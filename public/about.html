@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>litecanvas cheatsheet</title>
+    <link rel="stylesheet" href="prism/prism.css" />
+    <style>
+      html {
+        font-size: 14px;
+      }
+      body {
+        font-family: "Courier New", Courier, monospace;
+        margin: 0;
+      }
+      main {
+        max-width: 1000px;
+        margin: auto;
+        padding: 20px 10px;
+      }
+      .token a {
+        color: inherit;
+      }
+      nav {
+        line-height: 2;
+      }
+      h2 {
+        margin-top: 4rem !important;
+      }
+      @media print {
+        .no-print {
+          display: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>LITECANVAS</h1>
+
+      <nav>
+        <a href="https://github.com/litecanvas/engine">Source Code</a> |
+        <a href="https://github.com/litecanvas/demos">Demos</a> |
+        <a href="https://github.com/litecanvas/plugins">Plugins</a>
+      </nav>
+
+      <p>
+        Lightweight HTML5 canvas engine suitable for small games and animations.
+      </p>
+
+      <p>
+        <em
+          ><strong>litecanvas</strong> is a game engine to enjoy programming:
+          there is no visual helpers, no gui tools... just coding.</em
+        >
+      </p>
+
+      <p>
+        <button class="no-print" onclick="window.print()">Print PDF</button>
+      </p>
+
+      <nav class="no-print">
+        <strong>API</strong>: <a href="#colors">Colors</a> |
+        <a href="#settings">Configuration</a> | <a href="#drawing">Drawing</a> |
+        <a href="#sound">Sound</a> | <a href="#math">Math</a> |
+        <a href="#globals">Globals</a>
+      </nav>
+
+      <h2><a id="colors">Default Colors</a></h2>
+
+      <img src="images/colors.png" alt="Default Color Palette" />
+
+      <p>
+        <em
+          >Palette based on
+          <a href="https://lospec.com/palette-list/sweetie-16"
+            >https://lospec.com/palette-list/sweetie-16</a
+          ></em
+        >
+      </p>
+
+      <h2><a id="settings">Game Configuration</a></h2>
+
+      <pre><code class="language-typescript">// Initialize the game
+litecanvas(settings = {});
+
+// make the game screen fill the entire screen
+settings.fullscreen = true
+
+// the game screen size
+settings.width = opts.height = undefined
+
+// the canvas wrapper
+settings.parent = document.body
+
+// target FPS
+settings.fps = 60
+
+// the canvas background color
+// accept: null or integer (from 0 to 15)
+settings.background = 0
+
+// enable smooth drawing
+settings.antialias = true
+
+// scale the canvas
+settings.autoscale = true
+
+// disables antialias and force integer scales
+settings.pixelart = false
+
+// amount of time (milliseconds) to pause the tapping detection
+settings.tappingInterval = 100;
+
+// export all functions to global context
+settings.global = true
+</code></pre>
+
+      <h2><a id="drawing">Functions for Drawing</a></h2>
+
+      <pre><code class="language-typescript">/**
+ * SHAPES DRAWING-RELATED FUNCTIONS
+ */
+
+// clear the canvas
+// all color argument is a integer (from 0 to 15)
+clear(color: null|number): void
+
+// draw a color-filled rectangle
+rectfill(x, y, w, h, color = 0): void
+
+// draw a outline rectangle
+rect(x, y, w, h, color = 0): void
+
+// draw a color-filled circle
+circfill(x, y, r, color = 0): void
+
+// draw a outline circle
+circ(x, y, r, color = 0): void
+
+// draw a color-filled ellipse
+ovalfill(x, y, rx, ry, color = 0): void
+
+// draw a outline ellipse
+oval(x, y, rx, ry, color = 0): void
+
+// draw a color-filled polygon
+polyfill(points: number[], color = 0): void
+
+// draw a outline polygon
+poly(points: number[], color = 0): void
+
+// draw a line
+line(x1, y1, x2, y2, color = 0): void
+
+// customize lines and outlines
+// see: https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/lineJoin
+// see: https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/setLineDash
+linestyle(width = 1, join = 'miter', dash = null): void
+
+/**
+ * TEXT DRAWING-RELATED FUNCTIONS
+ */
+
+// draw a text
+text(x, y, text: string, color = 0, size: number|null, font = 'monospace'): void
+
+// set the text alignment and baseline
+// see: https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/textAlign
+// see: https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/textBaseline
+textalign(align = 'start', baseline = 'top'): void
+
+/**
+ * IMAGE DRAWING-RELATED FUNCTIONS
+ */
+
+// draw a image
+image(x, y, image: Image|HTMLCanvasElement): void
+
+/**
+ * IMAGE DRAWING-RELATED FUNCTIONS
+ */
+
+// make a image
+// see the "Paint" example
+paint(width, height, draw: Array|Function): OffscreenCanvas
+
+/**
+ * ADVANCED DRAWING-RELATED FUNCTIONS
+ */
+
+// save the canvas context
+push(): void
+
+// restore the canvas context
+pop(): void
+
+// update the transformation matrix
+// note: angle in radians
+transform(translateX, translateY, scale = 1, angle = 0): void
+
+// update the alpha (transparency)
+// see: https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/globalAlpha
+alpha(value = 1): void
+
+// update the type of compositing operation
+// see: https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/globalCompositeOperation
+blendmode(value = 'source-over'): void</code></pre>
+
+      <h2><a id="sound">Functions for Sound</a></h2>
+
+      <pre><code class="language-typescript">// play a predefined sound
+// note: `n` must be a sound index (from 0 to 15)
+sfx(n = 0, volume = 1, pitch = 0, randomness: number|null): AudioBufferSourceNode
+
+// also, you can play a ZzFX array of params
+// see: https://killedbyapixel.github.io/ZzFX/
+// example: sfx([2,.05,598,.07,0,.19,0,1.32,9.9,-70,0,0,0,0,0,0,.3,.02,0,.04])
+sfx(ZzFXparams: Array, volume = 1, pitch = 0, randomness: number|null): AudioBufferSourceNode</code></pre>
+
+      <h2><a id="math">Functions for Math</a></h2>
+
+      <pre><code class="language-typescript">// check a collision between two rectangles
+// all arguments are required and must be numbers
+collision(x1, y1, w1, h1, x2, y2, w2, h2): boolean
+
+// Generates a pseudo-random float between min (inclusive) and max (exclusive)
+rand(min = 0, max = 1.0): number;
+
+// Generates a pseudo-random integer between min (inclusive) and max (inclusive)
+randi(min = 0, max = 100): number;
+
+// Returns `true` or `false` based on random chance (p)
+// example: chance(0.25) ? '25% true' : '75% false'
+chance(p = 0.5): boolean
+
+// Choose a random item from a Array
+choose(arr: Array): any
+
+// Calculates a linear (interpolation) value over `t`.
+// example: lerp(10, 20, 0.5) returns 15 
+lerp(a: number, b: number, t: number): number
+
+// Convert degrees to radians
+deg2rads(n: number): number
+
+// Convert radians to degrees
+rad2deg(n: number): number
+
+// Force a value within the boundaries by clamping it to the range min, max.
+// example: clamp(50, 0, 100) return 50
+// example: clamp(150, 0, 100) return 100
+// example: clamp(-10, 0, 100) return 0
+clamp(value: number, min: number, max: number): number
+
+// Returns the absolute distance between two numbers
+// example: distance(10, 2) returns 8
+// example: distance(-2, -5) returns 3
+distance(a: number, b:number): number
+
+// Returns the sine of a number in radians.
+sin(n: number): number
+
+// Returns the cosine of a number in radians.
+cos(n: number): number
+
+// Returns the absolute value of a number.
+abs(n: number): number
+
+// Rounds up and returns the smallest integer greater than or equal to a given number
+ceil(n: number): number
+
+// Returns the value of a number rounded to the nearest integer.
+round(n: number): number
+
+// Rounds down and returns the largest integer less than or equal to a given number
+floor(n: number): number
+
+// Returns the smallest of the numbers given as input parameters, or `Infinity` if there are no parameters.
+// example: min(-10, 15, -1) returns -10
+min(...n: number): number
+
+// Returns the largest of the numbers given as input parameters, or `-Infinity` if there are no parameters.
+// example: max(-10, 15, -1) returns 15
+max(...n: number): number
+
+// Returns the value of a base raised to a power
+// example: pow(2, 3) returns 2³ or 8
+pow(x: number, y: number): number
+
+// Returns the square root of a number
+sqrt(n: number): number
+
+// Returns 1 or -1, indicating the sign of the number passed as argument. If the input is 0, it will returns 0.
+sign(n: number): number</code></pre>
+
+      <h2><a id="globals">Globals Variables</a></h2>
+
+      <pre><code class="language-typescript">
+// the game canvas
+CANVAS: HTMLCanvasElement
+
+// the game canvas 2d context
+// see: https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D
+CANVAS.ctx
+
+// the game canvas wrapper
+PARENT: HTMLElement
+
+// the game screen width
+WIDTH: number
+
+// the game screen height
+HEIGHT: number
+
+// the center X of game screen
+CENTERX: number
+
+// the center Y of game screen
+CENTERY: number
+
+// the FPS meter
+FPS: number
+
+// the amount of time since the game started
+ELAPSED: number
+
+// `true` when the screen is touched/clicked
+TAPPED: boolean
+
+// `true` while the screen is being touched/clicked
+TAPPING: boolean
+
+// the tap/click X position
+TAPX: number
+
+// the tap/click Y position
+TAPY: number
+      </code></pre>
+    </main>
+    <script src="prism/prism.js" defer></script>
+    <script src="prism/prism-typescript.js" defer></script>
+    <script src="prism/prism-autolinker.js" defer></script>
+  </body>
+</html>
