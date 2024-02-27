@@ -1,3 +1,3 @@
 # LITECANVAS PLAYGROUND
 
-https://litecanvas.github.io
+Online playground for [litecanvas](https://github.com/litecanvas/engine) engine.
