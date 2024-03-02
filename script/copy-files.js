@@ -3,7 +3,7 @@ import { copyFile, unlink, readFile, appendFile } from "node:fs/promises";
 const root = process.env["PWD"];
 const engineFile = root + "/public/litecanvas.js";
 
-unlink(engineFile);
+await unlink(engineFile);
 
 await copyFile(
   root + "/node_modules/@litecanvas/litecanvas/dist/dist.js",
