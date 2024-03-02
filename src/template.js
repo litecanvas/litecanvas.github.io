@@ -35,7 +35,16 @@ export default `
         err.style.display = 'block'
       })
     </script>
-    <script>{library}</script>
+    <script>
+      {library}
+      ((lc) => {
+        window.litecanvas = (config = {}) => {
+          config.plugins = config.plugins || [];
+          config.plugins.push(pluginAssetLoader);
+          return lc(config);
+        };
+      })(window.litecanvas);
+    </script>
     <script>{game}</script>
   </body>
 </html>`.trim();

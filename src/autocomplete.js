@@ -233,6 +233,27 @@ export default function customCompletions(context) {
         apply: "collision(",
         detail: "(x1, y1, w1, h1, x2, y2, w2, h2)",
       },
+      {
+        label: "plugin",
+        type: "function",
+        apply: "plugin(",
+        detail: "(callback|object)",
+        info: "Load a plugin to extend the litecanvas engine",
+      },
+      {
+        label: "loadScript",
+        type: "function",
+        apply: "loadScript(",
+        detail: "(filename, callback)",
+        info: "Load a JavaScript file",
+      },
+      {
+        label: "loadImage",
+        type: "function",
+        apply: "loadImage(",
+        detail: "(filename, callback)",
+        info: "Load a image file",
+      },
     ],
   };
 }

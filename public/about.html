@@ -64,6 +64,7 @@
         <a href="#settings">Configuration</a> | <a href="#drawing">Drawing</a> |
         <a href="#sound">Sound</a> | <a href="#math">Math</a> |
         <a href="#globals">Globals</a>
+        <a href="#advanced">Advanced</a>
       </nav>
 
       <h2><a id="colors">Default Colors</a></h2>
@@ -238,7 +239,7 @@ chance(p = 0.5): boolean
 choose(arr: Array): any
 
 // Calculates a linear (interpolation) value over `t`.
-// example: lerp(10, 20, 0.5) returns 15 
+// example: lerp(10, 20, 0.5) returns 15
 lerp(a: number, b: number, t: number): number
 
 // Convert degrees to radians
@@ -296,8 +297,7 @@ sign(n: number): number</code></pre>
 
       <h2><a id="globals">Globals Variables</a></h2>
 
-      <pre><code class="language-typescript">
-// the game canvas
+      <pre><code class="language-typescript">// the game canvas
 CANVAS: HTMLCanvasElement
 
 // the game canvas 2d context
@@ -336,6 +336,18 @@ TAPX: number
 
 // the tap/click Y position
 TAPY: number
+      </code></pre>
+
+      <h2><a id="advanced">Advanced Features</a></h2>
+
+      <pre><code class="language-typescript">// the plugin "Asset Loader" is automatically loaded into the playground
+// see: https://github.com/litecanvas/plugin-asset-loader
+
+// Asynchronously load an image
+loadImage(url: string, callback: function)
+
+// Asynchronously load an external JavaScript file
+loadScript(url: string, callback: function)
       </code></pre>
     </main>
     <script src="prism/prism.js" defer></script>
