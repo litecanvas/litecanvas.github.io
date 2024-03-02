@@ -34,9 +34,9 @@ export default `
         err.textContent = ev.message + ' in line ' + (ev.lineno - 38)
         err.style.display = 'block'
       })
-    </script>
-    <script>
+
       {library}
+
       ((lc) => {
         window.litecanvas = (config = {}) => {
           config.plugins = config.plugins || [];
