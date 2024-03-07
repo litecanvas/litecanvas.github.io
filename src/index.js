@@ -193,12 +193,16 @@ function resetStorage() {
   localStorage.clear();
 }
 
-window.isUpdateAvailable = new Promise(function (resolve, reject) {
+if (isMobile) {
+  mobileBar(codeEditor);
+}
+
+window.isUpdateAvailable = new Promise(function (resolve) {
   // lazy way of disabling service workers while developing
   if (
-    "serviceWorker" in navigator &&
-    location.hostname.indexOf("localhost") === -1 &&
-    location.hostname.indexOf("127.0.0") === -1
+    "serviceWorker" in navigator
+    // &&
+    // location.hostname.indexOf("127.0.0") === -1
   ) {
     // register service worker file
     navigator.serviceWorker
@@ -228,7 +232,3 @@ window.isUpdateAvailable.then((isAvailable) => {
     alert("New Update available! Reload the webapp to see the latest changes.");
   }
 });
-
-if (isMobile) {
-  mobileBar(codeEditor);
-}
