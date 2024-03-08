@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    <link rel="manifest" href="manifest.json" />
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>litecanvas cheatsheet</title>
     <link rel="stylesheet" href="prism/prism.css" />
+    <link rel="icon" href="icons/favicon.ico" />
     <style>
       html {
         font-size: 14px;
@@ -33,6 +35,23 @@
         }
       }
     </style>
+    <script>
+      function selectText(node) {
+        if (document.body.createTextRange) {
+          const range = document.body.createTextRange();
+          range.moveToElementText(node);
+          range.select();
+        } else if (window.getSelection) {
+          const selection = window.getSelection();
+          const range = document.createRange();
+          range.selectNodeContents(node);
+          selection.removeAllRanges();
+          selection.addRange(range);
+        } else {
+          console.warn("Could not select text in node: Unsupported browser.");
+        }
+      }
+    </script>
   </head>
   <body>
     <main>
@@ -41,17 +60,23 @@
       <nav>
         <a href="https://github.com/litecanvas/engine">Source Code</a> |
         <a href="https://github.com/litecanvas/demos">Demos</a> |
-        <a href="https://github.com/litecanvas/plugins">Plugins</a>
+        <a href="https://www.npmjs.com/search?q=keywords:litecanvas">Plugins</a>
       </nav>
 
       <p>
         Lightweight HTML5 canvas engine suitable for small games and animations.
+        Also, a game engine to enjoy programming: there is no visual helpers, no
+        gui tools... just coding.
       </p>
 
       <p>
-        <em
-          ><strong>litecanvas</strong> is a game engine to enjoy programming:
-          there is no visual helpers, no gui tools... just coding.</em
+        <strong>NPM</strong>:
+        <code onclick="selectText(this)" class="language-bash"
+          >npm i @litecanvas/litecanvas</code
+        >
+        <br /><strong>CND</strong>:
+        <code onclick="selectText(this)" class="language-bash"
+          >https://unpkg.com/@litecanvas/litecanvas/dist/dist.js</code
         >
       </p>
 
@@ -63,9 +88,28 @@
         <strong>API</strong>: <a href="#colors">Colors</a> |
         <a href="#settings">Configuration</a> | <a href="#drawing">Drawing</a> |
         <a href="#sound">Sound</a> | <a href="#math">Math</a> |
-        <a href="#globals">Globals</a>
+        <a href="#globals">Globals</a> |
         <a href="#advanced">Advanced</a>
       </nav>
+
+      <pre><code class="language-typescript">const settings = {
+  loop: { init, update, draw }
+}
+
+litecanvas(settings)
+
+function init() {
+  // run once before the game starts
+}
+
+function update(dt) {
+  // called at 60 fps by default
+  // note: `dt` is a fixed deltatime
+}
+
+function draw() {
+  // use to draw your game graphics
+}</code></pre>
 
       <h2><a id="colors">Default Colors</a></h2>
 
@@ -84,6 +128,10 @@
 
       <pre><code class="language-typescript">// Initialize the game
 litecanvas(settings = {});
+
+// the game loop callbacks
+// if undefined, use these global functions: init(), update(dt), draw()
+settings.loop = { init: function, update: function, draw: function}
 
 // make the game screen fill the entire screen
 settings.fullscreen = true
@@ -265,6 +313,12 @@ sin(n: number): number
 // Returns the cosine of a number in radians.
 cos(n: number): number
 
+// Returns the angle between the positive x-axis and the origin (0, 0) to the point (x, y)
+atan2(x: number, y:number): number
+
+// Returns the square root of the sum of squares of its arguments
+hypot(...ns: number): number
+
 // Returns the absolute value of a number.
 abs(n: number): number
 
@@ -283,7 +337,7 @@ min(...n: number): number
 
 // Returns the largest of the numbers given as input parameters, or `-Infinity` if there are no parameters.
 // example: max(-10, 15, -1) returns 15
-max(...n: number): number
+max(...ns: number): number
 
 // Returns the value of a base raised to a power
 // example: pow(2, 3) returns 2³ or 8
@@ -293,7 +347,8 @@ pow(x: number, y: number): number
 sqrt(n: number): number
 
 // Returns 1 or -1, indicating the sign of the number passed as argument. If the input is 0, it will returns 0.
-sign(n: number): number</code></pre>
+sign(n: number): number
+</code></pre>
 
       <h2><a id="globals">Globals Variables</a></h2>
 

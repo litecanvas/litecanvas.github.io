@@ -1,12 +1,15 @@
 {
   "name": "litecanvas",
   "short_name": "litecanvas",
+  "id": "litecanvas",
   "description": "A simple game editor.",
-  "start_url": "/?v=1.6.3",
+  "start_url": "/?v=1.7",
   "background_color": "#000",
   "theme_color": "#ffc76e",
   "display": "standalone",
-  "categories": ["education", "games"],
+  "categories": ["education", "games", "development"],
+  "lang": "en",
+  "orientation": "portrait",
   "icons": [
     {
       "src": "icons/icon.png",

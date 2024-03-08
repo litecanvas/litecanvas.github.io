@@ -200,9 +200,8 @@ if (isMobile) {
 window.isUpdateAvailable = new Promise(function (resolve) {
   // lazy way of disabling service workers while developing
   if (
-    "serviceWorker" in navigator
-    // &&
-    // location.hostname.indexOf("127.0.0") === -1
+    "serviceWorker" in navigator &&
+    location.hostname.indexOf("127.0.0") === -1
   ) {
     // register service worker file
     navigator.serviceWorker
