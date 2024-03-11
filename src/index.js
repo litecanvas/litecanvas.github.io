@@ -198,7 +198,6 @@ if (isMobile) {
 }
 
 window.isUpdateAvailable = new Promise(function (resolve) {
-  // lazy way of disabling service workers while developing
   if (
     "serviceWorker" in navigator &&
     location.hostname.indexOf("127.0.0") === -1
@@ -223,11 +222,21 @@ window.isUpdateAvailable = new Promise(function (resolve) {
         };
       })
       .catch((err) => console.error("[SW ERROR]", err));
+
+    navigator.serviceWorker.ready.then((reg) => {
+      reg.active.postMessage({ type: "GET_VERSION" });
+    });
+
+    navigator.serviceWorker.addEventListener("message", (event) => {
+      const type = event.data.type;
+      if ("GET_VERSION" === type) {
+        console.log("litecanvas playground version:", event.data.res);
+      }
+    });
   }
 });
 
 window.isUpdateAvailable.then((isAvailable) => {
-  if (isAvailable) {
-    alert("New Update available! Reload the webapp to see the latest changes.");
-  }
+  if (!isAvailable) return;
+  alert("New Update available! Reload the webapp to see the latest changes.");
 });

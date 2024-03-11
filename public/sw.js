@@ -1,5 +1,5 @@
-// version 1.7
 const cacheName = "luizbills.litecanvas-editor-v1";
+const version = "1.8";
 
 const precacheResources = [
   "/",
@@ -33,4 +33,11 @@ self.addEventListener("fetch", (event) => {
       return fetch(event.request);
     })
   );
+});
+
+self.addEventListener("message", (event) => {
+  const type = event.data.type;
+  if ("GET_VERSION" === type) {
+    event.source.postMessage({ type, res: version });
+  }
 });
