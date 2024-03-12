@@ -92,18 +92,6 @@ export default function customCompletions(context) {
         detail: "(x, y, rx, ry, color = 0)",
       },
       {
-        label: "poly",
-        type: "function",
-        apply: "poly([",
-        detail: "(points, color = 0)",
-      },
-      {
-        label: "polyfill",
-        type: "function",
-        apply: "polyfill([",
-        detail: "(points, color = 0)",
-      },
-      {
         label: "line",
         type: "function",
         apply: "line(",

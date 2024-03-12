@@ -3,7 +3,7 @@
   "short_name": "litecanvas",
   "id": "litecanvas",
   "description": "A simple game editor.",
-  "start_url": "/?v=1.7",
+  "start_url": ".",
   "background_color": "#000",
   "theme_color": "#ffc76e",
   "display": "standalone",

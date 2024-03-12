@@ -58,15 +58,15 @@
       <h1>LITECANVAS</h1>
 
       <nav>
-        <a href="https://github.com/litecanvas/engine">Source Code</a> |
-        <a href="https://github.com/litecanvas/demos">Demos</a> |
+        <a href="https://github.com/litecanvas/engine">Main Repository</a> |
+        <a href="https://litecanvas.js.org/">Playground</a> |
         <a href="https://www.npmjs.com/search?q=keywords:litecanvas">Plugins</a>
       </nav>
 
       <p>
-        Lightweight HTML5 canvas engine suitable for small games and animations.
-        Also, a game engine to enjoy programming: there is no visual helpers, no
-        gui tools... just coding.
+        Lightweight HTML5 canvas engine suitable for small games and animations
+        for people who enjoy coding: there is no fancy interface, no visual
+        helpers, no gui tools... just coding.
       </p>
 
       <p>
@@ -192,12 +192,6 @@ ovalfill(x, y, rx, ry, color = 0): void
 
 // draw a outline ellipse
 oval(x, y, rx, ry, color = 0): void
-
-// draw a color-filled polygon
-polyfill(points: number[], color = 0): void
-
-// draw a outline polygon
-poly(points: number[], color = 0): void
 
 // draw a line
 line(x1, y1, x2, y2, color = 0): void
@@ -333,7 +327,7 @@ floor(n: number): number
 
 // Returns the smallest of the numbers given as input parameters, or `Infinity` if there are no parameters.
 // example: min(-10, 15, -1) returns -10
-min(...n: number): number
+min(...ns: number): number
 
 // Returns the largest of the numbers given as input parameters, or `-Infinity` if there are no parameters.
 // example: max(-10, 15, -1) returns 15
