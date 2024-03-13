@@ -1,8 +1,6 @@
 export default () =>
-  `
-litecanvas({
+  `litecanvas({
   fullscreen: true,
-  antialias: false
 });
 
 function init () {
@@ -17,7 +15,7 @@ function update (dt) {
   if (TAPPED) {
     x = TAPX
     y = TAPY
-    sfx(7)
+    sfx(randi(0, 7))
   }
 
   radius = rand() * y

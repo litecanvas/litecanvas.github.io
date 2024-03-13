@@ -199,8 +199,9 @@ if (isMobile) {
 
 window.isUpdateAvailable = new Promise(function (resolve) {
   if (
-    "serviceWorker" in navigator &&
-    location.hostname.indexOf("127.0.0") === -1
+    ("serviceWorker" in navigator &&
+      location.hostname.indexOf("127.0.0") === -1) ||
+    url.searchParams.get("test_service_worker") === "on"
   ) {
     // register service worker file
     navigator.serviceWorker
