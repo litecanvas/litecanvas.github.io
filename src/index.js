@@ -108,11 +108,10 @@ copyButton.addEventListener("click", (evt) => {
 });
 
 function runCode() {
-  if (!library) return;
-  const code = codeEditor.state.doc.toString();
-  let content = template.replace(/{game}/, code);
-  content = content.replace(/{library}/, library);
-  iframe.srcdoc = content;
+  if (!library)
+    return alert("The library  was not loaded. Try reloading the page.");
+  const game = codeEditor.state.doc.toString();
+  iframe.srcdoc = template(library, game);
 }
 
 if (!smallScreen) {

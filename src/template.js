@@ -1,5 +1,5 @@
-export default `
-<!DOCTYPE html>
+export default function template(library, game) {
+  return `<!DOCTYPE html>
 <html>
   <head>
     <meta charset="UTF-8" />
@@ -35,7 +35,7 @@ export default `
         err.style.display = 'block'
       })
     </script>
-    <script>{library}</script>
+    <script>${library}</script>
     <script>
       ((lc) => {
         window.litecanvas = (config = {}) => {
@@ -45,6 +45,7 @@ export default `
         };
       })(window.litecanvas);
     </script>
-    <script>{game}</script>
+    <script>${game}</script>
   </body>
-</html>`.trim();
+</html>`;
+}
