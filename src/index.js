@@ -20,6 +20,8 @@ if (url.searchParams.get("reset") !== null) {
 let codeFromURL = url.searchParams.get("c");
 if (codeFromURL !== null) {
   codeFromURL = decompressString(codeFromURL);
+  url.searchParams.delete("c");
+  history.pushState({}, "", url);
 }
 
 const desktopExtensions = [];
