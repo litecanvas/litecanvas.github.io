@@ -117,7 +117,7 @@ function draw() {
 
       <p>
         <em
-          >Palette based on
+          >8-color palette inspired by
           <a href="https://lospec.com/palette-list/sweetie-16"
             >https://lospec.com/palette-list/sweetie-16</a
           ></em
@@ -146,7 +146,7 @@ settings.parent = document.body
 settings.fps = 60
 
 // the canvas background color
-// accept: null or integer (from 0 to 15)
+// accept: null or integer (a color from 0 to 7)
 settings.background = 0
 
 // enable smooth drawing
@@ -172,7 +172,7 @@ settings.global = true
  */
 
 // clear the canvas
-// all color argument is a integer (from 0 to 15)
+// all color argument is a integer (a color from 0 to 7)
 clear(color: null|number): void
 
 // draw a color-filled rectangle

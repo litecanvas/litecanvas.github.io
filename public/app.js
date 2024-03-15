@@ -31,7 +31,7 @@ function init () {
 }
 
 function update (dt) {
-  color = ELAPSED * 32 % 16
+  color = ELAPSED * 32
 
   if (TAPPED) {
     x = TAPX
