@@ -19,6 +19,15 @@ svg {
   display: none !important;
 }
 
+.sr-only {
+  position: absolute;
+  left: -99999px;
+  top: auto;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
 .top-bar {
   width: 100%;
   height: var(--top-bar-height);
