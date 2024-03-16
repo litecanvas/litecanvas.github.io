@@ -73,6 +73,10 @@ svg {
   position: relative;
 }
 
+.game {
+  background-color: #000;
+}
+
 .game iframe {
   display: block;
   width: 100%;

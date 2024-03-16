@@ -130,14 +130,18 @@ function draw() {
 litecanvas(settings = {});
 
 // the game loop callbacks
-// if undefined, use these global functions: init(), update(dt), draw()
+// if loop = undefined, will use these
+// global functions: window.init(), window.update(dt), window.draw()
 settings.loop = { init: function, update: function, draw: function}
 
 // make the game screen fill the entire screen
 settings.fullscreen = true
 
 // the game screen size
-settings.width = opts.height = undefined
+settings.width = settings.height = undefined
+
+// scale the canvas
+settings.autoscale = true
 
 // the canvas wrapper
 settings.parent = document.body
@@ -147,13 +151,10 @@ settings.fps = 60
 
 // the canvas background color
 // accept: null or integer (a color from 0 to 7)
-settings.background = 0
+settings.background = null
 
 // enable smooth drawing
 settings.antialias = true
-
-// scale the canvas
-settings.autoscale = true
 
 // disables antialias and force integer scales
 settings.pixelart = false
@@ -265,7 +266,11 @@ sfx(ZzFXparams: Array, volume = 1, pitch = 0, randomness: number|null): AudioBuf
 
       <pre><code class="language-typescript">// check a collision between two rectangles
 // all arguments are required and must be numbers
-collision(x1, y1, w1, h1, x2, y2, w2, h2): boolean
+colrect(x1, y1, w1, h1, x2, y2, w2, h2): boolean
+
+// check a collision between two circles
+// all arguments are required and must be numbers
+colcirc(x1, y1, r1, x2, y2, r2): boolean
 
 // Generates a pseudo-random float between min (inclusive) and max (exclusive)
 rand(min = 0, max = 1.0): number;
@@ -281,7 +286,8 @@ chance(p = 0.5): boolean
 choose(arr: Array): any
 
 // Calculates a linear (interpolation) value over `t`.
-// example: lerp(10, 20, 0.5) returns 15
+// example: lerp(0, 50, 0.5) returns 25
+// learn more: https://gamedev.net/tutorials/programming/general-and-gameplay-programming/a-brief-introduction-to-lerp-r4954/
 lerp(a: number, b: number, t: number): number
 
 // Convert degrees to radians
