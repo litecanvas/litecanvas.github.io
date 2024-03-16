@@ -125,7 +125,24 @@
       </button>
     </div>
     <div class="editor">
-      <div class="code"></div>
+      <div class="code">
+        <div
+          class="notice-warning"
+          id="changing-shared-code"
+          style="display: none"
+        >
+          You are accessing a code example that was shared via a link. The
+          changes you make will not be saved. If you want to keep your changes,
+          remember to copy the code before closing or refreshing this page.
+          <a
+            class="notice-close-button"
+            aria-label="Close this notice"
+            href="#"
+            onclick="this.parentNode.remove(); return false;"
+            >&times;</a
+          >
+        </div>
+      </div>
       <div class="game">
         <iframe id="frame" frameborder="0"></iframe>
       </div>

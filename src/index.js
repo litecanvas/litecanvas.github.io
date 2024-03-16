@@ -11,6 +11,12 @@ import template from "./template";
 import customCompletions from "./autocomplete";
 import mobileBar from "./mobileBar";
 
+const config = {
+  autosave: true,
+  autosaveInterval: 5000,
+  codeChanged: false,
+};
+
 const url = new URL(location.href);
 if (url.searchParams.get("reset") !== null) {
   resetStorage();
@@ -22,7 +28,25 @@ if (codeFromURL !== null) {
   codeFromURL = decompressString(codeFromURL);
   url.searchParams.delete("c");
   history.pushState({}, "", url);
+  if (codeFromURL) {
+    config.autosave = false;
+    $("#changing-shared-code").style.display = "";
+  }
 }
+
+document.addEventListener("visibilitychange", function () {
+  // fires when user switches tabs, apps, goes to homescreen, etc.
+  if (document.visibilityState === "hidden" && config.autosave) {
+    saveCode();
+  }
+});
+
+window.addEventListener("beforeunload", (evt) => {
+  if (!config.autosave) {
+    evt.preventDefault();
+    evt.returnValue = true;
+  }
+});
 
 const desktopExtensions = [];
 const code = $(".code");
@@ -156,6 +180,9 @@ const state = EditorState.create({
       ".cm-scroller": { overflow: "auto" },
     }),
     EditorView.lineWrapping,
+    EditorView.updateListener.of((update) => {
+      if (update.docChanged) config.codeChanged = true;
+    }),
     ...desktopExtensions,
   ],
 });
@@ -181,10 +208,16 @@ function decompressString(str) {
 }
 
 // autosave
-const autosave = 5000; // 5 seconds
-setInterval(() => {
+if (config.autosave) {
+  setInterval(() => {
+    if ("visible" !== document.visibilityState) return;
+    saveCode();
+  }, config.autosaveInterval);
+}
+
+function saveCode() {
   localStorage.setItem("litecanvas_code", codeEditor.state.doc.toString());
-}, autosave);
+}
 
 function loadFromStorage() {
   return localStorage.getItem("litecanvas_code");
