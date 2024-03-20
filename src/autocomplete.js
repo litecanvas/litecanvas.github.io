@@ -182,8 +182,8 @@ export default function customCompletions(context) {
         label: "lerp",
         type: "function",
         apply: "lerp(",
-        detail: "(a, b, t)",
-        info: "Calculates a linear (interpolation) value from 'a' to 'b' over 't'.",
+        detail: "(start, end, t)",
+        info: "linear interpolation from `start` to `end` over `t`%.",
       },
       {
         label: "deg2rad",
