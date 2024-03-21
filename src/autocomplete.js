@@ -125,7 +125,7 @@ export default function customCompletions(context) {
         label: "paint",
         type: "function",
         apply: "paint(",
-        detail: "(width, height, draw)",
+        detail: "(width, height, callback|array)",
         info: "Creates a offscreen canvas to draw on it",
       },
       {
@@ -139,6 +139,7 @@ export default function customCompletions(context) {
         type: "function",
         apply: "blendmode(",
         detail: "(mode)",
+        info: "sets the type of compositing operation to apply when drawing new shapes",
       },
       {
         label: "push",
@@ -159,18 +160,21 @@ export default function customCompletions(context) {
         type: "function",
         apply: "sfx(0)",
         detail: "(sound = 0, volume = 1, pitch = 0, randomness = 0)",
+        info: "play a sound",
       },
       {
         label: "rand",
         type: "function",
         apply: "rand()",
-        detail: "",
+        detail: "(min = 0.0, max = 1.0)",
+        info: "get a pseudo-random float between min (inclusive) and max (exclusive)",
       },
       {
         label: "randi",
         type: "function",
         apply: "randi()",
         detail: "(min = 1, max = 100)",
+        info: "get a pseudo-random integer between min (inclusive) and max (inclusive)",
       },
       {
         label: "clamp",
