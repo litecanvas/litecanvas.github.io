@@ -163,6 +163,10 @@ settings.antialias = true
 // disables antialias and force integer scales
 settings.pixelart = false
 
+// set to `false` to disable the default tap events (see TAP and TAPPING)
+// useful to create your own input handler
+settings.tapEvents = true
+
 // amount of time (milliseconds) to pause the tapping detection
 settings.tappingInterval = 100;
 
@@ -305,11 +309,6 @@ rad2deg(n: number): number
 // example: clamp(150, 0, 100) return 100
 // example: clamp(-10, 0, 100) return 0
 clamp(value: number, min: number, max: number): number
-
-// Returns the absolute distance between two numbers
-// example: distance(10, 2) returns 8
-// example: distance(-2, -5) returns 3
-distance(a: number, b:number): number
 
 // Returns the sine of a number in radians.
 sin(n: number): number
