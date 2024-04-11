@@ -59,7 +59,7 @@
 
       <nav>
         <a href="https://github.com/litecanvas/game-engine">Main Repository</a>
-        | <a href="https://litecanvas.js.org/">Playground</a> | |
+        | <a href="https://litecanvas.js.org/">Playground</a> |
         <a href="https://github.com/litecanvas/game-engine#basic-demos"
           >Demos</a
         >
@@ -221,6 +221,9 @@ text(x, y, text: string, color = 0, size: number|null, font = 'monospace'): void
 // see: https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/textAlign
 // see: https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/textBaseline
 textalign(align = 'start', baseline = 'top'): void
+
+// set the default font family
+textfont(fontName: string): void
 
 /**
  * IMAGE DRAWING-RELATED FUNCTIONS
@@ -402,10 +405,13 @@ TAPY: number
 // see: https://github.com/litecanvas/plugin-asset-loader
 
 // Asynchronously load an image
-loadImage(url: string, callback: function)
+loadImage(url: string, callback: function): void
 
 // Asynchronously load an external JavaScript file
-loadScript(url: string, callback: function)
+loadScript(url: string, callback: function): void
+
+// Asynchronously load a font
+loadFont(fontName:string, url: string, callback: function): void
       </code></pre>
     </main>
     <script src="prism/prism.js" defer></script>
