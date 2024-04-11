@@ -26,8 +26,8 @@ if (url.searchParams.get("reset") !== null) {
 let codeFromURL = url.searchParams.get("c");
 if (codeFromURL !== null) {
   codeFromURL = decompressString(codeFromURL);
-  url.searchParams.delete("c");
-  history.pushState({}, "", url);
+  // url.searchParams.delete("c");
+  // history.pushState({}, "", url);
   if (codeFromURL) {
     config.autosave = false;
     $("#changing-shared-code").style.display = "";
@@ -197,14 +197,21 @@ function compressString(str) {
 }
 
 function decompressString(str) {
-  return pako.inflate(
-    new Uint8Array(
-      atob(str)
-        .split("")
-        .map((c) => c.charCodeAt(0))
-    ),
-    { to: "string" }
-  );
+  let code = null;
+  try {
+    code = pako.inflate(
+      new Uint8Array(
+        atob(str)
+          .split("")
+          .map((c) => c.charCodeAt(0))
+      ),
+      { to: "string" }
+    );
+  } catch (e) {
+    alert("Invalid playground url: " + e.message);
+    code = null;
+  }
+  return code;
 }
 
 // autosave
