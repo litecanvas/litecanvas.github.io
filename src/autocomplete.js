@@ -116,6 +116,12 @@ export default function customCompletions(context) {
         detail: "(align = 'left', baseline = 'top')",
       },
       {
+        label: "textfont",
+        type: "function",
+        apply: "textfont(",
+        detail: "(fontName)",
+      },
+      {
         label: "image",
         type: "function",
         apply: "image(",
@@ -240,19 +246,33 @@ export default function customCompletions(context) {
         detail: "(callback|object)",
         info: "Load a plugin to extend the litecanvas engine",
       },
+
+      // asset loader plugin
       {
         label: "loadScript",
         type: "function",
         apply: "loadScript(",
-        detail: "(filename, callback)",
+        detail: "(url, callback)",
         info: "Load a JavaScript file",
       },
       {
         label: "loadImage",
         type: "function",
         apply: "loadImage(",
-        detail: "(filename, callback)",
-        info: "Load a image file",
+        detail: "(url, callback)",
+        info: "Load a image",
+      },
+      {
+        label: "loadFont",
+        type: "function",
+        apply: "loadFont(",
+        detail: "(name, url, callback)",
+        info: "Load a font",
+      },
+      {
+        label: "LOADING",
+        type: "variable",
+        info: "return the amount of assets that are loading",
       },
     ],
   };
