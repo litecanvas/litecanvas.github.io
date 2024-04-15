@@ -1,7 +1,5 @@
 export default () =>
-  `litecanvas({
-  fullscreen: true,
-});
+  `litecanvas()
 
 function init () {
   color = 0

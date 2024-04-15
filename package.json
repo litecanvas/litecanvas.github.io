@@ -23,6 +23,7 @@
     "@litecanvas/litecanvas": "*",
     "@litecanvas/plugin-asset-loader": "*",
     "codemirror": "^6.0.1",
+    "eslint-linter-browserify": "^9.0.0",
     "pako": "^2.1.0"
   }
 }

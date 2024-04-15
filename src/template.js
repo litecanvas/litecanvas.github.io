@@ -31,7 +31,8 @@ export default function template(library, game) {
       // catch errors
       const err = document.getElementById('err')
       window.addEventListener('error', (ev) => {
-        err.textContent = ev.message + ' in line ' + (ev.lineno - 38)
+        console.error(ev)
+        err.textContent = ev.message
         err.style.display = 'block'
       })
     </script>

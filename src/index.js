@@ -1,10 +1,18 @@
 import pako from "pako";
-import { EditorView, basicSetup } from "codemirror";
+import { EditorView } from "codemirror";
 import { EditorState } from "@codemirror/state";
 import { keymap } from "@codemirror/view";
-import { javascript, javascriptLanguage } from "@codemirror/lang-javascript";
+import {
+  javascript,
+  javascriptLanguage,
+  esLint,
+} from "@codemirror/lang-javascript";
+import { linter, lintGutter } from "@codemirror/lint";
 import { indentWithTab } from "@codemirror/commands";
 import { oneDark } from "@codemirror/theme-one-dark";
+import * as eslint from "eslint-linter-browserify";
+
+import editorSetup from "./editorSetup";
 import { show, hide, $ } from "./utils";
 import demo from "./demo";
 import template from "./template";
@@ -158,7 +166,7 @@ if (!smallScreen) {
 const state = EditorState.create({
   doc: codeFromURL || loadFromStorage() || demo(),
   extensions: [
-    basicSetup,
+    editorSetup(),
     // Ctrl+S to run the code
     keymap.of([
       indentWithTab,
@@ -172,6 +180,17 @@ const state = EditorState.create({
     ]),
     oneDark,
     javascript(),
+    lintGutter(),
+    linter(
+      esLint(new eslint.Linter(), {
+        // eslint configuration
+        languageOptions: {
+          ecmaVersion: "latest",
+          sourceType: "script",
+        },
+        rules: {},
+      })
+    ),
     javascriptLanguage.data.of({
       autocomplete: customCompletions,
     }),
