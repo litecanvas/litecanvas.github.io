@@ -31,6 +31,8 @@ if (url.searchParams.get("reset") !== null) {
   window.location = location.origin;
 }
 
+const autoplay = url.searchParams.get("autoplay") != 0;
+
 let codeFromURL = url.searchParams.get("c");
 if (codeFromURL !== null) {
   codeFromURL = decompressString(codeFromURL);
@@ -73,7 +75,7 @@ fetch("litecanvas.js")
   .then((source) => {
     library = source;
     if (!smallScreen) {
-      runCode();
+      if (autoplay) runCode();
     } else {
       show(playButton);
       hide(game);

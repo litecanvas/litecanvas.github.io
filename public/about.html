@@ -138,6 +138,9 @@ litecanvas(settings = {});
 // global functions: window.init(), window.update(dt), window.draw()
 settings.loop = { init: function, update: function, draw: function}
 
+// the canvas (by default a new canvas is created)
+settings.canvas = null
+
 // make the game screen fill the entire screen
 settings.fullscreen = true
 
@@ -146,9 +149,6 @@ settings.width = settings.height = undefined
 
 // scale the canvas
 settings.autoscale = true
-
-// the canvas wrapper
-settings.parent = document.body
 
 // target FPS
 settings.fps = 60
@@ -182,6 +182,7 @@ settings.global = true
 
 // clear the canvas
 // all color argument is a integer (a color from 0 to 7)
+// alias: cls(...)
 clear(color: null|number): void
 
 // draw a color-filled rectangle
@@ -215,6 +216,7 @@ linestyle(width = 1, join = 'miter', dash = null): void
  */
 
 // draw a text
+// alias: print(...)
 text(x, y, text: string, color = 0, size: number|null, font = 'monospace'): void
 
 // set the text alignment and baseline
@@ -365,9 +367,6 @@ CANVAS: HTMLCanvasElement
 // see: https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D
 CANVAS.ctx
 
-// the game canvas wrapper
-PARENT: HTMLElement
-
 // the game screen width
 WIDTH: number
 
@@ -397,6 +396,10 @@ TAPX: number
 
 // the tap/click Y position
 TAPY: number
+
+// The ratio of the circumference of a circle to its diameter,
+// approximately 3.14159
+PI: number
       </code></pre>
 
       <h2><a id="advanced">Advanced Features</a></h2>
