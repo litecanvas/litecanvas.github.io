@@ -7,11 +7,6 @@ export default function customCompletions(context) {
     options: [
       // global constants
       { label: "CANVAS", type: "constant", info: "game canvas HTML element" },
-      {
-        label: "PARENT",
-        type: "constant",
-        info: "the parent element of the game canvas",
-      },
       { label: "WIDTH", type: "variable", info: "width of the game screen" },
       { label: "HEIGHT", type: "variable", info: "height of the game screen" },
       {
@@ -47,9 +42,17 @@ export default function customCompletions(context) {
         type: "constant",
         info: "canvas rendering 2d context",
       },
+      { label: "PI", type: "constant" },
       // global functions
       {
         label: "clear",
+        type: "function",
+        apply: "clear(",
+        detail: "(color = null)",
+        info: "clear the game screen",
+      },
+      {
+        label: "cls",
         type: "function",
         apply: "clear(",
         detail: "(color = null)",
@@ -105,6 +108,12 @@ export default function customCompletions(context) {
       },
       {
         label: "text",
+        type: "function",
+        apply: "text(",
+        detail: "(x, y, text, color = 0, size = null, font = 'monospace')",
+      },
+      {
+        label: "print",
         type: "function",
         apply: "text(",
         detail: "(x, y, text, color = 0, size = null, font = 'monospace')",
