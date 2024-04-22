@@ -54,7 +54,7 @@ export default function customCompletions(context) {
       {
         label: "cls",
         type: "function",
-        apply: "clear(",
+        apply: "cls(",
         detail: "(color = null)",
         info: "clear the game screen",
       },
@@ -115,7 +115,7 @@ export default function customCompletions(context) {
       {
         label: "print",
         type: "function",
-        apply: "text(",
+        apply: "print(",
         detail: "(x, y, text, color = 0, size = null, font = 'monospace')",
       },
       {
@@ -169,6 +169,13 @@ export default function customCompletions(context) {
         apply: "pop()",
         detail: "",
         info: "restore the rendering context",
+      },
+      {
+        label: "clip",
+        type: "function",
+        apply: "clip((ctx) =>",
+        detail: "clip(callback: function)",
+        info: "create a clipping region using a path",
       },
       {
         label: "sfx",

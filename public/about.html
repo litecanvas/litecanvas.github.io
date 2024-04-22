@@ -252,9 +252,17 @@ push(): void
 // restore the canvas context
 pop(): void
 
+// create a clipping region using a path
+// example: clip((ctx) => ctx.arc(100, 100, 50, 0, PI * 2))
+// note: Clip paths cannot be reverted directly. You must save your
+// canvas state using push() before calling clip(), and restore it
+// once you have finished drawing in the clipped area using pop().
+// see: https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/clip
+clip(callback: function): void
+
 // update the transformation matrix
 // note: angle in radians
-transform(translateX, translateY, scale = 1, angle = 0): void
+transform(translateX: number, translateY: number, scale = 1, angle = 0): void
 
 // update the alpha (transparency)
 // see: https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/globalAlpha
