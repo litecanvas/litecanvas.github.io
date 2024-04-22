@@ -188,7 +188,7 @@ export default function customCompletions(context) {
         label: "randi",
         type: "function",
         apply: "randi()",
-        detail: "(min = 1, max = 100)",
+        detail: "(min = 0, max = 1)",
         info: "get a pseudo-random integer between min (inclusive) and max (inclusive)",
       },
       {
