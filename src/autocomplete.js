@@ -83,18 +83,6 @@ export default function customCompletions(context) {
         detail: "(x, y, radius, color = 0)",
       },
       {
-        label: "oval",
-        type: "function",
-        apply: "oval(",
-        detail: "(x, y, rx, ry, color = 0)",
-      },
-      {
-        label: "ovalfill",
-        type: "function",
-        apply: "ovalfill(",
-        detail: "(x, y, rx, ry, color = 0)",
-      },
-      {
         label: "line",
         type: "function",
         apply: "line(",
@@ -147,7 +135,25 @@ export default function customCompletions(context) {
         label: "transform",
         type: "function",
         apply: "transform(",
-        detail: "(translateX, translateY, scale = 1, angle = 0)",
+        detail: "(a, b, c, d, e, f, reset = true)",
+      },
+      {
+        label: "translate",
+        type: "function",
+        apply: "translate(",
+        detail: "(x, y)",
+      },
+      {
+        label: "scale",
+        type: "function",
+        apply: "scale(",
+        detail: "(x, y)",
+      },
+      {
+        label: "rotate",
+        type: "function",
+        apply: "rotate(",
+        detail: "(x, y)",
       },
       {
         label: "blendmode",

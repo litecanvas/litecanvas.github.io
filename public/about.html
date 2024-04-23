@@ -197,12 +197,6 @@ circfill(x, y, r, color = 0): void
 // draw a outline circle
 circ(x, y, r, color = 0): void
 
-// draw a color-filled ellipse
-ovalfill(x, y, rx, ry, color = 0): void
-
-// draw a outline ellipse
-oval(x, y, rx, ry, color = 0): void
-
 // draw a line
 line(x1, y1, x2, y2, color = 0): void
 
@@ -260,9 +254,21 @@ pop(): void
 // see: https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/clip
 clip(callback: function): void
 
+// Adds a translation transformation to the current matrix
+translate(x = 0, y = 0): void
+
+// Adds a scaling transformation to the canvas units horizontally and/or vertically
+scale(x = 1, y = 1): void
+
+// Adds a rotation to the transformation matrix
+rotate(radians = 0): void
+
 // update the transformation matrix
-// note: angle in radians
-transform(translateX: number, translateY: number, scale = 1, angle = 0): void
+// when `reset = true` uses `context.setTransform()`
+// wwhen `reset = false` uses `context.transform()`
+// see: https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/setTransform
+// see: https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/transform
+transform(a, b, c, d, e, f, reset = true): void
 
 // update the alpha (transparency)
 // see: https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/globalAlpha
