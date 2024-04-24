@@ -240,19 +240,23 @@ paint(width, height, draw: Array|Function): OffscreenCanvas
  * ADVANCED DRAWING-RELATED FUNCTIONS
  */
 
+// return the current canvas context 2D
+ctx(): CanvasRenderingContext2D
+
 // save the canvas context
 push(): void
 
 // restore the canvas context
 pop(): void
 
-// create a clipping region using a path
-// example: clip((ctx) => ctx.arc(100, 100, 50, 0, PI * 2))
-// note: Clip paths cannot be reverted directly. You must save your
-// canvas state using push() before calling clip(), and restore it
-// once you have finished drawing in the clipped area using pop().
-// see: https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/clip
-clip(callback: function): void
+// create a rectangular clipping region
+cliprect(x, y, width, height): void
+
+// create a circular clipping region
+clipcirc(x, y, width, height): void
+
+// note: before call cliprect or clipcirc you must save the context using push()
+// and later, you restore the context using pop()
 
 // Adds a translation transformation to the current matrix
 translate(x = 0, y = 0): void
@@ -264,11 +268,11 @@ scale(x = 1, y = 1): void
 rotate(radians = 0): void
 
 // update the transformation matrix
-// when `reset = true` uses `context.setTransform()`
-// wwhen `reset = false` uses `context.transform()`
+// when `resetFirst = true` uses `context.setTransform()`
+// wwhen `resetFirst = false` uses `context.transform()`
 // see: https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/setTransform
 // see: https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/transform
-transform(a, b, c, d, e, f, reset = true): void
+transform(a, b, c, d, e, f, resetFirst = true): void
 
 // update the alpha (transparency)
 // see: https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/globalAlpha
