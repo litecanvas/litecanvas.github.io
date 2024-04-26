@@ -16,7 +16,7 @@ import editorSetup from "./editorSetup";
 import { show, hide, $ } from "./utils";
 import demo from "./demo";
 import template from "./template";
-import customCompletions from "./autocomplete";
+import customCompletions from "./completions";
 import mobileBar from "./mobileBar";
 
 const config = {

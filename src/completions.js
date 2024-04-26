@@ -89,10 +89,22 @@ export default function customCompletions(context) {
         detail: "(x1, y1, x2, y2, color = 0)",
       },
       {
-        label: "linestyle",
+        label: "linewidth",
         type: "function",
-        apply: "linestyle(",
-        detail: "(lineWidth, lineJoin, lineDash)",
+        apply: "linewidth(",
+        detail: "(value)",
+      },
+      {
+        label: "linecap",
+        type: "function",
+        apply: "linecap(",
+        detail: "(value)",
+      },
+      {
+        label: "linedash",
+        type: "function",
+        apply: "linedash(",
+        detail: "(value)",
       },
       {
         label: "text",

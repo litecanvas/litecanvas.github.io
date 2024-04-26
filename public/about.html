@@ -97,7 +97,7 @@
       </nav>
 
       <pre><code class="language-typescript">const settings = {
-  loop: { init, update, draw }
+  loop: { init, update, draw, resize }
 }
 
 litecanvas(settings)
@@ -113,6 +113,10 @@ function update(dt) {
 
 function draw() {
   // use to draw your game graphics
+}
+
+function resize() {
+  // called when the browser resizes
 }</code></pre>
 
       <h2><a id="colors">Default Colors</a></h2>
@@ -135,8 +139,13 @@ litecanvas(settings = {});
 
 // the game loop callbacks
 // if loop = undefined, will use these
-// global functions: window.init(), window.update(dt), window.draw()
-settings.loop = { init: function, update: function, draw: function}
+// global functions: window.init(), window.update(dt), window.draw(), window.resize()
+settings.loop = {
+  init: function,
+  update: function,
+  draw: function,
+  resize: function
+}
 
 // the canvas (by default a new canvas is created)
 settings.canvas = null
@@ -200,10 +209,15 @@ circ(x, y, r, color = 0): void
 // draw a line
 line(x1, y1, x2, y2, color = 0): void
 
-// customize lines and outlines
-// see: https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/lineJoin
-// see: https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/setLineDash
-linestyle(width = 1, join = 'miter', dash = null): void
+// Sets the thickness of lines
+linewidth(value: number): void
+
+// Sets the line dash pattern used when drawing lines
+linedash(value: number|number[]): void
+
+// Determines the shape used to draw the end points of lines
+// Possible values are: "butt", "round" or "square"
+linecap(value: string): void
 
 /**
  * TEXT DRAWING-RELATED FUNCTIONS
@@ -234,7 +248,7 @@ image(x, y, image: Image|HTMLCanvasElement): void
 
 // make a image
 // see the "Paint" example
-paint(width, height, draw: Array|Function): OffscreenCanvas
+paint(width, height, draw: string[]|function): OffscreenCanvas
 
 /**
  * ADVANCED DRAWING-RELATED FUNCTIONS
