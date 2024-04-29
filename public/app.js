@@ -171,6 +171,7 @@ function update (dt) {
 
 function draw () {
   clear(0)
+  linewidth(4)
   circ(x, y, radius, color)
 }
 `.trim()+`
