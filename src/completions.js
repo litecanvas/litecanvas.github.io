@@ -37,11 +37,6 @@ export default function customCompletions(context) {
         type: "variable",
         info: "middle Y of the game screen",
       },
-      {
-        label: "CANVAS.ctx",
-        type: "constant",
-        info: "canvas rendering 2d context",
-      },
       { label: "PI", type: "constant" },
       // global functions
       {
@@ -107,6 +102,12 @@ export default function customCompletions(context) {
         detail: "(value)",
       },
       {
+        label: "linejoin",
+        type: "function",
+        apply: "linejoin(",
+        detail: "(value)",
+      },
+      {
         label: "text",
         type: "function",
         apply: "text(",
@@ -165,7 +166,7 @@ export default function customCompletions(context) {
         label: "rotate",
         type: "function",
         apply: "rotate(",
-        detail: "(x, y)",
+        detail: "(radians)",
       },
       {
         label: "blendmode",
@@ -272,6 +273,12 @@ export default function customCompletions(context) {
         detail: "(radians)",
       },
       {
+        label: "tan",
+        type: "function",
+        apply: "tan(",
+        detail: "(radians)",
+      },
+      {
         label: "abs",
         type: "function",
         apply: "abs(",
@@ -293,6 +300,18 @@ export default function customCompletions(context) {
         label: "floor",
         type: "function",
         apply: "floor(",
+        detail: "(value)",
+      },
+      {
+        label: "trunc",
+        type: "function",
+        apply: "trunc(",
+        detail: "(value)",
+      },
+      {
+        label: "fract",
+        type: "function",
+        apply: "fract(",
         detail: "(value)",
       },
       {
@@ -336,6 +355,12 @@ export default function customCompletions(context) {
         type: "function",
         apply: "hypot(",
         detail: "(...values)",
+      },
+      {
+        label: "exp",
+        type: "function",
+        apply: "exp(",
+        detail: "(x)",
       },
       {
         label: "colrect",

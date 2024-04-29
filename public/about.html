@@ -97,7 +97,7 @@
       </nav>
 
       <pre><code class="language-typescript">const settings = {
-  loop: { init, update, draw, resize }
+  loop: { init, update, draw, resized }
 }
 
 litecanvas(settings)
@@ -115,8 +115,9 @@ function draw() {
   // use to draw your game graphics
 }
 
-function resize() {
-  // called when the browser resizes
+function resized() {
+  // called when the browser was resized
+  // always called once before init()
 }</code></pre>
 
       <h2><a id="colors">Default Colors</a></h2>
@@ -138,13 +139,13 @@ function resize() {
 litecanvas(settings = {});
 
 // the game loop callbacks
-// if loop = undefined, will use these
-// global functions: window.init(), window.update(dt), window.draw(), window.resize()
+// if loop = undefined, will use these functions: 
+// window.init(), window.update(dt), window.draw(), window.resized()
 settings.loop = {
   init: function,
   update: function,
   draw: function,
-  resize: function
+  resized: function
 }
 
 // the canvas (by default a new canvas is created)
@@ -219,6 +220,10 @@ linedash(value: number|number[]): void
 // Possible values are: "butt", "round" or "square"
 linecap(value: string): void
 
+// Determines the shape used to join two line segments where they meet
+// Possible values are: "round", "bevel", and "miter"
+linejoin(value: string): void
+
 /**
  * TEXT DRAWING-RELATED FUNCTIONS
  */
@@ -255,6 +260,7 @@ paint(width, height, draw: string[]|function): OffscreenCanvas
  */
 
 // return the current canvas context 2D
+// see: https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D
 ctx(): CanvasRenderingContext2D
 
 // save the canvas context
@@ -348,13 +354,17 @@ rad2deg(n: number): number
 clamp(value: number, min: number, max: number): number
 
 // Returns the sine of a number in radians.
-sin(n: number): number
+sin(angle: number): number
 
 // Returns the cosine of a number in radians.
-cos(n: number): number
+cos(angle: number): number
 
-// Returns the angle between the positive x-axis and the origin (0, 0) to the point (x, y)
-atan2(x: number, y:number): number
+// Returns the tangent of a number in radians.
+tan(angle: number): number
+
+// Returns the angle between the positive x-axis 
+// and the origin (0, 0) to the point (x, y)
+atan2(y:number, x: number): number
 
 // Returns the square root of the sum of squares of its arguments
 hypot(...ns: number): number
@@ -371,11 +381,19 @@ round(n: number): number
 // Rounds down and returns the largest integer less than or equal to a given number
 floor(n: number): number
 
-// Returns the smallest of the numbers given as input parameters, or `Infinity` if there are no parameters.
+// Returns the integer part of a number by removing any fractional digits.
+trunc(n: number): number
+
+// Returns the fractional part of a number
+fract(n: number): number
+
+// Returns the smallest of the numbers given as input parameters, 
+// or `Infinity` if there are no parameters.
 // example: min(-10, 15, -1) returns -10
 min(...ns: number): number
 
-// Returns the largest of the numbers given as input parameters, or `-Infinity` if there are no parameters.
+// Returns the largest of the numbers given as input parameters, 
+// or `-Infinity` if there are no parameters.
 // example: max(-10, 15, -1) returns 15
 max(...ns: number): number
 
@@ -383,10 +401,15 @@ max(...ns: number): number
 // example: pow(2, 3) returns 2³ or 8
 pow(x: number, y: number): number
 
+// Returns E (Euler's number) raised to the power of a number
+// example: exp(1) returns 2.7182... (approximately)
+exp(n: number): number
+
 // Returns the square root of a number
 sqrt(n: number): number
 
-// Returns 1 or -1, indicating the sign of the number passed as argument. If the input is 0, it will returns 0.
+// Returns 1 or -1, indicating the sign of a number.
+// If the number is 0, it will returns 0.
 sign(n: number): number
 </code></pre>
 
@@ -394,10 +417,6 @@ sign(n: number): number
 
       <pre><code class="language-typescript">// the game canvas
 CANVAS: HTMLCanvasElement
-
-// the game canvas 2d context
-// see: https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D
-CANVAS.ctx
 
 // the game screen width
 WIDTH: number
