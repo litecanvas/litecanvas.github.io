@@ -38,6 +38,8 @@ export default function customCompletions(context) {
         info: "middle Y of the game screen",
       },
       { label: "PI", type: "constant" },
+      { label: "TWO_PI", type: "constant" },
+      { label: "HALF_PI", type: "constant" },
       // global functions
       {
         label: "clear",
@@ -228,6 +230,24 @@ export default function customCompletions(context) {
         apply: "randi()",
         detail: "(min = 0, max = 1)",
         info: "get a pseudo-random integer between min (inclusive) and max (inclusive)",
+      },
+      {
+        label: "map",
+        type: "function",
+        apply: "map(",
+        detail: "(val, l1, h1, l2, h2, withinBounds=false)",
+      },
+      {
+        label: "norm",
+        type: "function",
+        apply: "norm(",
+        detail: "(val, start, stop)",
+      },
+      {
+        label: "diff",
+        type: "function",
+        apply: "diff(",
+        detail: "(a, b)",
       },
       {
         label: "clamp",

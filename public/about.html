@@ -313,16 +313,9 @@ sfx(n = 0, volume = 1, pitch = 0, randomness = 0): AudioBufferSourceNode
 // example: sfx([2,.05,598,.07,0,.19,0,1.32,9.9,-70,0,0,0,0,0,0,.3,.02,0,.04])
 sfx(ZzFXparams: Array, volume = 1, pitch = 0, randomness = 0): AudioBufferSourceNode</code></pre>
 
-      <h2><a id="math">Functions for Math</a></h2>
+      <h2><a id="math">Math</a></h2>
 
-      <pre><code class="language-typescript">// check a collision between two rectangles
-// all arguments are required and must be numbers
-colrect(x1, y1, w1, h1, x2, y2, w2, h2): boolean
-
-// check a collision between two circles
-// all arguments are required and must be numbers
-colcirc(x1, y1, r1, x2, y2, r2): boolean
-
+      <pre><code class="language-typescript">
 // Generates a pseudo-random float between min (inclusive) and max (exclusive)
 rand(min = 0, max = 1.0): number;
 
@@ -352,6 +345,19 @@ rad2deg(n: number): number
 // example: clamp(150, 0, 100) return 100
 // example: clamp(-10, 0, 100) return 0
 clamp(value: number, min: number, max: number): number
+
+// Re-maps a number from one range to another.
+// example: map(2, 0, 10, 0, 100) returns 20
+map(val, l1, h1, l2, h2, withinBounds = false ): number
+
+// Maps a number from one range to a value between 0 and 1.
+// example: norm(50, 0, 100) returns 0.5
+norm(val, start, stop): number
+
+// Calculates the positive difference of two given numbers.
+// example: diff(20, 30) return 10
+// example: diff(-3, 3) return 6
+diff(a, b): number
 
 // Returns the sine of a number in radians.
 sin(angle: number): number
@@ -411,6 +417,14 @@ sqrt(n: number): number
 // Returns 1 or -1, indicating the sign of a number.
 // If the number is 0, it will returns 0.
 sign(n: number): number
+
+// check a collision between two rectangles
+// all arguments are required and must be numbers
+colrect(x1, y1, w1, h1, x2, y2, w2, h2): boolean
+
+// check a collision between two circles
+// all arguments are required and must be numbers
+colcirc(x1, y1, r1, x2, y2, r2): boolean
 </code></pre>
 
       <h2><a id="globals">Globals Variables</a></h2>
@@ -448,9 +462,12 @@ TAPX: number
 // the tap/click Y position
 TAPY: number
 
-// The ratio of the circumference of a circle to its diameter,
-// approximately 3.14159
-PI: number
+// Math constants
+PI: number // approximately 3.14159 radians (180º)
+
+TWO_PI: number // approximately 6.28318 radians (360º) 
+
+HALF_PI: number // approximately 1.57079 radians (90º)
       </code></pre>
 
       <h2><a id="advanced">Advanced Features</a></h2>
