@@ -101,7 +101,7 @@ export default function customCompletions(context) {
         label: "linedash",
         type: "function",
         apply: "linedash(",
-        detail: "(value)",
+        detail: "(pattern, ofsset)",
       },
       {
         label: "linejoin",
@@ -113,13 +113,13 @@ export default function customCompletions(context) {
         label: "text",
         type: "function",
         apply: "text(",
-        detail: "(x, y, text, color = 0, size = null, font = 'monospace')",
+        detail: "(x, y, text, color = 0, size = 32, font = null)",
       },
       {
         label: "print",
         type: "function",
         apply: "print(",
-        detail: "(x, y, text, color = 0, size = null, font = 'monospace')",
+        detail: "(x, y, text, color = 0, size = 32, font = null)",
       },
       {
         label: "textalign",
@@ -176,6 +176,12 @@ export default function customCompletions(context) {
         apply: "blendmode(",
         detail: "(mode)",
         info: "sets the type of compositing operation to apply when drawing new shapes",
+      },
+      {
+        label: "filter",
+        type: "function",
+        apply: "filter(",
+        detail: "(effect)",
       },
       {
         label: "push",

@@ -214,7 +214,7 @@ line(x1, y1, x2, y2, color = 0): void
 linewidth(value: number): void
 
 // Sets the line dash pattern used when drawing lines
-linedash(value: number|number[]): void
+linedash(value: number|number[], ofsset: number): void
 
 // Determines the shape used to draw the end points of lines
 // Possible values are: "butt", "round" or "square"
@@ -230,7 +230,7 @@ linejoin(value: string): void
 
 // draw a text
 // alias: print(...)
-text(x, y, text: string, color = 0, size: number|null, font = 'monospace'): void
+text(x, y, text, color, size, font): void
 
 // set the text alignment and baseline
 // see: https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/textAlign
@@ -300,7 +300,12 @@ alpha(value = 1): void
 
 // update the type of compositing operation
 // see: https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/globalCompositeOperation
-blendmode(value = 'source-over'): void</code></pre>
+blendmode(value = 'source-over'): void
+
+// Provides filter effects such as blurring and grayscaling.
+// It is similar to the CSS filter property and accepts the same values.
+// see: https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/filter
+filter(effect: string): void</code></pre>
 
       <h2><a id="sound">Functions for Sound</a></h2>
 
