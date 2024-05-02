@@ -219,19 +219,42 @@ function compressString(str) {
 
 function decompressString(str) {
   let code = null;
-  try {
-    code = pako.inflate(
-      new Uint8Array(
-        atob(str)
-          .split("")
-          .map((c) => c.charCodeAt(0))
-      ),
-      { to: "string" }
-    );
-  } catch (e) {
-    alert("Invalid playground url: " + e.message);
-    code = null;
+  let attempts = 0;
+
+  while (attempts < 2) {
+    try {
+      if (attempts === 1) {
+        // try a second time fixing some characters
+        str = decodeURIComponent(str);
+        str = str.replace(/ /g, "+");
+      }
+
+      // decode
+      code = pako.inflate(
+        new Uint8Array(
+          atob(str)
+            .split("")
+            .map((c) => c.charCodeAt(0))
+        ),
+        { to: "string" }
+      );
+      console.log("Playground url decoded successfully!");
+      break;
+    } catch (e) {
+      console.error(
+        `Failed decode the playground url (${attempts + 1}/2). Error:`,
+        e
+      );
+      console.log("Trying to decode again (fixing some characters)...");
+      code = null;
+      attempts++;
+    }
   }
+
+  if (!code) {
+    alert("Invalid playground url.");
+  }
+
   return code;
 }
 
