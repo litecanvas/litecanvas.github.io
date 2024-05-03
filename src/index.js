@@ -197,7 +197,7 @@ const state = EditorState.create({
       autocomplete: customCompletions,
     }),
     EditorView.theme({
-      "&": { height: "100%" },
+      "&": { height: "100%", fontSize: smallScreen ? "18px" : "16px" },
       ".cm-scroller": { overflow: "auto" },
     }),
     EditorView.lineWrapping,
