@@ -103,6 +103,15 @@ svg {
   position: relative;
 }
 
+.editor .code {
+  display: flex;
+  flex-direction: column;
+}
+
+.code .cm-editor {
+  flex: 1;
+}
+
 .game {
   background-color: #000;
 }

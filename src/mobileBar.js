@@ -1,10 +1,13 @@
 import { toggleComment, undo, redo, indentMore } from "@codemirror/commands";
-import { openSearchPanel } from "@codemirror/search";
+// import { openSearchPanel } from "@codemirror/search";
 
 export default function mobileBar(editorView) {
-  let blurTimeout = 0;
+  const viewport = visualViewport;
+  if (!viewport) return;
+
+  const screen = getScreenSize();
+  const parent = document.querySelector(".editor .code");
   let pendingUpdate = 0;
-  const parent = editorView.dom.parentNode;
   const commands = [
     {
       name: "indent",
@@ -60,29 +63,28 @@ export default function mobileBar(editorView) {
 
   requestAnimationFrame(updateButtonsBarPosition);
 
-  function viewportHandler(event) {
+  function viewportHandler() {
     if (pendingUpdate) cancelAnimationFrame(pendingUpdate);
     pendingUpdate = requestAnimationFrame(updateButtonsBarPosition);
   }
 
-  visualViewport.addEventListener("resize", viewportHandler);
-  visualViewport.addEventListener("scroll", viewportHandler);
+  viewport.addEventListener("resize", viewportHandler);
+  viewport.addEventListener("scroll", viewportHandler);
 
   function updateButtonsBarPosition() {
-    clearTimeout(blurTimeout);
     pendingUpdate = false;
-    viewport = window.visualViewport;
 
-    const screen = getScreenSize();
     const barSize = buttons.getBoundingClientRect();
-    const scale = 1 / viewport.scale;
+    const x = viewport.offsetLeft;
+    const y = viewport.height + viewport.offsetTop - barSize.height;
 
-    x = viewport.offsetLeft;
-    y = viewport.height + viewport.offsetTop - barSize.height;
+    buttons.style.transform = `translate(${x}px, ${y}px)`;
 
-    buttons.style.transform = `translate(${x}px, ${y}px) scale(${scale})`;
+    console.log(~~viewport.height);
+    console.log(~~screen.height);
+    console.log(Math.abs(~~viewport.height - ~~screen.height));
 
-    if (viewport.height < screen.height && scale >= 0.98) {
+    if (Math.abs(viewport.height - screen.height) > 100) {
       showMobileBar();
     } else {
       hideMobileBar();
@@ -105,10 +107,12 @@ export default function mobileBar(editorView) {
   }
 
   function hideMobileBar() {
+    console.log("hide");
     buttons.style.display = "none";
   }
 
   function showMobileBar() {
+    console.log("show");
     buttons.style.display = "";
   }
 }
