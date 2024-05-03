@@ -210,7 +210,7 @@ const state = EditorState.create({
 
 window.codeEditor = new EditorView({
   state,
-  parent: $(".code"),
+  parent: $(".code .cm-container"),
 });
 
 function compressString(str) {

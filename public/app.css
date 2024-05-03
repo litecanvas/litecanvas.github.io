@@ -108,8 +108,9 @@ svg {
   flex-direction: column;
 }
 
-.code .cm-editor {
+.code .cm-container {
   flex: 1;
+  overflow: hidden;
 }
 
 .game {
