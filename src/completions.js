@@ -113,7 +113,7 @@ export default function customCompletions(context) {
         label: "text",
         type: "function",
         apply: "text(",
-        detail: "(x, y, text, color = 0, size = 32, font = null)",
+        detail: "(x, y, text, color = 0, size = 32)",
       },
       {
         label: "print",
@@ -134,6 +134,18 @@ export default function customCompletions(context) {
         detail: "(fontName)",
       },
       {
+        label: "textstyle",
+        type: "function",
+        apply: "textstyle(",
+        detail: "(style)",
+      },
+      {
+        label: "textmetrics",
+        type: "function",
+        apply: "textmetrics(",
+        detail: "(text, size = 32)",
+      },
+      {
         label: "image",
         type: "function",
         apply: "image(",
@@ -143,7 +155,7 @@ export default function customCompletions(context) {
         label: "paint",
         type: "function",
         apply: "paint(",
-        detail: "(width, height, callback|array)",
+        detail: "(width, height, callback|array, options)",
         info: "Creates a offscreen canvas to draw on it",
       },
       {

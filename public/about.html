@@ -181,8 +181,7 @@ settings.tapEvents = true
 settings.tappingInterval = 100;
 
 // export all functions to global context
-settings.global = true
-</code></pre>
+settings.global = true</code></pre>
 
       <h2><a id="drawing">Functions for Drawing</a></h2>
 
@@ -230,7 +229,7 @@ linejoin(value: string): void
 
 // draw a text
 // alias: print(...)
-text(x, y, text, color, size, font): void
+text(x, y, text, color, size = 32): void
 
 // set the text alignment and baseline
 // see: https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/textAlign
@@ -239,6 +238,12 @@ textalign(align = 'start', baseline = 'top'): void
 
 // set the default font family
 textfont(fontName: string): void
+
+// used to draw a text as 'bold' or 'italic'
+textstyle(style:string)
+
+// returns the text dimensions like width and height
+textmetrics(text:string, size = 32)
 
 /**
  * IMAGE DRAWING-RELATED FUNCTIONS
@@ -251,9 +256,10 @@ image(x, y, image: Image|HTMLCanvasElement): void
  * IMAGE DRAWING-RELATED FUNCTIONS
  */
 
-// make a image
-// see the "Paint" example
-paint(width, height, draw: string[]|function): OffscreenCanvas
+// create a offcanvas and to make an image
+// see: https://github.com/litecanvas/game-engine/blob/main/samples/paint/paint.js
+// see: https://github.com/litecanvas/game-engine/blob/main/samples/pixelart/pixelart.js
+paint(width, height, draw: string[]|function, options): OffscreenCanvas
 
 /**
  * ADVANCED DRAWING-RELATED FUNCTIONS
@@ -268,12 +274,6 @@ push(): void
 
 // restore the canvas context
 pop(): void
-
-// create a rectangular clipping region
-cliprect(x, y, width, height): void
-
-// create a circular clipping region
-clipcirc(x, y, width, height): void
 
 // note: before call cliprect or clipcirc you must save the context using push()
 // and later, you restore the context using pop()
@@ -305,7 +305,14 @@ blendmode(value = 'source-over'): void
 // Provides filter effects such as blurring and grayscaling.
 // It is similar to the CSS filter property and accepts the same values.
 // see: https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/filter
-filter(effect: string): void</code></pre>
+filter(effect: string): void
+
+// create a "circular" clipping region
+// see: https://github.com/litecanvas/game-engine/blob/main/samples/clip/clip.js
+clipcirc(x, y, width, height): void
+
+// same as above, but create a "rectangular" clipping region
+cliprect(x, y, width, height): void</code></pre>
 
       <h2><a id="sound">Functions for Sound</a></h2>
 
@@ -429,8 +436,7 @@ colrect(x1, y1, w1, h1, x2, y2, w2, h2): boolean
 
 // check a collision between two circles
 // all arguments are required and must be numbers
-colcirc(x1, y1, r1, x2, y2, r2): boolean
-</code></pre>
+colcirc(x1, y1, r1, x2, y2, r2): boolean</code></pre>
 
       <h2><a id="globals">Globals Variables</a></h2>
 
@@ -472,8 +478,7 @@ PI: number // approximately 3.14159 radians (180º)
 
 TWO_PI: number // approximately 6.28318 radians (360º) 
 
-HALF_PI: number // approximately 1.57079 radians (90º)
-      </code></pre>
+HALF_PI: number // approximately 1.57079 radians (90º)</code></pre>
 
       <h2><a id="advanced">Advanced Features</a></h2>
 
@@ -488,7 +493,11 @@ loadScript(url: string, callback: function): void
 
 // Asynchronously load a font
 loadFont(fontName:string, url: string, callback: function): void
-      </code></pre>
+
+// a special variable that indicates if are loading or not
+// if equal to 0 then are not loading any asset
+// note: put `if (LOADING > 0) return` in your `update()` and `draw()`
+LOADING: number</code></pre>
     </main>
     <script src="prism/prism.js" defer></script>
     <script src="prism/prism-typescript.js" defer></script>
