@@ -139,7 +139,7 @@ function resized() {
 litecanvas(settings = {});
 
 // the game loop callbacks
-// if loop = undefined, will use these functions: 
+// if loop = undefined, will use these functions:
 // window.init(), window.update(dt), window.draw(), window.resized()
 settings.loop = {
   init: function,
@@ -229,21 +229,28 @@ linejoin(value: string): void
 
 // draw a text
 // alias: print(...)
-text(x, y, text, color, size = 32): void
+text(x, y, text, color = 3): void
 
 // set the text alignment and baseline
+// default values: align = 'start', baseline = 'top'
 // see: https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/textAlign
 // see: https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/textBaseline
-textalign(align = 'start', baseline = 'top'): void
+textalign(align: string, baseline: string): void
 
 // set the default font family
+// default: 'sans-serif'
 textfont(fontName: string): void
 
+// set the font size
+// default: 32
+textsize(size: number): void
+
 // used to draw a text as 'bold' or 'italic'
-textstyle(style:string)
+textstyle(style: string)
 
 // returns the text dimensions like width and height
-textmetrics(text:string, size = 32)
+// when size is omitted, it will use the current font size defined by textsize()
+textmetrics(text: string, size:number)
 
 /**
  * IMAGE DRAWING-RELATED FUNCTIONS
@@ -279,13 +286,13 @@ pop(): void
 // and later, you restore the context using pop()
 
 // Adds a translation transformation to the current matrix
-translate(x = 0, y = 0): void
+translate(x: number, y: number): void
 
 // Adds a scaling transformation to the canvas units horizontally and/or vertically
-scale(x = 1, y = 1): void
+scale(x: number, y: number): void
 
 // Adds a rotation to the transformation matrix
-rotate(radians = 0): void
+rotate(radians: number): void
 
 // update the transformation matrix
 // when `resetFirst = true` uses `context.setTransform()`
@@ -296,11 +303,11 @@ transform(a, b, c, d, e, f, resetFirst = true): void
 
 // update the alpha (transparency)
 // see: https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/globalAlpha
-alpha(value = 1): void
+alpha(value: number): void
 
 // update the type of compositing operation
 // see: https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/globalCompositeOperation
-blendmode(value = 'source-over'): void
+blendmode(value: string): void
 
 // Provides filter effects such as blurring and grayscaling.
 // It is similar to the CSS filter property and accepts the same values.
@@ -336,7 +343,7 @@ randi(min = 0, max = 1): number;
 
 // Returns `true` or `false` based on random chance (p)
 // example: chance(0.25) ? '25% true' : '75% false'
-chance(p = 0.5): boolean
+chance(p: number): boolean
 
 // Choose a random item from a Array
 choose(arr: Array): any
@@ -380,7 +387,7 @@ cos(angle: number): number
 // Returns the tangent of a number in radians.
 tan(angle: number): number
 
-// Returns the angle between the positive x-axis 
+// Returns the angle between the positive x-axis
 // and the origin (0, 0) to the point (x, y)
 atan2(y:number, x: number): number
 
@@ -405,12 +412,12 @@ trunc(n: number): number
 // Returns the fractional part of a number
 fract(n: number): number
 
-// Returns the smallest of the numbers given as input parameters, 
+// Returns the smallest of the numbers given as input parameters,
 // or `Infinity` if there are no parameters.
 // example: min(-10, 15, -1) returns -10
 min(...ns: number): number
 
-// Returns the largest of the numbers given as input parameters, 
+// Returns the largest of the numbers given as input parameters,
 // or `-Infinity` if there are no parameters.
 // example: max(-10, 15, -1) returns 15
 max(...ns: number): number
@@ -476,7 +483,7 @@ TAPY: number
 // Math constants
 PI: number // approximately 3.14159 radians (180º)
 
-TWO_PI: number // approximately 6.28318 radians (360º) 
+TWO_PI: number // approximately 6.28318 radians (360º)
 
 HALF_PI: number // approximately 1.57079 radians (90º)</code></pre>
 
