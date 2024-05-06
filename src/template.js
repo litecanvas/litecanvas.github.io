@@ -19,20 +19,34 @@ export default function template(library, game) {
         font-weight: bold;
         font-family: monospace;
         padding: 1em;
-        font-size: 2em;
+        font-size: 32px;
         z-index: 1000;
         box-sizing: border-box;
+        line-height: 1.5;
+      }
+
+      #err-tip {
+        font-family: sans-serif;
+        font-weight: normal;
+        opacity: 90%;
+        font-size: 20px;
+      }
+
+      #err-tip code {
+        background: rgba(0,0,0,.2);
       }
     </style>
   </head>
   <body>
-    <div id="err" style="display:none"></div>
+    <div id="err" style="display:none">
+      <p id="err-tip">Tip: If you are loading any asset (script, font, image etc), don't forget to add <code>if (LOADING > 0) return;</code> at the beginning of your <code>update</code> and <code>draw</code> functions.</p>
+    </div>
     <script>
       // catch errors
       const err = document.getElementById('err')
       window.addEventListener('error', (ev) => {
         console.error(ev)
-        err.textContent = ev.message
+        err.prepend(ev.message)
         err.style.display = 'block'
       })
     </script>
