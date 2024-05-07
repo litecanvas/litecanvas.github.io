@@ -93,6 +93,7 @@
         <a href="#settings">Configuration</a> | <a href="#drawing">Drawing</a> |
         <a href="#sound">Sound</a> | <a href="#math">Math</a> |
         <a href="#globals">Globals</a> |
+        <a href="#plugin-api">Plugin API</a> |
         <a href="#advanced">Advanced</a>
       </nav>
 
@@ -346,12 +347,16 @@ randi(min = 0, max = 1): number;
 chance(p: number): boolean
 
 // Choose a random item from a Array
-choose(arr: Array): any
+choose(arr: Array<T>): T
 
 // Calculates a linear (interpolation) value over `t`.
 // example: lerp(0, 50, 0.5) returns 25
 // learn more: https://gamedev.net/tutorials/programming/general-and-gameplay-programming/a-brief-introduction-to-lerp-r4954/
 lerp(a: number, b: number, t: number): number
+
+// Interpolate between 2 values.
+// Optionally, takes a custom periodic function (default = `Math.sin`).
+wave(lower, higher, t, fn = Math.sin): number
 
 // Convert degrees to radians
 deg2rad(n: number): number
@@ -445,7 +450,7 @@ colrect(x1, y1, w1, h1, x2, y2, w2, h2): boolean
 // all arguments are required and must be numbers
 colcirc(x1, y1, r1, x2, y2, r2): boolean</code></pre>
 
-      <h2><a id="globals">Globals Variables</a></h2>
+      <h2><a id="globals">Variables</a></h2>
 
       <pre><code class="language-typescript">// the game canvas
 CANVAS: HTMLCanvasElement
@@ -464,6 +469,9 @@ CENTERY: number
 
 // the FPS meter
 FPS: number
+
+// the fixed delta time
+DT: number
 
 // the amount of time since the game started
 ELAPSED: number
@@ -486,6 +494,21 @@ PI: number // approximately 3.14159 radians (180º)
 TWO_PI: number // approximately 6.28318 radians (360º)
 
 HALF_PI: number // approximately 1.57079 radians (90º)</code></pre>
+
+      <h2><a id="plugin-api">Plugin API</a></h2>
+
+      <pre><code class="language-typescript">// create or update variables
+setvar(name: string, value: any): void
+
+// get the color value
+getcolor(index: number): string
+
+// add a game loop listener
+// returns a function that removes the listener
+listen(event: string, callback: function, highPriority = false): function
+
+// call all listeners of a specific game loop event
+emit(event, ...args): void</code></pre>
 
       <h2><a id="advanced">Advanced Features</a></h2>
 

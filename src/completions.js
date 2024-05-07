@@ -28,6 +28,11 @@ export default function customCompletions(context) {
       },
       { label: "FPS", type: "variable", info: "frames per second" },
       {
+        label: "DT",
+        type: "variable",
+        info: "The fixed delta time",
+      },
+      {
         label: "CENTERX",
         type: "variable",
         info: "middle X of the game screen",
@@ -361,6 +366,12 @@ export default function customCompletions(context) {
         detail: "(value)",
       },
       {
+        label: "wave",
+        type: "function",
+        apply: "wave(",
+        detail: "(lower, higher, t, fn = math.sin)",
+      },
+      {
         label: "min",
         type: "function",
         apply: "min(",
@@ -428,6 +439,30 @@ export default function customCompletions(context) {
         apply: "plugin(",
         detail: "(callback|object)",
         info: "Load a plugin to extend the litecanvas engine",
+      },
+      {
+        label: "setvar",
+        type: "function",
+        apply: "setvar(",
+        detail: "(name,value)",
+      },
+      {
+        label: "getcolor",
+        type: "function",
+        apply: "getcolor(",
+        detail: "(index)",
+      },
+      {
+        label: "listen",
+        type: "function",
+        apply: "listen(",
+        detail: "(event,callback,[highPriority])",
+      },
+      {
+        label: "emit",
+        type: "function",
+        apply: "emit(",
+        detail: "(event,...args)",
       },
 
       // asset loader plugin
