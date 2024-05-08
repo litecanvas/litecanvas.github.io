@@ -458,6 +458,13 @@ export default function customCompletions(context) {
         apply: "listen(",
         detail: "(event,callback,[highPriority])",
       },
+      {
+        label: "resize",
+        type: "function",
+        apply: "resize(",
+        detail: "(width, height)",
+        info: "resizes the game canvas",
+      },
 
       // asset loader plugin
       {

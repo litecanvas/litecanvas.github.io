@@ -492,10 +492,9 @@
           let x = 0, y = 0;
           _ctx.imageSmoothingEnabled = false;
           for (const str of draw) {
-            for (const color of str.split("")) {
+            for (const color of str) {
               if (" " !== color && "." !== color) {
-                const colorIndex = ~~parseInt(color, 16);
-                instance.rectfill(x, y, 1, 1, colorIndex);
+                instance.rectfill(x, y, 1, 1, parseInt(color, 16));
               }
               x++;
             }
@@ -725,6 +724,17 @@
         if (settings.global) {
           root[key] = value;
         }
+      },
+      /**
+       * Resizes the game canvas
+       *
+       * @param {number} width
+       * @param {number} height
+       */
+      resize(width, height) {
+        instance.setvar("WIDTH", _canvas.width = ~~width);
+        instance.setvar("HEIGHT", _canvas.height = ~~(height || width));
+        pageResized();
       }
     };
     Object.assign(instance, {
@@ -770,6 +780,8 @@
         };
         on(instance.CANVAS, _eventTapStart, function(ev) {
           ev.preventDefault();
+          if (!_rafid)
+            _resume();
           on(body, _eventTapMove, _tappingHandler);
           const [x, y] = [_tapStartX, _tapStartY] = _getXY(ev);
           updateTapping(true, x, y);
@@ -784,11 +796,13 @@
         });
       }
       on(root, "focus", () => {
-        if (!_rafid) {
-          _lastFrame = time();
-          _rafid = requestAnimationFrame(frame);
-        }
+        if (!_rafid)
+          _resume();
       });
+      function _resume() {
+        _lastFrame = time();
+        _rafid = requestAnimationFrame(frame);
+      }
       on(root, "blur", () => {
         cancelAnimationFrame(_rafid);
         _rafid = 0;
@@ -847,11 +861,11 @@
     function setupCanvas() {
       _canvas = "string" === typeof _canvas ? document.querySelector(_canvas) : _canvas;
       instance.setvar("CANVAS", _canvas);
+      _ctx = _canvas.getContext("2d");
       if (instance.WIDTH > 0)
         _fullscreen = false;
       _canvas.width = instance.WIDTH;
       _canvas.height = instance.HEIGHT || instance.WIDTH;
-      _ctx = _canvas.getContext("2d");
       if (!_canvas.parentNode)
         body.appendChild(_canvas);
       if (!settings.antialias || settings.pixelart) {
@@ -867,21 +881,19 @@
       }
     }
     function pageResized() {
-      if (_autoscale || _fullscreen) {
-        if (_fullscreen) {
-          _canvas.width = innerWidth;
-          _canvas.height = innerHeight;
-          instance.setvar("WIDTH", innerWidth);
-          instance.setvar("HEIGHT", innerHeight);
-        } else if (_autoscale) {
-          _scale = math.min(
-            innerWidth / instance.WIDTH,
-            innerHeight / instance.HEIGHT
-          );
-          _scale = settings.pixelart ? math.floor(_scale) : _scale;
-          _canvas.style.width = instance.WIDTH * _scale + "px";
-          _canvas.style.height = instance.HEIGHT * _scale + "px";
-        }
+      if (_fullscreen) {
+        _canvas.width = innerWidth;
+        _canvas.height = innerHeight;
+        instance.setvar("WIDTH", innerWidth);
+        instance.setvar("HEIGHT", innerHeight);
+      } else if (_autoscale) {
+        _scale = math.min(
+          innerWidth / instance.WIDTH,
+          innerHeight / instance.HEIGHT
+        );
+        _scale = settings.pixelart ? math.floor(_scale) : _scale;
+        _canvas.style.width = instance.WIDTH * _scale + "px";
+        _canvas.style.height = instance.HEIGHT * _scale + "px";
       }
       instance.setvar("CENTERX", instance.WIDTH / 2);
       instance.setvar("CENTERY", instance.HEIGHT / 2);
@@ -931,7 +943,7 @@
   }
   window.litecanvas = litecanvas;
 })();
-/*! litecanvas v0.29.0 | https://github.com/litecanvas/game-engine */
+/*! litecanvas v0.30.0 | https://github.com/litecanvas/game-engine */
 
 (()=>{var s=getScriptLoader=t=>(o,r)=>{t.setvar("LOADING",t.LOADING+1),script=document.createElement("script"),script.onload=()=>{r&&r(script),t.setvar("LOADING",t.LOADING-1)},script.onerror=()=>{r&&r(null)},script.src=o,document.head.appendChild(script)};var L=getImageLoader=t=>(o,r)=>{t.setvar("LOADING",t.LOADING+1);let d=new Image;d.onload=()=>{r&&r(d),t.setvar("LOADING",t.LOADING-1)},d.onerror=function(){r&&r(null)},d.src=o};var p=getFontLoader=t=>async(o,r,d)=>{let e=new FontFace(o,`url(${r})`);t.setvar("LOADING",t.LOADING+1),document.fonts.add(e),e.load().then(a=>{d&&d(a),t.setvar("LOADING",t.LOADING-1)}).catch(()=>{d&&d(null)})};window.pluginAssetLoader=u;function u(t,o){return t.setvar("LOADING",0),{loadScript:s(t,o),loadImage:L(t,o),loadFont:p(t,o)}}})();
 /*! Asset Loader plugin for litecanvas v0.4.2 by Luiz Bills | MIT Licensed */
