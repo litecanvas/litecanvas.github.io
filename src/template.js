@@ -54,9 +54,9 @@ export default function template(library, game) {
     <script>
       ((lc) => {
         window.litecanvas = (config = {}) => {
-          config.plugins = config.plugins || [];
-          config.plugins.push(pluginAssetLoader);
-          return lc(config);
+          let instance = lc(config);
+          instance.use(pluginAssetLoader)
+          return instance;
         };
       })(window.litecanvas);
     </script>

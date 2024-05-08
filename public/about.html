@@ -497,7 +497,11 @@ HALF_PI: number // approximately 1.57079 radians (90º)</code></pre>
 
       <h2><a id="plugin-api">Plugin API</a></h2>
 
-      <pre><code class="language-typescript">// create or update variables
+      <pre><code class="language-typescript">// loads a plugin
+// see: https://github.com/litecanvas/game-engine/blob/main/samples/plugin-basics/plugin-basics.js
+use(callback): object|void
+
+// create or update variables
 setvar(name: string, value: any): void
 
 // get the color value
@@ -514,20 +518,7 @@ emit(event, ...args): void</code></pre>
 
       <pre><code class="language-typescript">// the plugin "Asset Loader" is automatically loaded into the playground
 // see: https://github.com/litecanvas/plugin-asset-loader
-
-// Asynchronously load an image
-loadImage(url: string, callback: function): void
-
-// Asynchronously load an external JavaScript file
-loadScript(url: string, callback: function): void
-
-// Asynchronously load a font
-loadFont(fontName:string, url: string, callback: function): void
-
-// a special variable that indicates if are loading or not
-// if equal to 0 then are not loading any asset
-// note: put `if (LOADING > 0) return` in your `update()` and `draw()`
-LOADING: number</code></pre>
+</code></pre>
     </main>
     <script src="prism/prism.js" defer></script>
     <script src="prism/prism-typescript.js" defer></script>

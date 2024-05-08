@@ -434,11 +434,11 @@ export default function customCompletions(context) {
         info: "Check collision between 2 circles",
       },
       {
-        label: "plugin",
+        label: "use",
         type: "function",
-        apply: "plugin(",
-        detail: "(callback|object)",
-        info: "Load a plugin to extend the litecanvas engine",
+        apply: "use(",
+        detail: "(callback)",
+        info: "Loads a plugin to extend the litecanvas engine",
       },
       {
         label: "setvar",

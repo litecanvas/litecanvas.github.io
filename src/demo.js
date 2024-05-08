@@ -1,5 +1,8 @@
 export default () =>
-  `litecanvas()
+  `// Welcome to litecanvas playground!
+// Learn more tapping on the question mark above
+// or join our discord community: https://discord.com/invite/r2c3rGsvH3
+litecanvas()
 
 function init () {
   color = 0
