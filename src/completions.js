@@ -458,12 +458,6 @@ export default function customCompletions(context) {
         apply: "listen(",
         detail: "(event,callback,[highPriority])",
       },
-      {
-        label: "emit",
-        type: "function",
-        apply: "emit(",
-        detail: "(event,...args)",
-      },
 
       // asset loader plugin
       {

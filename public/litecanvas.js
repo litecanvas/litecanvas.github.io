@@ -708,19 +708,6 @@
         };
       },
       /**
-       * Call all listeners attached to a game loop
-       *
-       * @param {string} event The game loop event
-       * @param  {...any} args Arguments passed to all functions
-       */
-      emit(event, ...args) {
-        if (!_loop[event])
-          return;
-        for (let i = 0; i < _loop[event].length; ++i) {
-          _loop[event][i](...args);
-        }
-      },
-      /**
        * Get the color value
        *
        * @param {number} index The color number
@@ -829,7 +816,7 @@
         on(root, "resize", pageResized);
       }
       pageResized();
-      instance.emit("init");
+      emit("init");
       _lastFrame = time();
       _rafid = requestAnimationFrame(frame);
     }
@@ -838,7 +825,7 @@
       _lastFrame = now;
       _accumulated += t;
       while (_accumulated >= _stepMs) {
-        instance.emit("update", _step);
+        emit("update", _step);
         instance.setvar("ELAPSED", instance.ELAPSED + _step);
         _accumulated -= _stepMs;
         ticks++;
@@ -846,7 +833,7 @@
       }
       if (ticks) {
         _drawCount++;
-        instance.emit("draw");
+        emit("draw");
         _drawTime += _stepMs * ticks;
         if (_drawTime + _accumulated >= 1e3) {
           instance.setvar("FPS", _drawCount);
@@ -901,7 +888,7 @@
       _offsetTop = _canvas.offsetTop;
       _offsetLeft = _canvas.offsetLeft;
       instance.textalign(_textAlign, _textBaseline);
-      instance.emit("resized");
+      emit("resized");
     }
     function updateTapped(tapped, x, y) {
       instance.setvar("TAPPED", tapped);
@@ -921,6 +908,13 @@
         }
       }
     }
+    function emit(event, ...args) {
+      if (!_loop[event])
+        return;
+      for (let i = 0; i < _loop[event].length; ++i) {
+        _loop[event][i](...args);
+      }
+    }
     if (settings.global) {
       if (root.__litecanvas) {
         throw new Error("Cannot instantiate litecanvas globally twice");
@@ -937,7 +931,7 @@
   }
   window.litecanvas = litecanvas;
 })();
-/*! litecanvas v0.28.0 | https://github.com/litecanvas/game-engine */
+/*! litecanvas v0.29.0 | https://github.com/litecanvas/game-engine */
 
 (()=>{var s=getScriptLoader=t=>(o,r)=>{t.setvar("LOADING",t.LOADING+1),script=document.createElement("script"),script.onload=()=>{r&&r(script),t.setvar("LOADING",t.LOADING-1)},script.onerror=()=>{r&&r(null)},script.src=o,document.head.appendChild(script)};var L=getImageLoader=t=>(o,r)=>{t.setvar("LOADING",t.LOADING+1);let d=new Image;d.onload=()=>{r&&r(d),t.setvar("LOADING",t.LOADING-1)},d.onerror=function(){r&&r(null)},d.src=o};var p=getFontLoader=t=>async(o,r,d)=>{let e=new FontFace(o,`url(${r})`);t.setvar("LOADING",t.LOADING+1),document.fonts.add(e),e.load().then(a=>{d&&d(a),t.setvar("LOADING",t.LOADING-1)}).catch(()=>{d&&d(null)})};window.pluginAssetLoader=u;function u(t,o){return t.setvar("LOADING",0),{loadScript:s(t,o),loadImage:L(t,o),loadFont:p(t,o)}}})();
 /*! Asset Loader plugin for litecanvas v0.4.2 by Luiz Bills | MIT Licensed */
