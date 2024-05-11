@@ -287,6 +287,12 @@ export default function customCompletions(context) {
         detail: "(value, min, max)",
       },
       {
+        label: "wrap",
+        type: "function",
+        apply: "wrap(",
+        detail: "(value, min, max)",
+      },
+      {
         label: "lerp",
         type: "function",
         apply: "lerp(",

@@ -1,6 +1,6 @@
 (() => {
   // src/zzfx.js
-  var zzfxX = new AudioContext();
+  zzfxX = new AudioContext();
   zzfxV = 0.1;
   zzfx = (p = 1, k = 0.05, b = 220, e = 0, r = 0, t = 0.1, q = 0, D = 1, u = 0, y = 0, v = 0, z = 0, l = 0, E = 0, A = 0, F = 0, c = 0, w = 1, m = 0, B = 0, M = Math, R = 44100, d = 2 * M.PI, G = u *= 500 * d / R / R, C = b *= (1 - k + 2 * k * M.random(k = [])) * d / R, g = 0, H = 0, a = 0, n = 1, I = 0, J = 0, f = 0, x, h) => {
     e = R * e + 9;
@@ -66,7 +66,7 @@
 
   // src/index.js
   function litecanvas(settings = {}) {
-    const root = window, body = document.body, math = Math, PI = math.PI, TWO_PI = PI * 2, on = (elem, evt, callback) => elem.addEventListener(evt, callback), off = (elem, evt, callback) => elem.removeEventListener(evt, callback), time = () => performance.now(), NULL = null, defaults = {
+    const root = window, body = document.body, math = Math, TWO_PI = math.PI * 2, on = (elem, evt, callback) => elem.addEventListener(evt, callback), off = (elem, evt, callback) => elem.removeEventListener(evt, callback), time = () => performance.now(), NULL = null, defaults = {
       fps: 60,
       fullscreen: true,
       width: NULL,
@@ -77,19 +77,15 @@
       background: NULL,
       canvas: NULL,
       global: true,
-      tappingInterval: true,
+      tappingInterval: 100,
       tapEvents: true,
       loop: NULL
     };
     settings = Object.assign(defaults, settings);
     let _initialized = false, _plugins = [], _canvas = settings.canvas || document.createElement("canvas"), _fullscreen = settings.fullscreen, _autoscale = settings.autoscale, _bg = settings.background, _hasMouse = matchMedia("(pointer:fine)").matches, _tappingHandler, _scale = 1, _offsetTop = 0, _offsetLeft = 0, _ctx, _lastFrame, _step = 1 / settings.fps, _stepMs = _step * 1e3, _accumulated = 0, _rafid, _drawCount = 0, _drawTime = 0, _fontFamily = "sans-serif", _fontStyle = "", _fontSize = 32, _textAlign = "start", _textBaseline = "top", _loop = {
-      /** @type {function[]} */
       init: [],
-      /** @type {function[]} */
       update: [],
-      /** @type {function[]} */
       draw: [],
-      /** @type {function[]} */
       resized: []
     }, _helpers = {
       settings: Object.assign({}, settings),
@@ -104,13 +100,13 @@
       /** @type {HTMLCanvasElement} */
       CANVAS: NULL,
       /** @type {boolean} */
-      TAPPED: false,
+      TAPPED: NULL,
       /** @type {boolean} */
-      TAPPING: false,
+      TAPPING: NULL,
       /** @type {number} */
-      TAPX: 0,
+      TAPX: NULL,
       /** @type {number} */
-      TAPY: 0,
+      TAPY: NULL,
       /** @type {number} */
       ELAPSED: 0,
       /** @type {number} */
@@ -118,22 +114,23 @@
       /** @type {number} */
       DT: _step,
       /** @type {number} */
-      CENTERX: 0,
+      CENTERX: NULL,
       /** @type {number} */
-      CENTERY: 0,
+      CENTERY: NULL,
+      /** MATH API */
       /**
        * The value of the mathematical constant PI (π).
        * Approximately 3.14159
        *
        * @type {number}
        */
-      PI,
+      PI: math.PI,
       /**
        * Twice the value of the mathematical constant PI (π).
        * Approximately 6.28318
        *
-       * Note: TWO_PI radians equals 360º, PI radians equals 180º,
-       * HALF_PI radians equals 90º, and HALF_PI/2 radians equals 45º.
+       * Note: TWO_PI radians equals 360°, PI radians equals 180°,
+       * HALF_PI radians equals 90°, and HALF_PI/2 radians equals 45°.
        *
        * @type {number}
        */
@@ -144,7 +141,7 @@
        *
        * @type {number}
        */
-      HALF_PI: PI * 0.5,
+      HALF_PI: math.PI * 0.5,
       /**
        * Calculates a linear (interpolation) value over t%.
        *
@@ -161,16 +158,16 @@
        * @param {number} degs
        * @returns {number} the value in radians
        */
-      deg2rad: (degs) => PI / 180 * degs,
+      deg2rad: (degs) => math.PI / 180 * degs,
       /**
        * Convert radians to degrees
        *
        * @param {number} rads
        * @returns {number} the value in degrees
        */
-      rad2deg: (rads) => 180 / PI * rads,
+      rad2deg: (rads) => 180 / math.PI * rads,
       /**
-       * Constrains a number between a minimum and maximum value.
+       * Constrains a number between `min` and `max`.
        *
        * @param {number} value
        * @param {number} min
@@ -179,6 +176,15 @@
        */
       clamp: (value, min, max) => math.min(math.max(value, min), max),
       /**
+       * Wraps a number between `min` and `max`.
+       *
+       * @param {number} value
+       * @param {number} min
+       * @param {number} max
+       * @returns {number}
+       */
+      wrap: (value, min, max) => value - (max - min) * math.floor((value - min) / (max - min)),
+      /**
        * Re-maps a number from one range to another.
        *
        * @param {number} value  the value to be remapped.
@@ -186,7 +192,7 @@
        * @param {number} stop1  upper bound of the value's current range.
        * @param {number} start2 lower bound of the value's target range.
        * @param {number} stop2  upper bound of the value's target range.
-       * @param {boolean} withinBounds constrain the value to the newly mapped range
+       * @param {boolean} [withinBounds=true] constrain the value to the newly mapped range
        * @returns {number} the remapped number
        */
       map(value, start1, stop1, start2, stop2, withinBounds = false) {
@@ -212,37 +218,6 @@
        * @returns {number}
        */
       diff: (a, b) => math.abs(b - a),
-      /** RNG API */
-      /**
-       * Generates a pseudorandom float between min (inclusive) and max (exclusive)
-       *
-       * @param {number} min
-       * @param {number} max
-       * @returns {number} the random number
-       */
-      rand: (min = 0, max = 1) => math.random() * (max - min) + min,
-      /**
-       * Generates a pseudorandom integer between min (inclusive) and max (inclusive)
-       *
-       * @param {number} min
-       * @param {number} max
-       * @returns {number} the random number
-       */
-      randi: (min = 0, max = 1) => instance.floor(instance.rand() * (max - min + 1) + min),
-      /**
-       * Randomly returns `true` or `false`
-       *
-       * @param {number} p chance from 0 to 1 (where 0 = 0% and 1 = 100%)
-       * @returns {boolean}
-       */
-      chance: (p) => instance.rand() < p,
-      /**
-       * Choose a random item from a Array
-       *
-       * @param {Array<T>} arr
-       * @returns {T}
-       */
-      choose: (arr) => arr[instance.randi(0, arr.length - 1)],
       /**
        * Returns the fractional part of a number
        *
@@ -257,18 +232,46 @@
        * @param {number} lower
        * @param {number} higher
        * @param {number} t
-       * @param {function} f
+       * @param {function} [fn=Math.sin]
        * @returns {number}
        */
-      wave(lower, higher, t, fn = math.sin) {
-        return lower + (fn(t) + 1) / 2 * (higher - lower);
-      },
+      wave: (lower, higher, t, fn = math.sin) => lower + (fn(t) + 1) / 2 * (higher - lower),
+      /** RNG API */
+      /**
+       * Generates a pseudorandom float between min (inclusive) and max (exclusive)
+       *
+       * @param {number} [min=0.0]
+       * @param {number} [max=1.0]
+       * @returns {number} the random number
+       */
+      rand: (min = 0, max = 1) => math.random() * (max - min) + min,
+      /**
+       * Generates a pseudorandom integer between min (inclusive) and max (inclusive)
+       *
+       * @param {number} [min=0]
+       * @param {number} [max=1]
+       * @returns {number} the random number
+       */
+      randi: (min = 0, max = 1) => instance.floor(instance.rand() * (max - min + 1) + min),
+      /**
+       * Randomly returns `true` or `false`
+       *
+       * @param {number} p chance from 0 to 1 (where 0 = 0% and 1 = 100%)
+       * @returns {boolean}
+       */
+      chance: (p) => instance.rand() < p,
+      /**
+       * Choose a random item from a Array
+       *
+       * @param {Array.<T>} arr
+       * @returns {T}
+       */
+      choose: (arr) => arr[instance.randi(0, arr.length - 1)],
       /** BASIC GRAPHICS API */
       /**
        * Clear the game screen
        *
        * @param {number|null} color The background color (from 0 to 7) or null
-       * @alias instance.cls
        */
       clear(color) {
         if (NULL == color) {
@@ -284,7 +287,7 @@
        * @param {number} y
        * @param {number} width
        * @param {number} height
-       * @param {number} color the color index (generally from 0 to 7)
+       * @param {number} [color=0] the color index (generally from 0 to 7)
        */
       rect(x, y, width, height, color = 0) {
         _ctx.strokeStyle = instance.getcolor(color);
@@ -297,7 +300,7 @@
        * @param {number} y
        * @param {number} width
        * @param {number} height
-       * @param {number} color the color index (generally from 0 to 7)
+       * @param {number} [color=0] the color index (generally from 0 to 7)
        */
       rectfill(x, y, width, height, color = 0) {
         _ctx.fillStyle = instance.getcolor(color);
@@ -309,7 +312,7 @@
        * @param {number} x
        * @param {number} y
        * @param {number} radius
-       * @param {number} color the color index (generally from 0 to 7)
+       * @param {number} [color=0] the color index (generally from 0 to 7)
        */
       circ(x, y, radius, color = 0) {
         _ctx.strokeStyle = instance.getcolor(color);
@@ -324,7 +327,7 @@
        * @param {number} x
        * @param {number} y
        * @param {number} radius
-       * @param {number} color the color index (generally from 0 to 7)
+       * @param {number} [color=0] the color index (generally from 0 to 7)
        */
       circfill(x, y, radius, color = 0) {
         _ctx.fillStyle = instance.getcolor(color);
@@ -340,7 +343,7 @@
        * @param {number} y1
        * @param {number} x2
        * @param {number} y2
-       * @param {number} color the color index (generally from 0 to 7)
+       * @param {number} [color=0] the color index (generally from 0 to 7)
        */
       line(x1, y1, x2, y2, color = 0) {
         _ctx.strokeStyle = instance.getcolor(color);
@@ -362,7 +365,7 @@
        * Sets the line dash pattern used when drawing lines
        *
        * @param {number|number[]} segments the line dash pattern
-       * @param {number} offset the line dash offset, or "phase".
+       * @param {number} [offset=0] the line dash offset, or "phase".
        * @see https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/setLineDash
        * @see https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/lineDashOffset
        */
@@ -394,12 +397,10 @@
       /**
        * Draw text
        *
-       * @alias instance.print
        * @param {number} x
        * @param {number} y
        * @param {string} text the text message
-       * @param {number} color the color index (generally from 0 to 7)
-       * @param {number} size the font size
+       * @param {number} [color=3] the color index (generally from 0 to 7)
        */
       text(x, y, text, color = 3) {
         _ctx.font = `${_fontStyle || ""} ${~~_fontSize}px ${_fontFamily}`;
@@ -446,11 +447,11 @@
        * Returns a TextMetrics object that contains information about the measured text (such as its width, for example)
        *
        * @param {string} text
-       * @param {number} size
+       * @param {number} [size]
        * @returns {TextMetrics}
        * @see https://developer.mozilla.org/en-US/docs/Web/API/TextMetrics
        */
-      textmetrics(text, size = NULL) {
+      textmetrics(text, size) {
         _ctx.font = `${_fontStyle || ""} ${~~(size || _fontSize)}px ${_fontFamily}`;
         metrics = _ctx.measureText(text);
         metrics.height = metrics.actualBoundingBoxAscent + metrics.actualBoundingBoxDescent;
@@ -468,16 +469,12 @@
         _ctx.drawImage(image, ~~x, ~~y);
       },
       /**
-       * @callback drawCallback
-       * @param {OffscreenCanvas} canvas
-       */
-      /**
        * Creates a offscreen canvas to draw on it
        *
        * @param {number} width
        * @param {number} height
        * @param {string[]|drawCallback} draw
-       * @param {{scale?:number}} options
+       * @param {{scale?:number}} [options]
        * @returns {OffscreenCanvas}
        * @see https://developer.mozilla.org/en-US/docs/Web/API/OffscreenCanvas
        */
@@ -553,7 +550,7 @@
        * @param {number} d
        * @param {number} e
        * @param {number} f
-       * @param {boolean} resetFirst `false` to use _ctx.transform(); by default use _ctx.setTransform()
+       * @param {boolean} [resetFirst=true] `false` to use _ctx.transform(); by default use _ctx.setTransform()
        * @see https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/setTransform
        */
       transform: (a, b, c, d, e, f, resetFirst = true) => _ctx[resetFirst ? "setTransform" : "transform"](a, b, c, d, e, f),
@@ -625,10 +622,10 @@
       /**
        * Play a defined sound or a ZzFX array of params
        *
-       * @param {number|Array} sound the sound index (from 0 to 7) or a ZzFX array of params
-       * @param {number} volume
-       * @param {number} pitch
-       * @param {number} randomness
+       * @param {number|number[]} [sound=0] the sound index (from 0 to 7) or a ZzFX array of params
+       * @param {number} [volume=1]
+       * @param {number} [pitch=0]
+       * @param {number} [randomness=0]
        * @returns {AudioBufferSourceNode}
        * @see https://github.com/KilledByAPixel/ZzFX
        */
@@ -674,33 +671,24 @@
       colcirc: (x1, y1, r1, x2, y2, r2) => (x2 - x1) ** 2 + (y2 - y1) ** 2 <= (r1 + r2) ** 2,
       /** PLUGINS API */
       /**
-       * Loads a plugin
+       * Prepares a plugin to be loaded
        *
-       * @callback pluginCallback
-       * @param {object} instance - The litecanvas instance
-       * @param {object} helpers
-       */
-      /**
        * @param {pluginCallback} callback
        */
-      use(callback) {
-        if (_initialized) {
-          loadPlugin(callback);
-        } else {
-          _plugins.push(callback);
-        }
+      use: (callback) => {
+        _initialized ? loadPlugin(callback) : _plugins.push(callback);
       },
       /**
        * Add a game loop event listener
        *
        * @param {string} event should be "init", "update", "draw" or "resized"
        * @param {function} callback the function that is called when the event occurs
-       * @param {boolean} highPriority determines whether the callback will be called before or after the others
-       * @returns {function|null} a function to remove the listener or null if passed a invalid event
+       * @param {boolean} [highPriority=false] determines whether the callback will be called before or after the others
+       * @returns {function?} a function to remove the listener or `undefined` if passed a invalid event
        */
       listen(event, callback, highPriority = false) {
         if (!_loop[event])
-          return NULL;
+          return;
         _loop[event][highPriority ? "unshift" : "push"](callback);
         return () => {
           _loop[event] = _loop[event].filter((f) => f !== callback);
@@ -726,7 +714,7 @@
         }
       },
       /**
-       * Resizes the game canvas
+       * Resizes the game canvas and emit the "resized" event
        *
        * @param {number} width
        * @param {number} height
@@ -737,10 +725,8 @@
         pageResized();
       }
     };
-    Object.assign(instance, {
-      cls: instance.clear,
-      print: instance.text
-    });
+    instance.cls = instance.clear;
+    instance.print = instance.text;
     for (const k of [
       "sin",
       "cos",
@@ -943,7 +929,7 @@
   }
   window.litecanvas = litecanvas;
 })();
-/*! litecanvas v0.30.0 | https://github.com/litecanvas/game-engine */
+/*! litecanvas v0.31.0 | https://github.com/litecanvas/game-engine */
 
 (()=>{var s=getScriptLoader=t=>(o,r)=>{t.setvar("LOADING",t.LOADING+1),script=document.createElement("script"),script.onload=()=>{r&&r(script),t.setvar("LOADING",t.LOADING-1)},script.onerror=()=>{r&&r(null)},script.src=o,document.head.appendChild(script)};var L=getImageLoader=t=>(o,r)=>{t.setvar("LOADING",t.LOADING+1);let d=new Image;d.onload=()=>{r&&r(d),t.setvar("LOADING",t.LOADING-1)},d.onerror=function(){r&&r(null)},d.src=o};var p=getFontLoader=t=>async(o,r,d)=>{let e=new FontFace(o,`url(${r})`);t.setvar("LOADING",t.LOADING+1),document.fonts.add(e),e.load().then(a=>{d&&d(a),t.setvar("LOADING",t.LOADING-1)}).catch(()=>{d&&d(null)})};window.pluginAssetLoader=u;function u(t,o){return t.setvar("LOADING",0),{loadScript:s(t,o),loadImage:L(t,o),loadFont:p(t,o)}}})();
 /*! Asset Loader plugin for litecanvas v0.4.2 by Luiz Bills | MIT Licensed */

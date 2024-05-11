@@ -92,8 +92,7 @@
         <strong>API</strong>: <a href="#colors">Colors</a> |
         <a href="#settings">Configuration</a> | <a href="#drawing">Drawing</a> |
         <a href="#sound">Sound</a> | <a href="#math">Math</a> |
-        <a href="#globals">Globals</a> |
-        <a href="#plugin-api">Plugin API</a> |
+        <a href="#globals">Globals</a> | <a href="#plugin-api">Plugin API</a> |
         <a href="#advanced">Advanced</a>
       </nav>
 
@@ -192,8 +191,8 @@ settings.global = true</code></pre>
 
 // clear the canvas
 // all color argument is a integer (a color from 0 to 7)
-// alias: cls(...)
-clear(color: null|number): void
+// alias: clear
+cls(color: null|number): void
 
 // draw a color-filled rectangle
 rectfill(x, y, w, h, color = 0): void
@@ -229,7 +228,7 @@ linejoin(value: string): void
  */
 
 // draw a text
-// alias: print(...)
+// alias: print
 text(x, y, text, color = 3): void
 
 // set the text alignment and baseline
@@ -364,11 +363,16 @@ deg2rad(n: number): number
 // Convert radians to degrees
 rad2deg(n: number): number
 
-// Force a value within the boundaries by clamping it to the range min, max.
+// Constrains a number between `min` and `max`.
 // example: clamp(50, 0, 100) return 50
 // example: clamp(150, 0, 100) return 100
 // example: clamp(-10, 0, 100) return 0
 clamp(value: number, min: number, max: number): number
+
+// Wraps a number between `min` and `max`.
+// example: wrap(50,0,100) return 50
+// example: wrap(125, 0, 100) return 25
+wrap(value: number, min: number, max: number): number
 
 // Re-maps a number from one range to another.
 // example: map(2, 0, 10, 0, 100) returns 20
