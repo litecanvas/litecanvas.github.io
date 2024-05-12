@@ -66,7 +66,7 @@
 
   // src/index.js
   function litecanvas(settings = {}) {
-    const root = window, body = document.body, math = Math, TWO_PI = math.PI * 2, on = (elem, evt, callback) => elem.addEventListener(evt, callback), off = (elem, evt, callback) => elem.removeEventListener(evt, callback), time = () => performance.now(), NULL = null, defaults = {
+    const root = window, body = document.body, math = Math, TWO_PI = math.PI * 2, on = (elem, evt, callback) => elem.addEventListener(evt, callback), off = (elem, evt, callback) => elem.removeEventListener(evt, callback), time = () => performance.now(), NULL = null, UNDEF = void 0, defaults = {
       fps: 60,
       fullscreen: true,
       width: NULL,
@@ -288,10 +288,18 @@
        * @param {number} width
        * @param {number} height
        * @param {number} [color=0] the color index (generally from 0 to 7)
+       * @param {number|number[]} [radii] A number or list specifying the radii used to draw a rounded-borders rectangle
        */
-      rect(x, y, width, height, color = 0) {
-        _ctx.strokeStyle = instance.getcolor(color);
-        _ctx.strokeRect(~~x, ~~y, ~~width, ~~height);
+      rect(x, y, width, height, color = 0, radii = UNDEF) {
+        _ctx.beginPath();
+        _ctx[radii ? "roundRect" : "rect"](
+          ~~x,
+          ~~y,
+          ~~width,
+          ~~height,
+          radii
+        );
+        instance.stroke(color);
       },
       /**
        * Draw a color-filled rectangle
@@ -301,10 +309,18 @@
        * @param {number} width
        * @param {number} height
        * @param {number} [color=0] the color index (generally from 0 to 7)
+       * @param {number|number[]} [radii] A number or list specifying the radii used to draw a rounded-borders rectangle
        */
-      rectfill(x, y, width, height, color = 0) {
-        _ctx.fillStyle = instance.getcolor(color);
-        _ctx.fillRect(~~x, ~~y, ~~width, ~~height);
+      rectfill(x, y, width, height, color = 0, radii = UNDEF) {
+        _ctx.beginPath();
+        _ctx[radii ? "roundRect" : "rect"](
+          ~~x,
+          ~~y,
+          ~~width,
+          ~~height,
+          radii
+        );
+        instance.fill(color);
       },
       /**
        * Draw a circle outline
@@ -315,11 +331,9 @@
        * @param {number} [color=0] the color index (generally from 0 to 7)
        */
       circ(x, y, radius, color = 0) {
-        _ctx.strokeStyle = instance.getcolor(color);
         _ctx.beginPath();
         _ctx.arc(~~x, ~~y, ~~radius, 0, TWO_PI);
-        _ctx.closePath();
-        _ctx.stroke();
+        instance.stroke(color);
       },
       /**
        * Draw a color-filled circle
@@ -330,11 +344,9 @@
        * @param {number} [color=0] the color index (generally from 0 to 7)
        */
       circfill(x, y, radius, color = 0) {
-        _ctx.fillStyle = instance.getcolor(color);
         _ctx.beginPath();
         _ctx.arc(~~x, ~~y, ~~radius, 0, TWO_PI);
-        _ctx.closePath();
-        _ctx.fill();
+        instance.fill(color);
       },
       /**
        * Draw a line
@@ -346,11 +358,10 @@
        * @param {number} [color=0] the color index (generally from 0 to 7)
        */
       line(x1, y1, x2, y2, color = 0) {
-        _ctx.strokeStyle = instance.getcolor(color);
         _ctx.beginPath();
         _ctx.moveTo(~~x1, ~~y1);
         _ctx.lineTo(~~x2, ~~y2);
-        _ctx.stroke();
+        instance.stroke(color);
       },
       /**
        * Sets the thickness of lines
@@ -532,9 +543,9 @@
        * Adds a scaling transformation to the canvas units horizontally and/or vertically.
        *
        * @param {number} x
-       * @param {number} y
+       * @param {number} [y]
        */
-      scale: (x, y) => _ctx.scale(x, y),
+      scale: (x, y) => _ctx.scale(x, y || x),
       /**
        * Adds a rotation to the transformation matrix
        *
@@ -562,6 +573,36 @@
        */
       alpha(alpha) {
         _ctx.globalAlpha = alpha;
+      },
+      /**
+       * Returns a newly instantiated Path2D object, optionally with another
+       * path as an argument (creates a copy), or optionally with a string
+       * consisting of SVG path data.
+       *
+       * @param {Path2D|string} [arg]
+       * @returns Path2D
+       * @see https://developer.mozilla.org/en-US/docs/Web/API/Path2D/Path2D
+       */
+      path: (arg) => new Path2D(arg),
+      /**
+       * Fills the current or given path with a given color.
+       *
+       * @param {number} color
+       * @param {Path2D} [path]
+       */
+      fill(color, path) {
+        _ctx.fillStyle = instance.getcolor(color);
+        _ctx.fill(path);
+      },
+      /**
+       * Outlines the current or given path with a given color.
+       *
+       * @param {number} color
+       * @param {Path2D} [path]
+       */
+      stroke(color, path) {
+        _ctx.strokeStyle = instance.getcolor(color);
+        path ? _ctx.stroke(path) : _ctx.stroke();
       },
       /**
        * Create a retangular clipping region.
@@ -812,9 +853,7 @@
       if (NULL != _bg) {
         instance.CANVAS.style.backgroundColor = instance.getcolor(_bg);
       }
-      if (_autoscale || _fullscreen) {
-        on(root, "resize", pageResized);
-      }
+      on(root, "resize", pageResized);
       pageResized();
       emit("init");
       _lastFrame = time();
@@ -929,7 +968,7 @@
   }
   window.litecanvas = litecanvas;
 })();
-/*! litecanvas v0.31.0 | https://github.com/litecanvas/game-engine */
+/*! litecanvas v0.32.0 | https://github.com/litecanvas/game-engine */
 
 (()=>{var s=getScriptLoader=t=>(o,r)=>{t.setvar("LOADING",t.LOADING+1),script=document.createElement("script"),script.onload=()=>{r&&r(script),t.setvar("LOADING",t.LOADING-1)},script.onerror=()=>{r&&r(null)},script.src=o,document.head.appendChild(script)};var L=getImageLoader=t=>(o,r)=>{t.setvar("LOADING",t.LOADING+1);let d=new Image;d.onload=()=>{r&&r(d),t.setvar("LOADING",t.LOADING-1)},d.onerror=function(){r&&r(null)},d.src=o};var p=getFontLoader=t=>async(o,r,d)=>{let e=new FontFace(o,`url(${r})`);t.setvar("LOADING",t.LOADING+1),document.fonts.add(e),e.load().then(a=>{d&&d(a),t.setvar("LOADING",t.LOADING-1)}).catch(()=>{d&&d(null)})};window.pluginAssetLoader=u;function u(t,o){return t.setvar("LOADING",0),{loadScript:s(t,o),loadImage:L(t,o),loadFont:p(t,o)}}})();
 /*! Asset Loader plugin for litecanvas v0.4.2 by Luiz Bills | MIT Licensed */

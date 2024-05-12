@@ -192,13 +192,13 @@ settings.global = true</code></pre>
 // clear the canvas
 // all color argument is a integer (a color from 0 to 7)
 // alias: clear
-cls(color: null|number): void
+cls(color?: number): void
 
 // draw a color-filled rectangle
-rectfill(x, y, w, h, color = 0): void
+rectfill(x, y, w, h, color = 0, radii?: number | number[]): void
 
 // draw a outline rectangle
-rect(x, y, w, h, color = 0): void
+rect(x, y, w, h, color = 0, radii?: number | number[]): void
 
 // draw a color-filled circle
 circfill(x, y, r, color = 0): void
@@ -213,7 +213,7 @@ line(x1, y1, x2, y2, color = 0): void
 linewidth(value: number): void
 
 // Sets the line dash pattern used when drawing lines
-linedash(value: number|number[], ofsset: number): void
+linedash(value: number | number[], ofsset?: number): void
 
 // Determines the shape used to draw the end points of lines
 // Possible values are: "butt", "round" or "square"
@@ -250,7 +250,7 @@ textstyle(style: string)
 
 // returns the text dimensions like width and height
 // when size is omitted, it will use the current font size defined by textsize()
-textmetrics(text: string, size:number)
+textmetrics(text: string, size?: number)
 
 /**
  * IMAGE DRAWING-RELATED FUNCTIONS
@@ -266,7 +266,7 @@ image(x, y, image: Image|HTMLCanvasElement): void
 // create a offcanvas and to make an image
 // see: https://github.com/litecanvas/game-engine/blob/main/samples/paint/paint.js
 // see: https://github.com/litecanvas/game-engine/blob/main/samples/pixelart/pixelart.js
-paint(width, height, draw: string[]|function, options): OffscreenCanvas
+paint(width, height, draw: string[]|function, options?: {scale: number}): OffscreenCanvas
 
 /**
  * ADVANCED DRAWING-RELATED FUNCTIONS
@@ -289,7 +289,7 @@ pop(): void
 translate(x: number, y: number): void
 
 // Adds a scaling transformation to the canvas units horizontally and/or vertically
-scale(x: number, y: number): void
+scale(x: number, y?: number): void
 
 // Adds a rotation to the transformation matrix
 rotate(radians: number): void
@@ -304,6 +304,18 @@ transform(a, b, c, d, e, f, resetFirst = true): void
 // update the alpha (transparency)
 // see: https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/globalAlpha
 alpha(value: number): void
+
+// fills the current path
+// see: https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/fill
+fill(color: number, path?: Path2D): void
+
+// outlines the current path
+// see: https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/stroke
+stroke(color: number, path?: Path2D): void
+
+// create a Path2D instance
+// see: https://developer.mozilla.org/en-US/docs/Web/API/Path2D/Path2D
+path(arg?: Path2D | string): Path2D
 
 // update the type of compositing operation
 // see: https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/globalCompositeOperation
