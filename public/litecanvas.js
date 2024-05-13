@@ -27,21 +27,21 @@
   // src/colors.js
   var colors = [
     // 0 - black
-    "#1a1c2c",
-    // 1 - blue
-    "#29366f",
-    // 2 - gray
-    "#94b0c2",
+    "#101820",
+    // 1 - stone
+    "#736464",
+    // 2 - brown
+    "#a0694b",
     // 3 - white
-    "#f4f4f4",
+    "#f0f0dc",
     // 4 - red
-    "#b13e53",
+    "#d24040",
     // 5 - yellow
-    "#ffcd75",
-    // 6 - green
-    "#38b764",
-    // 7 - lime
-    "#a7f070"
+    "#fac800",
+    // 6 - blue
+    "#00a0c8",
+    // 7 - green
+    "#10c840"
   ];
 
   // src/sounds.js
@@ -66,7 +66,7 @@
 
   // src/index.js
   function litecanvas(settings = {}) {
-    const root = window, body = document.body, math = Math, TWO_PI = math.PI * 2, on = (elem, evt, callback) => elem.addEventListener(evt, callback), off = (elem, evt, callback) => elem.removeEventListener(evt, callback), time = () => performance.now(), NULL = null, UNDEF = void 0, defaults = {
+    const root = window, body = document.body, math = Math, PI = math.PI, TWO_PI = PI * 2, on = (elem, evt, callback) => elem.addEventListener(evt, callback), off = (elem, evt, callback) => elem.removeEventListener(evt, callback), time = () => performance.now(), NULL = null, UNDEF = void 0, defaults = {
       fps: 60,
       fullscreen: true,
       width: NULL,
@@ -124,7 +124,7 @@
        *
        * @type {number}
        */
-      PI: math.PI,
+      PI,
       /**
        * Twice the value of the mathematical constant PI (π).
        * Approximately 6.28318
@@ -141,7 +141,7 @@
        *
        * @type {number}
        */
-      HALF_PI: math.PI * 0.5,
+      HALF_PI: PI * 0.5,
       /**
        * Calculates a linear (interpolation) value over t%.
        *
@@ -158,14 +158,14 @@
        * @param {number} degs
        * @returns {number} the value in radians
        */
-      deg2rad: (degs) => math.PI / 180 * degs,
+      deg2rad: (degs) => PI / 180 * degs,
       /**
        * Convert radians to degrees
        *
        * @param {number} rads
        * @returns {number} the value in degrees
        */
-      rad2deg: (rads) => 180 / math.PI * rads,
+      rad2deg: (rads) => 180 / PI * rads,
       /**
        * Constrains a number between `min` and `max`.
        *
@@ -176,7 +176,7 @@
        */
       clamp: (value, min, max) => math.min(math.max(value, min), max),
       /**
-       * Wraps a number between `min` and `max`.
+       * Wraps a number between `min` (inclusive) and `max` (exclusive).
        *
        * @param {number} value
        * @param {number} min
@@ -188,28 +188,26 @@
        * Re-maps a number from one range to another.
        *
        * @param {number} value  the value to be remapped.
-       * @param {number} start1 lower bound of the value's current range.
-       * @param {number} stop1  upper bound of the value's current range.
-       * @param {number} start2 lower bound of the value's target range.
-       * @param {number} stop2  upper bound of the value's target range.
-       * @param {boolean} [withinBounds=true] constrain the value to the newly mapped range
+       * @param {number} min1 lower bound of the value's current range.
+       * @param {number} max1  upper bound of the value's current range.
+       * @param {number} min2 lower bound of the value's target range.
+       * @param {number} max2  upper bound of the value's target range.
+       * @param {boolean} [withinBounds=false] constrain the value to the newly mapped range
        * @returns {number} the remapped number
        */
-      map(value, start1, stop1, start2, stop2, withinBounds = false) {
-        const result = (value - start1) / (stop1 - start1) * (stop2 - start2) + start2;
-        if (!withinBounds)
-          return result;
-        return start2 < stop2 ? instance.clamp(result, start2, stop2) : instance.clamp(result, stop2, start2);
+      map(value, min1, max1, min2, max2, withinBounds = false) {
+        const result = (value - min1) / (max1 - min1) * (max2 - min2) + min2;
+        return !withinBounds ? result : instance.clamp(result, min2, max2);
       },
       /**
        * Maps a number from one range to a value between 0 and 1.
        *
        * @param {number} value
-       * @param {number} start
-       * @param {number} stop
+       * @param {number} min
+       * @param {number} min
        * @returns {number} the normalized number.
        */
-      norm: (value, start, stop) => instance.map(value, start, stop, 0, 1),
+      norm: (value, min, max) => instance.map(value, min, max, 0, 1),
       /**
        * Calculates the positive difference/distance of two given numbers
        *
@@ -256,10 +254,10 @@
       /**
        * Randomly returns `true` or `false`
        *
-       * @param {number} p chance from 0 to 1 (where 0 = 0% and 1 = 100%)
+       * @param {number} percent chance from 0 to 1 (where 0 = 0% and 1 = 100%)
        * @returns {boolean}
        */
-      chance: (p) => instance.rand() < p,
+      chance: (percent) => instance.rand() < percent,
       /**
        * Choose a random item from a Array
        *
@@ -333,6 +331,7 @@
       circ(x, y, radius, color = 0) {
         _ctx.beginPath();
         _ctx.arc(~~x, ~~y, ~~radius, 0, TWO_PI);
+        _ctx.closePath();
         instance.stroke(color);
       },
       /**
@@ -346,6 +345,7 @@
       circfill(x, y, radius, color = 0) {
         _ctx.beginPath();
         _ctx.arc(~~x, ~~y, ~~radius, 0, TWO_PI);
+        _ctx.closePath();
         instance.fill(color);
       },
       /**
@@ -490,13 +490,12 @@
        * @see https://developer.mozilla.org/en-US/docs/Web/API/OffscreenCanvas
        */
       paint(width, height, draw, options = {}) {
-        options.scale = math.max(1, ~~options.scale);
-        const offscreenCanvas = new OffscreenCanvas(width, height), ctxOriginal = _ctx, pixelart = Array.isArray(draw), scale = pixelart ? math.floor(options.scale) : options.scale;
+        const offscreenCanvas = new OffscreenCanvas(width, height), ctxOriginal = _ctx, scale = options.scale || 1;
         offscreenCanvas.width = width * scale;
         offscreenCanvas.height = height * scale;
         _ctx = offscreenCanvas.getContext("2d");
         _ctx.scale(scale, scale);
-        if (pixelart) {
+        if (Array.isArray(draw)) {
           let x = 0, y = 0;
           _ctx.imageSmoothingEnabled = false;
           for (const str of draw) {
@@ -968,7 +967,7 @@
   }
   window.litecanvas = litecanvas;
 })();
-/*! litecanvas v0.32.0 | https://github.com/litecanvas/game-engine */
+/*! litecanvas v0.33.1 | https://github.com/litecanvas/game-engine */
 
 (()=>{var s=getScriptLoader=t=>(o,r)=>{t.setvar("LOADING",t.LOADING+1),script=document.createElement("script"),script.onload=()=>{r&&r(script),t.setvar("LOADING",t.LOADING-1)},script.onerror=()=>{r&&r(null)},script.src=o,document.head.appendChild(script)};var L=getImageLoader=t=>(o,r)=>{t.setvar("LOADING",t.LOADING+1);let d=new Image;d.onload=()=>{r&&r(d),t.setvar("LOADING",t.LOADING-1)},d.onerror=function(){r&&r(null)},d.src=o};var p=getFontLoader=t=>async(o,r,d)=>{let e=new FontFace(o,`url(${r})`);t.setvar("LOADING",t.LOADING+1),document.fonts.add(e),e.load().then(a=>{d&&d(a),t.setvar("LOADING",t.LOADING-1)}).catch(()=>{d&&d(null)})};window.pluginAssetLoader=u;function u(t,o){return t.setvar("LOADING",0),{loadScript:s(t,o),loadImage:L(t,o),loadFont:p(t,o)}}})();
 /*! Asset Loader plugin for litecanvas v0.4.2 by Luiz Bills | MIT Licensed */

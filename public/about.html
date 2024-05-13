@@ -381,18 +381,18 @@ rad2deg(n: number): number
 // example: clamp(-10, 0, 100) return 0
 clamp(value: number, min: number, max: number): number
 
-// Wraps a number between `min` and `max`.
+// Wraps a number between `min` (inclusive) and `max` (exclusive).
 // example: wrap(50,0,100) return 50
 // example: wrap(125, 0, 100) return 25
-wrap(value: number, min: number, max: number): number
+wrap(value, min, max): number
 
 // Re-maps a number from one range to another.
 // example: map(2, 0, 10, 0, 100) returns 20
-map(val, l1, h1, l2, h2, withinBounds = false ): number
+map(val, min1, max1, min2, max2, withinBounds = false ): number
 
 // Maps a number from one range to a value between 0 and 1.
 // example: norm(50, 0, 100) returns 0.5
-norm(val, start, stop): number
+norm(value, min, max): number
 
 // Calculates the positive difference of two given numbers.
 // example: diff(20, 30) return 10
