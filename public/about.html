@@ -20,6 +20,7 @@
       main {
         max-width: 1000px;
         margin: auto;
+        margin-bottom: 5rem;
         padding: 20px 10px;
       }
       .token a {
@@ -30,6 +31,10 @@
       }
       h2 {
         margin-top: 4rem !important;
+      }
+      ul li {
+        font-size: 1.2rem;
+        line-height: 2;
       }
       @media print {
         .no-print {
@@ -67,6 +72,8 @@
         >
         |
         <a href="https://www.npmjs.com/search?q=keywords:litecanvas">Plugins</a>
+        |
+        <a href="#tools">Tools</a>
       </nav>
 
       <p>
@@ -538,7 +545,33 @@ resize(width: number, height: number): void</code></pre>
       <pre><code class="language-typescript">// the plugin "Asset Loader" is automatically loaded into the playground
 // see: https://github.com/litecanvas/plugin-asset-loader
 </code></pre>
+
+      <h2><a id="tools">Useful tools</a></h2>
+
+      <ul>
+        <li>
+          <strong
+            ><a
+              href="https://litecanvas.js.org/pixel-art-editor"
+              target="_blank"
+              rel="noopener noreferrer"
+              >litepixel</a
+            ></strong
+          >: Tiny pixel art editor for litecanvas games.
+        </li>
+        <li>
+          <strong
+            ><a
+              href="https://killedbyapixel.github.io/ZzFX/"
+              target="_blank"
+              rel="noopener noreferrer"
+              >ZzFX Designer</a
+            ></strong
+          >: UI to generate ZzFX sounds.
+        </li>
+      </ul>
     </main>
+
     <script src="prism/prism.js" defer></script>
     <script src="prism/prism-typescript.js" defer></script>
     <script src="prism/prism-autolinker.js" defer></script>
