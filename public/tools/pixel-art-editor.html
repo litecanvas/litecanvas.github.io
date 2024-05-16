@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="manifest" href="manifest.json" />
+    <link rel="icon" href="icons/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>litepixel - Tiny pixel art editor</title>
+    <style>
+      body {
+        margin: 0;
+        padding: 1rem;
+        font-family: sans-serif;
+      }
+
+      h1 {
+        font-size: 1.5rem;
+        display: inline-block;
+        margin: 0;
+      }
+
+      a {
+        color: #1971c2 !important;
+      }
+
+      textarea {
+        margin-top: 2rem;
+        margin-bottom: 0.5rem;
+        display: block;
+        width: 100%;
+        max-width: 480px;
+      }
+
+      button {
+        padding: 0.5em 1em;
+        margin-right: 0.5em;
+      }
+
+      button:disabled {
+        cursor: not-allowed;
+      }
+
+      canvas,
+      input,
+      textarea,
+      button {
+        border-radius: 0;
+        border: 1px solid #868e96;
+      }
+
+      footer {
+        margin-top: 4rem;
+        font-style: italic;
+        color: #333;
+        line-height: 1.5;
+      }
+
+      .canvas-wrapper {
+        margin-top: 1rem;
+      }
+
+      #palette label {
+        color: #000;
+      }
+
+      #palette label[data-color="0"] {
+        color: #fff;
+      }
+
+      #palette label {
+        display: block;
+        padding: 4px;
+        border: 4px solid #ddd;
+      }
+
+      #palette label span {
+        width: 32px;
+        height: 32px;
+        display: block;
+        text-align: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      #palette label.selected {
+        border: 4px solid #37b24d;
+      }
+
+      #palette {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+
+      #art {
+        background-image: repeating-conic-gradient(
+          #fefefe 0% 25%,
+          #ededed 0% 50%
+        );
+        background-color: #ededed;
+        display: block;
+        margin-top: 2rem;
+        margin-bottom: 0.5rem;
+      }
+
+      #width,
+      #height,
+      #pixelSize {
+        width: 3rem;
+        padding: 0.5em 1em;
+        text-align: center;
+      }
+
+      @media only screen and (max-width: 48rem) {
+        #width,
+        #height,
+        #pixelSize {
+          width: 1.5rem;
+        }
+      }
+
+      @media (prefers-color-scheme: dark) {
+        body {
+          background: #000;
+          color: #fff;
+        }
+
+        footer {
+          color: #ccc;
+        }
+
+        input,
+        textarea {
+          color: #fff;
+          background-color: #343a40;
+        }
+
+        button:disabled {
+          color: #ccc;
+        }
+
+        input,
+        textarea,
+        button,
+        canvas {
+          border-color: #000;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <section id="title">
+      <h1>litepixel</h1>
+      <p>
+        Tiny pixel art editor for
+        <a
+          target="_blank"
+          rel="noopener noreferrer"
+          href="https://github.com/litecanvas/game-engine/"
+          >litecanvas</a
+        >
+        games.
+      </p>
+    </section>
+
+    <div id="palette"></div>
+
+    <section class="canvas-wrapper">
+      <section id="canvas-options">
+        Canvas size: <input type="number" id="width" value="8" min="1" /> x
+        <input type="number" id="height" value="8" min="1" />
+        &nbsp;&nbsp; Pixel size:
+        <input type="number" id="pixelSize" value="" min="1" />
+      </section>
+      <canvas id="art" width="80" height="80"></canvas>
+      <button id="clearButton">clear</button>
+      <button id="exportButton">export</button>
+      <textarea
+        id="exported"
+        rows="10"
+        readonly
+        onclick="this.select()"
+      ></textarea>
+      <button id="copy">copy</button>
+    </section>
+
+    <script>
+      const ctx = art.getContext("2d");
+      const $ = (selector) => document.querySelector(selector);
+      const colors = [
+        "#101820",
+        "#736464",
+        "#a0694b",
+        "#f0f0dc",
+        "#d24040",
+        "#fac800",
+        "#00a0c8",
+        "#10c840",
+      ];
+
+      /** @type HTMLElement */
+      let selected = null,
+        currentColor = 0,
+        W,
+        H,
+        ps,
+        dirty = false,
+        pixels = [];
+
+      onload =
+        pixelSize.onchange =
+        pixelSize.oninput =
+        width.onchange =
+        width.oninput =
+        height.onchange =
+        height.oninput =
+          function () {
+            prepare();
+            draw();
+          };
+
+      // Restore from localStorage
+      width.value = ~~localStorage.getItem("width") || 8;
+      height.value = ~~localStorage.getItem("height") || 8;
+      pixelSize.value = ~~localStorage.getItem("ps") || "";
+      try {
+        json = localStorage.getItem("pixels");
+        pixels = json ? JSON.parse(json) : pixels;
+      } catch (error) {}
+
+      if (!pixelSize.value) {
+        pixelSize.value = innerWidth < 800 ? 36 : 24;
+      }
+
+      // Setup canvas
+      function prepare() {
+        ps = pixelSize.value;
+        W = ~~width.value;
+        H = ~~height.value;
+
+        art.width = W * ps;
+        art.height = H * ps;
+
+        for (let i = 0; i < W; i++) {
+          pixels[i] = pixels[i] || [];
+        }
+
+        art.style.backgroundPosition = `0 0, ${ps}px ${ps}px`;
+        art.style.backgroundSize = `${2 * ps}px ${2 * ps}px`;
+
+        exported.value = "";
+        copy.disabled = true;
+        dirty = true;
+      }
+
+      // Reset
+      clearButton.onclick = () => {
+        if (
+          confirm(
+            "Are you sure you want to erase the canvas? This action cannot be undone."
+          )
+        ) {
+          pixels.length = 0;
+          localStorage.removeItem("pixels");
+          prepare();
+        }
+      };
+
+      // Draw
+      function draw() {
+        art.width = art.width; // hack to clear the canvas
+        for (let x = 0; x < W; x++) {
+          for (let y = 0; y < H; y++) {
+            const colorindex = pixels[x][y];
+            if (null == colorindex) continue;
+            setPixel(x, y, colorindex);
+          }
+        }
+      }
+
+      // Trace
+      const hasMouse = matchMedia("(pointer:fine)").matches;
+      const traceEvents = {
+        start: hasMouse ? "onmousedown" : "ontouchstart",
+        move: hasMouse ? "onmousemove" : "ontouchmove",
+        end: hasMouse ? "onmouseup" : "ontouchend",
+      };
+      let holding = false;
+
+      art[traceEvents.start] = function (evt) {
+        holding = true;
+        trace(evt);
+      };
+
+      art[traceEvents.move] = function (evt) {
+        evt.preventDefault();
+        if (holding) {
+          trace(evt);
+        }
+      };
+
+      art[traceEvents.end] = function (evt) {
+        holding = false;
+      };
+
+      function trace(evt) {
+        let [pageX, pageY] = getPageXY(evt);
+        const colorindex = ~~currentColor;
+
+        x = ~~((pageX - art.offsetLeft) / ps);
+        y = ~~((pageY - art.offsetTop) / ps);
+
+        setPixel(x, y, colorindex);
+        pixels[x][y] = colorindex;
+        dirty = true;
+      }
+
+      function getPageXY(evt) {
+        return hasMouse
+          ? [event.pageX, event.pageY]
+          : [event.touches[0].pageX, event.touches[0].pageY];
+      }
+
+      function setPixel(x, y, colorindex) {
+        if (-1 === colorindex) {
+          ctx.clearRect(x * ps, y * ps, ps, ps);
+        } else {
+          ctx.fillStyle = colors[colorindex];
+          ctx.fillRect(x * ps, y * ps, ps, ps);
+        }
+      }
+
+      // Setup color palette
+      for (let i = 0; i < colors.length; i++) {
+        let color = colors[i];
+        const el = document.createElement("label");
+        el.dataset.color = i;
+        el.innerHTML = `<span style="background:${color}">${i}</span>`;
+        palette.appendChild(el);
+        el.title = "Select color #" + i;
+        if (i === 0) {
+          setCurrentColor(0, el);
+        } else if (i + 1 === colors.length) {
+          const eraser = document.createElement("label");
+          eraser.dataset.color = -1;
+          eraser.innerHTML = `<span style="background:#fff;font-size: 26px;color: #c92a2a;">&times;</span>`;
+          eraser.title = "Select the pixel eraser";
+          palette.appendChild(eraser);
+        }
+      }
+
+      palette.onclick = (evt) => {
+        const target = evt.target;
+        let label = null;
+        if ("SPAN" === target.tagName) {
+          label = target.parentNode;
+        }
+        if ("LABEL" === target.tagName) {
+          label = target;
+        }
+        if (label) {
+          setCurrentColor(label.dataset.color, label);
+        }
+      };
+
+      /**
+       * @param {number} colorindex
+       * @param {HTMLElement} [element]
+       */
+      function setCurrentColor(colorindex, element) {
+        currentColor = colorindex;
+        if (selected) {
+          selected.classList.remove("selected");
+        }
+        if (element) {
+          selected = element;
+          selected.classList.add("selected");
+        }
+      }
+
+      window.onkeypress = (evt) => {
+        if ("INPUT" === evt.target.tagName) return;
+        evt.preventDefault();
+        const key = parseInt(evt.key, 10);
+        const keys = [0, 1, 2, 3, 4, 5, 6, 7];
+        if (key && keys.includes(key)) {
+          const el = $(`[data-color="${key}"]`);
+          setCurrentColor(key, el);
+        } else if ("'" === evt.key) {
+          const el = $(`[data-color="-1"]`);
+          setCurrentColor(-1, el);
+        }
+      };
+
+      // Export
+      exportButton.onclick = function () {
+        let output = "";
+
+        output += `paint(${W}, ${H}, [\n`;
+
+        for (let y = 0; y < H; y++) {
+          output += "  '";
+          for (let x = 0; x < W; x++) {
+            let colorindex = pixels[x][y];
+            if (null == colorindex || -1 === colorindex) colorindex = ".";
+            output += colorindex;
+          }
+          output += "',\n";
+        }
+
+        output += "], {\n  scale: 1\n})";
+
+        exported.value = output;
+        copy.disabled = false;
+      };
+
+      // Copy to clipboard
+      copy.onclick = () => {
+        if (!navigator.clipboard) {
+          return alert(
+            "Your browser not support this feature. Consider installing Firefox or Chrome."
+          );
+        }
+        if (!exported.value) return;
+
+        const code = exported.value;
+
+        navigator.clipboard.writeText(code).then(
+          () => {},
+          (err) => {
+            alert("Error: Unable to generate your shareable url!");
+            console.error("Error on copying text to clipboard:", err);
+          }
+        );
+      };
+
+      // Auto-save in local storage
+      setInterval(() => {
+        if (dirty) {
+          localStorage.setItem("width", W);
+          localStorage.setItem("height", H);
+          localStorage.setItem("pixels", JSON.stringify(pixels));
+          localStorage.setItem("ps", ps);
+          dirty = false;
+        }
+      }, 500);
+
+      window.addEventListener("beforeunload", (evt) => {
+        if (dirty) {
+          evt.preventDefault();
+          evt.returnValue = true;
+        }
+      });
+    </script>
+
+    <footer>
+      <p>
+        Tip: Press keys <code>0</code> to <code>7</code> to select a color. By
+        pressing <code>'</code> (single quote) you select the eraser.
+        <br />
+        <br />
+        Fork on GitHub:
+        <a href="https://github.com/litecanvas/pixel-art-editor"
+          >https://github.com/litecanvas/pixel-art-editor</a
+        >
+      </p>
+    </footer>
+  </body>
+</html>
