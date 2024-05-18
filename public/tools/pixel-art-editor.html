@@ -382,13 +382,17 @@
 
       window.onkeypress = (evt) => {
         if ("INPUT" === evt.target.tagName) return;
+
         evt.preventDefault();
-        const key = parseInt(evt.key, 10);
+        const key = " " === evt.key ? 0 : parseInt(evt.key, 10);
         const keys = [0, 1, 2, 3, 4, 5, 6, 7];
-        if (key && keys.includes(key)) {
+
+        console.log(key);
+
+        if (keys.includes(key)) {
           const el = $(`[data-color="${key}"]`);
           setCurrentColor(key, el);
-        } else if ("'" === evt.key) {
+        } else if (["e", "x"].includes(evt.key)) {
           const el = $(`[data-color="-1"]`);
           setCurrentColor(-1, el);
         }
@@ -456,16 +460,12 @@
     </script>
 
     <footer>
-      <p>
-        Tip: Press keys <code>0</code> to <code>7</code> to select a color. By
-        pressing <code>'</code> (single quote) you select the eraser.
-        <br />
-        <br />
-        Fork on GitHub:
-        <a href="https://github.com/litecanvas/pixel-art-editor"
-          >https://github.com/litecanvas/pixel-art-editor</a
-        >
-      </p>
+      <strong>Hotkeys:</strong>
+      <ul>
+        <li><code>0</code>...<code>7</code>: select a color.</li>
+        <li><code>space</code>...<code>7</code>: select the color #0.</li>
+        <li><code>x</code> or <code>e</code>: select the eraser.</li>
+      </ul>
     </footer>
   </body>
 </html>
