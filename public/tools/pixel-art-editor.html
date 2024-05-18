@@ -3,8 +3,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="manifest" href="manifest.json" />
-    <link rel="icon" href="icons/favicon.ico" />
+    <link rel="icon" href="../icons/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>litepixel - Tiny pixel art editor</title>
     <style>
@@ -25,6 +24,8 @@
       }
 
       textarea {
+        font-family: Consolas, "Lucida Console", monospace;
+        font-size: 0.9em;
         margin-top: 2rem;
         margin-bottom: 0.5rem;
         display: block;
@@ -54,6 +55,26 @@
         font-style: italic;
         color: #333;
         line-height: 1.5;
+      }
+
+      kbd {
+        font-family: Consolas, "Lucida Console", monospace;
+        display: inline-block;
+        border-radius: 3px;
+        padding: 0px 4px;
+        box-shadow: 1px 1px 1px #777;
+        margin: 2px;
+        font-size: small;
+        vertical-align: text-bottom;
+        background: #eee;
+        font-weight: 500;
+        color: #555;
+        cursor: pointer;
+        font-variant: small-caps;
+        font-weight: 700;
+        letter-spacing: 1px;
+        line-height: 1.35;
+        font-style: normal;
       }
 
       .canvas-wrapper {
@@ -186,9 +207,19 @@
       <button id="copy">copy</button>
     </section>
 
+    <footer>
+      <strong>Hotkeys:</strong>
+      <ul>
+        <li><kbd>0</kbd>...<kbd>7</kbd>: select a color.</li>
+        <li><kbd>space</kbd>: select the color #0.</li>
+        <li><kbd>x</kbd> or <kbd>e</kbd>: select the eraser.</li>
+      </ul>
+    </footer>
+
     <script>
       const ctx = art.getContext("2d");
       const $ = (selector) => document.querySelector(selector);
+      // color palette
       const colors = [
         "#101820",
         "#736464",
@@ -199,6 +230,16 @@
         "#00a0c8",
         "#10c840",
       ];
+      // local storage wrapper
+      const storage = {
+        prefix: "litepixel_",
+        getItem(key) {
+          return localStorage.getItem(this.prefix + key);
+        },
+        setItem(key, value) {
+          return localStorage.setItem(this.prefix + key, value);
+        },
+      };
 
       /** @type HTMLElement */
       let selected = null,
@@ -207,35 +248,43 @@
         H,
         ps,
         dirty = false,
-        pixels = [];
+        pixels;
 
-      onload =
-        pixelSize.onchange =
+      pixelSize.onchange =
         pixelSize.oninput =
         width.onchange =
         width.oninput =
         height.onchange =
         height.oninput =
-          function () {
-            prepare();
-            draw();
-          };
+          () => handleChanges(true);
 
-      // Restore from localStorage
-      width.value = ~~localStorage.getItem("width") || 8;
-      height.value = ~~localStorage.getItem("height") || 8;
-      pixelSize.value = ~~localStorage.getItem("ps") || "";
-      try {
-        json = localStorage.getItem("pixels");
-        pixels = json ? JSON.parse(json) : pixels;
-      } catch (error) {}
+      // Restore from user's local storage
+      width.value = ~~storage.getItem("width") || 8;
+      height.value = ~~storage.getItem("height") || 8;
 
+      pixelSize.value = ~~storage.getItem("ps") || "";
       if (!pixelSize.value) {
         pixelSize.value = innerWidth < 800 ? 36 : 24;
       }
 
+      try {
+        json = storage.getItem("pixels");
+        pixels = json ? JSON.parse(json) : pixels;
+      } catch (error) {
+        console.error(error);
+      }
+
+      handleChanges(false);
+
+      function handleChanges(save = true) {
+        prepare();
+        draw();
+        dirty = save;
+      }
+
       // Setup canvas
       function prepare() {
+        pixels = pixels || [];
         ps = pixelSize.value;
         W = ~~width.value;
         H = ~~height.value;
@@ -254,19 +303,6 @@
         copy.disabled = true;
         dirty = true;
       }
-
-      // Reset
-      clearButton.onclick = () => {
-        if (
-          confirm(
-            "Are you sure you want to erase the canvas? This action cannot be undone."
-          )
-        ) {
-          pixels.length = 0;
-          localStorage.removeItem("pixels");
-          prepare();
-        }
-      };
 
       // Draw
       function draw() {
@@ -380,6 +416,7 @@
         }
       }
 
+      // Hotkeys
       window.onkeypress = (evt) => {
         if ("INPUT" === evt.target.tagName) return;
 
@@ -387,14 +424,25 @@
         const key = " " === evt.key ? 0 : parseInt(evt.key, 10);
         const keys = [0, 1, 2, 3, 4, 5, 6, 7];
 
-        console.log(key);
-
         if (keys.includes(key)) {
           const el = $(`[data-color="${key}"]`);
           setCurrentColor(key, el);
         } else if (["e", "x"].includes(evt.key)) {
           const el = $(`[data-color="-1"]`);
           setCurrentColor(-1, el);
+        }
+      };
+
+      // Reset
+      clearButton.onclick = () => {
+        if (
+          confirm(
+            "Are you sure you want to erase the canvas? This action cannot be undone."
+          )
+        ) {
+          pixels.length = 0;
+          storage.setItem("pixels", null);
+          prepare();
         }
       };
 
@@ -443,10 +491,10 @@
       // Auto-save in local storage
       setInterval(() => {
         if (dirty) {
-          localStorage.setItem("width", W);
-          localStorage.setItem("height", H);
-          localStorage.setItem("pixels", JSON.stringify(pixels));
-          localStorage.setItem("ps", ps);
+          storage.setItem("width", W);
+          storage.setItem("height", H);
+          storage.setItem("pixels", JSON.stringify(pixels));
+          storage.setItem("ps", ps);
           dirty = false;
         }
       }, 500);
@@ -458,14 +506,5 @@
         }
       });
     </script>
-
-    <footer>
-      <strong>Hotkeys:</strong>
-      <ul>
-        <li><code>0</code>...<code>7</code>: select a color.</li>
-        <li><code>space</code>...<code>7</code>: select the color #0.</li>
-        <li><code>x</code> or <code>e</code>: select the eraser.</li>
-      </ul>
-    </footer>
   </body>
 </html>
