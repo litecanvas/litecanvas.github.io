@@ -105,11 +105,9 @@
         <a href="#advanced">Advanced</a>
       </nav>
 
-      <pre><code class="language-typescript">const settings = {
+      <pre><code class="language-typescript">litecanvas({
   loop: { init, update, draw, resized }
-}
-
-litecanvas(settings)
+})
 
 function init() {
   // run once before the game starts
@@ -117,7 +115,7 @@ function init() {
 
 function update(dt) {
   // called at 60 fps by default
-  // note: `dt` is a fixed deltatime
+  // note: `dt` is a fixed deltatime (number)
 }
 
 function draw() {
