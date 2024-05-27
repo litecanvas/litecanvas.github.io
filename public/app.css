@@ -123,8 +123,8 @@ svg {
   height: 100%;
 }
 
-.cm-scroller {
-  margin-bottom: 3rem !important;
+.cm-editor .cm-scroller {
+  margin-bottom: 3rem;
 }
 
 .mobile-buttons {
