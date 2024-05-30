@@ -66,6 +66,7 @@ const stopButton = $("#stop");
 const shareButton = $("#share");
 const copyButton = $("#copy");
 const iframe = $("#frame");
+const iframeOverlay = $("#frame-overlay");
 const smallScreen = innerWidth < 1024;
 const isMobile = navigator.userAgent.match(/android|iphone|ipad/i) !== null;
 let library = null;
@@ -88,6 +89,12 @@ playButton.addEventListener("click", () => {
   hide(playButton);
   show(stopButton);
   runCode();
+  if (smallScreen) {
+    iframe.focus();
+    hide(iframeOverlay);
+  } else {
+    show(iframeOverlay);
+  }
 });
 
 stopButton.addEventListener("click", stopGame);
@@ -211,6 +218,23 @@ const state = EditorState.create({
 window.codeEditor = new EditorView({
   state,
   parent: $(".code .cm-container"),
+});
+
+window.addEventListener("click", (evt) => {
+  if (evt.target === iframe) return;
+  if (evt.target === playButton) return;
+
+  if (evt.target === iframeOverlay) {
+    hide(iframeOverlay);
+    iframe.focus();
+    return;
+  }
+
+  show(iframeOverlay);
+});
+
+window.addEventListener("blur", (evt) => {
+  show(iframeOverlay);
 });
 
 function compressString(str) {

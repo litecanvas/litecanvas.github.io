@@ -3,6 +3,7 @@
  */
 export function show(el) {
   el.removeAttribute("hidden");
+  el.style.display = "";
 }
 
 /**
@@ -10,6 +11,7 @@ export function show(el) {
  */
 export function hide(el) {
   el.setAttribute("hidden", "");
+  el.style.display = "none";
 }
 
 /**
