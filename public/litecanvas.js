@@ -80,7 +80,6 @@
       tappingInterval: 100,
       tapEvents: true,
       useMouse: false,
-      // auto detect mouse or touch
       loop: NULL
     };
     settings = Object.assign(defaults, settings);
@@ -969,7 +968,7 @@
   }
   window.litecanvas = litecanvas;
 })();
-/*! litecanvas v0.34.0 | https://github.com/litecanvas/game-engine */
+/*! litecanvas v0.34.1 | https://github.com/litecanvas/game-engine */
 
 (()=>{var s=getScriptLoader=t=>(o,r)=>{t.setvar("LOADING",t.LOADING+1),script=document.createElement("script"),script.onload=()=>{r&&r(script),t.setvar("LOADING",t.LOADING-1)},script.onerror=()=>{r&&r(null)},script.src=o,document.head.appendChild(script)};var L=getImageLoader=t=>(o,r)=>{t.setvar("LOADING",t.LOADING+1);let d=new Image;d.onload=()=>{r&&r(d),t.setvar("LOADING",t.LOADING-1)},d.onerror=function(){r&&r(null)},d.src=o};var p=getFontLoader=t=>async(o,r,d)=>{let e=new FontFace(o,`url(${r})`);t.setvar("LOADING",t.LOADING+1),document.fonts.add(e),e.load().then(a=>{d&&d(a),t.setvar("LOADING",t.LOADING-1)}).catch(()=>{d&&d(null)})};window.pluginAssetLoader=u;function u(t,o){return t.setvar("LOADING",0),{loadScript:s(t,o),loadImage:L(t,o),loadFont:p(t,o)}}})();
 /*! Asset Loader plugin for litecanvas v0.4.2 by Luiz Bills | MIT Licensed */

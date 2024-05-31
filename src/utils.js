@@ -2,7 +2,7 @@
  * @param {HTMLElement} el
  */
 export function show(el) {
-  el.removeAttribute("hidden");
+  el.hidden = false;
   el.style.display = "";
 }
 
@@ -10,7 +10,7 @@ export function show(el) {
  * @param {HTMLElement} el
  */
 export function hide(el) {
-  el.setAttribute("hidden", "");
+  el.hidden = true;
   el.style.display = "none";
 }
 
