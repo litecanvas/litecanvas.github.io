@@ -66,14 +66,17 @@ const stopButton = $("#stop");
 const shareButton = $("#share");
 const copyButton = $("#copy");
 const iframe = $("#frame");
+const iframeOverlay = $("#frame-overlay");
+
 const smallScreen = innerWidth < 1024;
 const isMobile = navigator.userAgent.match(/android|iphone|ipad/i) !== null;
-let library = null;
+
+let litecanvasSourceCode = null;
 
 fetch("litecanvas.js")
   .then((response) => response.text())
   .then((source) => {
-    library = source;
+    litecanvasSourceCode = source;
     if (!smallScreen) {
       if (autoplay) runCode();
     } else {
@@ -88,6 +91,12 @@ playButton.addEventListener("click", () => {
   hide(playButton);
   show(stopButton);
   runCode();
+  if (smallScreen) {
+    iframe.focus();
+    hide(iframeOverlay);
+  } else {
+    show(iframeOverlay);
+  }
 });
 
 stopButton.addEventListener("click", stopGame);
@@ -144,10 +153,13 @@ copyButton.addEventListener("click", (evt) => {
 });
 
 function runCode() {
-  if (!library)
-    return alert("The library  was not loaded. Try reloading the page.");
+  if (!litecanvasSourceCode) {
+    return alert(
+      "The litecanvas source code  was not loaded. Try reloading this page."
+    );
+  }
   const game = codeEditor.state.doc.toString();
-  iframe.srcdoc = template(library, game);
+  iframe.srcdoc = template(litecanvasSourceCode, game);
 }
 
 if (!smallScreen) {
@@ -211,6 +223,32 @@ const state = EditorState.create({
 window.codeEditor = new EditorView({
   state,
   parent: $(".code .cm-container"),
+});
+
+iframeOverlay.onmousedown = iframeOverlay.ontouchstart = (evt) => {
+  evt.preventDefault();
+
+  if (evt.target === iframe) return;
+  if (evt.target === playButton) return;
+
+  if (evt.target === iframeOverlay) {
+    hide(iframeOverlay);
+    iframe.focus();
+    return;
+  }
+};
+
+window.addEventListener("click", (evt) => {
+  if (evt.target === iframeOverlay) return;
+  if (evt.target === playButton) return;
+  show(iframeOverlay);
+  iframe.blur();
+});
+
+window.addEventListener("blur", (evt) => {
+  if (document.body !== document.activeElement) {
+    show(iframeOverlay);
+  }
 });
 
 function compressString(str) {

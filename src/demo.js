@@ -9,16 +9,23 @@ function init () {
   color = 0
   x = CENTERX
   y = CENTERY
+  t = 0
 }
 
 function update (dt) {
   color = ELAPSED * 32
 
-  if (TAPPED) {
+  if (TAPPED || TAPPING) {
     x = TAPX
     y = TAPY
-    sfx(randi(0, 7))
   }
+
+  // play a random sound every 5 seconds
+  if (t > 5) {
+    sfx(randi(0, 7))
+    t -= 5
+  }
+  t += dt
 
   radius = rand() * y
 }
