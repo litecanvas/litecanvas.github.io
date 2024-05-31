@@ -234,7 +234,9 @@ window.addEventListener("click", (evt) => {
 });
 
 window.addEventListener("blur", (evt) => {
-  show(iframeOverlay);
+  if (document.body !== document.activeElement) {
+    show(iframeOverlay);
+  }
 });
 
 function compressString(str) {
