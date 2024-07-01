@@ -1,8 +1,9 @@
 (() => {
   // src/zzfx.js
   zzfxX = new AudioContext();
-  zzfxV = 0.1;
-  zzfx = (p = 1, k = 0.05, b = 220, e = 0, r = 0, t = 0.1, q = 0, D = 1, u = 0, y = 0, v = 0, z = 0, l = 0, E = 0, A = 0, F = 0, c = 0, w = 1, m = 0, B = 0, M = Math, R = 44100, d = 2 * M.PI, G = u *= 500 * d / R / R, C = b *= (1 - k + 2 * k * M.random(k = [])) * d / R, g = 0, H = 0, a = 0, n = 1, I = 0, J = 0, f = 0, x, h) => {
+  zzfxV = 0.3;
+  zzfx = (p = 1, k = 0.05, b = 220, e = 0, r = 0, t = 0.1, q = 0, D = 1, u = 0, y = 0, v = 0, z = 0, l = 0, E = 0, A = 0, F = 0, c = 0, w = 1, m = 0, B = 0, N = 0) => {
+    let M = Math, d = 2 * M.PI, R = 44100, G = u *= 500 * d / R / R, C = b *= (1 - k + 2 * k * M.random(k = [])) * d / R, g = 0, H = 0, a = 0, n = 1, I = 0, J = 0, f = 0, h = N < 0 ? -1 : 1, x = d * h * N * 2 / R, L = M.cos(x), Z = M.sin, K = Z(x) / 4, O = 1 + K, X = -2 * L / O, Y = (1 - K) / O, P = (1 + h * L) / 2 / O, Q = -(h + L) / O, S = P, T = 0, U = 0, V = 0, W = 0;
     e = R * e + 9;
     m *= R;
     r *= R;
@@ -13,60 +14,49 @@
     v *= d / R;
     z *= R;
     l = R * l | 0;
-    for (h = e + m + r + t + c | 0; a < h; k[a++] = f)
-      ++J % (100 * F | 0) || (f = q ? 1 < q ? 2 < q ? 3 < q ? M.sin((g % d) ** 3) : M.max(M.min(M.tan(g), 1), -1) : 1 - (2 * g / d % 2 + 2) % 2 : 1 - 4 * M.abs(M.round(g / d) - g / d) : M.sin(g), f = (l ? 1 - B + B * M.sin(d * a / l) : 1) * (0 < f ? 1 : -1) * M.abs(f) ** D * zzfxV * p * (a < e ? a / e : a < e + m ? 1 - (a - e) / m * (1 - w) : a < e + m + r ? w : a < h - c ? (h - a - c) / t * w : 0), f = c ? f / 2 + (c > a ? 0 : (a < h - c ? 1 : (h - a) / c) * k[a - c | 0] / 2) : f), x = (b += u += y) * M.cos(A * H++), g += x - x * E * (1 - 1e9 * (M.sin(a) + 1) % 2), n && ++n > z && (b += v, C += v, n = 0), !l || ++I % l || (b = C, u = G, n = n || 1);
+    p *= zzfxV;
+    for (h = e + m + r + t + c | 0; a < h; k[a++] = f * p)
+      ++J % (100 * F | 0) || (f = q ? 1 < q ? 2 < q ? 3 < q ? Z(g * g) : M.max(M.min(M.tan(g), 1), -1) : 1 - (2 * g / d % 2 + 2) % 2 : 1 - 4 * M.abs(M.round(g / d) - g / d) : Z(g), f = (l ? 1 - B + B * Z(d * a / l) : 1) * (f < 0 ? -1 : 1) * M.abs(f) ** D * (a < e ? a / e : a < e + m ? 1 - (a - e) / m * (1 - w) : a < e + m + r ? w : a < h - c ? (h - a - c) / t * w : 0), f = c ? f / 2 + (c > a ? 0 : (a < h - c ? 1 : (h - a) / c) * k[a - c | 0] / 2 / p) : f, N ? f = W = S * T + Q * (T = U) + P * (U = f) - Y * V - X * (V = W) : 0), x = (b += u += y) * M.cos(A * H++), g += x + x * E * Z(a ** 5), n && ++n > z && (b += v, C += v, n = 0), !l || ++I % l || (b = C, u = G, n = n || 1);
     p = zzfxX.createBuffer(1, h, R);
     p.getChannelData(0).set(k);
     b = zzfxX.createBufferSource();
     b.buffer = p;
     b.connect(zzfxX.destination);
     b.start();
-    return b;
   };
 
   // src/colors.js
   var colors = [
-    // 0 - black
-    "#101820",
-    // 1 - stone
-    "#736464",
-    // 2 - brown
-    "#a0694b",
-    // 3 - white
-    "#f0f0dc",
-    // 4 - red
-    "#d24040",
-    // 5 - yellow
-    "#fac800",
-    // 6 - blue
-    "#00a0c8",
-    // 7 - green
-    "#10c840"
+    "#212035",
+    "#495057",
+    "#adb5bd",
+    "#e9ecef",
+    "#cc3184",
+    "#ffce6b",
+    "#25a2a8",
+    "#4b56eb",
+    "#e87d43",
+    "#5dd477",
+    "#2f328f",
+    "#703075"
   ];
 
   // src/sounds.js
   var sounds = [
     // 0 - pickup
-    [1, 0, 1943, 0.01, 0.03, , 1, 1.83, , 0.8, -628, 0.06, , , , , , 0.59, 0.05, 0.16],
-    // 1 - jump
-    [1, 0, 152, 0.01, 0.07, 0.06, 1, 1.21, -16, , , , , , , , , 0.62, 0.03],
-    // 2 - falling
-    [1, 0, 468, 0.02, 0.22, 0.45, 1, 0.84, , 5.6, -37, 0.05, 0.09, , , , , 0.8, 0.27, 0.05],
+    [0.8, 0, 2e3, 0.01, 0.05, , 1, 2, , , -600, 0.05, , , , , , 0.5, 0.05],
+    // 1 - hit
+    [0.5, 0, 375, 0.02, 0.01, 0.2, 1, , , , , , , 0.4, , 0.1, , 0.6, 0.1],
+    // 2 - jump
+    [, 0, 360, 0.01, , 0.08, 1, 1.7, 12, 32, , , , , , , , 0.63, 0.02, , 99],
     // 3 - warning
-    [2, 0, 104, 0.07, 0.16, 0.23, , 1.97, 24, -24, , , 0.03, , , , , , 0.24, 0.31],
-    // 4 - powerup
-    [1, 0, 364, 0.02, 0.22, 0.45, , 1.58, , -3, 179, 0.13, 0.08, , , 0.1, , 0.83, 0.12],
-    // 5 - hit
-    [1, 0, 816, , 0.01, 0, , 0.56, , 63, 887, , , , -0.6, , , , 0.01],
-    // 6 - explosion
-    [2.75, 0, 328, 0.03, 0.26, 0.4, 4, 1.09, 0.5, 0.1, , , , 0.5, , 0.3, 0.33, 0.43, 0.05, 0.45],
-    // 7 - shoot
-    [1, 0, 234, , 0.08, 0.08, 3, 1.13, -3, , , , , , , , 0.11, 0.52, 0.04]
+    [1.2, 0, 240, 0.02, 0.15, 0.15, 1, 4, , , , , 0.05, , , , , 0.6, 0.15]
   ];
 
   // src/index.js
+  var root = globalThis;
   function litecanvas(settings = {}) {
-    const root = window, body = document.body, math = Math, PI = math.PI, TWO_PI = PI * 2, on = (elem, evt, callback) => elem.addEventListener(evt, callback), off = (elem, evt, callback) => elem.removeEventListener(evt, callback), time = () => performance.now(), NULL = null, UNDEF = void 0, defaults = {
+    const body = document.body, math = Math, PI = math.PI, TWO_PI = PI * 2, on = (elem, evt, callback) => elem.addEventListener(evt, callback), off = (elem, evt, callback) => elem.removeEventListener(evt, callback), time = () => performance.now(), NULL = null, UNDEF = void 0, defaults = {
       fps: 60,
       fullscreen: true,
       width: NULL,
@@ -966,9 +956,8 @@
     }
     return instance;
   }
-  window.litecanvas = litecanvas;
+  root.litecanvas = litecanvas;
 })();
-/*! litecanvas v0.34.2 | https://github.com/litecanvas/game-engine */
 
-(()=>{var s=getScriptLoader=t=>(o,r)=>{t.setvar("LOADING",t.LOADING+1),script=document.createElement("script"),script.onload=()=>{r&&r(script),t.setvar("LOADING",t.LOADING-1)},script.onerror=()=>{r&&r(null)},script.src=o,document.head.appendChild(script)};var L=getImageLoader=t=>(o,r)=>{t.setvar("LOADING",t.LOADING+1);let d=new Image;d.onload=()=>{r&&r(d),t.setvar("LOADING",t.LOADING-1)},d.onerror=function(){r&&r(null)},d.src=o};var p=getFontLoader=t=>async(o,r,d)=>{let e=new FontFace(o,`url(${r})`);t.setvar("LOADING",t.LOADING+1),document.fonts.add(e),e.load().then(a=>{d&&d(a),t.setvar("LOADING",t.LOADING-1)}).catch(()=>{d&&d(null)})};window.pluginAssetLoader=u;function u(t,o){return t.setvar("LOADING",0),{loadScript:s(t,o),loadImage:L(t,o),loadFont:p(t,o)}}})();
-/*! Asset Loader plugin for litecanvas v0.4.2 by Luiz Bills | MIT Licensed */
+(()=>{var G=getScriptLoader=o=>(c,i)=>{o.setvar("LOADING",o.LOADING+1),script=document.createElement("script"),image.crossOrigin="anonymous",script.onload=()=>{i&&i(script),o.setvar("LOADING",o.LOADING-1)},script.onerror=()=>{i&&i(null)},script.src=c,document.head.appendChild(script)};var N=getImageLoader=(o,{colors:c})=>{let i={convertColors:d};return(t,s)=>{o.setvar("LOADING",o.LOADING+1);let r=new Image;r.crossOrigin="anonymous",r.onload=()=>{s&&s(r,i),o.setvar("LOADING",o.LOADING-1)},r.onerror=function(){s&&s(null,i)},r.src=t};function d(t,s=!1){let r=new OffscreenCanvas(t.width,t.height),e=r.getContext("2d");e.drawImage(t,0,0);let u=e.getImageData(0,0,t.width,t.height),a=u.data,p=new Map;for(let n=0,I=a.length;n<I;n+=4){let L=a[n],m=a[n+1],g=a[n+2],A=[L,m,g],D=A.join(",");p.has(D)||p.set(D,w(A,c));let O=p.get(D),x=O.startsWith("#")?f(O):l(O);a[n]=x[0],a[n+1]=x[1],a[n+2]=x[2],a[n+3]=s?a[n+3]:255}return e.putImageData(u,0,0),r}function f(t){let s=0,r=0,e=0;return t.length===4?(s="0x"+t[1]+t[1],r="0x"+t[2]+t[2],e="0x"+t[3]+t[3]):t.length===7&&(s="0x"+t[1]+t[2],r="0x"+t[3]+t[4],e="0x"+t[5]+t[6]),[s|0,r|0,e|0]}function l(t){let s=t.indexOf(",")>-1?",":" ";t=t.substr(4).split(")")[0].split(s);let r=(+t[0]).toString(16),e=(+t[1]).toString(16),u=(+t[2]).toString(16);return r.length===1&&(r="0"+r),e.length===1&&(e="0"+e),u.length===1&&(u="0"+u),[r|0,e|0,u|0]}function w(t,s){let r=1/0,e=null,[u,a,p]=t;return s.forEach(n=>{let[I,L,m]=n.startsWith("#")?f(n):l(n),g=Math.sqrt((u-I)**2+(a-L)**2+(p-m)**2);g<r&&(r=g,e=n)}),e}};var v=getFontLoader=o=>async(c,i,d)=>{let f=new FontFace(c,`url(${i})`);o.setvar("LOADING",o.LOADING+1),document.fonts.add(f),f.load().then(l=>{d&&d(l),o.setvar("LOADING",o.LOADING-1)}).catch(()=>{d&&d(null)})};window.pluginAssetLoader=h;function h(o,c){return o.setvar("LOADING",0),{loadScript:G(o,c),loadImage:N(o,c),loadFont:v(o,c)}}})();
+/*! Asset Loader plugin for litecanvas v0.5.1 by Luiz Bills | MIT Licensed */
