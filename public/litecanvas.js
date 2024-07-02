@@ -25,24 +25,24 @@
     b.start();
   };
 
-  // src/colors.js
-  var colors = [
-    "#212035",
-    "#495057",
-    "#adb5bd",
-    "#e9ecef",
-    "#cc3184",
-    "#ffce6b",
-    "#25a2a8",
-    "#4b56eb",
-    "#e87d43",
-    "#5dd477",
+  // src/palette.js
+  var palette_default = colors = [
+    "#18161c",
+    "#6a7799",
+    "#aec2c2",
+    "#e3cfb4",
+    "#f04f78",
+    "#fcf660",
     "#2f328f",
-    "#703075"
+    "#4b80ca",
+    "#327345",
+    "#63c64d",
+    "#703075",
+    "#a56243"
   ];
 
   // src/sounds.js
-  var sounds = [
+  var sounds_default = sounds = [
     // 0 - pickup
     [0.8, 0, 2e3, 0.01, 0.05, , 1, 2, , , -600, 0.05, , , , , , 0.5, 0.05],
     // 1 - hit
@@ -80,8 +80,8 @@
       resized: []
     }, _helpers = {
       settings: Object.assign({}, settings),
-      colors,
-      sounds
+      colors: palette_default,
+      sounds: sounds_default
     };
     const instance = {
       /** @type {number} */
@@ -631,7 +631,7 @@
         if (navigator.userActivation && !navigator.userActivation.hasBeenActive) {
           return;
         }
-        let z = Array.isArray(sound) ? sound : sounds[~~sound % sounds.length];
+        let z = Array.isArray(sound) ? sound : sounds_default[~~sound % sounds_default.length];
         if (volume !== 1 || pitch || randomness) {
           z = [...z];
           z[0] = (Number(volume) || 1) * (z[0] || 1);
@@ -698,7 +698,7 @@
        * @param {number} index The color number
        * @returns {string} the color value
        */
-      getcolor: (index) => colors[~~index % colors.length],
+      getcolor: (index) => palette_default[~~index % palette_default.length],
       /**
        * Create or update a instance variable
        *
