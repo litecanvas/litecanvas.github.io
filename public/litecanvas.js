@@ -200,31 +200,12 @@
        */
       norm: (value, min, max) => instance.map(value, min, max, 0, 1),
       /**
-       * Calculates the positive difference/distance of two given numbers
-       *
-       * @param {number} a
-       * @param {number} b
-       * @returns {number}
-       */
-      diff: (a, b) => math.abs(b - a),
-      /**
        * Returns the fractional part of a number
        *
        * @param {number} value The number
        * @returns {number}
        */
       fract: (value) => value % 1,
-      /**
-       * Interpolate between 2 values.
-       * Optionally, takes a custom periodic function (default = `Math.sin`).
-       *
-       * @param {number} lower
-       * @param {number} higher
-       * @param {number} t
-       * @param {function} [fn=Math.sin]
-       * @returns {number}
-       */
-      wave: (lower, higher, t, fn = math.sin) => lower + (fn(t) + 1) / 2 * (higher - lower),
       /** RNG API */
       /**
        * Generates a pseudorandom float between min (inclusive) and max (exclusive)
@@ -242,20 +223,6 @@
        * @returns {number} the random number
        */
       randi: (min = 0, max = 1) => instance.floor(instance.rand() * (max - min + 1) + min),
-      /**
-       * Randomly returns `true` or `false`
-       *
-       * @param {number} percent chance from 0 to 1 (where 0 = 0% and 1 = 100%)
-       * @returns {boolean}
-       */
-      chance: (percent) => instance.rand() < percent,
-      /**
-       * Choose a random item from a Array
-       *
-       * @param {Array.<T>} arr
-       * @returns {T}
-       */
-      choose: (arr) => arr[instance.randi(0, arr.length - 1)],
       /** BASIC GRAPHICS API */
       /**
        * Clear the game screen
@@ -960,4 +927,4 @@
 })();
 
 (()=>{var G=getScriptLoader=o=>(c,i)=>{o.setvar("LOADING",o.LOADING+1),script=document.createElement("script"),image.crossOrigin="anonymous",script.onload=()=>{i&&i(script),o.setvar("LOADING",o.LOADING-1)},script.onerror=()=>{i&&i(null)},script.src=c,document.head.appendChild(script)};var N=getImageLoader=(o,{colors:c})=>{let i={convertColors:d};return(t,s)=>{o.setvar("LOADING",o.LOADING+1);let r=new Image;r.crossOrigin="anonymous",r.onload=()=>{s&&s(r,i),o.setvar("LOADING",o.LOADING-1)},r.onerror=function(){s&&s(null,i)},r.src=t};function d(t,s=!1){let r=new OffscreenCanvas(t.width,t.height),e=r.getContext("2d");e.drawImage(t,0,0);let u=e.getImageData(0,0,t.width,t.height),a=u.data,p=new Map;for(let n=0,I=a.length;n<I;n+=4){let L=a[n],m=a[n+1],g=a[n+2],A=[L,m,g],D=A.join(",");p.has(D)||p.set(D,w(A,c));let O=p.get(D),x=O.startsWith("#")?f(O):l(O);a[n]=x[0],a[n+1]=x[1],a[n+2]=x[2],a[n+3]=s?a[n+3]:255}return e.putImageData(u,0,0),r}function f(t){let s=0,r=0,e=0;return t.length===4?(s="0x"+t[1]+t[1],r="0x"+t[2]+t[2],e="0x"+t[3]+t[3]):t.length===7&&(s="0x"+t[1]+t[2],r="0x"+t[3]+t[4],e="0x"+t[5]+t[6]),[s|0,r|0,e|0]}function l(t){let s=t.indexOf(",")>-1?",":" ";t=t.substr(4).split(")")[0].split(s);let r=(+t[0]).toString(16),e=(+t[1]).toString(16),u=(+t[2]).toString(16);return r.length===1&&(r="0"+r),e.length===1&&(e="0"+e),u.length===1&&(u="0"+u),[r|0,e|0,u|0]}function w(t,s){let r=1/0,e=null,[u,a,p]=t;return s.forEach(n=>{let[I,L,m]=n.startsWith("#")?f(n):l(n),g=Math.sqrt((u-I)**2+(a-L)**2+(p-m)**2);g<r&&(r=g,e=n)}),e}};var v=getFontLoader=o=>async(c,i,d)=>{let f=new FontFace(c,`url(${i})`);o.setvar("LOADING",o.LOADING+1),document.fonts.add(f),f.load().then(l=>{d&&d(l),o.setvar("LOADING",o.LOADING-1)}).catch(()=>{d&&d(null)})};window.pluginAssetLoader=h;function h(o,c){return o.setvar("LOADING",0),{loadScript:G(o,c),loadImage:N(o,c),loadFont:v(o,c)}}})();
-/*! Asset Loader plugin for litecanvas v0.5.1 by Luiz Bills | MIT Licensed */
+/*! Asset Loader plugin for litecanvas v0.5.2 by Luiz Bills | MIT Licensed */

@@ -364,21 +364,10 @@ rand(min = 0, max = 1.0): number;
 // Generates a pseudo-random integer between min (inclusive) and max (inclusive)
 randi(min = 0, max = 1): number;
 
-// Returns `true` or `false` based on random chance (p)
-// example: chance(0.25) ? '25% true' : '75% false'
-chance(p: number): boolean
-
-// Choose a random item from a Array
-choose(arr: Array&lt;T&gt;): T
-
 // Calculates a linear (interpolation) value over `t`.
 // example: lerp(0, 50, 0.5) returns 25
 // learn more: https://gamedev.net/tutorials/programming/general-and-gameplay-programming/a-brief-introduction-to-lerp-r4954/
 lerp(a: number, b: number, t: number): number
-
-// Interpolate between 2 values.
-// Optionally, takes a custom periodic function (default = `Math.sin`).
-wave(lower, higher, t, fn = Math.sin): number
 
 // Convert degrees to radians
 deg2rad(n: number): number
@@ -404,11 +393,6 @@ map(val, min1, max1, min2, max2, withinBounds = false ): number
 // Maps a number from one range to a value between 0 and 1.
 // example: norm(50, 0, 100) returns 0.5
 norm(value, min, max): number
-
-// Calculates the positive difference of two given numbers.
-// example: diff(20, 30) return 10
-// example: diff(-3, 3) return 6
-diff(a, b): number
 
 // Returns the sine of a number in radians.
 sin(angle: number): number
