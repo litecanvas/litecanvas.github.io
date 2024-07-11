@@ -1,7 +1,7 @@
 import pako from "pako";
 import { EditorView } from "codemirror";
 import { EditorState } from "@codemirror/state";
-import { keymap } from "@codemirror/view";
+import { keymap, scrollPastEnd } from "@codemirror/view";
 import {
   javascript,
   javascriptLanguage,
@@ -113,7 +113,7 @@ function stopGame(evt) {
 shareButton.addEventListener("click", (evt) => {
   if (!navigator.clipboard) {
     return alert(
-      "Your browser not support this feature. Consider installing Firefox or Chrome."
+      "Your browser not support this feature. Consider installing Firefox or Chrome.",
     );
   }
   const code = codeEditor.state.doc.toString();
@@ -131,14 +131,14 @@ shareButton.addEventListener("click", (evt) => {
     (err) => {
       alert("Error: Unable to generate your shareable url!");
       console.error("Error on copying text to clipboard:", err);
-    }
+    },
   );
 });
 
 copyButton.addEventListener("click", (evt) => {
   if (!navigator.clipboard) {
     return alert(
-      "Your browser not support this feature. Consider installing Firefox or Chrome."
+      "Your browser not support this feature. Consider installing Firefox or Chrome.",
     );
   }
   const code = codeEditor.state.doc.toString();
@@ -148,14 +148,14 @@ copyButton.addEventListener("click", (evt) => {
     (err) => {
       alert("Error: Unable to generate your shareable url!");
       console.error("Error on copying text to clipboard:", err);
-    }
+    },
   );
 });
 
 function runCode() {
   if (!litecanvasSourceCode) {
     return alert(
-      "The litecanvas source code  was not loaded. Try reloading this page."
+      "The litecanvas source code  was not loaded. Try reloading this page.",
     );
   }
   const game = codeEditor.state.doc.toString();
@@ -203,7 +203,7 @@ const state = EditorState.create({
           sourceType: "script",
         },
         rules: {},
-      })
+      }),
     ),
     javascriptLanguage.data.of({
       autocomplete: customCompletions,
@@ -216,6 +216,7 @@ const state = EditorState.create({
     EditorView.updateListener.of((update) => {
       if (update.docChanged) config.codeChanged = true;
     }),
+    scrollPastEnd(),
     ...desktopExtensions,
   ],
 });
@@ -272,16 +273,16 @@ function decompressString(str) {
         new Uint8Array(
           atob(str)
             .split("")
-            .map((c) => c.charCodeAt(0))
+            .map((c) => c.charCodeAt(0)),
         ),
-        { to: "string" }
+        { to: "string" },
       );
       console.log("Playground url decoded successfully!");
       break;
     } catch (e) {
       console.error(
         `Failed decode the playground url (${attempts + 1}/2). Error:`,
-        e
+        e,
       );
       console.log("Trying to decode again (fixing some characters)...");
       code = null;
