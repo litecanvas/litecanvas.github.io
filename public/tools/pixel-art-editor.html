@@ -70,7 +70,6 @@
         font-weight: 500;
         color: #555;
         cursor: pointer;
-        font-variant: small-caps;
         font-weight: 700;
         letter-spacing: 1px;
         line-height: 1.35;
@@ -207,9 +206,12 @@
     <footer>
       <strong>Hotkeys:</strong>
       <ul>
-        <li><kbd>0</kbd>...<kbd>7</kbd>: select a color.</li>
-        <li><kbd>space</kbd>: select the color #0.</li>
-        <li><kbd>x</kbd> or <kbd>e</kbd>: select the eraser.</li>
+        <li>
+          <kbd>0</kbd>...<kbd>9</kbd> or <kbd>a</kbd>...<kbd>b</kbd>: select a
+          color.
+        </li>
+        <li><kbd>SPACE</kbd>: select the color #0.</li>
+        <li><kbd>x</kbd>: select the eraser.</li>
       </ul>
     </footer>
 
@@ -374,7 +376,9 @@
         let color = colors[i];
         const el = document.createElement("label");
         el.dataset.color = i;
-        el.innerHTML = `<span style="background:${color}">${i}</span>`;
+        el.innerHTML = `<span style="background:${color}">${i.toString(
+          16
+        )}</span>`;
         palette.appendChild(el);
         el.title = "Select color #" + i;
         if (i === 0) {
@@ -422,13 +426,12 @@
         if ("INPUT" === evt.target.tagName) return;
 
         evt.preventDefault();
-        const key = " " === evt.key ? 0 : parseInt(evt.key, 10);
-        const keys = [0, 1, 2, 3, 4, 5, 6, 7];
+        const num = " " === evt.key ? 0 : parseInt(evt.key, 16);
 
-        if (keys.includes(key)) {
-          const el = $(`[data-color="${key}"]`);
-          setCurrentColor(key, el);
-        } else if (["e", "x"].includes(evt.key)) {
+        if (num >= 0 && num + 1 <= colors.length) {
+          const el = $(`[data-color="${num}"]`);
+          setCurrentColor(num, el);
+        } else if (["x"].includes(evt.key)) {
           const el = $(`[data-color="-1"]`);
           setCurrentColor(-1, el);
         }
@@ -458,7 +461,10 @@
           for (let x = 0; x < W; x++) {
             let colorindex = pixels[x][y];
             if (null == colorindex || -1 === colorindex) colorindex = ".";
-            output += colorindex;
+            output +=
+              colorindex >= 0
+                ? (colorindex % colors.length).toString(16)
+                : colorindex;
           }
           output += "',\n";
         }
