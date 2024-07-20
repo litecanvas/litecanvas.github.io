@@ -35,6 +35,12 @@ export default function template(library, game) {
       #err-tip code {
         background: rgba(0,0,0,.2);
       }
+
+      canvas {
+        background-image: repeating-conic-gradient(#fefefe 0% 25%, #ddd 0% 50%);
+        background-position: 0 0, 0px 0px;
+        background-size: 48px 48px;
+      }
     </style>
   </head>
   <body>
