@@ -808,7 +808,7 @@
         loadPlugin(_plugins[i]);
       }
       if (NULL != _bg) {
-        instance.CANVAS.style.backgroundColor = instance.getcolor(_bg);
+        instance.CANVAS.style.background = instance.getcolor(_bg);
       }
       on(root, "resize", pageResized);
       pageResized();
