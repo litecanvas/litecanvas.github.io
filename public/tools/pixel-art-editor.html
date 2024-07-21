@@ -281,16 +281,15 @@
 
       function handleChanges(save = true) {
         prepare();
-        draw();
-        dirty = save;
+        dirty = !!save;
       }
 
       // Setup canvas
       function prepare() {
         pixels = pixels || [];
         ps = ~~pixelSize.value || 1;
-        W = ~~width.value;
-        H = ~~height.value;
+        W = ~~width.value || 1;
+        H = ~~height.value || 1;
 
         art.width = W * ps;
         art.height = H * ps;
@@ -307,9 +306,11 @@
         dirty = true;
       }
 
+      requestAnimationFrame(draw);
+
       // Draw
       function draw() {
-        art.width = art.width; // hack to clear the canvas
+        ctx.clearRect(0, 0, W, H);
         for (let x = 0; x < W; x++) {
           for (let y = 0; y < H; y++) {
             const colorindex = pixels[x][y];
@@ -317,6 +318,8 @@
             setPixel(x, y, colorindex);
           }
         }
+
+        requestAnimationFrame(draw);
       }
 
       // Trace
