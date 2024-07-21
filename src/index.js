@@ -32,7 +32,6 @@ if (url.searchParams.get("reset") !== null) {
 }
 
 const autoplay = !["0", "false"].includes(url.searchParams.get("autoplay"));
-console.log("autoplay", autoplay);
 
 let codeFromURL = url.searchParams.get("c");
 if (codeFromURL !== null) {
