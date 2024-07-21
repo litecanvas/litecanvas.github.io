@@ -236,13 +236,9 @@ function draw () {
       <p id="err-tip">Tip: If you are loading any asset (script, font, image etc), don't forget to add <code>if (LOADING > 0) return;</code> at the beginning of your <code>update</code> and <code>draw</code> functions.</p>
     </div>
     <script>
-      // catch errors
-      const err = document.getElementById('err')
-      window.addEventListener('error', (ev) => {
-        console.error(ev)
-        err.prepend(ev.message)
-        err.style.display = 'block'
-      })
+      // blue screen of death
+      handleError=e=>{console.log(e),err.prepend(e.message||e.reason),err.style.display='block'};
+      addEventListener('error',handleError);addEventListener('unhandledrejection',handleError);
     <\/script>
     <script>${r}<\/script>
     <script>
