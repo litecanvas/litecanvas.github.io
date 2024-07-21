@@ -4,7 +4,7 @@
     <link rel="manifest" href="manifest.json" />
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>litecanvas cheatsheet</title>
+    <title>Litecanvas Cheatsheet</title>
     <link rel="stylesheet" href="prism/prism.css" />
     <link rel="icon" href="icons/favicon.ico" />
     <style>
@@ -35,6 +35,10 @@
       ul li {
         font-size: 1.2rem;
         line-height: 2;
+      }
+      #install code {
+        background-color: #eee;
+        word-break: break-all;
       }
       @media print {
         .no-print {
@@ -82,13 +86,14 @@
         helpers, no gui tools... just coding.
       </p>
 
-      <p>
+      <p id="install">
         <strong>NPM</strong>:
-        <code onclick="selectText(this)" class="language-bash"
-          >npm i @litecanvas/litecanvas</code
-        >
-        <br /><strong>CND</strong>:
-        <code onclick="selectText(this)" class="language-bash"
+        <code onclick="selectText(this)">npm i @litecanvas/litecanvas</code>
+      </p>
+
+      <p id="install">
+        <strong>CND</strong>:
+        <code onclick="selectText(this)"
           >https://unpkg.com/@litecanvas/litecanvas/dist/dist.js</code
         >
       </p>
@@ -104,6 +109,8 @@
         <a href="#globals">Globals</a> | <a href="#plugin-api">Plugin API</a> |
         <a href="#advanced">Advanced</a>
       </nav>
+
+      <h2>Basic boilerplate</h2>
 
       <pre><code class="language-typescript">litecanvas({
   loop: { init, update, draw, resized }
@@ -162,7 +169,9 @@ settings.canvas = null
 settings.fullscreen = true
 
 // the game screen size
-settings.width = settings.height = undefined
+// by default, the game fills the entire screen
+settings.width = null
+settings.height = settings.width || null
 
 // scale the canvas
 settings.autoscale = true
@@ -191,7 +200,7 @@ settings.tapEvents = true
 // amount of time (milliseconds) to pause the tapping detection
 settings.tappingInterval = 100;
 
-// export all functions to global context
+// export all functions to global scope
 settings.global = true</code></pre>
 
       <h2><a id="drawing">Functions for Drawing</a></h2>
@@ -312,7 +321,7 @@ rotate(radians: number): void
 // see: https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/transform
 transform(a, b, c, d, e, f, resetFirst = true): void
 
-// update the alpha (transparency)
+// update the alpha (opacity)
 // see: https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/globalAlpha
 alpha(value: number): void
 
@@ -324,7 +333,7 @@ fill(color: number, path?: Path2D): void
 // see: https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/stroke
 stroke(color: number, path?: Path2D): void
 
-// create a Path2D instance
+// create (or clone) a Path2D instance
 // see: https://developer.mozilla.org/en-US/docs/Web/API/Path2D/Path2D
 path(arg?: Path2D | string): Path2D
 
