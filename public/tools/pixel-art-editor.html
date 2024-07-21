@@ -288,7 +288,7 @@
       // Setup canvas
       function prepare() {
         pixels = pixels || [];
-        ps = pixelSize.value;
+        ps = ~~pixelSize.value || 1;
         W = ~~width.value;
         H = ~~height.value;
 
