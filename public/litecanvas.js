@@ -67,7 +67,6 @@
       background: NULL,
       canvas: NULL,
       global: true,
-      tappingInterval: 100,
       tapEvents: true,
       useMouse: false,
       loop: NULL
@@ -755,12 +754,7 @@
         }, _eventTapStart = _hasMouse ? "mousedown" : "touchstart", _eventTapEnd = _hasMouse ? "mouseup" : "touchend", _eventTapMove = _hasMouse ? "mousemove" : "touchmove";
         let _tapStartX, _tapStartY, _last, _start;
         _tappingHandler = (ev) => {
-          let now = time();
-          if (now - _last > settings.tappingInterval) {
-            const [x, y] = _getXY(ev);
-            updateTapping(true, x, y);
-            _last = now;
-          }
+          updateTapping(true, ..._getXY(ev));
         };
         on(instance.CANVAS, _eventTapStart, function(ev) {
           ev.preventDefault();
