@@ -5,10 +5,7 @@ const engineFile = root + "/public/litecanvas.js";
 
 await unlink(engineFile);
 
-await copyFile(
-  root + "/node_modules/@litecanvas/litecanvas/dist/dist.js",
-  engineFile
-);
+await copyFile(root + "/node_modules/litecanvas/dist/dist.js", engineFile);
 
 const pluginAssetLoader = await readFile(
   root + "/node_modules/@litecanvas/plugin-asset-loader/dist/dist.js",
