@@ -12,21 +12,12 @@ body {
 }
 
 svg {
-  width: 1em;
+  width: 100%;
   pointer-events: none;
 }
 
 [hidden] {
   display: none !important;
-}
-
-.sr-only {
-  position: absolute;
-  left: -99999px;
-  top: auto;
-  width: 1px;
-  height: 1px;
-  overflow: hidden;
 }
 
 .notice-warning {
@@ -76,10 +67,7 @@ svg {
   padding: 0 1em;
   appearance: none;
   cursor: pointer;
-}
-
-.top-bar svg {
-  font-size: 2em;
+  overflow: hidden;
 }
 
 .top-bar button#play {
