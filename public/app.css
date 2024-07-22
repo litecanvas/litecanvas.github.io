@@ -137,13 +137,17 @@ svg {
 }
 
 .mobile-buttons > button {
-  font-size: 1em;
+  display: flex;
+  align-items: center;
+  padding: 0.5em 1em;
   appearance: none;
   border: 1px solid #101820;
   background-color: #282c34;
   color: #fff;
-  display: flex;
-  padding: 0.5em 1em;
+}
+
+.mobile-buttons svg {
+  width: 1em;
 }
 
 @media screen and (min-width: 64em) {
