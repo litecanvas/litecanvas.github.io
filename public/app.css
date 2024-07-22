@@ -134,12 +134,13 @@ svg {
 }
 
 .cm-editor .cm-scroller {
-  margin-bottom: 3rem;
+  /* margin-bottom: 3rem; */
 }
 
 .mobile-buttons {
   position: fixed;
   display: flex;
+  gap: 0.25rem;
   background-color: #101820;
   top: 0;
   left: 0;
@@ -155,7 +156,6 @@ svg {
   color: #fff;
   display: flex;
   padding: 0.5em 1em;
-  margin-right: 0.5em;
 }
 
 @media screen and (min-width: 64em) {
