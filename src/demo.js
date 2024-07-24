@@ -15,17 +15,14 @@ function init () {
 function update (dt) {
   color = ELAPSED * 32
 
+  // check taps/clicks
   if (TAPPED || TAPPING) {
     x = TAPX
     y = TAPY
-  }
 
-  // play a random sound every 5 seconds
-  if (t > 5) {
-    sfx(randi(0, 7))
-    t -= 5
+    // play sound
+    sfx(0)
   }
-  t += dt
 
   radius = rand() * y
 }
