@@ -4,12 +4,12 @@
   "id": "litecanvas",
   "description": "litecanvas is a lightweight HTML5 canvas engine suitable for small games and animations for people who enjoy coding: there is no fancy interface, no visual helpers, no gui tools... just coding.",
   "start_url": ".",
-  "background_color": "#101820",
-  "theme_color": "#fac800",
+  "background_color": "#18161c",
+  "theme_color": "#18161c",
   "display": "standalone",
   "categories": ["education", "games", "development"],
   "lang": "en",
-  "orientation": "portrait",
+  "orientation": "any",
   "icons": [
     {
       "src": "icons/icon.png",
