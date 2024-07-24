@@ -167,7 +167,7 @@ function update (dt) {
   color = ELAPSED * 32
 
   // check taps/clicks
-  if (TAPPED || TAPPING) {
+  if (TAPPED) {
     x = TAPX
     y = TAPY
 
