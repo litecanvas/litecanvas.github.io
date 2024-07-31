@@ -1,5 +1,5 @@
 {
-  "name": "litecanvas-editor",
+  "name": "@litecanvas/playground",
   "version": "1",
   "description": "",
   "main": "src/index.js",
@@ -7,7 +7,8 @@
   "scripts": {
     "dev": "esbuild src/index.js --bundle --watch --outfile=public/app.js --servedir=public",
     "build": "esbuild src/index.js --bundle --minify --outfile=public/app.js",
-    "postinstall": "node ./script/copy-files.js && npm run build"
+    "prepare": "node ./script/copy-files.js && npm run build",
+    "postinstall": "npm run prepare"
   },
   "keywords": [
     "game development"

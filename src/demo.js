@@ -3,33 +3,36 @@ export default () =>
 // Learn more tapping on the question mark above.
 // Join our discord community:
 // https://discord.com/invite/r2c3rGsvH3
-litecanvas()
+litecanvas({
+  loop: { init, update, draw, tapped },
+})
 
-function init () {
-  color = 0
-  x = CENTERX
-  y = CENTERY
-  t = 0
+function init() {
+  // this function run once
+  // before the game starts
+  bg = 0
+  color = 3
+  radius = 32
+  posx = CENTERX
+  posy = CENTERY
 }
 
-function update (dt) {
-  color = ELAPSED * 32
-
-  // check taps/clicks
-  if (TAPPED) {
-    x = TAPX
-    y = TAPY
-
-    // play sound
-    sfx(0)
-  }
-
-  radius = rand() * y
+// this function detect taps/clicks
+// and changes the circle position
+function tapped(x, y) {
+  posx = x
+  posy = y
 }
 
-function draw () {
-  clear(0)
-  linewidth(4)
-  circ(x, y, radius, color)
+// this function controls the game logic
+function update(dt) {
+  // make the circle falls 100 pixels per second
+  posy += 100 * dt
+}
+
+// this function render the game scene
+function draw() {
+  cls(bg) // clear the screen
+  circfill(posx, posy, radius, color) // draw a circle
 }
 `.trim() + "\n";

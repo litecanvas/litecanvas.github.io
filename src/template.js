@@ -61,6 +61,12 @@ export default function template(library, game) {
           return instance;
         };
       })(window.litecanvas);
+      window.print = () => {
+        console.log('warning: print() is no longer alias for text()')
+      };
+      window.clear = () => {
+        console.log('warning: clear() is no longer alias for cls()')
+      };
     </script>
     <script>${game}</script>
   </body>

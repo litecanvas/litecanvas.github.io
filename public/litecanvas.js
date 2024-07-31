@@ -26,7 +26,7 @@
   };
 
   // src/palette.js
-  var palette_default = colors = [
+  var colors = [
     "#18161c",
     "#6a7799",
     "#aec2c2",
@@ -42,7 +42,7 @@
   ];
 
   // src/sounds.js
-  var sounds_default = sounds = [
+  var sounds = [
     // 0 - pickup
     [0.8, 0, 2e3, 0.01, 0.05, , 1, 2, , , -600, 0.05, , , , , , 0.5, 0.05],
     // 1 - hit
@@ -56,31 +56,33 @@
   // src/index.js
   var root = globalThis;
   function litecanvas(settings = {}) {
-    const body = document.body, math = Math, PI = math.PI, TWO_PI = PI * 2, on = (elem, evt, callback) => elem.addEventListener(evt, callback), off = (elem, evt, callback) => elem.removeEventListener(evt, callback), time = () => performance.now(), NULL = null, UNDEF = void 0, defaults = {
+    const PI = Math.PI, TWO_PI = PI * 2, on = (elem, evt, callback) => elem.addEventListener(evt, callback), defaults = {
       fps: 60,
       fullscreen: true,
-      width: NULL,
-      height: NULL,
+      width: null,
+      height: null,
       autoscale: true,
       pixelart: false,
       antialias: true,
-      background: NULL,
-      canvas: NULL,
+      canvas: null,
       global: true,
       tapEvents: true,
-      useMouse: false,
-      loop: NULL
+      loop: null
     };
     settings = Object.assign(defaults, settings);
-    let _initialized = false, _plugins = [], _canvas = settings.canvas || document.createElement("canvas"), _fullscreen = settings.fullscreen, _autoscale = settings.autoscale, _bg = settings.background, _hasMouse = settings.useMouse || matchMedia("(pointer:fine)").matches, _tappingHandler, _scale = 1, _offsetTop = 0, _offsetLeft = 0, _ctx, _lastFrame, _step = 1 / settings.fps, _stepMs = _step * 1e3, _accumulated = 0, _rafid, _drawCount = 0, _drawTime = 0, _fontFamily = "sans-serif", _fontStyle = "", _fontSize = 32, _textAlign = "start", _textBaseline = "top", _loop = {
+    let _initialized = false, _plugins = [], _canvas = settings.canvas || document.createElement("canvas"), _fullscreen = settings.fullscreen, _autoscale = settings.autoscale, _scale = 1, _mouseX, _mouseY, _ctx, _lastFrame, _step = 1 / settings.fps, _stepMs = _step * 1e3, _accumulated = 0, _rafid, _drawCount = 0, _drawTime = 0, _fontFamily = "sans-serif", _fontStyle = "", _fontSize = 32, _textAlign = "start", _textBaseline = "top", _events = {
       init: [],
       update: [],
       draw: [],
-      resized: []
+      resized: [],
+      tap: [],
+      untap: [],
+      tapping: [],
+      tapped: []
     }, _helpers = {
       settings: Object.assign({}, settings),
-      colors: palette_default,
-      sounds: sounds_default
+      colors,
+      sounds
     };
     const instance = {
       /** @type {number} */
@@ -88,25 +90,15 @@
       /** @type {number} */
       HEIGHT: settings.height || settings.width,
       /** @type {HTMLCanvasElement} */
-      CANVAS: NULL,
-      /** @type {boolean} */
-      TAPPED: NULL,
-      /** @type {boolean} */
-      TAPPING: NULL,
-      /** @type {number} */
-      TAPX: NULL,
-      /** @type {number} */
-      TAPY: NULL,
+      CANVAS: null,
       /** @type {number} */
       ELAPSED: 0,
       /** @type {number} */
       FPS: settings.fps,
       /** @type {number} */
-      DT: _step,
+      CENTERX: null,
       /** @type {number} */
-      CENTERX: NULL,
-      /** @type {number} */
-      CENTERY: NULL,
+      CENTERY: null,
       /** MATH API */
       /**
        * The value of the mathematical constant PI (π).
@@ -164,7 +156,7 @@
        * @param {number} max
        * @returns {number}
        */
-      clamp: (value, min, max) => math.min(math.max(value, min), max),
+      clamp: (value, min, max) => Math.min(Math.max(value, min), max),
       /**
        * Wraps a number between `min` (inclusive) and `max` (exclusive).
        *
@@ -173,7 +165,7 @@
        * @param {number} max
        * @returns {number}
        */
-      wrap: (value, min, max) => value - (max - min) * math.floor((value - min) / (max - min)),
+      wrap: (value, min, max) => value - (max - min) * Math.floor((value - min) / (max - min)),
       /**
        * Re-maps a number from one range to another.
        *
@@ -198,13 +190,6 @@
        * @returns {number} the normalized number.
        */
       norm: (value, min, max) => instance.map(value, min, max, 0, 1),
-      /**
-       * Returns the fractional part of a number
-       *
-       * @param {number} value The number
-       * @returns {number}
-       */
-      fract: (value) => value % 1,
       /** RNG API */
       /**
        * Generates a pseudorandom float between min (inclusive) and max (exclusive)
@@ -213,7 +198,7 @@
        * @param {number} [max=1.0]
        * @returns {number} the random number
        */
-      rand: (min = 0, max = 1) => math.random() * (max - min) + min,
+      rand: (min = 0, max = 1) => Math.random() * (max - min) + min,
       /**
        * Generates a pseudorandom integer between min (inclusive) and max (inclusive)
        *
@@ -228,8 +213,8 @@
        *
        * @param {number|null} color The background color (from 0 to 7) or null
        */
-      clear(color) {
-        if (NULL == color) {
+      cls(color) {
+        if (null == color) {
           _ctx.clearRect(0, 0, instance.WIDTH, instance.HEIGHT);
         } else {
           instance.rectfill(0, 0, instance.WIDTH, instance.HEIGHT, color);
@@ -245,7 +230,7 @@
        * @param {number} [color=0] the color index (generally from 0 to 7)
        * @param {number|number[]} [radii] A number or list specifying the radii used to draw a rounded-borders rectangle
        */
-      rect(x, y, width, height, color = 0, radii = UNDEF) {
+      rect(x, y, width, height, color = 0, radii = null) {
         _ctx.beginPath();
         _ctx[radii ? "roundRect" : "rect"](
           ~~x,
@@ -266,7 +251,7 @@
        * @param {number} [color=0] the color index (generally from 0 to 7)
        * @param {number|number[]} [radii] A number or list specifying the radii used to draw a rounded-borders rectangle
        */
-      rectfill(x, y, width, height, color = 0, radii = UNDEF) {
+      rectfill(x, y, width, height, color = 0, radii = null) {
         _ctx.beginPath();
         _ctx[radii ? "roundRect" : "rect"](
           ~~x,
@@ -340,26 +325,6 @@
       linedash(segments, offset = 0) {
         _ctx.setLineDash(Array.isArray(segments) ? segments : [segments]);
         _ctx.lineDashOffset = offset;
-      },
-      /**
-       * Determines the shape used to draw the end points of lines
-       * Possible values are: "butt", "round" or "square"
-       *
-       * @param {string} value
-       * @see https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/lineCap
-       */
-      linecap(value) {
-        _ctx.lineCap = value;
-      },
-      /**
-       * Determines the shape used to join two line segments where they meet
-       * Possible values are: "round", "bevel", and "miter"
-       *
-       * @param {string} value
-       * @see https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/lineJoin
-       */
-      linejoin(value) {
-        _ctx.lineJoin = value;
       },
       /** TEXT RENDERING API */
       /**
@@ -605,16 +570,6 @@
       blendmode(value) {
         _ctx.globalCompositeOperation = value;
       },
-      /**
-       * Provides filter effects such as blurring and grayscaling.
-       * It is similar to the CSS filter property and accepts the same values.
-       *
-       * @param {string} effect
-       * @see https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/filter
-       */
-      filter(effect) {
-        _ctx.filter = effect;
-      },
       /** SOUND API */
       /**
        * Play a defined sound or a ZzFX array of params
@@ -630,7 +585,7 @@
         if (navigator.userActivation && !navigator.userActivation.hasBeenActive) {
           return;
         }
-        let z = Array.isArray(sound) ? sound : sounds_default[~~sound % sounds_default.length];
+        let z = Array.isArray(sound) ? sound : sounds[~~sound % sounds.length];
         if (volume !== 1 || pitch || randomness) {
           z = [...z];
           z[0] = (Number(volume) || 1) * (z[0] || 1);
@@ -666,30 +621,50 @@
        * @returns {boolean}
        */
       colcirc: (x1, y1, r1, x2, y2, r2) => (x2 - x1) ** 2 + (y2 - y1) ** 2 <= (r1 + r2) ** 2,
+      /**
+       * Get the mouse position
+       * @returns number[]
+       */
+      mousepos: () => [_mouseX, _mouseY],
       /** PLUGINS API */
       /**
        * Prepares a plugin to be loaded
        *
        * @param {pluginCallback} callback
        */
-      use: (callback) => {
+      use: (callback, config = {}) => {
+        callback.__config = config;
         _initialized ? loadPlugin(callback) : _plugins.push(callback);
       },
       /**
-       * Add a game loop event listener
+       * Add a game event listener
        *
-       * @param {string} event should be "init", "update", "draw" or "resized"
+       * @param {string} event the event type name
        * @param {function} callback the function that is called when the event occurs
        * @param {boolean} [highPriority=false] determines whether the callback will be called before or after the others
-       * @returns {function?} a function to remove the listener or `undefined` if passed a invalid event
+       * @returns {function} a function to remove the listener
        */
       listen(event, callback, highPriority = false) {
-        if (!_loop[event])
-          return;
-        _loop[event][highPriority ? "unshift" : "push"](callback);
+        _events[event] = _events[event] || [];
+        _events[event][highPriority ? "unshift" : "push"](callback);
         return () => {
-          _loop[event] = _loop[event].filter((f) => f !== callback);
+          _events[event] = _events[event].filter(
+            (item) => item !== callback
+          );
         };
+      },
+      /**
+       * Call all listeners attached to a game event
+       *
+       * @param {string} event The game event type
+       * @param  {...any} args Arguments passed to all listeners
+       */
+      emit(event, ...args) {
+        if (!_events[event])
+          return;
+        for (let i = 0; i < _events[event].length; ++i) {
+          _events[event][i](...args);
+        }
       },
       /**
        * Get the color value
@@ -697,7 +672,7 @@
        * @param {number} index The color number
        * @returns {string} the color value
        */
-      getcolor: (index) => palette_default[~~index % palette_default.length],
+      getcolor: (index) => colors[~~index % colors.length],
       /**
        * Create or update a instance variable
        *
@@ -722,8 +697,6 @@
         pageResized();
       }
     };
-    instance.cls = instance.clear;
-    instance.print = instance.text;
     for (const k of [
       "sin",
       "cos",
@@ -742,88 +715,145 @@
       "sign",
       "exp"
     ]) {
-      instance[k] = math[k];
+      instance[k] = Math[k];
     }
     function init() {
       _initialized = true;
       setupCanvas();
-      if (settings.tapEvents) {
-        const _tappedLimit = 200;
-        const _getXY = (event) => {
-          return _hasMouse ? [event.pageX, event.pageY] : [event.touches[0].pageX, event.touches[0].pageY];
-        }, _eventTapStart = _hasMouse ? "mousedown" : "touchstart", _eventTapEnd = _hasMouse ? "mouseup" : "touchend", _eventTapMove = _hasMouse ? "mousemove" : "touchmove";
-        let _tapStartX, _tapStartY, _last, _start;
-        _tappingHandler = (ev) => {
-          updateTapping(true, ..._getXY(ev));
-        };
-        on(instance.CANVAS, _eventTapStart, function(ev) {
-          ev.preventDefault();
-          if (!_rafid)
-            _resume();
-          on(body, _eventTapMove, _tappingHandler);
-          const [x, y] = [_tapStartX, _tapStartY] = _getXY(ev);
-          updateTapping(true, x, y);
-          _last = _start = time();
-        });
-        on(instance.CANVAS, _eventTapEnd, function(ev) {
-          off(body, _eventTapMove, _tappingHandler);
-          updateTapping(false);
-          if (time() - _start <= _tappedLimit) {
-            updateTapped(true, _tapStartX, _tapStartY);
-          }
-        });
-      }
-      on(root, "focus", () => {
-        if (!_rafid)
-          _resume();
-      });
-      function _resume() {
-        _lastFrame = time();
-        _rafid = requestAnimationFrame(frame);
-      }
       on(root, "blur", () => {
         cancelAnimationFrame(_rafid);
         _rafid = 0;
-        if (settings.tapEvents) {
-          off(
-            body,
-            _hasMouse ? "mousemove" : "touchmove",
-            _tappingHandler
-          );
-          updateTapping(false);
+      });
+      on(root, "focus", () => {
+        if (!_rafid) {
+          _lastFrame = performance.now();
+          _rafid = requestAnimationFrame(drawFrame);
         }
       });
       const source = settings.loop ? settings.loop : root;
-      for (const event in _loop) {
+      for (const event in _events) {
         if (source[event])
           instance.listen(event, source[event]);
       }
       for (let i = 0; i < _plugins.length; i++) {
         loadPlugin(_plugins[i]);
       }
-      if (NULL != _bg) {
-        instance.CANVAS.style.background = instance.getcolor(_bg);
-      }
       on(root, "resize", pageResized);
       pageResized();
-      emit("init");
-      _lastFrame = time();
-      _rafid = requestAnimationFrame(frame);
+      instance.emit("init");
+      _lastFrame = performance.now();
+      _rafid = requestAnimationFrame(drawFrame);
+      if (settings.tapEvents) {
+        const _getXY = (pageX, pageY) => [
+          (pageX - _canvas.offsetLeft) / _scale,
+          (pageY - _canvas.offsetTop) / _scale
+        ], _taps = /* @__PURE__ */ new Map(), _registerTap = (id, x, y) => {
+          const tap = {
+            x,
+            y,
+            startX: x,
+            startY: y,
+            // timestamp
+            ts: performance.now()
+          };
+          _taps.set(id, tap);
+          return tap;
+        }, _updateTap = (id, x, y) => {
+          const tap = _taps.get(id) || _registerTap(id);
+          tap.x = x;
+          tap.y = y;
+        }, _checkTapped = (tap) => tap && performance.now() - tap.ts <= 200;
+        let _pressingMouse = false;
+        on(_canvas, "mousedown", (ev) => {
+          ev.preventDefault();
+          const [x, y] = _getXY(ev.pageX, ev.pageY);
+          instance.emit("tap", x, y, 0);
+          _registerTap(0, x, y);
+          _pressingMouse = true;
+        });
+        on(_canvas, "mousemove", (ev) => {
+          ev.preventDefault();
+          const [x, y] = [_mouseX, _mouseY] = _getXY(ev.pageX, ev.pageY);
+          if (!_pressingMouse)
+            return;
+          instance.emit("tapping", x, y, 0);
+          _updateTap(0, x, y);
+        });
+        on(_canvas, "mouseup", (ev) => {
+          ev.preventDefault();
+          const tap = _taps.get(0);
+          const [x, y] = _getXY(ev.pageX, ev.pageY);
+          if (_checkTapped(tap)) {
+            instance.emit("tapped", tap.startX, tap.startY, 0);
+          }
+          instance.emit("untap", x, y, 0);
+          _taps.delete(0);
+          _pressingMouse = false;
+        });
+        on(_canvas, "touchstart", (ev) => {
+          ev.preventDefault();
+          const touches = ev.changedTouches;
+          for (let i = 0; i < touches.length; i++) {
+            const touch = touches[i];
+            const [x, y] = _getXY(touch.pageX, touch.pageY);
+            instance.emit("tap", x, y, touch.identifier + 1);
+            _registerTap(touch.identifier + 1, x, y);
+          }
+        });
+        on(_canvas, "touchmove", (ev) => {
+          ev.preventDefault();
+          const touches = ev.changedTouches;
+          for (let i = 0; i < touches.length; i++) {
+            const touch = touches[i];
+            const [x, y] = _getXY(touch.pageX, touch.pageY);
+            instance.emit("tapping", x, y, touch.identifier + 1);
+            _updateTap(touch.identifier + 1, x, y);
+          }
+        });
+        const _touchEndHandler = (ev) => {
+          ev.preventDefault();
+          const existing = [];
+          if (ev.targetTouches.length > 0) {
+            for (const touch of ev.targetTouches) {
+              existing.push(touch.identifier + 1);
+            }
+          }
+          for (const [id, tap] of _taps) {
+            if (existing.includes(id))
+              continue;
+            if (_checkTapped(tap)) {
+              instance.emit("tapped", tap.startX, tap.startY, id);
+            }
+            instance.emit("untap", tap.x, tap.y, id);
+            _taps.delete(id);
+          }
+        };
+        on(_canvas, "touchend", _touchEndHandler);
+        on(_canvas, "touchcancel", _touchEndHandler);
+        on(root, "blur", () => {
+          _pressingMouse = false;
+          if (_taps.size === 0)
+            return;
+          for (const [id, tap] of _taps) {
+            instance.emit("untap", tap.x, tap.y, id);
+            _taps.delete(id);
+          }
+        });
+      }
     }
-    function frame(now) {
+    function drawFrame(now) {
       let ticks = 0, t = now - _lastFrame;
       _lastFrame = now;
       _accumulated += t;
       while (_accumulated >= _stepMs) {
-        emit("update", _step);
+        instance.emit("update", _step);
         instance.setvar("ELAPSED", instance.ELAPSED + _step);
         _accumulated -= _stepMs;
         ticks++;
-        instance.setvar("TAPPED", false);
       }
       if (ticks) {
         _drawCount++;
-        emit("draw");
+        instance.emit("draw");
         _drawTime += _stepMs * ticks;
         if (_drawTime + _accumulated >= 1e3) {
           instance.setvar("FPS", _drawCount);
@@ -832,7 +862,7 @@
         }
       }
       if (_rafid)
-        _rafid = requestAnimationFrame(frame);
+        _rafid = requestAnimationFrame(drawFrame);
     }
     function setupCanvas() {
       _canvas = "string" === typeof _canvas ? document.querySelector(_canvas) : _canvas;
@@ -843,7 +873,7 @@
       _canvas.width = instance.WIDTH;
       _canvas.height = instance.HEIGHT || instance.WIDTH;
       if (!_canvas.parentNode)
-        body.appendChild(_canvas);
+        document.body.appendChild(_canvas);
       if (!settings.antialias || settings.pixelart) {
         _ctx.imageSmoothingEnabled = false;
         _canvas.style.imageRendering = "pixelated";
@@ -863,44 +893,25 @@
         instance.setvar("WIDTH", innerWidth);
         instance.setvar("HEIGHT", innerHeight);
       } else if (_autoscale) {
-        _scale = math.min(
+        _scale = Math.min(
           innerWidth / instance.WIDTH,
           innerHeight / instance.HEIGHT
         );
-        _scale = settings.pixelart ? math.floor(_scale) : _scale;
+        _scale = settings.pixelart ? Math.floor(_scale) : _scale;
         _canvas.style.width = instance.WIDTH * _scale + "px";
         _canvas.style.height = instance.HEIGHT * _scale + "px";
       }
       instance.setvar("CENTERX", instance.WIDTH / 2);
       instance.setvar("CENTERY", instance.HEIGHT / 2);
-      _offsetTop = _canvas.offsetTop;
-      _offsetLeft = _canvas.offsetLeft;
       instance.textalign(_textAlign, _textBaseline);
-      emit("resized");
-    }
-    function updateTapped(tapped, x, y) {
-      instance.setvar("TAPPED", tapped);
-      instance.setvar("TAPX", (x - _offsetLeft) / _scale);
-      instance.setvar("TAPY", (y - _offsetTop) / _scale);
-    }
-    function updateTapping(tapped, x, y) {
-      instance.setvar("TAPPING", tapped);
-      instance.setvar("TAPX", (x - _offsetLeft) / _scale);
-      instance.setvar("TAPY", (y - _offsetTop) / _scale);
+      instance.emit("resized", _scale);
     }
     function loadPlugin(callback) {
-      const pluginData = callback(instance, _helpers);
+      const pluginData = callback(instance, _helpers, callback.__config);
       if ("object" === typeof pluginData) {
         for (const key in pluginData) {
           instance.setvar(key, pluginData[key]);
         }
-      }
-    }
-    function emit(event, ...args) {
-      if (!_loop[event])
-        return;
-      for (let i = 0; i < _loop[event].length; ++i) {
-        _loop[event][i](...args);
       }
     }
     if (settings.global) {

@@ -10,28 +10,11 @@ export default function customCompletions(context) {
       { label: "WIDTH", type: "variable", info: "width of the game screen" },
       { label: "HEIGHT", type: "variable", info: "height of the game screen" },
       {
-        label: "TAPPED",
-        type: "variable",
-        info: "true when the game screen is tapped",
-      },
-      {
-        label: "TAPPING",
-        type: "variable",
-        info: "true when the game screen is holding the mouse/touch",
-      },
-      { label: "TAPX", type: "variable", info: "position X of the tap" },
-      { label: "TAPY", type: "variable", info: "position Y of the tap" },
-      {
         label: "ELAPSED",
         type: "variable",
         info: "seconds since the game started",
       },
       { label: "FPS", type: "variable", info: "frames per second" },
-      {
-        label: "DT",
-        type: "variable",
-        info: "The fixed delta time",
-      },
       {
         label: "CENTERX",
         type: "variable",
@@ -47,16 +30,9 @@ export default function customCompletions(context) {
       { label: "HALF_PI", type: "constant" },
       // global functions
       {
-        label: "clear",
-        type: "function",
-        apply: "clear(",
-        detail: "(color?: number)",
-        info: "clear the game screen",
-      },
-      {
         label: "cls",
         type: "function",
-        apply: "cls(",
+        apply: "clear(",
         detail: "(color?: number)",
         info: "clear the game screen",
       },
@@ -97,33 +73,15 @@ export default function customCompletions(context) {
         detail: "(value)",
       },
       {
-        label: "linecap",
-        type: "function",
-        apply: "linecap(",
-        detail: "(value)",
-      },
-      {
         label: "linedash",
         type: "function",
         apply: "linedash(",
         detail: "(pattern, ofsset)",
       },
       {
-        label: "linejoin",
-        type: "function",
-        apply: "linejoin(",
-        detail: "(value)",
-      },
-      {
         label: "text",
         type: "function",
         apply: "text(",
-        detail: "(x, y, text, color=3)",
-      },
-      {
-        label: "print",
-        type: "function",
-        apply: "print(",
         detail: "(x, y, text, color=3)",
       },
       {
@@ -227,12 +185,6 @@ export default function customCompletions(context) {
         detail: "(arg?: string|Path2D)",
       },
       {
-        label: "filter",
-        type: "function",
-        apply: "filter(",
-        detail: "(effect)",
-      },
-      {
         label: "push",
         type: "function",
         apply: "push()",
@@ -324,12 +276,6 @@ export default function customCompletions(context) {
         info: "linear interpolation from `start` to `end` over `t`%.",
       },
       {
-        label: "chance",
-        type: "function",
-        apply: "chance(",
-        detail: "(p)",
-      },
-      {
         label: "deg2rad",
         type: "function",
         apply: "deg2rad(",
@@ -388,18 +334,6 @@ export default function customCompletions(context) {
         type: "function",
         apply: "trunc(",
         detail: "(value)",
-      },
-      {
-        label: "fract",
-        type: "function",
-        apply: "fract(",
-        detail: "(value)",
-      },
-      {
-        label: "wave",
-        type: "function",
-        apply: "wave(",
-        detail: "(lower, higher, t, fn=Math.sin)",
       },
       {
         label: "min",
@@ -464,6 +398,13 @@ export default function customCompletions(context) {
         info: "Check collision between 2 circles",
       },
       {
+        label: "mousepos",
+        type: "function",
+        apply: "mousepos()",
+        detail: "() => [x, y]",
+        info: "Gets the mouse X and Y",
+      },
+      {
         label: "use",
         type: "function",
         apply: "use(",
@@ -474,7 +415,7 @@ export default function customCompletions(context) {
         label: "setvar",
         type: "function",
         apply: "setvar(",
-        detail: "(name,value)",
+        detail: "(name, value)",
       },
       {
         label: "getcolor",
@@ -486,7 +427,13 @@ export default function customCompletions(context) {
         label: "listen",
         type: "function",
         apply: "listen(",
-        detail: "(event,callback,[highPriority])",
+        detail: "(event, callback, [highPriority=false])",
+      },
+      {
+        label: "emit",
+        type: "function",
+        apply: "emit(",
+        detail: "(event,...data)",
       },
       {
         label: "resize",

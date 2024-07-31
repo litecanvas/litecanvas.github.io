@@ -130,7 +130,9 @@
       <h2>Basic boilerplate</h2>
 
       <pre><code class="language-typescript">litecanvas({
-  loop: { init, update, draw, resized }
+  loop: {
+    init, update, draw, resized, tap, tapping, untap
+  }
 })
 
 function init() {
@@ -149,7 +151,28 @@ function draw() {
 function resized() {
   // called when the browser was resized
   // always called once before init()
-}</code></pre>
+}
+
+function tap(x, y, tapId) {
+  // called when a tap starts
+  // equivalent to "mousedown" and "touchstart" browser events
+
+  // note:
+  //   Use the tapId to handle multiple touches
+  //   Each touch has a unique tapId
+  //   mouse's tapId always is 0
+}
+
+function untap(x, y, tapId) {
+  // called when a tap end
+  // equivalent to "mouseup" and "touchend" browser events
+}
+
+function tapping(x, y, tapId) {
+  // called when a tap moves
+  // equivalent to "mousemove" and "touchmove" browser events
+}
+</code></pre>
 
       <h2><a id="colors">Default Colors</a></h2>
 
@@ -170,13 +193,16 @@ function resized() {
 litecanvas(settings = {});
 
 // the game loop callbacks
-// if loop = undefined, will use these functions:
-// window.init(), window.update(dt), window.draw(), window.resized()
+// if loop = undefined, will use global functions:
+// window.init(), window.update(dt), window.draw(), etc
 settings.loop = {
-  init: function,
-  update: function,
-  draw: function,
-  resized: function
+  init: function?,
+  update: function?,
+  draw: function?,
+  resized: function?,
+  tap: function?,
+  tapping: function?,
+  untap: function?
 }
 
 // the canvas (by default a new canvas is created)
@@ -196,22 +222,14 @@ settings.autoscale = true
 // target FPS
 settings.fps = 60
 
-// the canvas background color
-// accept: null or integer (a color from 0 to 7)
-settings.background = null
-
 // enable smooth drawing
 settings.antialias = true
 
 // disables antialias and force integer scales
 settings.pixelart = false
 
-// by default, the litecanvas use only mouse or only touches (giving priority to the mouse)
-// set this option to `true` if you are having any troubles to detect your mouse
-settings.useMouse = false
-
-// set to `false` to disable the default tap events (see TAPPED and TAPPING globals)
-// useful to create your own input handler
+// set to `false` to disable the default tap handler
+// useful to create your own mouse/touch handler
 settings.tapEvents = true
 
 // export all functions to global scope
@@ -248,14 +266,6 @@ linewidth(value: number): void
 
 // Sets the line dash pattern used when drawing lines
 linedash(value: number | number[], ofsset?: number): void
-
-// Determines the shape used to draw the end points of lines
-// Possible values are: "butt", "round" or "square"
-linecap(value: string): void
-
-// Determines the shape used to join two line segments where they meet
-// Possible values are: "round", "bevel", and "miter"
-linejoin(value: string): void
 
 /**
  * TEXT DRAWING-RELATED FUNCTIONS
@@ -355,11 +365,6 @@ path(arg?: Path2D | string): Path2D
 // see: https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/globalCompositeOperation
 blendmode(value: string): void
 
-// Provides filter effects such as blurring and grayscaling.
-// It is similar to the CSS filter property and accepts the same values.
-// see: https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/filter
-filter(effect: string): void
-
 // create a "circular" clipping region
 // see: https://github.com/litecanvas/game-engine/blob/main/samples/clip/clip.js
 clipcirc(x, y, width, height): void
@@ -448,9 +453,6 @@ floor(n: number): number
 // Returns the integer part of a number by removing any fractional digits.
 trunc(n: number): number
 
-// Returns the fractional part of a number
-fract(n: number): number
-
 // Returns the smallest of the numbers given as input parameters,
 // or `Infinity` if there are no parameters.
 // example: min(-10, 15, -1) returns -10
@@ -504,23 +506,8 @@ CENTERY: number
 // the FPS meter
 FPS: number
 
-// the fixed delta time
-DT: number
-
 // the amount of time since the game started
 ELAPSED: number
-
-// `true` when the screen is touched/clicked
-TAPPED: boolean
-
-// `true` while the screen is being touched/clicked
-TAPPING: boolean
-
-// the tap/click X position
-TAPX: number
-
-// the tap/click Y position
-TAPY: number
 
 // Math constants
 PI: number // approximately 3.14159 radians (180º)
