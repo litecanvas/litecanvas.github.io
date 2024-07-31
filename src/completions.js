@@ -32,7 +32,7 @@ export default function customCompletions(context) {
       {
         label: "cls",
         type: "function",
-        apply: "clear(",
+        apply: "cls(",
         detail: "(color?: number)",
         info: "clear the game screen",
       },
