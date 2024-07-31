@@ -80,10 +80,6 @@ export default function mobileBar(editorView) {
 
     buttons.style.transform = `translate(${x}px, ${y}px)`;
 
-    console.log(~~viewport.height);
-    console.log(~~screen.height);
-    console.log(Math.abs(~~viewport.height - ~~screen.height));
-
     if (Math.abs(viewport.height - screen.height) > 100) {
       showMobileBar();
     } else {
@@ -107,12 +103,10 @@ export default function mobileBar(editorView) {
   }
 
   function hideMobileBar() {
-    console.log("hide");
     buttons.style.display = "none";
   }
 
   function showMobileBar() {
-    console.log("show");
     buttons.style.display = "";
   }
 }
