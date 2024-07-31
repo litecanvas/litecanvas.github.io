@@ -123,7 +123,8 @@
         <strong>API</strong>: <a href="#colors">Colors</a> |
         <a href="#settings">Configuration</a> | <a href="#drawing">Drawing</a> |
         <a href="#sound">Sound</a> | <a href="#math">Math</a> |
-        <a href="#globals">Globals</a> | <a href="#plugin-api">Plugin API</a> |
+        <a href="#globals">Globals</a> | <a href="#events">Events</a> |
+        <a href="#plugin-api">Plugin API</a> |
         <a href="#advanced">Advanced</a>
       </nav>
 
@@ -516,6 +517,15 @@ TWO_PI: number // approximately 6.28318 radians (360º)
 
 HALF_PI: number // approximately 1.57079 radians (90º)</code></pre>
 
+      <h2><a id="events">Event Emitter</a></h2>
+
+      <pre><code class="language-typescript">// add a game event listener
+// returns a function that removes the listener
+listen(event: string, callback: function, highPriority = false): function
+
+// triggers a game event and call all listeners
+emit(event: string, ...data: any[]): void</code></pre>
+
       <h2><a id="plugin-api">Plugin API</a></h2>
 
       <pre><code class="language-typescript">// loads a plugin
@@ -527,10 +537,6 @@ setvar(name: string, value: any): void
 
 // get the color value
 getcolor(index: number): string
-
-// add a game loop listener
-// returns a function that removes the listener
-listen(event: string, callback: function, highPriority = false): function
 
 // resizes the game canvas
 // also, emit the "resized" event
