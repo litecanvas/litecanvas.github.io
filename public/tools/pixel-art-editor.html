@@ -58,7 +58,7 @@
       }
 
       kbd {
-        font-family: Consolas, "Lucida Console", monospace;
+        font-family: Consolas, monospace;
         display: inline-block;
         border-radius: 3px;
         padding: 0px 4px;
@@ -118,7 +118,7 @@
         background-image: repeating-conic-gradient(#fefefe 0% 25%, #ddd 0% 50%);
         background-color: #ddd;
         display: block;
-        margin-top: 2rem;
+        margin-top: 1rem;
         margin-bottom: 0.5rem;
       }
 
@@ -128,6 +128,10 @@
         width: 3rem;
         padding: 0.5em 1em;
         text-align: center;
+      }
+
+      #canvas-options {
+        line-height: 2.5;
       }
 
       @media only screen and (max-width: 48rem) {
@@ -190,8 +194,16 @@
         <input type="number" id="height" value="8" min="1" />
         &nbsp;&nbsp; Scale:
         <input type="number" id="pixelSize" value="" min="1" />
+        <br />
+        Paint tool:
+        <select id="paintTool">
+          <option value="pencil">Pencil</option>
+          <option value="bucket">Bucket</option>
+        </select>
       </section>
-      <canvas id="art" width="80" height="80"></canvas>
+      <canvas id="art" width="80" height="80"
+        >Your browser do not support canvas element</canvas
+      >
       <button id="clearButton">clear</button>
       <button id="exportButton">export</button>
       <textarea
@@ -212,6 +224,8 @@
         </li>
         <li><kbd>SPACE</kbd>: select the color #0.</li>
         <li><kbd>x</kbd>: select the eraser.</li>
+        <li><kbd>p</kbd>: use "pencil" to paint the pixels.</li>
+        <li><kbd>u</kbd>: use "bucket" to paint the pixels.</li>
       </ul>
     </footer>
 
@@ -250,16 +264,9 @@
         W,
         H,
         ps,
-        dirty = false,
+        dirty = true,
+        firstPaint = true,
         pixels;
-
-      pixelSize.onchange =
-        pixelSize.oninput =
-        width.onchange =
-        width.oninput =
-        height.onchange =
-        height.oninput =
-          () => handleChanges(true);
 
       // Restore from user's local storage
       width.value = ~~storage.getItem("width") || 8;
@@ -273,15 +280,9 @@
       try {
         json = storage.getItem("pixels");
         pixels = json ? JSON.parse(json) : pixels;
+        pixels = Array.isArray(pixels) ? pixels : [];
       } catch (error) {
         console.error(error);
-      }
-
-      handleChanges(false);
-
-      function handleChanges(save = true) {
-        prepare();
-        dirty = !!save;
       }
 
       // Setup canvas
@@ -306,108 +307,133 @@
         dirty = true;
       }
 
-      requestAnimationFrame(draw);
+      // setup controls
+      pixelSize.onchange =
+        pixelSize.oninput =
+        width.onchange =
+        width.oninput =
+        height.onchange =
+        height.oninput =
+          prepare;
 
-      // Draw
-      function draw() {
+      function drawArt() {
+        requestAnimationFrame(drawArt);
+
+        if (!dirty) return;
+        dirty = false;
+
         ctx.clearRect(0, 0, W, H);
+
         for (let x = 0; x < W; x++) {
           for (let y = 0; y < H; y++) {
             const colorindex = pixels[x][y];
             if (null == colorindex) continue;
-            setPixel(x, y, colorindex);
+            ctx.fillStyle = colors[colorindex];
+            ctx.fillRect(x * ps, y * ps, ps, ps);
           }
         }
 
-        requestAnimationFrame(draw);
+        if (!firstPaint) {
+          saveArt();
+        }
+        firstPaint = false;
       }
 
       // Trace
-      const hasMouse = matchMedia("(pointer:fine)").matches;
-      const traceEvents = {
-        start: hasMouse ? "onmousedown" : "ontouchstart",
-        move: hasMouse ? "onmousemove" : "ontouchmove",
-        end: hasMouse ? "onmouseup" : "ontouchend",
-      };
       let holding = false;
 
-      art[traceEvents.start] = function (evt) {
+      art["onmousedown"] = art["ontouchstart"] = function (evt) {
+        if (evt.target !== art) return;
+        evt.preventDefault();
         holding = true;
-        trace(evt);
+        trace(evt, true);
       };
 
-      art[traceEvents.move] = function (evt) {
+      art["onmousemove"] = art["ontouchmove"] = function (evt) {
+        if (evt.target !== art) return;
         evt.preventDefault();
         if (holding) {
           trace(evt);
         }
       };
 
-      art[traceEvents.end] = function (evt) {
+      window["onmouseup"] = window["ontouchend"] = function (evt) {
+        if (evt.target !== art) return;
+        evt.preventDefault();
         holding = false;
       };
 
-      function trace(evt) {
+      function trace(evt, tapped = false) {
         let [pageX, pageY] = getPageXY(evt);
-        const colorindex = ~~currentColor;
+        if (undefined === pageX || undefined === pageY) return;
 
-        x = ~~((pageX - art.offsetLeft) / ps);
-        y = ~~((pageY - art.offsetTop) / ps);
+        const colorindex = ~~currentColor,
+          x = ~~(Math.floor(pageX - art.offsetLeft) / ps),
+          y = ~~(Math.floor(pageY - art.offsetTop) / ps);
 
-        setPixel(x, y, colorindex);
-        pixels[x][y] = colorindex;
-        dirty = true;
+        switch (paintTool.value) {
+          case "pencil":
+            setPixel(x, y, colorindex);
+            break;
+          case "bucket":
+            if (tapped) bucketFill(x, y, colorindex);
+            break;
+          default:
+            break;
+        }
+      }
+
+      function bucketFill(fromX, fromY, color) {
+        if (null == fromX || null == fromY) return;
+
+        const fromcolor = getPixel(fromX, fromY);
+
+        if (fromcolor === color) return;
+
+        const search = [];
+
+        search.push([fromX, fromY]);
+
+        while (search.length > 0) {
+          const [x, y] = search.pop();
+
+          if (
+            x < 0 ||
+            x >= W ||
+            y < 0 ||
+            y >= H ||
+            getPixel(x, y) !== fromcolor
+          ) {
+            continue;
+          }
+
+          setPixel(x, y, color);
+          search.push([x + 1, y]);
+          search.push([x - 1, y]);
+          search.push([x, y + 1]);
+          search.push([x, y - 1]);
+        }
       }
 
       function getPageXY(evt) {
-        return hasMouse
-          ? [event.pageX, event.pageY]
-          : [event.touches[0].pageX, event.touches[0].pageY];
+        return event.touches
+          ? [event.touches[0].pageX, event.touches[0].pageY]
+          : [event.pageX, event.pageY];
       }
 
       function setPixel(x, y, colorindex) {
-        if (-1 === colorindex) {
-          ctx.clearRect(x * ps, y * ps, ps, ps);
-        } else {
-          ctx.fillStyle = colors[colorindex];
-          ctx.fillRect(x * ps, y * ps, ps, ps);
+        if (null == x || null == y) return;
+        colorindex = -1 === colorindex ? null : ~~colorindex % colors.length;
+        if (pixels[x][y] !== colorindex) {
+          pixels[x][y] = colorindex;
         }
+        dirty = true;
       }
 
-      // Setup color palette
-      for (let i = 0; i < colors.length; i++) {
-        let color = colors[i];
-        const el = document.createElement("label");
-        el.dataset.color = i;
-        el.innerHTML = `<span style="background:${color}">${i.toString(
-          16
-        )}</span>`;
-        palette.appendChild(el);
-        el.title = "Select color #" + i;
-        if (i === 0) {
-          setCurrentColor(0, el);
-        } else if (i + 1 === colors.length) {
-          const eraser = document.createElement("label");
-          eraser.dataset.color = -1;
-          eraser.innerHTML = `<span style="background:#fff;font-size: 26px;color: #c92a2a;">&times;</span>`;
-          eraser.title = "Select the pixel eraser";
-          palette.appendChild(eraser);
-        }
+      function getPixel(x, y) {
+        if (null == x || null == y) return;
+        return pixels[x][y];
       }
-
-      palette.onclick = (evt) => {
-        const target = evt.target;
-        let label = null;
-        if ("SPAN" === target.tagName) {
-          label = target.parentNode;
-        }
-        if ("LABEL" === target.tagName) {
-          label = target;
-        }
-        if (label) {
-          setCurrentColor(label.dataset.color, label);
-        }
-      };
 
       /**
        * @param {number} colorindex
@@ -429,14 +455,25 @@
         if ("INPUT" === evt.target.tagName) return;
 
         evt.preventDefault();
+
         const num = " " === evt.key ? 0 : parseInt(evt.key, 16);
 
         if (num >= 0 && num + 1 <= colors.length) {
           const el = $(`[data-color="${num}"]`);
           setCurrentColor(num, el);
-        } else if (["x"].includes(evt.key)) {
-          const el = $(`[data-color="-1"]`);
-          setCurrentColor(-1, el);
+        } else {
+          switch (evt.key.toLowerCase()) {
+            case "x":
+              const el = $(`[data-color="-1"]`);
+              setCurrentColor(-1, el);
+              break;
+            case "p":
+              paintTool.value = "pencil";
+              break;
+            case "u":
+              paintTool.value = "bucket";
+              break;
+          }
         }
       };
 
@@ -498,16 +535,13 @@
         );
       };
 
-      // Auto-save in local storage
-      setInterval(() => {
-        if (dirty) {
-          storage.setItem("width", W);
-          storage.setItem("height", H);
-          storage.setItem("pixels", JSON.stringify(pixels));
-          storage.setItem("ps", ps);
-          dirty = false;
-        }
-      }, 500);
+      // Save in local storage
+      function saveArt() {
+        storage.setItem("width", W);
+        storage.setItem("height", H);
+        storage.setItem("pixels", JSON.stringify(pixels));
+        storage.setItem("ps", ps);
+      }
 
       window.addEventListener("beforeunload", (evt) => {
         if (dirty) {
@@ -515,6 +549,47 @@
           evt.returnValue = true;
         }
       });
+
+      // Setup color palette
+      for (let i = 0; i < colors.length; i++) {
+        let color = colors[i];
+        const el = document.createElement("label");
+        el.dataset.color = i;
+        el.innerHTML = `<span style="background:${color}">${i.toString(
+          16
+        )}</span>`;
+        palette.appendChild(el);
+        el.title = "Select color #" + i;
+        if (i === 0) {
+          setCurrentColor(0, el);
+        } else if (i + 1 === colors.length) {
+          const eraser = document.createElement("label");
+          eraser.dataset.color = -1;
+          eraser.innerHTML = `<span style="background:#fff;font-size: 26px;color: #c92a2a;">&times;</span>`;
+          eraser.title = "Select the pixel eraser";
+          palette.appendChild(eraser);
+        }
+      }
+
+      palette.onclick = (evt) => {
+        const target = evt.target;
+        let label = null;
+        if ("SPAN" === target.tagName) {
+          label = target.parentNode;
+        }
+        if ("LABEL" === target.tagName) {
+          label = target;
+        }
+        if (label) {
+          setCurrentColor(label.dataset.color, label);
+        }
+      };
+
+      // Init
+      prepare();
+
+      // Draw at 60 FPS
+      drawArt();
     </script>
   </body>
 </html>
