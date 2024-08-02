@@ -1,11 +1,9 @@
 export default () =>
   `// Welcome to litecanvas playground!
-// Learn more tapping on the question mark above.
-// Join our discord community:
+// Learn more tapping on the question mark (?) above.
+// Also, join our discord community:
 // https://discord.com/invite/r2c3rGsvH3
-litecanvas({
-  loop: { init, update, draw, tapped },
-})
+litecanvas()
 
 function init() {
   // this function run once
@@ -34,5 +32,4 @@ function update(dt) {
 function draw() {
   cls(bg) // clear the screen
   circfill(posx, posy, radius, color) // draw a circle
-}
-`.trim() + "\n";
+}\n`;
