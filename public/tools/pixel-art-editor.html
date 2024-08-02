@@ -264,15 +264,15 @@
         W,
         H,
         ps,
-        dirty = true,
+        dirty = false,
         firstPaint = true,
         pixels;
 
       // Restore from user's local storage
       width.value = ~~storage.getItem("width") || 8;
       height.value = ~~storage.getItem("height") || 8;
-
       pixelSize.value = ~~storage.getItem("ps") || "";
+
       if (!pixelSize.value) {
         pixelSize.value = innerWidth < 800 ? 36 : 24;
       }
@@ -304,7 +304,6 @@
 
         exported.value = "";
         copy.disabled = true;
-        dirty = true;
       }
 
       // setup controls
@@ -316,27 +315,21 @@
         height.oninput =
           prepare;
 
-      function drawArt() {
-        requestAnimationFrame(drawArt);
-
-        if (!dirty) return;
-        dirty = false;
-
-        ctx.clearRect(0, 0, W, H);
-
+      function renderArt() {
+        requestAnimationFrame(renderArt);
         for (let x = 0; x < W; x++) {
           for (let y = 0; y < H; y++) {
-            const colorindex = pixels[x][y];
-            if (null == colorindex) continue;
-            ctx.fillStyle = colors[colorindex];
-            ctx.fillRect(x * ps, y * ps, ps, ps);
+            const color = getPixel(x, y);
+            if (null == color || -1 === ~~color) {
+              ctx.clearRect(x * ps, y * ps, ps, ps);
+            } else {
+              ctx.fillStyle = colors[color % colors.length];
+              ctx.fillRect(x * ps, y * ps, ps, ps);
+            }
           }
         }
-
-        if (!firstPaint) {
-          saveArt();
-        }
-        firstPaint = false;
+        saveArt();
+        dirty = false;
       }
 
       // Trace
@@ -367,16 +360,15 @@
         let [pageX, pageY] = getPageXY(evt);
         if (undefined === pageX || undefined === pageY) return;
 
-        const colorindex = ~~currentColor,
-          x = ~~(Math.floor(pageX - art.offsetLeft) / ps),
+        const x = ~~(Math.floor(pageX - art.offsetLeft) / ps),
           y = ~~(Math.floor(pageY - art.offsetTop) / ps);
 
         switch (paintTool.value) {
           case "pencil":
-            setPixel(x, y, colorindex);
+            setPixel(x, y, ~~currentColor);
             break;
           case "bucket":
-            if (tapped) bucketFill(x, y, colorindex);
+            if (tapped) bucketFill(x, y, ~~currentColor);
             break;
           default:
             break;
@@ -421,17 +413,18 @@
           : [event.pageX, event.pageY];
       }
 
-      function setPixel(x, y, colorindex) {
-        if (null == x || null == y) return;
-        colorindex = -1 === colorindex ? null : ~~colorindex % colors.length;
-        if (pixels[x][y] !== colorindex) {
-          pixels[x][y] = colorindex;
+      function setPixel(x, y, color) {
+        if (null == x || null == y || x < 0 || x >= W || y < 0 || y >= H) {
+          return;
         }
+        pixels[x][y] = color;
         dirty = true;
       }
 
       function getPixel(x, y) {
-        if (null == x || null == y) return;
+        if (null == x || null == y || x < 0 || x >= W || y < 0 || y >= H) {
+          return;
+        }
         return pixels[x][y];
       }
 
@@ -440,7 +433,7 @@
        * @param {HTMLElement} [element]
        */
       function setCurrentColor(colorindex, element) {
-        currentColor = colorindex;
+        currentColor = ~~colorindex;
         if (selected) {
           selected.classList.remove("selected");
         }
@@ -485,8 +478,9 @@
           )
         ) {
           pixels.length = 0;
-          storage.setItem("pixels", null);
+          storage.setItem("pixels", pixels);
           prepare();
+          ctx.clearRect(0, 0, W * ps, H * ps);
         }
       };
 
@@ -499,12 +493,9 @@
         for (let y = 0; y < H; y++) {
           output += "  '";
           for (let x = 0; x < W; x++) {
-            let colorindex = pixels[x][y];
-            if (null == colorindex || -1 === colorindex) colorindex = ".";
-            output +=
-              colorindex >= 0
-                ? (colorindex % colors.length).toString(16)
-                : colorindex;
+            let color = getPixel(x, y);
+            if (null == color || -1 === ~~color) color = ".";
+            output += color >= 0 ? (color % colors.length).toString(16) : color;
           }
           output += "',\n";
         }
@@ -587,9 +578,7 @@
 
       // Init
       prepare();
-
-      // Draw at 60 FPS
-      drawArt();
+      requestAnimationFrame(renderArt);
     </script>
   </body>
 </html>
