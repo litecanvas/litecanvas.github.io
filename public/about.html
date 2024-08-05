@@ -4,18 +4,36 @@
     <link rel="manifest" href="manifest.json" />
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="dark light" />
     <title>Litecanvas Cheatsheet</title>
     <link rel="stylesheet" href="prism/prism.css" />
     <link rel="icon" href="icons/favicon.ico" />
     <style>
       html {
-        font-size: 14px;
+        font-size: 18px;
+        background-color: #222;
+        color: #e9ecef;
       }
       body {
         font-family: ui-monospace, "Cascadia Code", "Source Code Pro", Menlo,
           Consolas, "DejaVu Sans Mono", monospace;
         font-weight: normal;
         margin: 0;
+      }
+      p {
+        line-height: 1.4;
+      }
+      a[href] {
+        color: #1c7ed6;
+      }
+      button {
+        appearance: none;
+        border: 0;
+        font-size: 1rem;
+        padding: 0.25em 0.75em;
+        border-radius: 4px;
+        background-color: #1c7ed6;
+        color: #e9ecef;
       }
       main {
         max-width: 1000px;
@@ -25,7 +43,7 @@
       }
       main header {
         text-align: center;
-        margin-bottom: 4rem;
+        margin-bottom: 2rem;
       }
       main header img {
         width: 128px;
@@ -41,19 +59,31 @@
         margin-top: 0;
       }
       h2 {
-        margin-top: 4rem !important;
+        margin-top: 2rem !important;
       }
       ul li {
         font-size: 1.2rem;
         line-height: 2;
       }
       #install code {
-        background-color: #eee;
+        background-color: #444;
         word-break: break-all;
       }
       @media print {
+        html {
+          font-size: 14px;
+        }
         .no-print {
           display: none;
+        }
+      }
+      @media (prefers-color-scheme: light) {
+        html {
+          background-color: #e9ecef;
+          color: #222;
+        }
+        #install code {
+          background-color: #adb5bd;
         }
       }
     </style>
@@ -217,7 +247,8 @@ settings.fullscreen = true
 settings.width = null
 settings.height = settings.width || null
 
-// Determines whether the game loop should be paused when the "blur" event happens.
+// Determines whether the game loop should be paused
+// when the "blur" event happens.
 settings.pauseOnBlur = true
 
 // scale the canvas
@@ -289,15 +320,15 @@ textalign(align: string, baseline: string): void
 // default: 'sans-serif'
 textfont(fontName: string): void
 
-// set the font size
-// default: 32
+// Sets the font size (default: 32)
 textsize(size: number): void
 
-// used to draw a text as 'bold' or 'italic'
+// Used to draw a text as 'bold' or 'italic'
 textstyle(style: string)
 
-// returns the text dimensions like width and height
-// when size is omitted, it will use the current font size defined by textsize()
+// Returns the text dimensions like width and height
+// when size is omitted, it will use the current
+// font size defined by textsize()
 textmetrics(text: string, size?: number)
 
 /**
@@ -330,13 +361,15 @@ push(): void
 // restore the canvas context
 pop(): void
 
-// note: before call cliprect or clipcirc you must save the context using push()
-// and later, you restore the context using pop()
+// note: before call cliprect or clipcirc you must
+// save the context using `push()` and later, you
+// must restore the context using `pop()`
 
 // Adds a translation transformation to the current matrix
 translate(x: number, y: number): void
 
-// Adds a scaling transformation to the canvas units horizontally and/or vertically
+// Adds a scaling transformation to the canvas units
+// horizontally and/or vertically
 scale(x: number, y?: number): void
 
 // Adds a rotation to the transformation matrix
@@ -390,10 +423,12 @@ sfx(ZzFXparams: Array, volume = 1, pitch = 0, randomness = 0): AudioBufferSource
       <h2><a id="math">Math</a></h2>
 
       <pre><code class="language-typescript">
-// Generates a pseudo-random float between min (inclusive) and max (exclusive)
+// Generates a pseudo-random float between min (inclusive)
+// and max (exclusive)
 rand(min = 0, max = 1.0): number;
 
-// Generates a pseudo-random integer between min (inclusive) and max (inclusive)
+// Generates a pseudo-random integer between min (inclusive)
+// and max (inclusive)
 randi(min = 0, max = 1): number;
 
 // Calculates a linear (interpolation) value over `t`.
@@ -445,20 +480,23 @@ hypot(...ns: number): number
 // Returns the absolute value of a number.
 abs(n: number): number
 
-// Rounds up and returns the smallest integer greater than or equal to a given number.
+// Rounds up and returns the smallest integer greater than or
+// equal to a given number.
 ceil(n: number): number
 
 // Returns the value of a number rounded to the nearest integer.
 round(n: number): number
 
-// Rounds down and returns the largest integer less than or equal to a given number.
+// Rounds down and returns the largest integer less than or
+// equal to a given number.
 floor(n: number): number
 
-// Returns the integer part of a number by removing any fractional digits.
+// Returns the integer part of a number
+// by removing any fractional digits.
 trunc(n: number): number
 
-// Returns the smallest of the numbers given as input parameters,
-// or `Infinity` if there are no parameters.
+// Returns the smallest of the numbers given as
+// input parameters, or `Infinity` if there are no parameters.
 // example: min(-10, 15, -1) returns -10
 min(...ns: number): number
 
@@ -490,9 +528,11 @@ colrect(x1, y1, w1, h1, x2, y2, w2, h2): boolean
 // All arguments are required and must be numbers.
 colcirc(x1, y1, r1, x2, y2, r2): boolean
 
-// Sets the scale of the game's delta time (dt). By default is equal to 1.
-// Values higher than 1 increase the speed of time, while values smaller than 1 decrease it.
-// A value of 0 freezes time and is effectively equivalent to pausing.
+// Sets the scale of the game's delta time (dt).
+// By default is equal to 1.
+// Values higher than 1 increase the speed of time,
+// while values smaller than 1 decrease it.
+// A value of 0 freezes time (equivalent to pausing).
 timescale(value: number): void</code></pre>
 
       <h2><a id="globals">Variables</a></h2>
@@ -527,32 +567,33 @@ HALF_PI: number // approximately 1.57079 radians (90º)</code></pre>
 
       <h2><a id="events">Event Emitter</a></h2>
 
-      <pre><code class="language-typescript">// add a game event listener
-// returns a function that removes the listener
+      <pre><code class="language-typescript">// Adds a game event listener and
+// returns a function that removes the listener.
 listen(event: string, callback: function, highPriority = false): function
 
-// triggers a game event and call all listeners
+// Triggers a game event and call all listeners.
 emit(event: string, ...data: any[]): void</code></pre>
 
       <h2><a id="plugin-api">Plugin API</a></h2>
 
-      <pre><code class="language-typescript">// loads a plugin
+      <pre><code class="language-typescript">// Loads a plugin.
 // see: https://github.com/litecanvas/game-engine/blob/main/samples/plugin-basics/plugin-basics.js
 use(callback): object|void
 
-// create or update variables
+// Create or update an global variable.
 setvar(name: string, value: any): void
 
-// get the color value
+// Gets the color value.
+// example: getcolor(0) returns "#18161c"
 getcolor(index: number): string
 
-// resizes the game canvas
-// also, emit the "resized" event
+// Resizes the game canvas.
+// Also, emits the "resized" (use `listen` to observe this event).
 resize(width: number, height: number): void</code></pre>
 
       <h2><a id="advanced">Advanced Features (playground only)</a></h2>
 
-      <pre><code class="language-typescript">// the plugin "Asset Loader" is automatically loaded into the playground
+      <pre><code class="language-typescript">// The plugin "Asset Loader" is automatically loaded into the playground.
 // see: https://github.com/litecanvas/plugin-asset-loader
 </code></pre>
 
