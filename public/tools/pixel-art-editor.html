@@ -206,6 +206,7 @@
       >
       <button id="clearButton">clear</button>
       <button id="exportButton">export</button>
+      <button id="downloadButton">download</button>
       <textarea
         id="exported"
         rows="10"
@@ -505,6 +506,14 @@
         exported.value = output;
         copy.disabled = false;
       };
+
+      // Download
+      downloadButton.onclick = (ev) => {
+		const link = document.createElement("a")
+		link.download = "pixelart.png"
+		link.href = art.toDataURL("image/png")
+		link.click()
+      }
 
       // Copy to clipboard
       copy.onclick = () => {
