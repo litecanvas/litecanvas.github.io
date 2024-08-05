@@ -217,6 +217,9 @@ settings.fullscreen = true
 settings.width = null
 settings.height = settings.width || null
 
+// Determines whether the game loop should be paused when the "blur" event happens.
+settings.pauseOnBlur = true
+
 // scale the canvas
 settings.autoscale = true
 
@@ -433,22 +436,22 @@ cos(angle: number): number
 tan(angle: number): number
 
 // Returns the angle between the positive x-axis
-// and the origin (0, 0) to the point (x, y)
+// and the origin (0, 0) to the point (x, y).
 atan2(y:number, x: number): number
 
-// Returns the square root of the sum of squares of its arguments
+// Returns the square root of the sum of squares of its arguments.
 hypot(...ns: number): number
 
 // Returns the absolute value of a number.
 abs(n: number): number
 
-// Rounds up and returns the smallest integer greater than or equal to a given number
+// Rounds up and returns the smallest integer greater than or equal to a given number.
 ceil(n: number): number
 
 // Returns the value of a number rounded to the nearest integer.
 round(n: number): number
 
-// Rounds down and returns the largest integer less than or equal to a given number
+// Rounds down and returns the largest integer less than or equal to a given number.
 floor(n: number): number
 
 // Returns the integer part of a number by removing any fractional digits.
@@ -464,28 +467,33 @@ min(...ns: number): number
 // example: max(-10, 15, -1) returns 15
 max(...ns: number): number
 
-// Returns the value of a base raised to a power
+// Returns the value of a base raised to a power.
 // example: pow(2, 3) returns 2³ or 8
 pow(x: number, y: number): number
 
-// Returns E (Euler's number) raised to the power of a number
+// Returns E (Euler's number) raised to the power of a number.
 // example: exp(1) returns 2.7182... (approximately)
 exp(n: number): number
 
-// Returns the square root of a number
+// Returns the square root of a number.
 sqrt(n: number): number
 
 // Returns 1 or -1, indicating the sign of a number.
 // If the number is 0, it will returns 0.
 sign(n: number): number
 
-// check a collision between two rectangles
-// all arguments are required and must be numbers
+// Check a collision between two rectangles.
+// All arguments are required and must be numbers.
 colrect(x1, y1, w1, h1, x2, y2, w2, h2): boolean
 
-// check a collision between two circles
-// all arguments are required and must be numbers
-colcirc(x1, y1, r1, x2, y2, r2): boolean</code></pre>
+// Check a collision between two circles.
+// All arguments are required and must be numbers.
+colcirc(x1, y1, r1, x2, y2, r2): boolean
+
+// Sets the scale of the game's delta time (dt). By default is equal to 1.
+// Values higher than 1 increase the speed of time, while values smaller than 1 decrease it.
+// A value of 0 freezes time and is effectively equivalent to pausing.
+timescale(value: number): void</code></pre>
 
       <h2><a id="globals">Variables</a></h2>
 

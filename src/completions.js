@@ -398,6 +398,13 @@ export default function customCompletions(context) {
         info: "Check collision between 2 circles",
       },
       {
+        label: "timescale",
+        type: "function",
+        apply: "timescale(",
+        detail: "(value)",
+        info: "Sets the scale of the game's delta time (dt)",
+      },
+      {
         label: "mousepos",
         type: "function",
         apply: "mousepos()",

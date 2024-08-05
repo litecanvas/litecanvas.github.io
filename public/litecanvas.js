@@ -61,6 +61,7 @@
       fullscreen: true,
       width: null,
       height: null,
+      pauseOnBlur: true,
       autoscale: true,
       pixelart: false,
       antialias: true,
@@ -70,7 +71,7 @@
       loop: null
     };
     settings = Object.assign(defaults, settings);
-    let _initialized = false, _plugins = [], _canvas = settings.canvas || document.createElement("canvas"), _fullscreen = settings.fullscreen, _autoscale = settings.autoscale, _scale = 1, _mouseX, _mouseY, _ctx, _lastFrame, _step = 1 / settings.fps, _stepMs = _step * 1e3, _accumulated = 0, _rafid, _drawCount = 0, _drawTime = 0, _fontFamily = "sans-serif", _fontStyle = "", _fontSize = 32, _textAlign = "start", _textBaseline = "top", _events = {
+    let _initialized = false, _plugins = [], _canvas = settings.canvas || document.createElement("canvas"), _fullscreen = settings.fullscreen, _autoscale = settings.autoscale, _scale = 1, _mouseX, _mouseY, _ctx, _timeScale = 1, _lastFrame, _step = 1 / settings.fps, _stepMs = _step * 1e3, _accumulated = 0, _rafid, _drawCount = 0, _drawTime = 0, _fontFamily = "sans-serif", _fontStyle = "", _fontSize = 32, _textAlign = "start", _textBaseline = "top", _events = {
       init: [],
       update: [],
       draw: [],
@@ -211,7 +212,7 @@
       /**
        * Clear the game screen
        *
-       * @param {number|null} color The background color (from 0 to 7) or null
+       * @param {number|null} color The background color (from 0 to 7) or null (for transparent)
        */
       cls(color) {
         if (null == color) {
@@ -626,6 +627,16 @@
        * @returns number[]
        */
       mousepos: () => [_mouseX, _mouseY],
+      /**
+       * The scale of the game's time delta (dt).
+       * Values higher than 1 increase the speed of time, while values smaller than 1 decrease it.
+       * A value of 0 freezes time and is effectively equivalent to pausing.
+       *
+       * @param {number} value
+       */
+      timescale(value) {
+        _timeScale = value;
+      },
       /** PLUGINS API */
       /**
        * Prepares a plugin to be loaded
@@ -667,10 +678,10 @@
         }
       },
       /**
-       * Get the color value
+       * Get a color by index
        *
        * @param {number} index The color number
-       * @returns {string} the color value
+       * @returns {string} the color code
        */
       getcolor: (index) => colors[~~index % colors.length],
       /**
@@ -720,16 +731,6 @@
     function init() {
       _initialized = true;
       setupCanvas();
-      on(root, "blur", () => {
-        cancelAnimationFrame(_rafid);
-        _rafid = 0;
-      });
-      on(root, "focus", () => {
-        if (!_rafid) {
-          _lastFrame = performance.now();
-          _rafid = requestAnimationFrame(drawFrame);
-        }
-      });
       const source = settings.loop ? settings.loop : root;
       for (const event in _events) {
         if (source[event])
@@ -740,9 +741,6 @@
       }
       on(root, "resize", pageResized);
       pageResized();
-      instance.emit("init");
-      _lastFrame = performance.now();
-      _rafid = requestAnimationFrame(drawFrame);
       if (settings.tapEvents) {
         const _getXY = (pageX, pageY) => [
           (pageX - _canvas.offsetLeft) / _scale,
@@ -840,20 +838,34 @@
           }
         });
       }
+      if (settings.pauseOnBlur) {
+        on(root, "blur", () => {
+          _rafid = null;
+        });
+        on(root, "focus", () => {
+          if (!_rafid) {
+            _lastFrame = performance.now();
+            _rafid = requestAnimationFrame(drawFrame);
+          }
+        });
+      }
+      instance.emit("init");
+      _lastFrame = performance.now();
+      _rafid = requestAnimationFrame(drawFrame);
     }
     function drawFrame(now) {
       let ticks = 0, t = now - _lastFrame;
       _lastFrame = now;
       _accumulated += t;
       while (_accumulated >= _stepMs) {
-        instance.emit("update", _step);
-        instance.setvar("ELAPSED", instance.ELAPSED + _step);
+        instance.emit("update", _step * _timeScale);
+        instance.setvar("ELAPSED", instance.ELAPSED + _step * _timeScale);
         _accumulated -= _stepMs;
         ticks++;
       }
       if (ticks) {
-        _drawCount++;
         instance.emit("draw");
+        _drawCount++;
         _drawTime += _stepMs * ticks;
         if (_drawTime + _accumulated >= 1e3) {
           instance.setvar("FPS", _drawCount);
