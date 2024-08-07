@@ -643,8 +643,8 @@
        *
        * @param {pluginCallback} callback
        */
-      use: (callback, config = {}) => {
-        callback.__config = config;
+      use(callback, config = {}) {
+        callback.__conf = config;
         _initialized ? loadPlugin(callback) : _plugins.push(callback);
       },
       /**
@@ -886,10 +886,6 @@
       _canvas.height = instance.HEIGHT || instance.WIDTH;
       if (!_canvas.parentNode)
         document.body.appendChild(_canvas);
-      if (!settings.antialias || settings.pixelart) {
-        _ctx.imageSmoothingEnabled = false;
-        _canvas.style.imageRendering = "pixelated";
-      }
       _canvas.style.display = "block";
       if (_fullscreen) {
         _canvas.style.position = "absolute";
@@ -915,11 +911,15 @@
       }
       instance.setvar("CENTERX", instance.WIDTH / 2);
       instance.setvar("CENTERY", instance.HEIGHT / 2);
+      if (!settings.antialias || settings.pixelart) {
+        _ctx.imageSmoothingEnabled = false;
+        _canvas.style.imageRendering = "pixelated";
+      }
       instance.textalign(_textAlign, _textBaseline);
       instance.emit("resized", _scale);
     }
     function loadPlugin(callback) {
-      const pluginData = callback(instance, _helpers, callback.__config);
+      const pluginData = callback(instance, _helpers, callback.__conf);
       if ("object" === typeof pluginData) {
         for (const key in pluginData) {
           instance.setvar(key, pluginData[key]);
@@ -928,7 +928,7 @@
     }
     if (settings.global) {
       if (root.__litecanvas) {
-        throw new Error("Cannot instantiate litecanvas globally twice");
+        throw "Cannot instantiate litecanvas globally twice";
       }
       Object.assign(root, instance);
       root.__litecanvas = true;
@@ -943,5 +943,5 @@
   root.litecanvas = litecanvas;
 })();
 
-(()=>{var N=getScriptLoader=r=>(c,i)=>{r.setvar("LOADING",r.LOADING+1),script=document.createElement("script"),image.crossOrigin="anonymous",script.onload=()=>{i&&i(script),r.setvar("LOADING",r.LOADING-1)},script.onerror=()=>{i&&i(null)},script.src=c,document.head.appendChild(script)};var g=getImageLoader=(r,{colors:c})=>{let i={convertColors:d,splitFrames:h};return(t,s)=>{r.setvar("LOADING",r.LOADING+1);let n=new Image;n.crossOrigin="anonymous",n.onload=()=>{s&&s(n,i),r.setvar("LOADING",r.LOADING-1)},n.onerror=function(){s&&s(null,i)},n.src=t};function h(t,s,n,e=0,a=0){let u=[],I=Math.floor((t.width+a)/(s+a)),o=Math.floor((t.height+a)/(n+a));for(let f=0;f<o;f++)for(let p=0;p<I;p++){let L=new OffscreenCanvas(s,n);L.getContext("2d").drawImage(t,e+p*s+p*a,e+f*n+f*a,s,n,0,0,s,n),u.push(L)}return u}function d(t,s=!1){let n=new OffscreenCanvas(t.width,t.height),e=n.getContext("2d");e.drawImage(t,0,0);let a=e.getImageData(0,0,t.width,t.height),u=a.data,I=new Map;for(let o=0,f=u.length;o<f;o+=4){let p=u[o],L=u[o+1],l=u[o+2],G=[p,L,l],D=G.join(",");I.has(D)||I.set(D,m(G,c));let x=I.get(D),w=x.startsWith("#")?O(x):A(x);u[o]=w[0],u[o+1]=w[1],u[o+2]=w[2],u[o+3]=s?u[o+3]:255}return e.putImageData(a,0,0),n}function O(t){let s=0,n=0,e=0;return t.length===4?(s="0x"+t[1]+t[1],n="0x"+t[2]+t[2],e="0x"+t[3]+t[3]):t.length===7&&(s="0x"+t[1]+t[2],n="0x"+t[3]+t[4],e="0x"+t[5]+t[6]),[~~s,~~n,~~e]}function A(t){let s=t.indexOf(",")>-1?",":" ";t=t.substr(4).split(")")[0].split(s);let n=(+t[0]).toString(16),e=(+t[1]).toString(16),a=(+t[2]).toString(16);return n.length===1&&(n="0"+n),e.length===1&&(e="0"+e),a.length===1&&(a="0"+a),[n|0,e|0,a|0]}function m(t,s){let n=1/0,e=null,[a,u,I]=t;return s.forEach(o=>{let[f,p,L]=o.startsWith("#")?O(o):A(o),l=Math.sqrt((a-f)**2+(u-p)**2+(I-L)**2);l<n&&(n=l,e=o)}),e}};var v=getFontLoader=r=>async(c,i,h)=>{let d=new FontFace(c,`url(${i})`);r.setvar("LOADING",r.LOADING+1),document.fonts.add(d),d.load().then(O=>{h&&h(O),r.setvar("LOADING",r.LOADING-1)}).catch(()=>{h&&h(null)})};window.pluginAssetLoader=F;function F(r,c){return r.setvar("LOADING",0),{loadScript:N(r,c),loadImage:g(r,c),loadFont:v(r,c)}}})();
-/*! Asset Loader plugin for litecanvas v0.6.3 by Luiz Bills | MIT Licensed */
+(()=>{var y=getScriptLoader=(s,{basename:c,prepareURL:l},{crossOrigin:O})=>async(i,o)=>{i=l(i);let f=document.createElement("script"),d={type:"script",src:i,id:c(i)};f.crossOrigin=O,s.setvar("LOADING",s.LOADING+1),f.onload=()=>{o&&o(f),d.script=f,s.emit("asset-load",d),s.setvar("LOADING",s.LOADING-1)},f.onerror=()=>{o&&o(null),s.emit("asset-error",d)},s.emit("filter-asset",f,d),f.src=i,document.head.appendChild(f)};var F=getImageLoader=(s,{colors:c,basename:l,prepareURL:O},{crossOrigin:i})=>{let o={convertColors:d,splitFrames:f};return async(t,r)=>{t=O(t);let e=new Image,n={type:"image",src:t,id:l(t)};e.crossOrigin=i,s.setvar("LOADING",s.LOADING+1),e.onload=()=>{r&&r(e,o),n.image=e,s.emit("asset-load",n),s.setvar("LOADING",s.LOADING-1)},e.onerror=function(){r&&r(null,o),s.emit("asset-error",n)},s.emit("filter-asset",e,n),e.src=t};function f(t,r,e,n=0,u=0){let p=[],h=Math.floor((t.width+u)/(r+u)),a=Math.floor((t.height+u)/(e+u));for(let L=0;L<a;L++)for(let I=0;I<h;I++){let D=new OffscreenCanvas(r,e);D.getContext("2d").drawImage(t,n+I*r+I*u,n+L*e+L*u,r,e,0,0,r,e),p.push(D)}return p}function d(t,r=!1){let e=new OffscreenCanvas(t.width,t.height),n=e.getContext("2d");n.drawImage(t,0,0);let u=n.getImageData(0,0,t.width,t.height),p=u.data,h=new Map;for(let a=0,L=p.length;a<L;a+=4){let I=p[a],D=p[a+1],x=p[a+2],N=[I,D,x],v=N.join(",");h.has(v)||h.set(v,R(N,c));let w=h.get(v),A=w.startsWith("#")?m(w):G(w);p[a]=A[0],p[a+1]=A[1],p[a+2]=A[2],p[a+3]=r?p[a+3]:255}return n.putImageData(u,0,0),e}function m(t){let r=0,e=0,n=0;return t.length===4?(r="0x"+t[1]+t[1],e="0x"+t[2]+t[2],n="0x"+t[3]+t[3]):t.length===7&&(r="0x"+t[1]+t[2],e="0x"+t[3]+t[4],n="0x"+t[5]+t[6]),[~~r,~~e,~~n]}function G(t){let r=t.indexOf(",")>-1?",":" ";t=t.substr(4).split(")")[0].split(r);let e=(+t[0]).toString(16),n=(+t[1]).toString(16),u=(+t[2]).toString(16);return e.length===1&&(e="0"+e),n.length===1&&(n="0"+n),u.length===1&&(u="0"+u),[e|0,n|0,u|0]}function R(t,r){let e=1/0,n=null,[u,p,h]=t;return r.forEach(a=>{let[L,I,D]=a.startsWith("#")?m(a):G(a),x=Math.sqrt((u-L)**2+(p-I)**2+(h-D)**2);x<e&&(e=x,n=a)}),n}};var S=getFontLoader=(s,{basename:c,prepareURL:l})=>async(O,i,o)=>{i=l(i);let f=new FontFace(O,`url(${i})`),d={type:"font",fontName:O,src:i,id:c(i)};s.emit("filter-asset",f,d),document.fonts.add(f),s.setvar("LOADING",s.LOADING+1),f.load().then(m=>{o&&o(m),d.fontFace=m,s.emit("asset-load",d),s.setvar("LOADING",s.LOADING-1)}).catch(()=>{o&&o(null),s.emit("asset-error",d)})};window.pluginAssetLoader=U;function U(s,c,l={}){l=Object.assign({crossOrigin:"anonymous",baseURL:null},l);function i(o){return l.baseURL&&!M(o)&&(o=l.baseURL+o),o}return c=Object.assign(c,{basename:j,prepareURL:i}),s.setvar("LOADING",0),{loadScript:y(s,c,l),loadImage:F(s,c,l),loadFont:S(s,c,l)}}function j(s){return s.split("\\").pop().split("/").pop().split(".")[0]}function M(s){try{return!!new URL(s).protocol}catch{}return!1}})();
+/*! Asset Loader plugin for litecanvas v0.7.0 by Luiz Bills | MIT Licensed */
