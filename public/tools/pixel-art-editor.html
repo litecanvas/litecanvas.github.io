@@ -424,9 +424,9 @@
 
       function getPixel(x, y) {
         if (null == x || null == y || x < 0 || x >= W || y < 0 || y >= H) {
-          return;
+          return -1;
         }
-        return pixels[x][y];
+        return Number(pixels[x][y]) || -1;
       }
 
       /**
@@ -509,11 +509,18 @@
 
       // Download
       downloadButton.onclick = (ev) => {
-		const link = document.createElement("a")
-		link.download = "pixelart.png"
-		link.href = art.toDataURL("image/png")
-		link.click()
-      }
+        const offcanvas = new OffscreenCanvas(art.width, art.height);
+        const toBlob = offcanvas.toBlob ? "toBlob" : "convertToBlob";
+
+        offcanvas.getContext("2d").drawImage(art, 0, 0);
+
+        offcanvas[toBlob]().then((blob) => {
+          const link = document.createElement("a");
+          link.download = "pixelart.png";
+          link.href = URL.createObjectURL(blob);
+          link.click();
+        });
+      };
 
       // Copy to clipboard
       copy.onclick = () => {
