@@ -1,5 +1,5 @@
 const cacheName = "luizbills.litecanvas-editor-v1";
-const version = "1.78.0";
+const version = "1.79.0";
 
 const precacheResources = [
   "/",
@@ -15,6 +15,9 @@ const precacheResources = [
   "/icons/favicon.ico",
   "/icons/icon.png",
   "/images/colors.png",
+  "/images/badges/discord.png",
+  "/images/badges/itch.png",
+  "/images/badges/x.png",
   "/fonts/monogram.ttf",
   "/manifest.json",
   "/tools/pixel-art-editor.html",
