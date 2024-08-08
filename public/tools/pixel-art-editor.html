@@ -1,5 +1,5 @@
 <!-- Inspired by https://github.com/xem/miniPixelArt -->
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -426,7 +426,8 @@
         if (null == x || null == y || x < 0 || x >= W || y < 0 || y >= H) {
           return -1;
         }
-        return Number(pixels[x][y]) || -1;
+        const color = Number(pixels[x][y]);
+        return color >= 0 ? color : -1;
       }
 
       /**
@@ -475,7 +476,7 @@
       clearButton.onclick = () => {
         if (
           confirm(
-            "Are you sure you want to erase the canvas? This action cannot be undone."
+            "Are you sure you want to erase the canvas? This action cannot be undone.",
           )
         ) {
           pixels.length = 0;
@@ -526,7 +527,7 @@
       copy.onclick = () => {
         if (!navigator.clipboard) {
           return alert(
-            "Your browser not support this feature. Consider installing Firefox or Chrome."
+            "Your browser not support this feature. Consider installing Firefox or Chrome.",
           );
         }
         if (!exported.value) return;
@@ -538,7 +539,7 @@
           (err) => {
             alert("Error: Unable to generate your shareable url!");
             console.error("Error on copying text to clipboard:", err);
-          }
+          },
         );
       };
 
@@ -563,7 +564,7 @@
         const el = document.createElement("label");
         el.dataset.color = i;
         el.innerHTML = `<span style="background:${color}">${i.toString(
-          16
+          16,
         )}</span>`;
         palette.appendChild(el);
         el.title = "Select color #" + i;
