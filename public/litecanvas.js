@@ -1,8 +1,8 @@
 (() => {
   // src/zzfx.js
-  zzfxX = new AudioContext();
-  zzfxV = 0.3;
-  zzfx = (p = 1, k = 0.05, b = 220, e = 0, r = 0, t = 0.1, q = 0, D = 1, u = 0, y = 0, v = 0, z = 0, l = 0, E = 0, A = 0, F = 0, c = 0, w = 1, m = 0, B = 0, N = 0) => {
+  globalThis.zzfxX = new AudioContext();
+  globalThis.zzfxV = 0.3;
+  globalThis.zzfx = (p = 1, k = 0.05, b = 220, e = 0, r = 0, t = 0.1, q = 0, D = 1, u = 0, y = 0, v = 0, z = 0, l = 0, E = 0, A = 0, F = 0, c = 0, w = 1, m = 0, B = 0, N = 0) => {
     let M = Math, d = 2 * M.PI, R = 44100, G = u *= 500 * d / R / R, C = b *= (1 - k + 2 * k * M.random(k = [])) * d / R, g = 0, H = 0, a = 0, n = 1, I = 0, J = 0, f = 0, h = N < 0 ? -1 : 1, x = d * h * N * 2 / R, L = M.cos(x), Z = M.sin, K = Z(x) / 4, O = 1 + K, X = -2 * L / O, Y = (1 - K) / O, P = (1 + h * L) / 2 / O, Q = -(h + L) / O, S = P, T = 0, U = 0, V = 0, W = 0;
     e = R * e + 9;
     m *= R;
@@ -61,25 +61,26 @@
       fullscreen: true,
       width: null,
       height: null,
-      pauseOnBlur: true,
       autoscale: true,
       pixelart: false,
       antialias: true,
       canvas: null,
       global: true,
+      loop: null,
       tapEvents: true,
-      loop: null
+      pauseOnBlur: true,
+      defaultTextSize: 32
     };
     settings = Object.assign(defaults, settings);
-    let _initialized = false, _plugins = [], _canvas = settings.canvas || document.createElement("canvas"), _fullscreen = settings.fullscreen, _autoscale = settings.autoscale, _scale = 1, _mouseX, _mouseY, _ctx, _timeScale = 1, _lastFrame, _step = 1 / settings.fps, _stepMs = _step * 1e3, _accumulated = 0, _rafid, _drawCount = 0, _drawTime = 0, _fontFamily = "sans-serif", _fontStyle = "", _fontSize = 32, _textAlign = "start", _textBaseline = "top", _events = {
-      init: [],
-      update: [],
-      draw: [],
-      resized: [],
-      tap: [],
-      untap: [],
-      tapping: [],
-      tapped: []
+    let _initialized = false, _plugins = [], _canvas = settings.canvas || document.createElement("canvas"), _fullscreen = settings.fullscreen, _autoscale = settings.autoscale, _scale = 1, _mouseX, _mouseY, _ctx, _timeScale = 1, _lastFrame, _step = 1 / settings.fps, _stepMs = _step * 1e3, _accumulated = 0, _rafid, _drawCount = 0, _drawTime = 0, _fontFamily = "sans-serif", _fontStyle = "", _fontSize = settings.defaultTextSize, _events = {
+      init: false,
+      update: false,
+      draw: false,
+      resized: false,
+      tap: false,
+      untap: false,
+      tapping: false,
+      tapped: false
     }, _helpers = {
       settings: Object.assign({}, settings),
       colors,
@@ -233,13 +234,7 @@
        */
       rect(x, y, width, height, color = 0, radii = null) {
         _ctx.beginPath();
-        _ctx[radii ? "roundRect" : "rect"](
-          ~~x,
-          ~~y,
-          ~~width,
-          ~~height,
-          radii
-        );
+        _ctx[radii ? "roundRect" : "rect"](~~x, ~~y, width, height, radii);
         instance.stroke(color);
       },
       /**
@@ -254,13 +249,7 @@
        */
       rectfill(x, y, width, height, color = 0, radii = null) {
         _ctx.beginPath();
-        _ctx[radii ? "roundRect" : "rect"](
-          ~~x,
-          ~~y,
-          ~~width,
-          ~~height,
-          radii
-        );
+        _ctx[radii ? "roundRect" : "rect"](~~x, ~~y, width, height, radii);
         instance.fill(color);
       },
       /**
@@ -273,7 +262,7 @@
        */
       circ(x, y, radius, color = 0) {
         _ctx.beginPath();
-        _ctx.arc(~~x, ~~y, ~~radius, 0, TWO_PI);
+        _ctx.arc(~~x, ~~y, radius, 0, TWO_PI);
         _ctx.closePath();
         instance.stroke(color);
       },
@@ -287,7 +276,7 @@
        */
       circfill(x, y, radius, color = 0) {
         _ctx.beginPath();
-        _ctx.arc(~~x, ~~y, ~~radius, 0, TWO_PI);
+        _ctx.arc(~~x, ~~y, radius, 0, TWO_PI);
         _ctx.closePath();
         instance.fill(color);
       },
@@ -337,7 +326,7 @@
        * @param {number} [color=3] the color index (generally from 0 to 7)
        */
       text(x, y, text, color = 3) {
-        _ctx.font = `${_fontStyle || ""} ${~~_fontSize}px ${_fontFamily}`;
+        _ctx.font = `${_fontStyle || ""} ${_fontSize}px ${_fontFamily}`;
         _ctx.fillStyle = instance.getcolor(color);
         _ctx.fillText(text, ~~x, ~~y);
       },
@@ -374,8 +363,10 @@
        * @see https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/textAlign
        */
       textalign(align, baseline) {
-        _ctx.textAlign = _textAlign = align;
-        _ctx.textBaseline = _textBaseline = baseline;
+        if (align)
+          _ctx.textAlign = align;
+        if (baseline)
+          _ctx.textBaseline = baseline;
       },
       /**
        * Returns a TextMetrics object that contains information about the measured text (such as its width, for example)
@@ -386,7 +377,7 @@
        * @see https://developer.mozilla.org/en-US/docs/Web/API/TextMetrics
        */
       textmetrics(text, size) {
-        _ctx.font = `${_fontStyle || ""} ${~~(size || _fontSize)}px ${_fontFamily}`;
+        _ctx.font = `${_fontStyle || ""} ${size || _fontSize}px ${_fontFamily}`;
         metrics = _ctx.measureText(text);
         metrics.height = metrics.actualBoundingBoxAscent + metrics.actualBoundingBoxDescent;
         return metrics;
@@ -586,7 +577,7 @@
         if (navigator.userActivation && !navigator.userActivation.hasBeenActive) {
           return;
         }
-        let z = Array.isArray(sound) ? sound : sounds[~~sound % sounds.length];
+        let z = Array.isArray(sound) ? sound : sounds[sound % sounds.length];
         if (volume !== 1 || pitch || randomness) {
           z = [...z];
           z[0] = (Number(volume) || 1) * (z[0] || 1);
@@ -656,12 +647,10 @@
        * @returns {function} a function to remove the listener
        */
       listen(event, callback, highPriority = false) {
-        _events[event] = _events[event] || [];
-        _events[event][highPriority ? "unshift" : "push"](callback);
+        _events[event] = _events[event] || [[], []];
+        const size = _events[event][highPriority ? 0 : 1].push(callback);
         return () => {
-          _events[event] = _events[event].filter(
-            (item) => item !== callback
-          );
+          _events[event][highPriority ? 0 : 1].splice(size - 1, 1);
         };
       },
       /**
@@ -673,8 +662,10 @@
       emit(event, ...args) {
         if (!_events[event])
           return;
-        for (let i = 0; i < _events[event].length; ++i) {
-          _events[event][i](...args);
+        for (const list of _events[event]) {
+          for (const callback of list) {
+            callback(...args);
+          }
         }
       },
       /**
@@ -703,8 +694,8 @@
        * @param {number} height
        */
       resize(width, height) {
-        instance.setvar("WIDTH", _canvas.width = ~~width);
-        instance.setvar("HEIGHT", _canvas.height = ~~(height || width));
+        instance.setvar("WIDTH", _canvas.width = width);
+        instance.setvar("HEIGHT", _canvas.height = height || width);
         pageResized();
       }
     };
@@ -732,12 +723,12 @@
       _initialized = true;
       setupCanvas();
       const source = settings.loop ? settings.loop : root;
-      for (const event in _events) {
+      for (const event of Object.keys(_events)) {
         if (source[event])
           instance.listen(event, source[event]);
       }
-      for (let i = 0; i < _plugins.length; i++) {
-        loadPlugin(_plugins[i]);
+      for (const plugin of _plugins) {
+        loadPlugin(plugin);
       }
       on(root, "resize", pageResized);
       pageResized();
@@ -791,8 +782,7 @@
         on(_canvas, "touchstart", (ev) => {
           ev.preventDefault();
           const touches = ev.changedTouches;
-          for (let i = 0; i < touches.length; i++) {
-            const touch = touches[i];
+          for (const touch of touches) {
             const [x, y] = _getXY(touch.pageX, touch.pageY);
             instance.emit("tap", x, y, touch.identifier + 1);
             _registerTap(touch.identifier + 1, x, y);
@@ -801,8 +791,7 @@
         on(_canvas, "touchmove", (ev) => {
           ev.preventDefault();
           const touches = ev.changedTouches;
-          for (let i = 0; i < touches.length; i++) {
-            const touch = touches[i];
+          for (const touch of touches) {
             const [x, y] = _getXY(touch.pageX, touch.pageY);
             instance.emit("tapping", x, y, touch.identifier + 1);
             _updateTap(touch.identifier + 1, x, y);
@@ -864,6 +853,7 @@
         ticks++;
       }
       if (ticks) {
+        instance.textalign("start", "top");
         instance.emit("draw");
         _drawCount++;
         _drawTime += _stepMs * ticks;
@@ -915,14 +905,13 @@
         _ctx.imageSmoothingEnabled = false;
         _canvas.style.imageRendering = "pixelated";
       }
-      instance.textalign(_textAlign, _textBaseline);
       instance.emit("resized", _scale);
     }
     function loadPlugin(callback) {
       const pluginData = callback(instance, _helpers, callback.__conf);
       if ("object" === typeof pluginData) {
-        for (const key in pluginData) {
-          instance.setvar(key, pluginData[key]);
+        for (const [key, value] of Object.entries(pluginData)) {
+          instance.setvar(key, value);
         }
       }
     }
