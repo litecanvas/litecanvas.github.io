@@ -68,11 +68,10 @@
       global: true,
       loop: null,
       tapEvents: true,
-      pauseOnBlur: true,
-      defaultTextSize: 32
+      pauseOnBlur: true
     };
     settings = Object.assign(defaults, settings);
-    let _initialized = false, _plugins = [], _canvas = settings.canvas || document.createElement("canvas"), _fullscreen = settings.fullscreen, _autoscale = settings.autoscale, _scale = 1, _mouseX, _mouseY, _ctx, _timeScale = 1, _lastFrame, _step = 1 / settings.fps, _stepMs = _step * 1e3, _accumulated = 0, _rafid, _drawCount = 0, _drawTime = 0, _fontFamily = "sans-serif", _fontStyle = "", _fontSize = settings.defaultTextSize, _events = {
+    let _initialized = false, _plugins = [], _canvas = settings.canvas || document.createElement("canvas"), _fullscreen = settings.fullscreen, _autoscale = settings.autoscale, _scale = 1, _mouseX, _mouseY, _ctx, _timeScale = 1, _lastFrame, _step = 1 / settings.fps, _stepMs = _step * 1e3, _accumulated = 0, _rafid, _drawCount = 0, _drawTime = 0, _fontFamily = "sans-serif", _fontStyle = "", _fontSize = 32, _events = {
       init: false,
       update: false,
       draw: false,
