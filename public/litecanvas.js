@@ -71,7 +71,7 @@
       pauseOnBlur: true
     };
     settings = Object.assign(defaults, settings);
-    let _initialized = false, _plugins = [], _canvas = settings.canvas || document.createElement("canvas"), _fullscreen = settings.fullscreen, _autoscale = settings.autoscale, _scale = 1, _mouseX, _mouseY, _ctx, _timeScale = 1, _lastFrame, _step = 1 / settings.fps, _stepMs = _step * 1e3, _accumulated = 0, _rafid, _drawCount = 0, _drawTime = 0, _fontFamily = "sans-serif", _fontStyle = "", _fontSize = 32, _events = {
+    let _initialized = false, _plugins = [], _canvas = settings.canvas || document.createElement("canvas"), _fullscreen = settings.fullscreen, _autoscale = settings.autoscale, _scale = 1, _mouseX, _mouseY, _ctx, _timeScale = 1, _lastFrame, _step = 1 / settings.fps, _stepMs = _step * 1e3, _accumulated = 0, _rafid, _drawCount = 0, _drawTime = 0, _fontFamily = "sans-serif", _fontStyle = "", _fontSize = 32, _rng_seed = Date.now(), _events = {
       init: false,
       update: false,
       draw: false,
@@ -194,12 +194,19 @@
       /** RNG API */
       /**
        * Generates a pseudorandom float between min (inclusive) and max (exclusive)
+       * using the  Linear Congruential Generator (LCG) algorithm.
        *
        * @param {number} [min=0.0]
        * @param {number} [max=1.0]
        * @returns {number} the random number
        */
-      rand: (min = 0, max = 1) => Math.random() * (max - min) + min,
+      rand: (min = 0, max = 1) => {
+        const a = 1664525;
+        const c = 1013904223;
+        const m = 4294967296;
+        _rng_seed = (a * _rng_seed + c) % m;
+        return _rng_seed / m * (max - min) + min;
+      },
       /**
        * Generates a pseudorandom integer between min (inclusive) and max (inclusive)
        *
@@ -208,6 +215,16 @@
        * @returns {number} the random number
        */
       randi: (min = 0, max = 1) => instance.floor(instance.rand() * (max - min + 1) + min),
+      /**
+       * If a value is passed, initializes the random number generator with an explicit seed value.
+       * Otherwise, returns the current seed state.
+       *
+       * @param {number} value
+       * @returns {number} the seed state
+       */
+      seed: (value) => {
+        return value ? _rng_seed = value : _rng_seed;
+      },
       /** BASIC GRAPHICS API */
       /**
        * Clear the game screen

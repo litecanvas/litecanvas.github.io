@@ -452,6 +452,10 @@ rand(min = 0, max = 1.0): number;
 // and max (inclusive)
 randi(min = 0, max = 1): number;
 
+//  If a value is passed, initializes the random number generator (RNG)
+// with an explicit seed value. Otherwise, returns the current seed state.
+seed(value: number | null): number;
+
 // Calculates a linear (interpolation) value over `t`.
 // example: lerp(0, 50, 0.5) returns 25
 // learn more: https://gamedev.net/tutorials/programming/general-and-gameplay-programming/a-brief-introduction-to-lerp-r4954/

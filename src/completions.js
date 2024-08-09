@@ -232,6 +232,13 @@ export default function customCompletions(context) {
         info: "play a sound",
       },
       {
+        label: "seed",
+        type: "function",
+        apply: "seed(",
+        detail: "(value?)",
+        info: "initialize the RNG with a seed value",
+      },
+      {
         label: "rand",
         type: "function",
         apply: "rand()",
