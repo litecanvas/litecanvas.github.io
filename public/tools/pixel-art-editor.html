@@ -1,5 +1,5 @@
 <!-- Inspired by https://github.com/xem/miniPixelArt -->
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -9,7 +9,8 @@
     <style>
       body {
         margin: 0;
-        padding: 1rem;
+        padding-top: 2rem;
+        padding-left: 2rem;
         font-family: sans-serif;
       }
 
@@ -51,7 +52,7 @@
       }
 
       footer {
-        margin-top: 4rem;
+        margin-top: 2rem;
         font-style: italic;
         color: #333;
         line-height: 1.5;
@@ -220,13 +221,13 @@
       <strong>Hotkeys:</strong>
       <ul>
         <li>
-          <kbd>0</kbd>...<kbd>9</kbd> or <kbd>a</kbd>...<kbd>b</kbd>: select a
+          <kbd>0</kbd>...<kbd>9</kbd> and <kbd>a</kbd>...<kbd>b</kbd>: select a
           color.
         </li>
-        <li><kbd>SPACE</kbd>: select the color #0.</li>
+        <li><kbd>SPACE</kbd>: also select the color #0.</li>
         <li><kbd>x</kbd>: select the eraser.</li>
-        <li><kbd>p</kbd>: use "pencil" to paint the pixels.</li>
-        <li><kbd>u</kbd>: use "bucket" to paint the pixels.</li>
+        <li><kbd>p</kbd>: select the "pencil" tool.</li>
+        <li><kbd>u</kbd>: select the "bucket" tool.</li>
       </ul>
     </footer>
 
@@ -316,8 +317,7 @@
         height.oninput =
           prepare;
 
-      function renderArt() {
-        requestAnimationFrame(renderArt);
+      function renderPixels(ctx) {
         for (let x = 0; x < W; x++) {
           for (let y = 0; y < H; y++) {
             const color = getPixel(x, y);
@@ -329,6 +329,11 @@
             }
           }
         }
+      }
+
+      function renderArt() {
+        requestAnimationFrame(renderArt);
+        renderPixels(ctx);
         saveArt();
         dirty = false;
       }
@@ -476,7 +481,7 @@
       clearButton.onclick = () => {
         if (
           confirm(
-            "Are you sure you want to erase the canvas? This action cannot be undone.",
+            "Are you sure you want to erase the canvas? This action cannot be undone."
           )
         ) {
           pixels.length = 0;
@@ -513,7 +518,7 @@
         const offcanvas = new OffscreenCanvas(art.width, art.height);
         const toBlob = offcanvas.toBlob ? "toBlob" : "convertToBlob";
 
-        offcanvas.getContext("2d").drawImage(art, 0, 0);
+        renderPixels(offcanvas.getContext("2d"));
 
         offcanvas[toBlob]().then((blob) => {
           const link = document.createElement("a");
@@ -527,7 +532,7 @@
       copy.onclick = () => {
         if (!navigator.clipboard) {
           return alert(
-            "Your browser not support this feature. Consider installing Firefox or Chrome.",
+            "Your browser not support this feature. Consider installing Firefox or Chrome."
           );
         }
         if (!exported.value) return;
@@ -539,7 +544,7 @@
           (err) => {
             alert("Error: Unable to generate your shareable url!");
             console.error("Error on copying text to clipboard:", err);
-          },
+          }
         );
       };
 
@@ -564,7 +569,7 @@
         const el = document.createElement("label");
         el.dataset.color = i;
         el.innerHTML = `<span style="background:${color}">${i.toString(
-          16,
+          16
         )}</span>`;
         palette.appendChild(el);
         el.title = "Select color #" + i;
