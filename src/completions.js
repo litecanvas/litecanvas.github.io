@@ -30,6 +30,13 @@ export default function customCompletions(context) {
       { label: "HALF_PI", type: "constant" },
       // global functions
       {
+        label: "litecanvas",
+        type: "function",
+        apply: "litecanvas({})",
+        detail: "(settings?: object)",
+        info: "initialize a litecanvas instance",
+      },
+      {
         label: "cls",
         type: "function",
         apply: "cls(",
