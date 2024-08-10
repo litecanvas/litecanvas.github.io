@@ -223,7 +223,7 @@
        * @returns {number} the seed state
        */
       seed: (value) => {
-        return value ? _rng_seed = value : _rng_seed;
+        return null == value ? _rng_seed : _rng_seed = ~~value;
       },
       /** BASIC GRAPHICS API */
       /**
