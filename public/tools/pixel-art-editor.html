@@ -321,14 +321,16 @@
         for (let x = 0; x < W; x++) {
           for (let y = 0; y < H; y++) {
             const color = getPixel(x, y);
-            if (null == color || -1 === ~~color) {
+            if (-1 === color) {
               ctx.clearRect(x * ps, y * ps, ps, ps);
             } else {
-              ctx.fillStyle = colors[color % colors.length];
+              const c = color % colors.length;
+              ctx.fillStyle = colors[c];
               ctx.fillRect(x * ps, y * ps, ps, ps);
             }
           }
         }
+        once = false;
       }
 
       function renderArt() {
@@ -431,7 +433,7 @@
         if (null == x || null == y || x < 0 || x >= W || y < 0 || y >= H) {
           return -1;
         }
-        const color = Number(pixels[x][y]);
+        const color = pixels[x][y] == null ? -1 : Number(pixels[x][y]);
         return color >= 0 ? color : -1;
       }
 
@@ -501,7 +503,7 @@
           output += "  '";
           for (let x = 0; x < W; x++) {
             let color = getPixel(x, y);
-            if (null == color || -1 === ~~color) color = ".";
+            if (-1 === ~~color) color = ".";
             output += color >= 0 ? (color % colors.length).toString(16) : color;
           }
           output += "',\n";
