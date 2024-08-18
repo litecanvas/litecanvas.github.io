@@ -454,6 +454,7 @@ randi(min = 0, max = 1): number;
 
 // If a value is passed, initializes the random number generator (RNG)
 // with an explicit seed value. Otherwise, returns the current seed state.
+// By default, the initial seed is the current timestamp (from `Date.now()`).
 seed(value: number | null): number;
 
 // Calculates a linear (interpolation) value over `t`.
