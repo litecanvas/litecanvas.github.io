@@ -1,8 +1,6 @@
 (() => {
   // src/zzfx.js
-  globalThis.zzfxX = new AudioContext();
-  globalThis.zzfxV = 0.3;
-  globalThis.zzfx = (p = 1, k = 0.05, b = 220, e = 0, r = 0, t = 0.1, q = 0, D = 1, u = 0, y = 0, v = 0, z = 0, l = 0, E = 0, A = 0, F = 0, c = 0, w = 1, m = 0, B = 0, N = 0) => {
+  var zzfx = (p = 1, k = 0.05, b = 220, e = 0, r = 0, t = 0.1, q = 0, D = 1, u = 0, y = 0, v = 0, z = 0, l = 0, E = 0, A = 0, F = 0, c = 0, w = 1, m = 0, B = 0, N = 0) => {
     let M = Math, d = 2 * M.PI, R = 44100, G = u *= 500 * d / R / R, C = b *= (1 - k + 2 * k * M.random(k = [])) * d / R, g = 0, H = 0, a = 0, n = 1, I = 0, J = 0, f = 0, h = N < 0 ? -1 : 1, x = d * h * N * 2 / R, L = M.cos(x), Z = M.sin, K = Z(x) / 4, O = 1 + K, X = -2 * L / O, Y = (1 - K) / O, P = (1 + h * L) / 2 / O, Q = -(h + L) / O, S = P, T = 0, U = 0, V = 0, W = 0;
     e = R * e + 9;
     m *= R;
@@ -14,7 +12,7 @@
     v *= d / R;
     z *= R;
     l = R * l | 0;
-    p *= zzfxV;
+    p *= globalThis.zzfxV || 0.3;
     for (h = e + m + r + t + c | 0; a < h; k[a++] = f * p)
       ++J % (100 * F | 0) || (f = q ? 1 < q ? 2 < q ? 3 < q ? Z(g * g) : M.max(M.min(M.tan(g), 1), -1) : 1 - (2 * g / d % 2 + 2) % 2 : 1 - 4 * M.abs(M.round(g / d) - g / d) : Z(g), f = (l ? 1 - B + B * Z(d * a / l) : 1) * (f < 0 ? -1 : 1) * M.abs(f) ** D * (a < e ? a / e : a < e + m ? 1 - (a - e) / m * (1 - w) : a < e + m + r ? w : a < h - c ? (h - a - c) / t * w : 0), f = c ? f / 2 + (c > a ? 0 : (a < h - c ? 1 : (h - a) / c) * k[a - c | 0] / 2 / p) : f, N ? f = W = S * T + Q * (T = U) + P * (U = f) - Y * V - X * (V = W) : 0), x = (b += u += y) * M.cos(A * H++), g += x + x * E * Z(a ** 5), n && ++n > z && (b += v, C += v, n = 0), !l || ++I % l || (b = C, u = G, n = n || 1);
     p = zzfxX.createBuffer(1, h, R);
@@ -24,6 +22,7 @@
     b.connect(zzfxX.destination);
     b.start();
   };
+  var zzfxX = /* @__PURE__ */ new AudioContext();
 
   // src/palette.js
   var colors = [
@@ -54,9 +53,8 @@
   ];
 
   // src/index.js
-  var root = globalThis;
   function litecanvas(settings = {}) {
-    const PI = Math.PI, TWO_PI = PI * 2, on = (elem, evt, callback) => elem.addEventListener(evt, callback), defaults = {
+    const root = globalThis, PI = Math.PI, TWO_PI = PI * 2, on = (elem, evt, callback) => elem.addEventListener(evt, callback), defaults = {
       fps: 60,
       fullscreen: true,
       width: null,
@@ -157,7 +155,11 @@
        * @param {number} max
        * @returns {number}
        */
-      clamp: (value, min, max) => Math.min(Math.max(value, min), max),
+      clamp: (value, min, max) => {
+        if (value < min) return min;
+        if (value > max) return max;
+        return value;
+      },
       /**
        * Wraps a number between `min` (inclusive) and `max` (exclusive).
        *
@@ -184,6 +186,8 @@
       },
       /**
        * Maps a number from one range to a value between 0 and 1.
+       * Identical to `map(value, min, max, 0, 1)`.
+       * Note: Numbers outside the range are not clamped to 0 and 1.
        *
        * @param {number} value
        * @param {number} min
@@ -379,10 +383,8 @@
        * @see https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/textAlign
        */
       textalign(align, baseline) {
-        if (align)
-          _ctx.textAlign = align;
-        if (baseline)
-          _ctx.textBaseline = baseline;
+        if (align) _ctx.textAlign = align;
+        if (baseline) _ctx.textBaseline = baseline;
       },
       /**
        * Returns a TextMetrics object that contains information about the measured text (such as its width, for example)
@@ -676,8 +678,7 @@
        * @param  {...any} args Arguments passed to all listeners
        */
       emit(event, ...args) {
-        if (!_events[event])
-          return;
+        if (!_events[event]) return;
         for (const list of _events[event]) {
           for (const callback of list) {
             callback(...args);
@@ -740,8 +741,7 @@
       setupCanvas();
       const source = settings.loop ? settings.loop : root;
       for (const event of Object.keys(_events)) {
-        if (source[event])
-          instance.listen(event, source[event]);
+        if (source[event]) instance.listen(event, source[event]);
       }
       for (const plugin of _plugins) {
         loadPlugin(plugin);
@@ -779,8 +779,7 @@
         on(_canvas, "mousemove", (ev) => {
           ev.preventDefault();
           const [x, y] = [_mouseX, _mouseY] = _getXY(ev.pageX, ev.pageY);
-          if (!_pressingMouse)
-            return;
+          if (!_pressingMouse) return;
           instance.emit("tapping", x, y, 0);
           _updateTap(0, x, y);
         });
@@ -822,8 +821,7 @@
             }
           }
           for (const [id, tap] of _taps) {
-            if (existing.includes(id))
-              continue;
+            if (existing.includes(id)) continue;
             if (_checkTapped(tap)) {
               instance.emit("tapped", tap.startX, tap.startY, id);
             }
@@ -835,8 +833,7 @@
         on(_canvas, "touchcancel", _touchEndHandler);
         on(root, "blur", () => {
           _pressingMouse = false;
-          if (_taps.size === 0)
-            return;
+          if (_taps.size === 0) return;
           for (const [id, tap] of _taps) {
             instance.emit("untap", tap.x, tap.y, id);
             _taps.delete(id);
@@ -879,19 +876,16 @@
           _drawTime -= 1e3;
         }
       }
-      if (_rafid)
-        _rafid = requestAnimationFrame(drawFrame);
+      if (_rafid) _rafid = requestAnimationFrame(drawFrame);
     }
     function setupCanvas() {
       _canvas = "string" === typeof _canvas ? document.querySelector(_canvas) : _canvas;
       instance.setvar("CANVAS", _canvas);
       _ctx = _canvas.getContext("2d");
-      if (instance.WIDTH > 0)
-        _fullscreen = false;
+      if (instance.WIDTH > 0) _fullscreen = false;
       _canvas.width = instance.WIDTH;
       _canvas.height = instance.HEIGHT || instance.WIDTH;
-      if (!_canvas.parentNode)
-        document.body.appendChild(_canvas);
+      if (!_canvas.parentNode) document.body.appendChild(_canvas);
       _canvas.style.display = "block";
       if (_fullscreen) {
         _canvas.style.position = "absolute";
@@ -936,7 +930,7 @@
         throw "Cannot instantiate litecanvas globally twice";
       }
       Object.assign(root, instance);
-      root.__litecanvas = true;
+      root.__litecanvas = instance;
     }
     if ("loading" === document.readyState) {
       on(root, "DOMContentLoaded", init);
@@ -945,8 +939,10 @@
     }
     return instance;
   }
-  root.litecanvas = litecanvas;
+
+  // src/web.js
+  globalThis.litecanvas = litecanvas;
 })();
 
-(()=>{var N=getScriptLoader=(t,{basename:d,prepareURL:l},{crossOrigin:m})=>async(n,r)=>{n=l(n);let u=document.createElement("script"),i={type:"script",src:n,id:d(n)};u.crossOrigin=m,t.setvar("LOADING",t.LOADING+1),u.onload=()=>{r&&r(u),i.asset=u,t.emit("asset-load",i),t.setvar("LOADING",t.LOADING-1)},u.onerror=()=>{r&&r(null),t.emit("asset-error",i)},t.emit("filter-asset",u,i),u.src=n,document.head.appendChild(u)};var S=getImageLoader=(t,{colors:d,basename:l,prepareURL:m},{crossOrigin:n})=>{let r={convertColors:i,splitFrames:u};return async(s,a)=>{s=m(s);let e=new Image,o={type:"image",src:s,id:l(s)};e.crossOrigin=n,t.setvar("LOADING",t.LOADING+1),e.onload=()=>{a&&a(e,r),o.asset=e,t.emit("asset-load",o),t.setvar("LOADING",t.LOADING-1)},e.onerror=()=>{a&&a(null,r),t.emit("asset-error",o)},t.emit("filter-asset",e,o),e.src=s};function u(s,a,e,o=0,L=0){let f=[],c=Math.floor((s.width+L)/(a+L)),p=Math.floor((s.height+L)/(e+L));for(let h=0;h<p;h++)for(let I=0;I<c;I++){let D=new OffscreenCanvas(a,e);D.getContext("2d").drawImage(s,o+I*a+I*L,o+h*e+h*L,a,e,0,0,a,e),f.push(D)}return f}function i(s,a=!1){let e=new OffscreenCanvas(s.width,s.height),o=e.getContext("2d");o.drawImage(s,0,0);let L=o.getImageData(0,0,s.width,s.height),f=L.data,c=new Map;for(let p=0,h=f.length;p<h;p+=4){let I=f[p],D=f[p+1],A=f[p+2],G=[I,D,A],y=G.join(",");c.has(y)||c.set(y,F(G,d));let v=c.get(y),w=v.startsWith("#")?O(v):x(v);f[p]=w[0],f[p+1]=w[1],f[p+2]=w[2],f[p+3]=a?f[p+3]:255}return o.putImageData(L,0,0),e}function O(s){let a=0,e=0,o=0;return s.length===4?(a="0x"+s[1]+s[1],e="0x"+s[2]+s[2],o="0x"+s[3]+s[3]):s.length===7&&(a="0x"+s[1]+s[2],e="0x"+s[3]+s[4],o="0x"+s[5]+s[6]),[~~a,~~e,~~o]}function x(s){let a=s.indexOf(",")>-1?",":" ";s=s.substr(4).split(")")[0].split(a);let e=(+s[0]).toString(16),o=(+s[1]).toString(16),L=(+s[2]).toString(16);return e.length===1&&(e="0"+e),o.length===1&&(o="0"+o),L.length===1&&(L="0"+L),[e|0,o|0,L|0]}function F(s,a){let e=1/0,o=null,[L,f,c]=s;return a.forEach(p=>{let[h,I,D]=p.startsWith("#")?O(p):x(p),A=Math.sqrt((L-h)**2+(f-I)**2+(c-D)**2);A<e&&(e=A,o=p)}),o}};var M=getFontLoader=(t,{basename:d,prepareURL:l})=>async(m,n,r)=>{n=l(n);let u=new FontFace(m,`url(${n})`),i={type:"font",fontName:m,src:n,id:d(n)};t.emit("filter-asset",u,i),document.fonts.add(u),t.setvar("LOADING",t.LOADING+1),u.load().then(O=>{r&&r(O),i.asset=O,t.emit("asset-load",i),t.setvar("LOADING",t.LOADING-1)}).catch(()=>{r&&r(null),t.emit("asset-error",i)})};var E=getSoundLoader=(t,{basename:d,prepareURL:l},{allowSoundInterruptions:m})=>async(n,r)=>{n=l(n);let u={type:"sound",src:n,id:d(n)},i=new Audio;t.setvar("LOADING",t.LOADING+1),i[m?"oncanplay":"oncanplaythrough"]=()=>{r&&r(i),u.asset=i,t.emit("asset-load",u),t.setvar("LOADING",t.LOADING-1)},image.onerror=()=>{r&&r(null),t.emit("asset-error",u)},t.emit("filter-asset",i,u),i.src=n};HTMLAudioElement.prototype.stop=HTMLAudioElement.prototype.stop||function(){this.pause(),this.currentTime=0,this.src=this.src};HTMLAudioElement.prototype.restart=HTMLAudioElement.prototype.restart||function(){this.pause(),this.currentTime=0,this.play()};window.pluginAssetLoader=T;function T(t,d,l={}){l=Object.assign({crossOrigin:"anonymous",baseURL:null,allowSoundInterruptions:!0},l);function n(r){return l.baseURL&&!U(r)&&(r=l.baseURL+r),r}return d=Object.assign(d,{basename:R,prepareURL:n}),t.setvar("LOADING",0),{loadScript:N(t,d,l),loadImage:S(t,d,l),loadFont:M(t,d,l),loadSound:E(t,d,l)}}function R(t){return t.split("\\").pop().split("/").pop().split(".")[0]}function U(t){try{return!!new URL(t).protocol}catch{}return!1}})();
-/*! Asset Loader plugin for litecanvas v0.8.0 by Luiz Bills | MIT Licensed */
+(()=>{var N=getScriptLoader=(t,{basename:d,prepareURL:l},{crossOrigin:m})=>async(a,r)=>{a=l(a);let u=document.createElement("script"),i={type:"script",src:a,id:d(a)};u.crossOrigin=m,t.setvar("LOADING",t.LOADING+1),u.onload=()=>{r&&r(u),i.asset=u,t.emit("asset-load",i),t.setvar("LOADING",t.LOADING-1)},u.onerror=()=>{r&&r(null),t.emit("asset-error",i)},t.emit("filter-asset",u,i),u.src=a,document.head.appendChild(u)};var S=getImageLoader=(t,{colors:d,basename:l,prepareURL:m},{crossOrigin:a})=>{let r={convertColors:i,splitFrames:u};return async(s,n)=>{s=m(s);let e=new Image,o={type:"image",src:s,id:l(s)};e.crossOrigin=a,t.setvar("LOADING",t.LOADING+1),e.onload=()=>{n&&n(e,r),o.asset=e,t.emit("asset-load",o),t.setvar("LOADING",t.LOADING-1)},e.onerror=()=>{n&&n(null,r),t.emit("asset-error",o)},t.emit("filter-asset",e,o),e.src=s};function u(s,n,e,o=0,f=0){let L=[],c=Math.floor((s.width+f)/(n+f)),p=Math.floor((s.height+f)/(e+f));for(let h=0;h<p;h++)for(let I=0;I<c;I++){let D=new OffscreenCanvas(n,e);D.getContext("2d").drawImage(s,o+I*n+I*f,o+h*e+h*f,n,e,0,0,n,e),L.push(D)}return L}function i(s,n=!1){let e=new OffscreenCanvas(s.width,s.height),o=e.getContext("2d");o.drawImage(s,0,0);let f=o.getImageData(0,0,s.width,s.height),L=f.data,c=new Map;for(let p=0,h=L.length;p<h;p+=4){let I=L[p],D=L[p+1],A=L[p+2],G=[I,D,A],y=G.join(",");c.has(y)||c.set(y,T(G,d));let v=c.get(y),w=v.startsWith("#")?O(v):x(v);L[p]=w[0],L[p+1]=w[1],L[p+2]=w[2],L[p+3]=n?L[p+3]:255}return o.putImageData(f,0,0),e}function O(s){let n=0,e=0,o=0;return s.length===4?(n="0x"+s[1]+s[1],e="0x"+s[2]+s[2],o="0x"+s[3]+s[3]):s.length===7&&(n="0x"+s[1]+s[2],e="0x"+s[3]+s[4],o="0x"+s[5]+s[6]),[~~n,~~e,~~o]}function x(s){let n=s.indexOf(",")>-1?",":" ";s=s.substr(4).split(")")[0].split(n);let e=(+s[0]).toString(16),o=(+s[1]).toString(16),f=(+s[2]).toString(16);return e.length===1&&(e="0"+e),o.length===1&&(o="0"+o),f.length===1&&(f="0"+f),[e|0,o|0,f|0]}function T(s,n){let e=1/0,o=null,[f,L,c]=s;return n.forEach(p=>{let[h,I,D]=p.startsWith("#")?O(p):x(p),A=Math.sqrt((f-h)**2+(L-I)**2+(c-D)**2);A<e&&(e=A,o=p)}),o}};var M=getFontLoader=(t,{basename:d,prepareURL:l})=>async(m,a,r)=>{a=l(a);let u=new FontFace(m,`url(${a})`),i={type:"font",fontName:m,src:a,id:d(a)};t.emit("filter-asset",u,i),document.fonts.add(u),t.setvar("LOADING",t.LOADING+1),u.load().then(O=>{r&&r(O),i.asset=O,t.emit("asset-load",i),t.setvar("LOADING",t.LOADING-1)}).catch(()=>{r&&r(null),t.emit("asset-error",i)})};var E=getSoundLoader=(t,{basename:d,prepareURL:l},{allowSoundInterruptions:m})=>async(a,r)=>{a=l(a);let u={type:"sound",src:a,id:d(a)},i=new Audio;t.setvar("LOADING",t.LOADING+1),i[m?"oncanplay":"oncanplaythrough"]=()=>{r&&r(i),u.asset=i,t.emit("asset-load",u),t.setvar("LOADING",t.LOADING-1)},image.onerror=()=>{r&&r(null),t.emit("asset-error",u)},t.emit("filter-asset",i,u),i.src=a};HTMLAudioElement.prototype.stop=HTMLAudioElement.prototype.stop||function(){this.pause(),this.currentTime=0,this.src=this.src};HTMLAudioElement.prototype.restart=HTMLAudioElement.prototype.restart||function(){this.pause(),this.currentTime=0,this.play()};window.pluginAssetLoader=F;function F(t,d,l={}){l=Object.assign({crossOrigin:"anonymous",baseURL:null,allowSoundInterruptions:!0},l);function a(r){return l.baseURL&&!U(r)&&(r=l.baseURL+r),r}return d=Object.assign(d,{basename:R,prepareURL:a}),t.setvar("LOADING",0),{loadScript:N(t,d,l),loadImage:S(t,d,l),loadFont:M(t,d,l),loadSound:E(t,d,l)}}function R(t){return t.split("\\").pop().split("/").pop().split(".")[0]}function U(t){try{return!!new URL(t).protocol}catch{}return!1}})();
+/*! Asset Loader plugin for litecanvas v0.8.2 by Luiz Bills | MIT Licensed */
