@@ -403,7 +403,7 @@ rotate(radians: number): void
 // see: https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/transform
 transform(a, b, c, d, e, f, resetFirst = true): void
 
-// update the alpha (opacity)
+// set the alpha (opacity) value to apply when drawing new shapes and images
 // see: https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/globalAlpha
 alpha(value: number): void
 
@@ -432,13 +432,14 @@ cliprect(x, y, width, height): void</code></pre>
 
       <h2><a id="sound">Functions for Sound</a></h2>
 
-      <pre><code class="language-typescript">// play a predefined sound
-// note: `n` must be a sound index (from 0 to 7)
-sfx(n = 0, volume = 1, pitch = 0, randomness = 0): AudioBufferSourceNode
+      <pre><code class="language-typescript">// play a predefined sound (by default has only 4 predefined sounds)
+// note: `n` must be an integer from 0 to 3
+// see: https://github.com/litecanvas/game-engine/blob/main/src/sounds.js
+sfx(n = 0, volume = 1, pitch = 0, randomness = null): AudioBufferSourceNode
 
 // also, you can play a ZzFX array of params
-// see: https://killedbyapixel.github.io/ZzFX/
 // example: sfx([2,.05,598,.07,0,.19,0,1.32,9.9,-70,0,0,0,0,0,0,.3,.02,0,.04])
+// see: https://killedbyapixel.github.io/ZzFX/
 sfx(ZzFXparams: Array, volume = 1, pitch = 0, randomness = 0): AudioBufferSourceNode</code></pre>
 
       <h2><a id="math">Math</a></h2>

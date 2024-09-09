@@ -43,13 +43,13 @@
   // src/sounds.js
   var sounds = [
     // 0 - pickup
-    [0.8, 0, 2e3, 0.01, 0.05, , 1, 2, , , -600, 0.05, , , , , , 0.5, 0.05],
+    [0.8, , 2e3, 0.01, 0.05, , 1, 2, , , -600, 0.05, , , , , , 0.5, 0.05],
     // 1 - hit
-    [0.5, 0, 375, 0.02, 0.01, 0.2, 1, , , , , , , 0.4, , 0.1, , 0.6, 0.1],
+    [0.5, , 375, 0.02, 0.01, 0.2, 1, , , , , , , 0.4, , 0.1, , 0.6, 0.1],
     // 2 - jump
-    [, 0, 360, 0.01, , 0.08, 1, 1.7, 12, 32, , , , , , , , 0.63, 0.02, , 99],
+    [, , 360, 0.01, , 0.08, 1, 1.7, 12, 32, , , , , , , , 0.63, 0.02, , 99],
     // 3 - warning
-    [1.2, 0, 240, 0.02, 0.15, 0.15, 1, 4, , , , , 0.05, , , , , 0.6, 0.15]
+    [1.2, , 240, 0.02, 0.15, 0.15, 1, 4, , , , , 0.05, , , , , 0.6, 0.15]
   ];
 
   // src/index.js
@@ -280,7 +280,7 @@
        * @param {number} radius
        * @param {number} [color=0] the color index (generally from 0 to 7)
        */
-      circ(x, y, radius, color = 0) {
+      circ(x, y, radius, color) {
         _ctx.beginPath();
         _ctx.arc(~~x, ~~y, radius, 0, TWO_PI);
         _ctx.closePath();
@@ -294,7 +294,7 @@
        * @param {number} radius
        * @param {number} [color=0] the color index (generally from 0 to 7)
        */
-      circfill(x, y, radius, color = 0) {
+      circfill(x, y, radius, color) {
         _ctx.beginPath();
         _ctx.arc(~~x, ~~y, radius, 0, TWO_PI);
         _ctx.closePath();
@@ -309,7 +309,7 @@
        * @param {number} y2
        * @param {number} [color=0] the color index (generally from 0 to 7)
        */
-      line(x1, y1, x2, y2, color = 0) {
+      line(x1, y1, x2, y2, color) {
         _ctx.beginPath();
         _ctx.moveTo(~~x1, ~~y1);
         _ctx.lineTo(~~x2, ~~y2);
@@ -497,13 +497,13 @@
        */
       transform: (a, b, c, d, e, f, resetFirst = true) => _ctx[resetFirst ? "setTransform" : "transform"](a, b, c, d, e, f),
       /**
-       * Sets the alpha (transparency) value to apply when drawing new shapes and images
+       * Sets the alpha (opacity) value to apply when drawing new shapes and images
        *
        * @param {number} alpha float from 0 to 1 (e.g: 0.5 = 50% transparent)
        * @see https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/globalAlpha
        */
-      alpha(alpha) {
-        _ctx.globalAlpha = alpha;
+      alpha(value) {
+        _ctx.globalAlpha = instance.clamp(value, 0, 1);
       },
       /**
        * Returns a newly instantiated Path2D object, optionally with another
@@ -518,7 +518,7 @@
       /**
        * Fills the current or given path with a given color.
        *
-       * @param {number} color
+       * @param {number} [color=0]
        * @param {Path2D} [path]
        */
       fill(color, path) {
@@ -528,7 +528,7 @@
       /**
        * Outlines the current or given path with a given color.
        *
-       * @param {number} color
+       * @param {number} [color=0]
        * @param {Path2D} [path]
        */
       stroke(color, path) {
@@ -582,16 +582,19 @@
       },
       /** SOUND API */
       /**
-       * Play a defined sound or a ZzFX array of params
+       * Play a predefined sound or a ZzFX array of params.
+       * By default has 4 predefined sounds.
        *
-       * @param {number|number[]} [sound=0] the sound index (from 0 to 7) or a ZzFX array of params
+       * @param {number|number[]} [sound=0] the sound index (from 0 to 3) or a ZzFX array of params
        * @param {number} [volume=1]
        * @param {number} [pitch=0]
-       * @param {number} [randomness=0]
+       * @param {number} [randomness=null] an float value between 0 and 1
        * @returns {AudioBufferSourceNode}
+       *
        * @see https://github.com/KilledByAPixel/ZzFX
+       * @see https://github.com/litecanvas/game-engine/blob/main/src/sounds.js
        */
-      sfx(sound = 0, volume = 1, pitch = 0, randomness = 0) {
+      sfx(sound = 0, volume = 1, pitch = 0, randomness = null) {
         if (navigator.userActivation && !navigator.userActivation.hasBeenActive) {
           return;
         }
@@ -599,7 +602,7 @@
         if (volume !== 1 || pitch || randomness) {
           z = [...z];
           z[0] = (Number(volume) || 1) * (z[0] || 1);
-          z[1] = randomness > 0 ? randomness : 0;
+          z[1] = randomness != null ? randomness : z[1];
           z[10] = ~~z[10] + ~~pitch;
         }
         return zzfx(...z);
@@ -688,7 +691,7 @@
       /**
        * Get a color by index
        *
-       * @param {number} index The color number
+       * @param {number} [index=0] The color number
        * @returns {string} the color code
        */
       getcolor: (index) => colors[~~index % colors.length],
