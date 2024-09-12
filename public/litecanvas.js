@@ -43,13 +43,13 @@
   // src/sounds.js
   var sounds = [
     // 0 - pickup
-    [0.8, , 2e3, 0.01, 0.05, , 1, 2, , , -600, 0.05, , , , , , 0.5, 0.05],
+    [0.5, , 1675, , 0.06, 0.2, 1, 1.8, , , 837, 0.06],
     // 1 - hit
-    [0.5, , 375, 0.02, 0.01, 0.2, 1, , , , , , , 0.4, , 0.1, , 0.6, 0.1],
+    [1.5, , 820, , , , , 1.5, , 0.3, , 0.1, 1.6, , , 0.1, 0.2],
     // 2 - jump
-    [, , 360, 0.01, , 0.08, 1, 1.7, 12, 32, , , , , , , , 0.63, 0.02, , 99],
-    // 3 - warning
-    [1.2, , 240, 0.02, 0.15, 0.15, 1, 4, , , , , 0.05, , , , , 0.6, 0.15]
+    [0.7, , 360, 0.01, , 0.08, 1, 1.7, 12, 32, , , , , , , , 0.63, 0.02, , 99],
+    // 3 - powerup
+    [, , 300, 0.02, 0.1, , 1, 3.2, , , 100, 0.08, 0.1, , , , , 0.6, 0.25, 0.3]
   ];
 
   // src/index.js
@@ -667,11 +667,13 @@
        * @param {boolean} [highPriority=false] determines whether the callback will be called before or after the others
        * @returns {function} a function to remove the listener
        */
-      listen(event, callback, highPriority = false) {
-        _events[event] = _events[event] || [[], []];
-        const size = _events[event][highPriority ? 0 : 1].push(callback);
+      listen(eventName, callback) {
+        _events[eventName] = _events[eventName] || [];
+        _events[eventName].push(callback);
         return () => {
-          _events[event][highPriority ? 0 : 1].splice(size - 1, 1);
+          _events[eventName] = _events[eventName].filter(
+            (x) => callback !== x
+          );
         };
       },
       /**
@@ -680,13 +682,10 @@
        * @param {string} event The game event type
        * @param  {...any} args Arguments passed to all listeners
        */
-      emit(event, ...args) {
-        if (!_events[event]) return;
-        for (const list of _events[event]) {
-          for (const callback of list) {
-            callback(...args);
-          }
-        }
+      emit(eventName, ...args) {
+        _emit("before:" + eventName, ...args);
+        _emit(eventName, ...args);
+        _emit("after:" + eventName, ...args);
       },
       /**
        * Get a color by index
@@ -919,6 +918,12 @@
         _canvas.style.imageRendering = "pixelated";
       }
       instance.emit("resized", _scale);
+    }
+    function _emit(eventName, ...args) {
+      if (!_events[eventName]) return;
+      for (const callback of _events[eventName]) {
+        callback(...args);
+      }
     }
     function loadPlugin(callback) {
       const pluginData = callback(instance, _helpers, callback.__conf);

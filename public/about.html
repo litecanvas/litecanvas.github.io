@@ -248,13 +248,13 @@ litecanvas(settings = {});
 // if loop = undefined, will use global functions:
 // window.init(), window.update(dt), window.draw(), etc
 settings.loop = {
-  init: function?,
-  update: function?,
-  draw: function?,
-  resized: function?,
-  tap: function?,
-  tapping: function?,
-  untap: function?
+  init: Function?,
+  update: Function?,
+  draw: Function?,
+  resized: Function?,
+  tap: Function?,
+  tapping: Function?,
+  untap: Function?
 }
 
 // the canvas (by default a new canvas is created)
@@ -596,7 +596,7 @@ HALF_PI: number // approximately 1.57079 radians (90º)</code></pre>
 
       <pre><code class="language-typescript">// Adds a game event listener and
 // returns a function that removes the listener.
-listen(event: string, callback: function, highPriority = false): function
+listen(event: string, callback: Function): Function
 
 // Triggers a game event and call all listeners.
 emit(event: string, ...data: any[]): void</code></pre>

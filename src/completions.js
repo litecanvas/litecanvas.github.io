@@ -448,13 +448,13 @@ export default function customCompletions(context) {
         label: "listen",
         type: "function",
         apply: "listen(",
-        detail: "(event, callback, [highPriority=false])",
+        detail: "(event, callback)",
       },
       {
         label: "emit",
         type: "function",
         apply: "emit(",
-        detail: "(event,...data)",
+        detail: "(event, ...data)",
       },
       {
         label: "resize",
