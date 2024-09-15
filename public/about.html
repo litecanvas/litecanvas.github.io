@@ -183,7 +183,7 @@
 
       <pre><code class="language-typescript">litecanvas({
   loop: {
-    init, update, draw, resized, tap, tapping, untap
+    init, update, draw, resized, tap, tapping, untap, tapped
   }
 })
 
@@ -206,13 +206,13 @@ function resized() {
 }
 
 function tap(x, y, tapId) {
-  // called when a tap starts
+  // called when a tap (click/touch) starts
   // equivalent to "mousedown" and "touchstart" browser events
 
   // note:
   //   Use the tapId to handle multiple touches
-  //   Each touch has a unique tapId
-  //   mouse's tapId always is 0
+  //   Each touch has a unique tapId >= 1
+  //   mouse's tapId always equal to 0 (zero)
 }
 
 function untap(x, y, tapId) {
@@ -223,6 +223,11 @@ function untap(x, y, tapId) {
 function tapping(x, y, tapId) {
   // called when a tap moves
   // equivalent to "mousemove" and "touchmove" browser events
+}
+
+function tapped(x, y, tapId) {
+  // called when a tap stars and ends in a short time
+  // equivalent to "click" browser events
 }
 </code></pre>
 
@@ -253,8 +258,9 @@ settings.loop = {
   draw: Function?,
   resized: Function?,
   tap: Function?,
-  tapping: Function?,
   untap: Function?
+  tapping: Function?,
+  tapped: Function?
 }
 
 // the canvas (by default a new canvas is created)
