@@ -208,7 +208,8 @@ export default function customCompletions(context) {
       {
         label: "ctx",
         type: "function",
-        apply: "ctx()",
+        apply: "ctx(value?)",
+        info: "set or get the canvas context",
       },
       {
         label: "cliprect",
@@ -228,7 +229,7 @@ export default function customCompletions(context) {
         label: "sfx",
         type: "function",
         apply: "sfx(0)",
-        detail: "(sound:number|Array, volume=1, pitch=0, randomness=0)",
+        detail: "(sound, volume=1, pitch=0, randomness=0)",
         info: "play a sound",
       },
       {

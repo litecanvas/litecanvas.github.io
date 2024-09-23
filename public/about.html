@@ -378,9 +378,9 @@ paint(width, height, draw: string[]|function, options?: {scale: number}): Offscr
  * ADVANCED DRAWING-RELATED FUNCTIONS
  */
 
-// return the current canvas context 2D
+// Set or get the current canvas context 2D
 // see: https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D
-ctx(): CanvasRenderingContext2D
+ctx(context?: CanvasRenderingContext2D): CanvasRenderingContext2D
 
 // save the canvas context
 push(): void
