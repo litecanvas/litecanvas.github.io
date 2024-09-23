@@ -388,10 +388,6 @@ push(): void
 // restore the canvas context
 pop(): void
 
-// note: before call cliprect or clipcirc you must
-// save the context using `push()` and later, you
-// must restore the context using `pop()`
-
 // Adds a translation transformation to the current matrix
 translate(x: number, y: number): void
 
@@ -434,7 +430,11 @@ blendmode(value: string): void
 clipcirc(x, y, width, height): void
 
 // same as above, but create a "rectangular" clipping region
-cliprect(x, y, width, height): void</code></pre>
+cliprect(x, y, width, height): void
+
+// note: before call `cliprect()` or `clipcirc()` you must
+// save the context using `push()` and later,
+// you must restore the context using `pop()`</code></pre>
 
       <h2><a id="sound">Functions for Sound</a></h2>
 
