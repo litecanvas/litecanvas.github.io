@@ -228,9 +228,15 @@ export default function customCompletions(context) {
       {
         label: "sfx",
         type: "function",
-        apply: "sfx(0)",
-        detail: "(sound, volume=1, pitch=0, randomness=0)",
-        info: "play a sound",
+        apply: "sfx()",
+        detail: "(sound?, volume?, pitch?, randomness?)",
+        info: "play a ZzFX sound",
+      },
+      {
+        label: "volume",
+        type: "function",
+        apply: "volume(",
+        detail: "(value)",
       },
       {
         label: "seed",

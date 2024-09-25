@@ -438,15 +438,15 @@ cliprect(x, y, width, height): void
 
       <h2><a id="sound">Functions for Sound</a></h2>
 
-      <pre><code class="language-typescript">// play a predefined sound (by default has only 4 predefined sounds)
-// note: `n` must be an integer from 0 to 3
-// see: https://github.com/litecanvas/game-engine/blob/main/src/sounds.js
-sfx(n = 0, volume = 1, pitch = 0, randomness = null): void
-
-// also, you can play a ZzFX array of params
+      <pre><code class="language-typescript">// Plays a ZzFX sound
 // example: sfx([2,.05,598,.07,0,.19,0,1.32,9.9,-70,0,0,0,0,0,0,.3,.02,0,.04])
 // see: https://killedbyapixel.github.io/ZzFX/
-sfx(ZzFXparams: Array, volume = 1, pitch = 0, randomness = 0): void</code></pre>
+// note: if the first argument (the ZzFX array), a default sound is played
+sfx(ZzFXparams?: number[], volume?: number, pitch?: number, randomness?: number): void
+
+// Sets the ZzFX global volume
+// default: 0.3
+volume(value: number): void</code></pre>
 
       <h2><a id="math">Math</a></h2>
 
