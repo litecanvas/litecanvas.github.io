@@ -9,7 +9,7 @@
     "build": "esbuild src/index.js --bundle --minify --outfile=public/app.js",
     "prepare": "node ./script/copy-files.js && npm run build",
     "postinstall": "npm run prepare",
-    "upgrade-engine": "npm update && npm run prepare"
+    "upgrade": "npm update && npm run prepare"
   },
   "keywords": [
     "game development"
