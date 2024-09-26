@@ -25,6 +25,10 @@ export default function customCompletions(context) {
         type: "variable",
         info: "middle Y of the game screen",
       },
+      {
+        label: "DEFAULT_SFX",
+        type: "variable",
+      },
       { label: "PI", type: "constant" },
       { label: "TWO_PI", type: "constant" },
       { label: "HALF_PI", type: "constant" },
@@ -229,7 +233,7 @@ export default function customCompletions(context) {
         label: "sfx",
         type: "function",
         apply: "sfx()",
-        detail: "(sound?, volume?, pitch?, randomness?)",
+        detail: "(zzfxParams?, pitchSlide?, volumeFactor?)",
         info: "play a ZzFX sound",
       },
       {
@@ -237,6 +241,7 @@ export default function customCompletions(context) {
         type: "function",
         apply: "volume(",
         detail: "(value)",
+        info: "set the ZzFX global volume",
       },
       {
         label: "seed",

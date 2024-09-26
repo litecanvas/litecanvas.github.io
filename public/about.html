@@ -372,7 +372,8 @@ image(x, y, image: Image|HTMLCanvasElement): void
 // create a offcanvas and to make an image
 // see: https://github.com/litecanvas/game-engine/blob/main/samples/paint/paint.js
 // see: https://github.com/litecanvas/game-engine/blob/main/samples/pixelart/pixelart.js
-paint(width, height, draw: string[]|function, options?: {scale: number}): OffscreenCanvas
+// note: options argument is `{scale: number, canvas: OffscreenCanvas}`
+paint(width, height, draw: string[]|function, options?): OffscreenCanvas
 
 /**
  * ADVANCED DRAWING-RELATED FUNCTIONS
@@ -438,11 +439,12 @@ cliprect(x, y, width, height): void
 
       <h2><a id="sound">Functions for Sound</a></h2>
 
-      <pre><code class="language-typescript">// Plays a ZzFX sound effects.
+      <pre><code class="language-typescript">// Plays ZzFX sound effects and returns the played sound array or `false`.
 // example: sfx([2,.05,598,.07,0,.19,0,1.32,9.9,-70,0,0,0,0,0,0,.3,.02,0,.04])
 // see: https://killedbyapixel.github.io/ZzFX/
-// note: if the first argument (the ZzFX array), a default sound is played
-sfx(ZzFXparams?: number[], volume?: number, pitch?: number, randomness?: number): void
+// note: if the first argument is omitted, a default sound is played (see DEFAULT_SFX)
+// example: sfx() or sfx(null)
+sfx(ZzFXparams?: number[], pitchSlide = 0, volumeFactor = 1): number[] | boolean
 
 // Sets the ZzFX global volume factor.
 // note: use 0 (zero) to mute all ZzFX sounds.
@@ -590,6 +592,9 @@ FPS: number
 
 // the amount of time since the game started
 ELAPSED: number
+
+// the default sound played in `sfx()`
+DEFAULT_SFX: number[]
 
 // Math constants
 PI: number // approximately 3.14159 radians (180º)
