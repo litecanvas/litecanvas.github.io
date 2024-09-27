@@ -23,7 +23,7 @@
     "@codemirror/lang-javascript": "^6.2.1",
     "@codemirror/theme-one-dark": "^6.1.2",
     "@litecanvas/plugin-asset-loader": "*",
-    "@litecanvas/utils": "^0.8.0",
+    "@litecanvas/utils": "*",
     "codemirror": "^6.0.1",
     "eslint-linter-browserify": "9.2.0",
     "litecanvas": "*",
