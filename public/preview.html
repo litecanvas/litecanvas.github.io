@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Preview</title>
+    <style>
+      html,
+      body {
+        height: 100%;
+      }
+      body {
+        margin: 0;
+      }
+      #err {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: blue;
+        color: white;
+        font-weight: bold;
+        font-family: monospace;
+        padding: 1em;
+        font-size: 32px;
+        z-index: 1000;
+        box-sizing: border-box;
+        line-height: 1.5;
+      }
+
+      #err-tip {
+        font-family: sans-serif;
+        font-weight: normal;
+        opacity: 90%;
+        font-size: 20px;
+      }
+
+      #err-tip code {
+        background: rgba(0, 0, 0, 0.2);
+      }
+
+      canvas {
+        background-image: repeating-conic-gradient(#fefefe 0% 25%, #ddd 0% 50%);
+        background-position: 0 0, 0px 0px;
+        background-size: 48px 48px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="err" style="display: none">
+      <p id="err-tip">
+        Tip: If you are loading any asset (script, font, image etc), don't
+        forget to add <code>if (LOADING > 0) return;</code> at the beginning of
+        your <code>update</code> and <code>draw</code> functions.
+      </p>
+    </div>
+
+    <script>
+      // blue screen of death
+      let errorMessage = null;
+      handleError = (e) => {
+        if (errorMessage) return;
+        errorMessage = e.message || e.reason;
+        console.error(errorMessage);
+        err.prepend(errorMessage);
+        err.style.display = "block";
+      };
+      addEventListener("error", handleError);
+      addEventListener("unhandledrejection", handleError);
+    </script>
+
+    <script src="/litecanvas.js"></script>
+
+    <script>
+      ((lc) => {
+        window.litecanvas = (config = {}) => {
+          if (!config.loop) {
+            let _init = globalThis.init;
+            globalThis.init = (instance) => {
+              instance.use(pluginAssetLoader);
+              _init();
+            };
+          } else if (config.loop.init) {
+            let _init = config.loop.init;
+            config.loop.init = (instance) => {
+              instance.use(pluginAssetLoader);
+              _init();
+            };
+          }
+          return lc(config);
+        };
+      })(window.litecanvas);
+
+      window.print = () => {
+        console.log("warning: print() is no longer alias for text()");
+      };
+
+      window.clear = () => {
+        console.log("warning: clear() is no longer alias for cls()");
+      };
+    </script>
+
+    <script id="code"></script>
+  </body>
+</html>

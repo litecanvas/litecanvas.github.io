@@ -15,7 +15,6 @@ import * as eslint from "eslint-linter-browserify";
 import editorSetup from "./editorSetup";
 import { show, hide, $ } from "./utils";
 import demo from "./demo";
-import template from "./template";
 import customCompletions from "./completions";
 import mobileBar from "./mobileBar";
 
@@ -65,25 +64,12 @@ const playButton = $("#play");
 const stopButton = $("#stop");
 const shareButton = $("#share");
 const copyButton = $("#copy");
+/** @type {HTMLIFrameElement} */
 const iframe = $("#frame");
 const iframeOverlay = $("#frame-overlay");
 
 const smallScreen = innerWidth < 1024;
 const isMobile = navigator.userAgent.match(/android|iphone|ipad/i) !== null;
-
-let litecanvasSourceCode = null;
-
-fetch("litecanvas.js")
-  .then((response) => response.text())
-  .then((source) => {
-    litecanvasSourceCode = source;
-    if (!smallScreen) {
-      if (autoplay) runCode();
-    } else {
-      show(playButton);
-      hide(game);
-    }
-  });
 
 playButton.addEventListener("click", () => {
   hide(code);
@@ -153,14 +139,13 @@ copyButton.addEventListener("click", (evt) => {
 });
 
 function runCode() {
-  if (!litecanvasSourceCode) {
-    return alert(
-      "The litecanvas source code  was not loaded. Try reloading this page."
-    );
-  }
-  const game = codeEditor.state.doc.toString();
-  iframe.srcdoc = template(litecanvasSourceCode, game);
+  iframe.src = "preview.html"; // reload the iframe
 }
+
+iframe.addEventListener("load", () => {
+  const code = codeEditor.state.doc.toString();
+  iframe.contentDocument.querySelector("#code").innerHTML = code;
+});
 
 if (!smallScreen) {
   let updateTimeout = 0;
@@ -323,9 +308,9 @@ if (isMobile) {
 
 window.isUpdateAvailable = new Promise(function (resolve) {
   if (
+    url.searchParams.get("test_service_worker") === "on" ||
     ("serviceWorker" in navigator &&
-      location.hostname.indexOf("127.0.0") === -1) ||
-    url.searchParams.get("test_service_worker") === "on"
+      location.hostname.indexOf("127.0.0") === -1)
   ) {
     // register service worker file
     navigator.serviceWorker
@@ -365,3 +350,10 @@ window.isUpdateAvailable.then((isAvailable) => {
   if (!isAvailable) return;
   alert("New Update available! Reload the webapp to see the latest changes.");
 });
+
+if (!smallScreen) {
+  if (autoplay) runCode();
+} else {
+  show(playButton);
+  hide(game);
+}
