@@ -631,6 +631,7 @@ resize(width: number, height: number): void</code></pre>
 
       <h2><a id="advanced">Playground Features</a></h2>
 
+      <h3>Extra packages</h3>
       <p>
         The following packages are automatically loaded into the playground:
       </p>
@@ -652,11 +653,20 @@ resize(width: number, height: number): void</code></pre>
         </li>
       </ul>
 
-      <h2><a id="tools">Public assets</a></h2>
+      <h3><a id="tools">Public assets</a></h3>
 
       <p>We have a few assets you can use to help prototype ideas.</p>
 
-      <p><strong>Cool 1-bit sprites made by Kenney</strong></p>
+      <p></p>
+        <strong
+          >Cool
+          <a href="https://litecanvas.js.org/images/sprites.png"
+            >1-bit sprites</a
+          >
+          made by
+          <a href="https://www.kenney.nl/assets/1-bit-pack">Kenney</a></strong
+        >
+      </p>
 
       <pre><code class="language-typescript">let sprites;
 
@@ -666,7 +676,6 @@ litecanvas({
 
 function init() {
   // first, load the spritesheet image
-  // see the image in https://litecanvas.js.org/images/sprites.png
   loadImage('/images/sprites.png', (res, { splitFrames }) => {
     // after loaded, split the image in multiple 16x16 sprites
     sprites = splitFrames(res, 16, 16)
@@ -693,7 +702,7 @@ function draw() {
 
       <p>
         <strong
-          >Monogram, an nice font available by
+          >Monogram font by
           <a href="https://datagoblin.itch.io/monogram">datagoblin</a></strong
         >
       </p>
