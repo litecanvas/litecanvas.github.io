@@ -48,11 +48,6 @@ export default function template(library, game) {
       <p id="err-tip">Tip: If you are loading any asset (script, font, image etc), don't forget to add <code>if (LOADING > 0) return;</code> at the beginning of your <code>update</code> and <code>draw</code> functions.</p>
     </div>
     <script>
-      if ("serviceWorker" in navigator) {
-        navigator.serviceWorker.register("sw.js")
-      }
-    </script>
-    <script>
       // blue screen of death
       handleError=e=>{console.log(e),err.prepend(e.message||e.reason),err.style.display='block'};
       addEventListener('error',handleError);addEventListener('unhandledrejection',handleError);
