@@ -244,6 +244,12 @@ export default function customCompletions(context) {
         info: "set the ZzFX global volume",
       },
       {
+        label: "iskeydown",
+        type: "function",
+        apply: "iskeydown(",
+        detail: "(key)",
+      },
+      {
         label: "seed",
         type: "function",
         apply: "seed(",
