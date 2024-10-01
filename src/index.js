@@ -352,6 +352,7 @@ window.isUpdateAvailable.then((isAvailable) => {
 });
 
 if (!smallScreen) {
+  show(iframeOverlay);
   if (autoplay) runCode();
 } else {
   show(playButton);
