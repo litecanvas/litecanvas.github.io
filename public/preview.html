@@ -79,15 +79,17 @@
             let _init = globalThis.init;
             globalThis.init = (instance) => {
               instance.use(pluginAssetLoader);
-              _init();
+              _init && _init();
             };
           } else if (config.loop.init) {
             let _init = config.loop.init;
+            console.log(config);
             config.loop.init = (instance) => {
               instance.use(pluginAssetLoader);
-              _init();
+              _init && _init();
             };
           }
+
           return lc(config);
         };
       })(window.litecanvas);

@@ -93,7 +93,7 @@ function stopGame(evt) {
   hide(game);
   show(playButton);
   hide(stopButton);
-  iframe.srcdoc = "";
+  iframe.contentDocument.body.innerHTML = "";
 }
 
 shareButton.addEventListener("click", (evt) => {
