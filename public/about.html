@@ -430,10 +430,6 @@ stroke(color: number, path?: Path2D): void
 // see: https://developer.mozilla.org/en-US/docs/Web/API/Path2D/Path2D
 path(arg?: Path2D | string): Path2D
 
-// update the type of compositing operation
-// see: https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/globalCompositeOperation
-blendmode(value: string): void
-
 // create a "circular" clipping region
 // see: https://github.com/litecanvas/game-engine/blob/main/samples/clip/clip.js
 clipcirc(x, y, width, height): void
@@ -609,6 +605,14 @@ FPS: number
 
 // the amount of time since the game started
 ELAPSED: number
+
+// the current mouse's X-position
+// or -1 (if the mouse was not used or detected)
+MOUSEX: number
+
+// the current mouse's Y-position
+// or -1 (if the mouse was not used or detected)
+MOUSEY: number
 
 // the default sound played in `sfx()`
 DEFAULT_SFX: number[]

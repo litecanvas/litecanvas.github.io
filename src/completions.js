@@ -26,6 +26,14 @@ export default function customCompletions(context) {
         info: "middle Y of the game screen",
       },
       {
+        label: "MOUSEX",
+        type: "variable",
+      },
+      {
+        label: "MOUSEY",
+        type: "variable",
+      },
+      {
         label: "DEFAULT_SFX",
         type: "variable",
       },
@@ -163,13 +171,6 @@ export default function customCompletions(context) {
         type: "function",
         apply: "rotate(",
         detail: "(radians)",
-      },
-      {
-        label: "blendmode",
-        type: "function",
-        apply: "blendmode(",
-        detail: "(mode)",
-        info: "sets the type of compositing operation to apply when drawing new shapes",
       },
       {
         label: "alpha",
@@ -435,13 +436,6 @@ export default function customCompletions(context) {
         apply: "timescale(",
         detail: "(value)",
         info: "Sets the scale of the game's delta time (dt)",
-      },
-      {
-        label: "mousepos",
-        type: "function",
-        apply: "mousepos()",
-        detail: "() => [x, y]",
-        info: "Gets the mouse X and Y",
       },
       {
         label: "use",
