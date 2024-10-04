@@ -104,8 +104,6 @@ svg {
 
 .game {
   position: relative;
-  background-color: #000;
-  color: white;
 }
 
 .game #frame-overlay {
