@@ -239,6 +239,10 @@ function tapped(x, y, tapId) {
 
       <img src="images/colors.png" alt="Default Color Palette" />
 
+      <p>
+        <em>Every time a function asks for a color argument, choose one of these numbers.</em>
+      </p>
+
       <h2><a id="settings">Game Configuration</a></h2>
 
       <pre><code class="language-typescript">// Initialize the game
@@ -303,9 +307,7 @@ settings.keyboardEvents = true</code></pre>
  */
 
 // clear the canvas
-// all color argument is a integer (a color from 0 to 7)
-// alias: clear
-cls(color?: number): void
+cls(color: number | null): void
 
 // draw a color-filled rectangle
 rectfill(x, y, w, h, color = 0, radii?: number | number[]): void
@@ -333,7 +335,6 @@ linedash(value: number | number[], ofsset?: number): void
  */
 
 // draw a text
-// alias: print
 text(x, y, text, color = 3): void
 
 // set the text alignment and baseline
@@ -634,7 +635,7 @@ use(callback): void
 setvar(name: string, value: any): void
 
 // Gets the color value.
-// example: getcolor(0) returns "#18161c"
+// example: getcolor(0) returns "#000"
 getcolor(index: number): string
 
 // Resizes the game canvas.
