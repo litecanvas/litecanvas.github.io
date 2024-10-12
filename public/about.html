@@ -422,16 +422,10 @@ stroke(color: number, path?: Path2D): void
 // see: https://developer.mozilla.org/en-US/docs/Web/API/Path2D/Path2D
 path(arg?: Path2D | string): Path2D
 
-// create a "circular" clipping region
+// create a clipping region
 // see: https://github.com/litecanvas/game-engine/blob/main/samples/clip/clip.js
-clipcirc(x, y, width, height): void
-
-// same as above, but create a "rectangular" clipping region
-cliprect(x, y, width, height): void
-
-// note: before call `cliprect()` or `clipcirc()` you must
-// save the context using `push()` and later,
-// you must restore the context using `pop()`</code></pre>
+// note: before call `clip()` you must save the context using `push()` and `pop()`
+clipcirc(path: Path2D)</code></pre>
 
       <h2><a id="sound">Functions for Sound</a></h2>
 
@@ -448,12 +442,10 @@ volume(value: number): void</code></pre>
 
       <h2><a id="keyboard">Functions for Keyboard</a></h2>
 
-      <pre><code class="language-typescript">
-        // Checks if which key is currently pressed in your keyboard.
-        // note: you can check if any key is pressed using `iskeydown("any")`.
-        // note: to check the space key use `iskeydown(" ")`.
-        iskeydown(key: string): boolean
-      </code></pre>
+      <pre><code class="language-typescript">// Checks if which key is currently pressed in your keyboard.
+// note: you can check if any key is pressed using `iskeydown("any")`.
+// note: to check the space key use `iskeydown(" ")`.
+iskeydown(key: string): boolean</code></pre>
 
       <h2><a id="math">Math</a></h2>
 
@@ -635,7 +627,7 @@ use(callback): void
 setvar(name: string, value: any): void
 
 // Gets the color value.
-// example: getcolor(0) returns "#000"
+// example: getcolor(0) returns "#111"
 getcolor(index: number): string
 
 // Resizes the game canvas.
