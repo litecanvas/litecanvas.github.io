@@ -307,12 +307,16 @@ settings.keyboardEvents = true</code></pre>
  */
 
 // clear the canvas
+// if color is a number, fill the entire screen with which color
+// if null just clear the screen
 cls(color: number | null): void
 
 // draw a color-filled rectangle
+// radii is for border radius
 rectfill(x, y, w, h, color = 0, radii?: number | number[]): void
 
 // draw a outline rectangle
+// radii is for border radius
 rect(x, y, w, h, color = 0, radii?: number | number[]): void
 
 // draw a color-filled circle
@@ -321,7 +325,7 @@ circfill(x, y, r, color = 0): void
 // draw a outline circle
 circ(x, y, r, color = 0): void
 
-// draw a line
+// draw a line from one point (x1, y1) to another (x2, y2)
 line(x1, y1, x2, y2, color = 0): void
 
 // Sets the thickness of lines
@@ -335,7 +339,7 @@ linedash(value: number | number[], ofsset?: number): void
  */
 
 // draw a text
-text(x, y, text, color = 3): void
+text(x, y, text, color? = 3): void
 
 // set the text alignment and baseline
 // default values: align = 'start', baseline = 'top'
@@ -343,14 +347,14 @@ text(x, y, text, color = 3): void
 // see: https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/textBaseline
 textalign(align: string, baseline: string): void
 
-// set the default font family
-// default: 'sans-serif'
+// set the font family for texts
 textfont(fontName: string): void
 
 // Sets the font size (default: 32)
 textsize(size: number): void
 
-// Used to draw a text as 'bold' or 'italic'
+// Used to draw a text as 'bold' or/and 'italic'
+// use "normal" or empty string to reset the font style
 textstyle(style: string)
 
 // Returns the text dimensions like width and height
@@ -365,15 +369,15 @@ textmetrics(text: string, size?: number)
 // draw a image
 image(x, y, image: Image|HTMLCanvasElement): void
 
-/**
- * IMAGE DRAWING-RELATED FUNCTIONS
- */
-
-// create a offcanvas and to make an image
-// see: https://github.com/litecanvas/game-engine/blob/main/samples/paint/paint.js
+// create a offcanvas and to make an image on it
+// data can be a array of strings (to draw pixel art)
 // see: https://github.com/litecanvas/game-engine/blob/main/samples/pixelart/pixelart.js
-// note: options argument is `{scale: number, canvas: OffscreenCanvas}`
-paint(width, height, draw: string[]|function, options?): OffscreenCanvas
+// or data can be a function with drawing operations
+// see: https://github.com/litecanvas/game-engine/blob/main/samples/paint/paint.js
+// the options are:
+//   * scale?: default = 1.
+//   * canvas?: by default creates a new canvas.
+paint(width, height, data: string[]|function, options?): OffscreenCanvas
 
 /**
  * ADVANCED DRAWING-RELATED FUNCTIONS
@@ -393,7 +397,7 @@ pop(): void
 translate(x: number, y: number): void
 
 // Adds a scaling transformation to the canvas units
-// horizontally and/or vertically
+// horizontally (x) and/or vertically (y)
 scale(x: number, y?: number): void
 
 // Adds a rotation to the transformation matrix
@@ -401,8 +405,8 @@ rotate(radians: number): void
 
 // update the transformation matrix
 // when `resetFirst = true` uses `context.setTransform()`
-// wwhen `resetFirst = false` uses `context.transform()`
 // see: https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/setTransform
+// when `resetFirst = false` uses `context.transform()`
 // see: https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/transform
 transform(a, b, c, d, e, f, resetFirst = true): void
 
@@ -552,6 +556,8 @@ sqrt(n: number): number
 // If the number is 0, it will returns 0.
 sign(n: number): number
 
+/** UTILS */
+
 // Check a collision between two rectangles.
 // All arguments are required and must be numbers.
 colrect(x1, y1, w1, h1, x2, y2, w2, h2): boolean
@@ -567,7 +573,7 @@ colcirc(x1, y1, r1, x2, y2, r2): boolean
 // A value of 0 freezes time (equivalent to pausing).
 timescale(value: number): void</code></pre>
 
-      <h2><a id="globals">Variables</a></h2>
+      <h2><a id="globals">Global Variables</a></h2>
 
       <pre><code class="language-typescript">// the game canvas
 CANVAS: HTMLCanvasElement
@@ -610,12 +616,12 @@ HALF_PI: number // approximately 1.57079 radians (90º)</code></pre>
 
       <h2><a id="events">Event Emitter</a></h2>
 
-      <pre><code class="language-typescript">// Adds a game event listener and
-// returns a function that removes the listener.
+      <pre><code class="language-typescript">// Registers a game event callback and
+// returns a function that unregister this callback.
 listen(event: string, callback: Function): Function
 
-// Triggers a game event and call all listeners.
-emit(event: string, ...data: any[]): void</code></pre>
+// Triggers a game event and call its registered callbacks.
+emit(event: string, arg1?, arg2?, arg3?, arg4?): void</code></pre>
 
       <h2><a id="plugin-api">Plugin API</a></h2>
 
@@ -623,10 +629,10 @@ emit(event: string, ...data: any[]): void</code></pre>
 // see: https://github.com/litecanvas/game-engine/blob/main/samples/plugin-basics/plugin-basics.js
 use(callback): void
 
-// Create or update an global variable.
+// Create or update an global variable (see above WIDTH, HEIGHT, etc)
 setvar(name: string, value: any): void
 
-// Gets the color value.
+// Gets the color value given its index.
 // example: getcolor(0) returns "#111"
 getcolor(index: number): string
 
@@ -754,8 +760,8 @@ function draw() {
       </ul>
     </main>
 
-    <script src="prism/prism.js" defer></script>
-    <script src="prism/prism-typescript.js" defer></script>
-    <script src="prism/prism-autolinker.js" defer></script>
+    <script src="prism/prism.js"></script>
+    <script src="prism/prism-typescript.js"></script>
+    <script src="prism/prism-autolinker.js"></script>
   </body>
 </html>

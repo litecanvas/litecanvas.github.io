@@ -1,6 +1,6 @@
 {
   "name": "@litecanvas/playground",
-  "version": "1",
+  "version": "2",
   "description": "",
   "main": "src/index.js",
   "type": "module",

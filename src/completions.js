@@ -466,7 +466,7 @@ export default function customCompletions(context) {
         label: "emit",
         type: "function",
         apply: "emit(",
-        detail: "(event, ...data)",
+        detail: "(event, a1, a2, a3, a4)",
       },
       {
         label: "resize",
