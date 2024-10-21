@@ -19,6 +19,7 @@ function init() {
 function tapped(x, y) {
   posx = x
   posy = y
+  sfx() // play a sound effect
 }
 
 // this function controls the game logic
