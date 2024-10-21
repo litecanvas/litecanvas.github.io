@@ -475,6 +475,12 @@ export default function customCompletions(context) {
         detail: "(width, height)",
         info: "resizes the game canvas",
       },
+      {
+        label: "setfps",
+        type: "function",
+        apply: "setfps(",
+        detail: "(value)",
+      },
 
       // asset loader plugin
       {

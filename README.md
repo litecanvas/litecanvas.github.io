@@ -1,6 +1,6 @@
 # LITECANVAS PLAYGROUND
 
-Online playground for [litecanvas](https://github.com/litecanvas/game-engine) game engine.
+Online playground for [Litecanvas](https://github.com/litecanvas/game-engine) game engine.
 
 Try on https://litecanvas.js.org/
 

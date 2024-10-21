@@ -149,14 +149,11 @@
       </header>
 
       <p>
-        Lightweight HTML5 canvas engine suitable for small games and animations
-        for people who enjoy coding: there is no fancy interface, no visual
-        helpers, no gui tools... just coding.
+        Litecanvas is a lightweight HTML5 canvas engine suitable for small web games, prototypes, game jams, animations, creative programming, learning game programming and game design, etc. Just install our NPM package or load/download the CDN by adding it as a script tag in your HTML.
       </p>
 
-      <p id="install">
-        <strong>NPM</strong>:
-        <code onclick="selectText(this)">npm i litecanvas</code>
+      <p>
+        <strong>This project is still under development. All feedback is appreciated! For bugs, suggestions or contribuitions open a issue in our <a href="https://github.com/litecanvas/game-engine">Github Repository</a>.</strong>
       </p>
 
       <p id="install">
@@ -166,6 +163,11 @@
         >
       </p>
 
+      <p id="install">
+        <strong>NPM</strong>:
+        <code onclick="selectText(this)">npm install litecanvas</code>
+      </p>
+
       <p>
         <button class="no-print" onclick="window.print()">Print PDF</button>
       </p>
@@ -173,21 +175,20 @@
       <nav class="no-print">
         <strong>API</strong>: <a href="#colors">Colors</a> |
         <a href="#settings">Configuration</a> |
+        <a href="#globals">Globals</a> |
         <a href="#drawing">Drawing</a> |
         <a href="#sound">Sound</a> |
         <a href="#keyboard">Keyboard</a> |
         <a href="#math">Math</a> |
-        <a href="#globals">Globals</a> |
-        <a href="#events">Events</a> |
-        <a href="#plugin-api">Plugin API</a> |
-        <a href="#advanced">Advanced</a>
+        <a href="#engine-api">Engine</a>
       </nav>
 
       <h2>Basic boilerplate</h2>
 
       <pre><code class="language-typescript">litecanvas({
   loop: {
-    init, update, draw, resized, tap, tapping, untap, tapped
+    init, update, draw, resized,
+    tap, tapping, untap, tapped
   }
 })
 
@@ -206,7 +207,7 @@ function draw() {
 
 function resized() {
   // called when the browser was resized
-  // always called once before init()
+  // also called once before init()
 }
 
 function tap(x, y, tapId) {
@@ -273,11 +274,12 @@ settings.fullscreen = true
 settings.width = null
 settings.height = settings.width || null
 
-// Determines whether the game loop should be paused
-// when the "blur" event happens.
+// Determines whether the game loop should
+// be paused when the "blur" event happens.
 settings.pauseOnBlur = true
 
-// scale the canvas
+// Determines whether the canvas should
+// scale to fill the canvas
 settings.autoscale = true
 
 // target FPS
@@ -286,10 +288,12 @@ settings.fps = 60
 // enable smooth drawing
 settings.antialias = false
 
-// disables antialias and force integer scales
+// disables antialias
+// and force the autoscale to use integers
 settings.pixelart = false
 
-// export all functions to global scope
+// exposes all methods and properties (see below)
+// in the global scope
 settings.global = true
 
 // set to `false` to disable the default tap handler
@@ -299,6 +303,47 @@ settings.tapEvents = true
 // set to `false` to disable the `iskeydown()` method
 // useful to create your own keyboard handler
 settings.keyboardEvents = true</code></pre>
+
+      <h2><a id="globals">Global Variables</a></h2>
+
+      <pre><code class="language-typescript">// the game canvas
+CANVAS: HTMLCanvasElement
+
+// the game screen width
+WIDTH: number
+
+// the game screen height
+HEIGHT: number
+
+// the center X of game screen
+CENTERX: number
+
+// the center Y of game screen
+CENTERY: number
+
+// the FPS meter
+FPS: number
+
+// the amount of time since the game started
+ELAPSED: number
+
+// the current mouse's X-position
+// or -1 (if the mouse was not used or detected)
+MOUSEX: number
+
+// the current mouse's Y-position
+// or -1 (if the mouse was not used or detected)
+MOUSEY: number
+
+// the default sound played in `sfx()`
+DEFAULT_SFX: number[]
+
+// Math constants
+PI: number // approximately 3.14 radians (180º)
+
+TWO_PI: number // approximately 6.28 radians (360º)
+
+HALF_PI: number // approximately 1.57 radians (90º)</code></pre>
 
       <h2><a id="drawing">Functions for Drawing</a></h2>
 
@@ -338,16 +383,16 @@ linedash(value: number | number[], ofsset?: number): void
  * TEXT DRAWING-RELATED FUNCTIONS
  */
 
-// draw a text
+// Draw a text
 text(x, y, text, color? = 3): void
 
-// set the text alignment and baseline
+// Sets the text alignment and baseline
 // default values: align = 'start', baseline = 'top'
 // see: https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/textAlign
 // see: https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/textBaseline
 textalign(align: string, baseline: string): void
 
-// set the font family for texts
+// Sets the font family for texts
 textfont(fontName: string): void
 
 // Sets the font size (default: 32)
@@ -403,30 +448,30 @@ scale(x: number, y?: number): void
 // Adds a rotation to the transformation matrix
 rotate(radians: number): void
 
-// update the transformation matrix
+// Updates the transformation matrix
 // when `resetFirst = true` uses `context.setTransform()`
 // see: https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/setTransform
 // when `resetFirst = false` uses `context.transform()`
 // see: https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/transform
 transform(a, b, c, d, e, f, resetFirst = true): void
 
-// set the alpha (opacity) value to apply when drawing new shapes and images
+// Sets the alpha (opacity) value to apply when drawing new shapes and images
 // see: https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/globalAlpha
 alpha(value: number): void
 
-// fills the current path
+// Fills the current path
 // see: https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/fill
 fill(color: number, path?: Path2D): void
 
-// outlines the current path
+// Outlines the current path
 // see: https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/stroke
 stroke(color: number, path?: Path2D): void
 
-// create (or clone) a Path2D instance
+// Create (or clone) a Path2D instance
 // see: https://developer.mozilla.org/en-US/docs/Web/API/Path2D/Path2D
 path(arg?: Path2D | string): Path2D
 
-// create a clipping region
+// Create a clipping region
 // see: https://github.com/litecanvas/game-engine/blob/main/samples/clip/clip.js
 // note: before call `clip()` you must save the context using `push()` and `pop()`
 clipcirc(path: Path2D)</code></pre>
@@ -564,66 +609,9 @@ colrect(x1, y1, w1, h1, x2, y2, w2, h2): boolean
 
 // Check a collision between two circles.
 // All arguments are required and must be numbers.
-colcirc(x1, y1, r1, x2, y2, r2): boolean
+colcirc(x1, y1, r1, x2, y2, r2): boolean</code></pre>
 
-// Sets the scale of the game's delta time (dt).
-// By default is equal to 1.
-// Values higher than 1 increase the speed of time,
-// while values smaller than 1 decrease it.
-// A value of 0 freezes time (equivalent to pausing).
-timescale(value: number): void</code></pre>
-
-      <h2><a id="globals">Global Variables</a></h2>
-
-      <pre><code class="language-typescript">// the game canvas
-CANVAS: HTMLCanvasElement
-
-// the game screen width
-WIDTH: number
-
-// the game screen height
-HEIGHT: number
-
-// the center X of game screen
-CENTERX: number
-
-// the center Y of game screen
-CENTERY: number
-
-// the FPS meter
-FPS: number
-
-// the amount of time since the game started
-ELAPSED: number
-
-// the current mouse's X-position
-// or -1 (if the mouse was not used or detected)
-MOUSEX: number
-
-// the current mouse's Y-position
-// or -1 (if the mouse was not used or detected)
-MOUSEY: number
-
-// the default sound played in `sfx()`
-DEFAULT_SFX: number[]
-
-// Math constants
-PI: number // approximately 3.14159 radians (180º)
-
-TWO_PI: number // approximately 6.28318 radians (360º)
-
-HALF_PI: number // approximately 1.57079 radians (90º)</code></pre>
-
-      <h2><a id="events">Event Emitter</a></h2>
-
-      <pre><code class="language-typescript">// Registers a game event callback and
-// returns a function that unregister this callback.
-listen(event: string, callback: Function): Function
-
-// Triggers a game event and call its registered callbacks.
-emit(event: string, arg1?, arg2?, arg3?, arg4?): void</code></pre>
-
-      <h2><a id="plugin-api">Plugin API</a></h2>
+      <h2><a id="plugin-api">Engine API</a></h2>
 
       <pre><code class="language-typescript">// Loads a plugin.
 // see: https://github.com/litecanvas/game-engine/blob/main/samples/plugin-basics/plugin-basics.js
@@ -636,9 +624,26 @@ setvar(name: string, value: any): void
 // example: getcolor(0) returns "#111"
 getcolor(index: number): string
 
+// Registers a game event callback and
+// returns a function that unregister this callback.
+listen(event: string, callback: Function): Function
+
+// Triggers a game event and call its registered callbacks.
+emit(event: string, arg1?, arg2?, arg3?, arg4?): void
+
 // Resizes the game canvas.
 // Also, emits the "resized" (use `listen` to observe this event).
-resize(width: number, height: number): void</code></pre>
+resize(width: number, height: number): void
+
+// Sets the scale of the game's delta time (dt).
+// By default is equal to 1.
+// Values higher than 1 increase the speed of time,
+// while values smaller than 1 decrease it.
+// A value of 0 freezes time (equivalent to pausing).
+timescale(value: number): void
+
+// Sets the target FPS at runtime
+setfps(value: number): void</code></pre>
 
       <h2><a id="advanced">Playground Features</a></h2>
 
