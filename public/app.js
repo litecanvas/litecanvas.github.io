@@ -152,22 +152,21 @@ Occurred while linting ${Z.filename}`,F("An error occurred while traversing"),F(
 Rule: "${Fe.ruleId}"`),Fe}return f({directives:Te.disableDirectives,disableFixes:Z.disableFixes,problems:$e.concat(Te.problems).concat(ue).sort((Fe,Oe)=>Fe.line-Oe.line||Fe.column-Oe.column),reportUnusedDisableDirectives:Z.reportUnusedDisableDirectives,ruleFilter:Z.ruleFilter,configuredRules:Be})}_verifyWithConfigArray(X,ne,ee){F("With ConfigArray: %s",ee.filename),xt.get(this).lastConfigArray=ne;let oe=ne.extractConfig(ee.filename),ce=oe.processor&&ne.pluginProcessors.get(oe.processor);if(ce){F("Apply the processor: %o",oe.processor);let{preprocess:Z,postprocess:J,supportsAutofix:ie}=ce,de=ee.disableFixes||!ie;return this._verifyWithProcessor(X,oe,{...ee,disableFixes:de,postprocess:J,preprocess:Z},ne)}return this._verifyWithoutProcessors(X,oe,ee)}_verifyWithFlatConfigArray(X,ne,ee,oe=!1){F("With flat config: %s",ee.filename);let ce=ee.filename||"__placeholder__.js";xt.get(this).lastConfigArray=ne;let Z=ne.getConfig(ce);if(!Z)return[{ruleId:null,severity:1,message:`No matching configuration found for ${ce}.`,line:0,column:0,nodeType:null}];if(Z.processor){F("Apply the processor: %o",Z.processor);let{preprocess:J,postprocess:ie,supportsAutofix:de}=Z.processor,Ce=ee.disableFixes||!de;return this._verifyWithFlatConfigArrayAndProcessor(X,Z,{...ee,filename:ce,disableFixes:Ce,postprocess:ie,preprocess:J},ne)}return oe&&(ee.preprocess||ee.postprocess)?this._verifyWithFlatConfigArrayAndProcessor(X,Z,ee):this._verifyWithFlatConfigArrayAndWithoutProcessors(X,Z,ee)}_verifyWithProcessor(X,ne,ee,oe){let ce=ee.filename||"<input>",Z=qe(ce),J=ee.physicalFilename||Z,ie=vt(X),de=ee.preprocess||($e=>[$e]),Ce=ee.postprocess||($e=>$e.flat()),N=ee.filterCodeBlock||($e=>$e.endsWith(".js")),ue=r.extname(ce),Te;try{Te=de(ie,Z)}catch($e){let Fe=`Preprocessing error: ${$e.message.replace(/^line \d+:/iu,"").trim()}`;return F(`%s
 %s`,Fe,$e.stack),[{ruleId:null,fatal:!0,severity:2,message:Fe,line:$e.lineNumber,column:$e.column,nodeType:null}]}let Be=Te.map(($e,Fe)=>{if(F("A code block was found: %o",$e.filename||"(unnamed)"),typeof $e=="string")return this._verifyWithoutProcessors($e,ne,ee);let Oe=$e.text,Ie=r.join(ce,`${Fe}_${$e.filename}`);return N(Ie,Oe)?oe&&(ie!==Oe||r.extname(Ie)!==ue)?(F("Resolving configuration again because the file content or extension was changed."),this._verifyWithConfigArray(Oe,oe,{...ee,filename:Ie,physicalFilename:J})):this._verifyWithoutProcessors(Oe,ne,{...ee,filename:Ie,physicalFilename:J}):(F("This code block was skipped."),[])});return Ce(Be,Z)}_distinguishSuppressedMessages(X){let ne=[],ee=[],oe=xt.get(this);for(let ce of X)ce.suppressions?ee.push(ce):ne.push(ce);return oe.lastSuppressedMessages=ee,ne}getSourceCode(){return xt.get(this).lastSourceCode}getTimes(){return xt.get(this).times??{passes:[]}}getFixPassCount(){return xt.get(this).fixPasses??0}getSuppressedMessages(){return xt.get(this).lastSuppressedMessages}defineRule(X,ne){Ye(this),xt.get(this).ruleMap.define(X,ne)}defineRules(X){Ye(this),Object.getOwnPropertyNames(X).forEach(ne=>{this.defineRule(ne,X[ne])})}getRules(){Ye(this);let{lastConfigArray:X,ruleMap:ne}=xt.get(this);return new Map(function*(){yield*ne,X&&(yield*X.pluginRules)}())}defineParser(X,ne){Ye(this),xt.get(this).parserMap.set(X,ne)}verifyAndFix(X,ne,ee){let oe,ce,Z=!1,J=0,ie=X,de=ee&&ee.filename||`${X.slice(0,10)}...`,Ce=ee&&typeof ee.fix<"u"?ee.fix:!0,N=ee?.stats,ue=xt.get(this);N&&(delete ue.times,ue.fixPasses=0);do{J++;let Te;N&&(Te=E()),F(`Linting code for ${de} (pass ${J})`),oe=this.verify(ie,ne,ee),F(`Generating fixed text for ${de} (pass ${J})`);let Be;if(N&&(Be=E()),ce=x.applyFixes(ie,oe,Ce),N)if(ce.fixed){let $e=k(Be);ke($e,{type:"fix"},ue),ue.fixPasses++}else ke(0,{type:"fix"},ue);if(oe.length===1&&oe[0].fatal)break;if(Z=Z||ce.fixed,ie=ce.output,N){Te=k(Te);let $e=ue.times.passes.length-1;ue.times.passes[$e].total=Te}}while(ce.fixed&&J<T);if(ce.fixed){let Te;N&&(Te=E()),ce.messages=this.verify(ie,ne,ee),N&&(ke(0,{type:"fix"},ue),ue.times.passes.at(-1).total=k(Te))}return ce.fixed=Z,ce.output=ie,ce}}return lO={Linter:Kt,getLinterInternalSlots(De){return xt.get(De)}},lO}function xX(){return vX().Linter}var kL=X6.Linter=xX();var AL=editorSetup=()=>[zC(),ZC(),NC(),Iw(),RC(),LC(),Vt.allowMultipleSelections.of(!0),pw(),xu(gw,{fallback:!0}),xw(),$k(),jk(),jC(),qC(),MC(),gk(),_s.of([...ok,...xk,...Bw])];function Hn(r){r.hidden=!1,r.style.display=""}function Vs(r){r.hidden=!0,r.style.display="none"}function An(r,e=document){return e.querySelector(r)}var PL=()=>`// Welcome to litecanvas playground!
 // Learn more tapping on the question mark (?) above.
-// Also, join our discord community:
-// https://discord.com/invite/r2c3rGsvH3
+// Our discord: https://discord.com/invite/r2c3rGsvH3
 litecanvas()
 
+// this function run once
+// before the game starts
 function init() {
-  // this function run once
-  // before the game starts
   bg = 0
   color = 3
   radius = 32
   posx = CENTERX
   posy = CENTERY
+  speed = HEIGHT
 }
 
-// this function detect taps/clicks
-// and changes the circle position
+// this function detect touches/clicks
 function tapped(x, y) {
   posx = x
   posy = y
@@ -175,8 +174,10 @@ function tapped(x, y) {
 
 // this function controls the game logic
 function update(dt) {
-  // make the circle falls 100 pixels per second
-  posy += 100 * dt
+  posy += speed * dt
+  if (posy > HEIGHT - radius) {
+    posy = HEIGHT - radius
+  }
 }
 
 // this function render the game scene

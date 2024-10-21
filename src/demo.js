@@ -1,22 +1,21 @@
 export default () =>
   `// Welcome to litecanvas playground!
 // Learn more tapping on the question mark (?) above.
-// Also, join our discord community:
-// https://discord.com/invite/r2c3rGsvH3
+// Our discord: https://discord.com/invite/r2c3rGsvH3
 litecanvas()
 
+// this function run once
+// before the game starts
 function init() {
-  // this function run once
-  // before the game starts
   bg = 0
   color = 3
   radius = 32
   posx = CENTERX
   posy = CENTERY
+  speed = HEIGHT
 }
 
-// this function detect taps/clicks
-// and changes the circle position
+// this function detect touches/clicks
 function tapped(x, y) {
   posx = x
   posy = y
@@ -24,12 +23,15 @@ function tapped(x, y) {
 
 // this function controls the game logic
 function update(dt) {
-  // make the circle falls 100 pixels per second
-  posy += 100 * dt
+  posy += speed * dt
+  if (posy > HEIGHT - radius) {
+    posy = HEIGHT - radius
+  }
 }
 
 // this function render the game scene
 function draw() {
   cls(bg) // clear the screen
   circfill(posx, posy, radius, color) // draw a circle
-}\n`;
+}
+`;
