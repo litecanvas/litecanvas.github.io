@@ -1,5 +1,5 @@
 const cacheName = "luizbills.litecanvas-editor-v1";
-const version = "2.25.1";
+const version = "2.26.0";
 
 const precacheResources = [
   "/",
@@ -14,8 +14,9 @@ const precacheResources = [
   "/prism/prism-typescript.js",
   "/prism/prism-autolinker.js",
   "/icons/favicon.ico",
-  "/icons/icon.png",
-  "/icons/icon-nobg.png",
+  "/icons/icon-128.png",
+  "/icons/icon-256.png",
+  "/icons/icon-512.png",
   "/images/colors.png",
   "/images/sprites.png",
   "/images/badges/discord.png",
