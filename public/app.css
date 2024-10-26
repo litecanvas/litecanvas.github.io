@@ -89,6 +89,10 @@ svg {
   color: #101820;
 }
 
+.top-bar button#hide-editor.active {
+  color: #606060;
+}
+
 .editor {
   display: flex;
   flex-flow: row wrap;

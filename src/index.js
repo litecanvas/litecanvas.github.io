@@ -64,6 +64,7 @@ const playButton = $("#play");
 const stopButton = $("#stop");
 const shareButton = $("#share");
 const copyButton = $("#copy");
+const hideEditor = $("#hide-editor");
 /** @type {HTMLIFrameElement} */
 const iframe = $("#frame");
 const iframeOverlay = $("#frame-overlay");
@@ -102,11 +103,12 @@ shareButton.addEventListener("click", (evt) => {
       "Your browser not support this feature. Consider installing Firefox or Chrome."
     );
   }
-  const code = codeEditor.state.doc.toString();
+  const code = window.codeEditor.state.doc.toString();
   const url =
     location.origin + "?c=" + encodeURIComponent(compressString(code));
 
-  if (url.length > 2048) {
+  if (url.length > 2000) {
+    console.log("Your too long URL:", url);
     return alert("Code too long to encode in URL");
   }
 
@@ -127,7 +129,7 @@ copyButton.addEventListener("click", (evt) => {
       "Your browser not support this feature. Consider installing Firefox or Chrome."
     );
   }
-  const code = codeEditor.state.doc.toString();
+  const code = window.codeEditor.state.doc.toString();
 
   navigator.clipboard.writeText(code).then(
     () => {},
@@ -138,12 +140,23 @@ copyButton.addEventListener("click", (evt) => {
   );
 });
 
+hideEditor.addEventListener("click", (evt) => {
+  if (code.hasAttribute("hidden")) {
+    code.removeAttribute("hidden");
+    hideEditor.classList.remove("active");
+  } else {
+    code.setAttribute("hidden", true);
+    hideEditor.classList.add("active");
+  }
+  iframe.focus();
+});
+
 function runCode() {
   iframe.src = "preview.html"; // reload the iframe
 }
 
 iframe.addEventListener("load", () => {
-  const code = codeEditor.state.doc.toString();
+  const code = window.codeEditor.state.doc.toString();
   iframe.contentDocument.querySelector("#code").innerHTML = code;
 });
 
@@ -220,13 +233,14 @@ iframeOverlay.onmousedown = iframeOverlay.ontouchstart = (evt) => {
   if (evt.target === iframeOverlay) {
     hide(iframeOverlay);
     iframe.focus();
-    return;
   }
 };
 
 window.addEventListener("click", (evt) => {
   if (evt.target === iframeOverlay) return;
   if (evt.target === playButton) return;
+  if (evt.target === hideEditor) return;
+
   show(iframeOverlay);
   iframe.blur();
 });
@@ -291,7 +305,10 @@ if (config.autosave) {
 }
 
 function saveCode() {
-  localStorage.setItem("litecanvas_code", codeEditor.state.doc.toString());
+  localStorage.setItem(
+    "litecanvas_code",
+    window.codeEditor.state.doc.toString()
+  );
 }
 
 function loadFromStorage() {
@@ -303,7 +320,7 @@ function resetStorage() {
 }
 
 if (isMobile) {
-  mobileBar(codeEditor);
+  mobileBar(window.codeEditor);
 }
 
 window.isUpdateAvailable = new Promise(function (resolve) {
@@ -353,6 +370,7 @@ window.isUpdateAvailable.then((isAvailable) => {
 
 if (!smallScreen) {
   show(iframeOverlay);
+  show(hideEditor);
   if (autoplay) runCode();
 } else {
   show(playButton);
