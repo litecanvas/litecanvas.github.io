@@ -607,25 +607,11 @@ colrect(x1, y1, w1, h1, x2, y2, w2, h2): boolean
 // All arguments are required and must be numbers.
 colcirc(x1, y1, r1, x2, y2, r2): boolean</code></pre>
 
-      <h2><a id="plugin-api">Engine API</a></h2>
+      <h2><a id="engine-api">Engine API</a></h2>
 
       <pre><code class="language-typescript">// Loads a plugin.
 // see: https://github.com/litecanvas/game-engine/blob/main/samples/plugin-basics/plugin-basics.js
 use(callback): void
-
-// Create or update an global variable (see above WIDTH, HEIGHT, etc)
-setvar(name: string, value: any): void
-
-// Gets the color value given its index.
-// example: getcolor(0) returns "#111"
-getcolor(index: number): string
-
-// Registers a game event callback and
-// returns a function that unregister this callback.
-listen(event: string, callback: Function): Function
-
-// Triggers a game event and call its registered callbacks.
-emit(event: string, arg1?, arg2?, arg3?, arg4?): void
 
 // Resizes the game canvas.
 // Also, emits the "resized" (use `listen` to observe this event).
@@ -639,7 +625,24 @@ resize(width: number, height: number): void
 timescale(value: number): void
 
 // Sets the target FPS at runtime
-setfps(value: number): void</code></pre>
+setfps(value: number): void
+
+// the following functions are most used by plugins...
+
+// Create or update an global variables (and instance properties)
+setvar(name: string, value: any): void
+
+// Gets the color value given its index.
+// example: getcolor(0) returns "#111"
+getcolor(index: number): string
+
+// Registers a game event callback and
+// returns a function that unregister this callback.
+listen(event: string, callback: Function): Function
+
+// Triggers a game event and call its registered callbacks.
+emit(event: string, arg1?, arg2?, arg3?, arg4?): void
+</code></pre>
 
       <h2><a id="advanced">Playground Features</a></h2>
 
