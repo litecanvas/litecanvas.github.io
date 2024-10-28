@@ -217,18 +217,11 @@ export default function customCompletions(context) {
         info: "set or get the canvas context",
       },
       {
-        label: "cliprect",
+        label: "clip",
         type: "function",
-        apply: "cliprect(",
-        detail: "(x, y, width, height)",
-        info: "create a rectagular clipping region",
-      },
-      {
-        label: "clipcirc",
-        type: "function",
-        apply: "clipcirc(",
-        detail: "(x, y, radius)",
-        info: "create a circular clipping region",
+        apply: "clip(",
+        detail: "(path)",
+        info: "create a clipping region based in a Path2D instance",
       },
       {
         label: "sfx",

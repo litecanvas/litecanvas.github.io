@@ -463,14 +463,14 @@ fill(color: number, path?: Path2D): void
 // see: https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/stroke
 stroke(color: number, path?: Path2D): void
 
-// Create (or clone) a Path2D instance
-// see: https://developer.mozilla.org/en-US/docs/Web/API/Path2D/Path2D
-path(arg?: Path2D | string): Path2D
-
-// Create a clipping region
+// Create a clipping region based in a Path2D instance
 // see: https://github.com/litecanvas/game-engine/blob/main/samples/clip/clip.js
 // note: before call `clip()` you must save the context using `push()` and `pop()`
-clipcirc(path: Path2D)</code></pre>
+clip(path: Path2D)
+
+// Create (or clone) a Path2D instance
+// see: https://developer.mozilla.org/en-US/docs/Web/API/Path2D/Path2D
+path(arg?: Path2D | string): Path2D</code></pre>
 
       <h2><a id="sound">Functions for Sound</a></h2>
 
