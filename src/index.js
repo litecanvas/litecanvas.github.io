@@ -67,7 +67,6 @@ const copyButton = $("#copy");
 const hideEditor = $("#hide-editor");
 /** @type {HTMLIFrameElement} */
 const iframe = $("#frame");
-const iframeOverlay = $("#frame-overlay");
 
 const smallScreen = innerWidth < 1024;
 const isMobile = navigator.userAgent.match(/android|iphone|ipad/i) !== null;
@@ -80,9 +79,6 @@ playButton.addEventListener("click", () => {
   runCode();
   if (smallScreen) {
     iframe.focus();
-    hide(iframeOverlay);
-  } else {
-    show(iframeOverlay);
   }
 });
 
@@ -224,31 +220,10 @@ window.codeEditor = new EditorView({
   parent: $(".code .cm-container"),
 });
 
-iframeOverlay.onmousedown = iframeOverlay.ontouchstart = (evt) => {
-  evt.preventDefault();
-
-  if (evt.target === iframe) return;
-  if (evt.target === playButton) return;
-
-  if (evt.target === iframeOverlay) {
-    hide(iframeOverlay);
-    iframe.focus();
-  }
-};
-
 window.addEventListener("click", (evt) => {
-  if (evt.target === iframeOverlay) return;
   if (evt.target === playButton) return;
   if (evt.target === hideEditor) return;
-
-  show(iframeOverlay);
   iframe.blur();
-});
-
-window.addEventListener("blur", (evt) => {
-  if (document.body !== document.activeElement) {
-    show(iframeOverlay);
-  }
 });
 
 function compressString(str) {
@@ -369,7 +344,6 @@ window.isUpdateAvailable.then((isAvailable) => {
 });
 
 if (!smallScreen) {
-  show(iframeOverlay);
   show(hideEditor);
   if (autoplay) runCode();
 } else {
