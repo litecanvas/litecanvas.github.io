@@ -226,6 +226,10 @@ window.addEventListener("click", (evt) => {
   iframe.blur();
 });
 
+window.addEventListener("blur", (evt) => {
+  iframe.blur();
+});
+
 function compressString(str) {
   return btoa(String.fromCharCode.apply(null, Array.from(pako.deflate(str))));
 }
