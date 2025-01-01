@@ -1,5 +1,5 @@
 <!-- Inspired by https://github.com/xem/miniPixelArt -->
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -207,10 +207,11 @@
       >
       <button id="clearButton">clear</button>
       <button id="exportButton">export</button>
+      <button id="importButton">import</button>
       <button id="downloadButton">download</button>
       <textarea
         id="exported"
-        rows="10"
+        rows="20"
         readonly
         onclick="this.select()"
       ></textarea>
@@ -436,7 +437,10 @@
           return -1;
         }
         const color = pixels[x][y] == null ? -1 : Number(pixels[x][y]);
-        return color >= 0 ? color : -1;
+        if (Number.isNaN(color) || !Number.isFinite(color) || color < 0) {
+          return -1;
+        }
+        return color;
       }
 
       /**
@@ -485,7 +489,7 @@
       clearButton.onclick = () => {
         if (
           confirm(
-            "Are you sure you want to erase the canvas? This action cannot be undone."
+            "Are you sure you want to erase the canvas? This action cannot be undone.",
           )
         ) {
           pixels.length = 0;
@@ -498,8 +502,9 @@
       // Export
       exportButton.onclick = function () {
         let output = "";
+        const _pixels = [];
 
-        output += `paint(${W}, ${H}, [\n`;
+        output += `const renameThisVar = paint(${W}, ${H}, [\n`;
 
         for (let y = 0; y < H; y++) {
           output += "  '";
@@ -507,14 +512,70 @@
             let color = getPixel(x, y);
             if (-1 === ~~color) color = ".";
             output += color >= 0 ? (color % colors.length).toString(16) : color;
+            _pixels.push(color === "." ? "#" : color);
           }
           output += "',\n";
         }
 
         output += "], {\n  scale: 1\n})";
 
+        const importCode = `Art Code: ${W}x${H}/${_pixels.join(" ")}`;
+        output = `// ${importCode}\n` + output;
+
         exported.value = output;
+
         copy.disabled = false;
+      };
+
+      // Import
+      importButton.onclick = (ev) => {
+        const importCode = prompt("Paste the Art Code here:");
+        let [_size, _pixels] = importCode.replace("//", "").split("/");
+
+        // validate the dimensions
+        _size = _size
+          .replace(/[^0-9]/g, " ")
+          .trim()
+          .split(" ");
+
+        if (_size.length !== 2) {
+          alert("Invalid size: " + _size.join(" x "));
+          console.error("Invalid art size: " + _size);
+          return;
+        } else {
+          _size[0] = _size[0] < 1 ? 8 : ~~_size[0];
+          _size[1] = _size[1] < 1 ? 8 : ~~_size[1];
+        }
+
+        // validate the pixels
+        _pixels = _pixels.trim().replace(/\#/g, ".").split(" ");
+
+        if (_pixels.length !== _size[0] * _size[1]) {
+          alert("Invalid amount of pixels");
+          return;
+        }
+
+        console.log(
+          "importing... size:",
+          _size.join("x"),
+          "colors:",
+          _pixels.join(" "),
+        );
+
+        // reset the canvas
+        width.value = _size[0];
+        height.value = _size[1];
+        pixels.length = 0;
+        prepare();
+
+        // set the pixels
+        for (let y = 0; y < H; y++) {
+          for (let x = 0; x < W; x++) {
+            const i = y * H + x;
+            const color = _pixels[i];
+            setPixel(x, y, "." === color ? null : ~~color);
+          }
+        }
       };
 
       // Download
@@ -536,7 +597,7 @@
       copy.onclick = () => {
         if (!navigator.clipboard) {
           return alert(
-            "Your browser not support this feature. Consider installing Firefox or Chrome."
+            "Your browser not support this feature. Consider installing Firefox or Chrome.",
           );
         }
         if (!exported.value) return;
@@ -548,7 +609,7 @@
           (err) => {
             alert("Error: Unable to generate your shareable url!");
             console.error("Error on copying text to clipboard:", err);
-          }
+          },
         );
       };
 
@@ -573,7 +634,7 @@
         const el = document.createElement("label");
         el.dataset.color = i;
         el.innerHTML = `<span style="background:${color}">${i.toString(
-          16
+          16,
         )}</span>`;
         palette.appendChild(el);
         el.title = "Select color #" + i;
