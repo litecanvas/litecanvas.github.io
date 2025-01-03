@@ -1,11 +1,10 @@
 export default () =>
   `// Welcome to litecanvas playground!
 // Learn more tapping on the question mark (?) above.
-// Our discord: https://discord.com/invite/r2c3rGsvH3
+// Join our discord: https://discord.com/invite/r2c3rGsvH3
 litecanvas()
 
-// this function run once
-// before the game starts
+// this function run once before the game starts
 function init() {
   bg = 0
   color = 3
