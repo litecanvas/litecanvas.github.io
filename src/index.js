@@ -31,6 +31,7 @@ if (url.searchParams.get("reset") !== null) {
 }
 
 const autoplay = !["0", "false"].includes(url.searchParams.get("autoplay"));
+let blank = url.searchParams.get("blank") != null;
 
 let codeFromURL = url.searchParams.get("c");
 if (codeFromURL !== null) {
@@ -40,6 +41,7 @@ if (codeFromURL !== null) {
   if (codeFromURL) {
     config.autosave = false;
     $("#changing-shared-code").style.display = "";
+    blank = false;
   }
 }
 
@@ -96,7 +98,7 @@ function stopGame(evt) {
 shareButton.addEventListener("click", (evt) => {
   if (!navigator.clipboard) {
     return alert(
-      "Your browser not support this feature. Consider installing Firefox or Chrome."
+      "Your browser not support this feature. Consider installing Firefox or Chrome.",
     );
   }
   const code = window.codeEditor.state.doc.toString();
@@ -115,14 +117,14 @@ shareButton.addEventListener("click", (evt) => {
     (err) => {
       alert("Error: Unable to generate your shareable url!");
       console.error("Error on copying text to clipboard:", err);
-    }
+    },
   );
 });
 
 copyButton.addEventListener("click", (evt) => {
   if (!navigator.clipboard) {
     return alert(
-      "Your browser not support this feature. Consider installing Firefox or Chrome."
+      "Your browser not support this feature. Consider installing Firefox or Chrome.",
     );
   }
   const code = window.codeEditor.state.doc.toString();
@@ -132,7 +134,7 @@ copyButton.addEventListener("click", (evt) => {
     (err) => {
       alert("Error: Unable to generate your shareable url!");
       console.error("Error on copying text to clipboard:", err);
-    }
+    },
   );
 });
 
@@ -172,7 +174,7 @@ if (!smallScreen) {
 }
 
 const state = EditorState.create({
-  doc: codeFromURL || loadFromStorage() || demo(),
+  doc: codeFromURL || (blank ? "" : loadFromStorage() || demo()),
   extensions: [
     editorSetup(),
     // Ctrl+S to run the code
@@ -197,7 +199,7 @@ const state = EditorState.create({
           sourceType: "script",
         },
         rules: {},
-      })
+      }),
     ),
     javascriptLanguage.data.of({
       autocomplete: customCompletions,
@@ -251,16 +253,16 @@ function decompressString(str) {
         new Uint8Array(
           atob(str)
             .split("")
-            .map((c) => c.charCodeAt(0))
+            .map((c) => c.charCodeAt(0)),
         ),
-        { to: "string" }
+        { to: "string" },
       );
       console.log("Playground url decoded successfully!");
       break;
     } catch (e) {
       console.error(
         `Failed decode the playground url (${attempts + 1}/2). Error:`,
-        e
+        e,
       );
       console.log("Trying to decode again (fixing some characters)...");
       code = null;
@@ -286,7 +288,7 @@ if (config.autosave) {
 function saveCode() {
   localStorage.setItem(
     "litecanvas_code",
-    window.codeEditor.state.doc.toString()
+    window.codeEditor.state.doc.toString(),
   );
 }
 
