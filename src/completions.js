@@ -473,6 +473,12 @@ export default function customCompletions(context) {
         apply: "setfps(",
         detail: "(value)",
       },
+      {
+        label: "quit",
+        type: "function",
+        apply: "quit()",
+        detail: "shutdown a Litecanvas' instance",
+      },
 
       // asset loader plugin
       {
