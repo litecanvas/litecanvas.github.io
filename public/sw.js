@@ -1,5 +1,5 @@
 const cacheName = "luizbills.litecanvas-editor-v1";
-const version = "2.43.0";
+const version = "2.44.0";
 
 const precacheResources = [
   "/",
@@ -9,6 +9,7 @@ const precacheResources = [
   "/app.css",
   "/app.js",
   "/litecanvas.js",
+  "/stats.js",
   "/prism/prism.css",
   "/prism/prism.js",
   "/prism/prism-typescript.js",
@@ -28,7 +29,7 @@ const precacheResources = [
 
 self.addEventListener("install", (event) => {
   event.waitUntil(
-    caches.open(cacheName).then((cache) => cache.addAll(precacheResources)),
+    caches.open(cacheName).then((cache) => cache.addAll(precacheResources))
   );
 });
 
@@ -41,7 +42,7 @@ self.addEventListener("fetch", (event) => {
           return cachedResponse;
         }
         return fetch(event.request);
-      }),
+      })
   );
 });
 

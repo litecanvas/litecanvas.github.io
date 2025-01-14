@@ -14,7 +14,6 @@ export default function customCompletions(context) {
         type: "variable",
         info: "seconds since the game started",
       },
-      { label: "FPS", type: "variable", info: "frames per second" },
       {
         label: "CENTERX",
         type: "variable",
