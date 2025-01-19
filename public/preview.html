@@ -78,26 +78,19 @@
 
     <script>
       ((lc) => {
-        window.litecanvas = (config = {}) => {
-          if (!config.loop) {
-            let _init = globalThis.init;
-            globalThis.init = (instance) => {
-              instance.use(pluginAssetLoader);
-              _init && _init();
-            };
-          } else if (config.loop.init) {
-            let _init = config.loop.init;
-            console.log(config);
-            config.loop.init = (instance) => {
-              instance.use(pluginAssetLoader);
-              _init && _init();
-            };
-          }
-
-          return lc(config);
+        window.litecanvas = (settings = {}) => {
+          const loop =
+            settings.loop && settings.loop.init ? settings.loop : globalThis;
+          const _init = loop.init;
+          loop.init = (instance) => {
+            instance.use(pluginAssetLoader);
+            if (_init) _init(instance);
+          };
+          return lc(settings);
         };
       })(window.litecanvas);
 
+      window.printPage = window.print;
       window.print = () => {
         console.log("warning: print() is no longer alias for text()");
       };

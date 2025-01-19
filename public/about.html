@@ -612,9 +612,20 @@ colcirc(x1, y1, r1, x2, y2, r2): boolean</code></pre>
 // see: https://github.com/litecanvas/game-engine/blob/main/samples/plugin-basics/plugin-basics.js
 use(callback): void
 
+// Registers a game event callback and
+// returns a function that unregister this callback.
+listen(event: string, callback: Function): Function
+
+// Triggers a game event and call its registered callbacks.
+emit(event: string, arg1?, arg2?, arg3?, arg4?): void
+
 // Resizes the game canvas.
 // Also, emits the "resized" (use `listen` to observe this event).
 resize(width: number, height: number): void
+
+// shutdown the engine
+// also emits the "quit" event
+quit(): void
 
 // Sets the scale of the game's delta time (dt).
 // By default is equal to 1.
@@ -635,12 +646,6 @@ setvar(name: string, value: any): void
 // example: getcolor(0) returns "#111"
 getcolor(index: number): string
 
-// Registers a game event callback and
-// returns a function that unregister this callback.
-listen(event: string, callback: Function): Function
-
-// Triggers a game event and call its registered callbacks.
-emit(event: string, arg1?, arg2?, arg3?, arg4?): void
 </code></pre>
 
       <h2><a id="advanced">Playground Features</a></h2>
