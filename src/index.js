@@ -67,8 +67,6 @@ const stopButton = $("#stop");
 const shareButton = $("#share");
 const copyButton = $("#copy");
 const hideEditor = $("#hide-editor");
-/** @type {HTMLIFrameElement} */
-const iframe = $("#frame");
 
 const smallScreen = innerWidth < 1024;
 const isMobile = navigator.userAgent.match(/android|iphone|ipad/i) !== null;
@@ -80,7 +78,7 @@ playButton.addEventListener("click", () => {
   show(stopButton);
   runCode();
   if (smallScreen) {
-    iframe.focus();
+    getIframe().focus();
   }
 });
 
@@ -92,13 +90,13 @@ function stopGame(evt) {
   hide(game);
   show(playButton);
   hide(stopButton);
-  iframe.contentDocument.body.innerHTML = "";
+  getIframe().remove();
 }
 
 shareButton.addEventListener("click", (evt) => {
   if (!navigator.clipboard) {
     return alert(
-      "Your browser not support this feature. Consider installing Firefox or Chrome.",
+      "Your browser not support this feature. Consider installing Firefox or Chrome."
     );
   }
   const code = window.codeEditor.state.doc.toString();
@@ -117,14 +115,14 @@ shareButton.addEventListener("click", (evt) => {
     (err) => {
       alert("Error: Unable to generate your shareable url!");
       console.error("Error on copying text to clipboard:", err);
-    },
+    }
   );
 });
 
 copyButton.addEventListener("click", (evt) => {
   if (!navigator.clipboard) {
     return alert(
-      "Your browser not support this feature. Consider installing Firefox or Chrome.",
+      "Your browser not support this feature. Consider installing Firefox or Chrome."
     );
   }
   const code = window.codeEditor.state.doc.toString();
@@ -134,7 +132,7 @@ copyButton.addEventListener("click", (evt) => {
     (err) => {
       alert("Error: Unable to generate your shareable url!");
       console.error("Error on copying text to clipboard:", err);
-    },
+    }
   );
 });
 
@@ -146,17 +144,36 @@ hideEditor.addEventListener("click", (evt) => {
     code.setAttribute("hidden", true);
     hideEditor.classList.add("active");
   }
-  iframe.focus();
+  getIframe().focus();
 });
 
 function runCode() {
+  const iframe = getIframe();
   iframe.src = "preview.html"; // reload the iframe
+  if (!iframe.onload) {
+    iframe.onload = loadCode;
+  }
 }
 
-iframe.addEventListener("load", () => {
+function loadCode() {
   const code = window.codeEditor.state.doc.toString();
-  iframe.contentDocument.querySelector("#code").innerHTML = code;
-});
+  getIframe().contentDocument.querySelector("#code").innerHTML = code;
+}
+
+/**
+ * @returns {HTMLIFrameElement}
+ */
+function getIframe() {
+  const ID = "frame";
+  let iframe = $("#" + ID);
+  if (!iframe) {
+    iframe = document.createElement("iframe");
+    iframe.id = ID;
+    iframe.setAttribute("frameborder", "0");
+    game.appendChild(iframe);
+  }
+  return iframe;
+}
 
 if (!smallScreen) {
   let updateTimeout = 0;
@@ -199,7 +216,7 @@ const state = EditorState.create({
           sourceType: "script",
         },
         rules: {},
-      }),
+      })
     ),
     javascriptLanguage.data.of({
       autocomplete: customCompletions,
@@ -225,11 +242,11 @@ window.codeEditor = new EditorView({
 window.addEventListener("click", (evt) => {
   if (evt.target === playButton) return;
   if (evt.target === hideEditor) return;
-  iframe.blur();
+  getIframe().blur();
 });
 
 window.addEventListener("blur", (evt) => {
-  iframe.blur();
+  getIframe().blur();
 });
 
 function compressString(str) {
@@ -253,16 +270,16 @@ function decompressString(str) {
         new Uint8Array(
           atob(str)
             .split("")
-            .map((c) => c.charCodeAt(0)),
+            .map((c) => c.charCodeAt(0))
         ),
-        { to: "string" },
+        { to: "string" }
       );
       console.log("Playground url decoded successfully!");
       break;
     } catch (e) {
       console.error(
         `Failed decode the playground url (${attempts + 1}/2). Error:`,
-        e,
+        e
       );
       console.log("Trying to decode again (fixing some characters)...");
       code = null;
@@ -288,7 +305,7 @@ if (config.autosave) {
 function saveCode() {
   localStorage.setItem(
     "litecanvas_code",
-    window.codeEditor.state.doc.toString(),
+    window.codeEditor.state.doc.toString()
   );
 }
 

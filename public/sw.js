@@ -1,5 +1,5 @@
 const cacheName = "luizbills.litecanvas-editor-v1";
-const version = "2.45.0";
+const version = "2.45.1";
 
 const precacheResources = [
   "/",
@@ -9,7 +9,6 @@ const precacheResources = [
   "/app.css",
   "/app.js",
   "/litecanvas.js",
-  "/stats.js",
   "/prism/prism.css",
   "/prism/prism.js",
   "/prism/prism-typescript.js",
