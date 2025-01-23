@@ -6,6 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="color-scheme" content="dark light" />
     <title>Litecanvas Cheatsheet</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300..700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="prism/prism.css" />
     <link rel="icon" href="icons/favicon.ico" />
     <style>
@@ -77,6 +80,14 @@
       #social img {
         height: 100%;
         width: auto;
+      }
+      code {
+        font-family: "Fira Code", monospace;
+        font-optical-sizing: auto;
+        font-weight: 400;
+        font-style: normal;
+        font-size: 90%;
+        font-variant-ligatures: none;
       }
       @media print {
         html {
@@ -166,8 +177,6 @@
         <button class="no-print" onclick="window.print()">Print PDF</button>
       </p>
 
-
-
       <nav class="no-print">
         <strong>API</strong>: <a href="#colors">Colors</a> |
         <a href="#settings">Configuration</a> |
@@ -179,6 +188,29 @@
         <a href="#engine-api">Engine</a>
       </nav>
 
+      <h2>Hello World</h2>
+
+      <pre><code class="language-html">&lt;!-- create a text file named "index.html" and open it your browser --&gt;
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+  &lt;body&gt;
+    &lt;script src=&quot;https://unpkg.com/litecanvas/dist/dist.js&quot;&gt;&lt;/script&gt;
+    &lt;script&gt;
+      // setup the engine
+      litecanvas({
+        loop: { draw }
+      });
+
+      function draw() {
+        // clear the screen with black (color #0)
+        cls(0)
+        // write 'Hello World' in x=0 y=0
+        text(0, 0, 'Hello World')
+      }
+    &lt;/script&gt;
+  &lt;/body&gt;
+&lt;/html&gt;</code></pre>
+
       <h2>Basic boilerplate</h2>
 
       <pre><code class="language-typescript">litecanvas({
@@ -188,17 +220,17 @@
   }
 })
 
-function init() {
+function init(instance) {
   // run once before the game starts
 }
 
 function update(dt) {
   // called at 60 fps by default
-  // note: `dt` is a fixed deltatime (number)
+  // note: `dt` is a fixed deltatime (fps/1000)
 }
 
 function draw() {
-  // use to draw your game graphics
+  // used to draw your graphics
 }
 
 function resized() {
@@ -210,10 +242,10 @@ function tap(x, y, tapId) {
   // called when a tap (click/touch) starts
   // equivalent to "mousedown" and "touchstart" browser events
 
-  // note:
-  //   Use the tapId to handle multiple touches
-  //   Each touch has a unique tapId >= 1
-  //   mouse's tapId always equal to 0 (zero)
+  // Notes:
+  // - `tapId` is used to handle multiple touches
+  // - each touch has a unique `tapId` >= 1
+  // - mouse's `tapId` always equal to 0 (zero)
 }
 
 function untap(x, y, tapId) {
