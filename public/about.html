@@ -190,7 +190,7 @@
 
       <h2>Hello World</h2>
 
-      <pre><code class="language-html">&lt;!-- create a text file named "index.html" and open it your browser --&gt;
+      <pre><code class="language-html" onclick="selectText(this)">&lt;!-- create a text file named "index.html" and open it your browser --&gt;
 &lt;!DOCTYPE html&gt;
 &lt;html&gt;
   &lt;body&gt;
@@ -213,7 +213,7 @@
 
       <h2>Basic boilerplate</h2>
 
-      <pre><code class="language-typescript">litecanvas({
+      <pre><code class="language-typescript" onclick="selectText(this)">litecanvas({
   loop: {
     init, update, draw, resized,
     tap, tapping, untap, tapped
@@ -719,7 +719,7 @@ getcolor(index: number): string
         >
       </p>
 
-      <pre><code class="language-typescript">let sprites;
+      <pre><code class="language-typescript" onclick="selectText(this)">let sprites;
 
 litecanvas({
   pixelart: true
@@ -758,7 +758,7 @@ function draw() {
         >
       </p>
 
-      <pre><code class="language-typescript">litecanvas()
+      <pre><code class="language-typescript" onclick="selectText(this)">litecanvas()
 
 function init() {
   // first, load the font
