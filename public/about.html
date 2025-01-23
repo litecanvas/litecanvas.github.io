@@ -33,10 +33,23 @@
         appearance: none;
         border: 0;
         font-size: 1rem;
-        padding: 0.25em 0.75em;
-        border-radius: 4px;
-        background-color: #1c7ed6;
-        color: #e9ecef;
+        padding: 0;
+        background: transparent;
+      }
+      code, pre {
+        position: relative;
+      }
+      pre code {
+        font-family: "Fira Code", monospace;
+        font-optical-sizing: auto;
+        font-weight: 400;
+        font-style: normal;
+        font-size: 90%;
+        font-variant-ligatures: none;
+      }
+      svg {
+        width: 1em;
+        height: 1em;
       }
       main {
         max-width: 1000px;
@@ -70,7 +83,7 @@
         font-size: 1.2rem;
         line-height: 2;
       }
-      #install code {
+      p code {
         background-color: #444;
         word-break: break-all;
       }
@@ -81,14 +94,35 @@
         height: 100%;
         width: auto;
       }
-      code {
-        font-family: "Fira Code", monospace;
-        font-optical-sizing: auto;
-        font-weight: 400;
-        font-style: normal;
-        font-size: 90%;
-        font-variant-ligatures: none;
+      button.btn-print-pdf {
+        padding: 0.25em 0.75em;
+        border-radius: 4px;
+        background-color: #1c7ed6;
+        color: #e9ecef;
       }
+      .copy {
+        padding-left: 0.5em;
+        cursor: pointer;
+      }
+      .copy button {
+        cursor: pointer;
+        position: relative;
+        top: 3px;
+        color: #d0d0d0;
+      }
+      .copy.copy-pos-absolute {
+        position: absolute;
+        top: 0;
+        right: 0;
+      }
+      .copy.copy-size-bg {
+        top: 0.5em;
+        right: 0.5em;
+      }
+      .copy.copy-size-bg svg {
+        font-size: 1.5em;
+      }
+
       @media print {
         html {
           font-size: 14px;
@@ -102,28 +136,14 @@
           background-color: #e9ecef;
           color: #222;
         }
-        #install code {
-          background-color: #adb5bd;
+        p code {
+          background-color: #d6d6d6;
+        }
+        .copy.copy-inline button {
+          color: #333;
         }
       }
     </style>
-    <script>
-      function selectText(node) {
-        if (document.body.createTextRange) {
-          const range = document.body.createTextRange();
-          range.moveToElementText(node);
-          range.select();
-        } else if (window.getSelection) {
-          const selection = window.getSelection();
-          const range = document.createRange();
-          range.selectNodeContents(node);
-          selection.removeAllRanges();
-          selection.addRange(range);
-        } else {
-          console.warn("Could not select text in node: Unsupported browser.");
-        }
-      }
-    </script>
   </head>
   <body>
     <main>
@@ -159,14 +179,12 @@
 
       <p id="install">
         <strong>CDN</strong>:
-        <code onclick="selectText(this)"
-          >https://unpkg.com/litecanvas/dist/dist.js</code
-        >
+        <code data-copy="inline">https://unpkg.com/litecanvas/dist/dist.js</code>
       </p>
 
       <p id="install">
         <strong>NPM</strong>:
-        <code onclick="selectText(this)">npm install litecanvas</code>
+        <code data-copy="inline">npm install litecanvas</code>
       </p>
 
       <p style="color: #f76707;">
@@ -174,7 +192,7 @@
       </p>
 
       <p>
-        <button class="no-print" onclick="window.print()">Print PDF</button>
+        <button class="btn-print-pdf no-print" onclick="window.print()">Print PDF</button>
       </p>
 
       <nav class="no-print">
@@ -190,8 +208,8 @@
 
       <h2>Hello World</h2>
 
-      <pre><code class="language-html" onclick="selectText(this)">&lt;!-- create a text file named "index.html" and open it your browser --&gt;
-&lt;!DOCTYPE html&gt;
+      <p>Create a text file named <code>index.html</code> and open it your browser.</p>
+      <pre><code class="language-html" data-copy="pos-absolute size-bg">&lt;!DOCTYPE html&gt;
 &lt;html&gt;
   &lt;body&gt;
     &lt;script src=&quot;https://unpkg.com/litecanvas/dist/dist.js&quot;&gt;&lt;/script&gt;
@@ -213,7 +231,7 @@
 
       <h2>Basic boilerplate</h2>
 
-      <pre><code class="language-typescript" onclick="selectText(this)">litecanvas({
+      <pre><code class="language-typescript" data-copy="pos-absolute size-bg">litecanvas({
   loop: {
     init, update, draw, resized,
     tap, tapping, untap, tapped
@@ -719,7 +737,7 @@ getcolor(index: number): string
         >
       </p>
 
-      <pre><code class="language-typescript" onclick="selectText(this)">let sprites;
+      <pre><code class="language-typescript" data-copy="size-bg pos-absolute">let sprites;
 
 litecanvas({
   pixelart: true
@@ -758,7 +776,7 @@ function draw() {
         >
       </p>
 
-      <pre><code class="language-typescript" onclick="selectText(this)">litecanvas()
+      <pre><code class="language-typescript" data-copy="size-bg pos-absolute">litecanvas()
 
 function init() {
   // first, load the font
@@ -803,5 +821,70 @@ function draw() {
     <script src="prism/prism.js"></script>
     <script src="prism/prism-typescript.js"></script>
     <script src="prism/prism-autolinker.js"></script>
+
+    <script>
+      for (const element of document.querySelectorAll('[data-copy]')) {
+        const data = element.dataset.copy || ''
+        const wrapper = document.createElement('span')
+
+        wrapper.classList.add('copy')
+        for (const opt of data.split(' ')) {
+          if (!opt) continue;
+          wrapper.classList.add('copy-' + opt)
+        }
+        const inline = wrapper.classList.contains('copy-inline')
+        const button = document.createElement('button')
+        button.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18" stroke-width="1.5" stroke="currentColor" class="size-6"><path stroke-linecap="round" stroke-linejoin="round" d="M13 13h2a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2v2m6 12H3a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2z" /></svg>`;
+        button.setAttribute('class', 'copy-button')
+
+        wrapper.appendChild(button)
+
+        if (inline) {
+          element.appendChild(wrapper)
+        } else {
+          element.parentElement.appendChild(wrapper)
+        }
+
+        button.onclick = () => {
+          selectNodeContent(element)
+          copyNodeContent(element)
+        }
+      }
+
+      /**
+       * @param {HTMLElement} node
+       */
+      function copyNodeContent(node) {
+        if (!navigator.clipboard) {
+          return alert("Could not copy text: Unsupported browser.");
+        };
+        navigator.clipboard.writeText(node.textContent).then(
+          () => {},
+          (err) => {
+            alert("Error: Unable to copy this code.");
+            console.error("Error on copying text to clipboard:", err);
+          }
+        );
+      }
+
+      /**
+       * @param {HTMLElement} node
+       */
+      function selectNodeContent(node) {
+        if (document.body.createTextRange) {
+          const range = document.body.createTextRange();
+          range.moveToElementText(node);
+          range.select();
+        } else if (window.getSelection) {
+          const selection = window.getSelection();
+          const range = document.createRange();
+          range.selectNodeContents(node);
+          selection.removeAllRanges();
+          selection.addRange(range);
+        } else {
+          console.error("Could not select text: Unsupported browser.");
+        }
+      }
+    </script>
   </body>
 </html>
