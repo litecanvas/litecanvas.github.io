@@ -15,7 +15,7 @@ const utils = await readFile(
 await appendFile(engineFile, "\n\n" + utils);
 
 const pluginAssetLoader = await readFile(
-  root + "/node_modules/@litecanvas/plugin-asset-loader/dist/dist.js",
+  root + "/node_modules/@litecanvas/plugin-asset-loader/dist/dist.min.js",
   { encoding: "utf8" }
 );
 
