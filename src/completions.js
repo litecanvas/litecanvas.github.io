@@ -510,6 +510,13 @@ export default function customCompletions(context) {
         info: "Load a JSON file",
       },
       {
+        label: "load",
+        type: "function",
+        apply: "load(",
+        detail: "(callback: (resolve,reject)=>void)",
+        info: "Create a custom loader",
+      },
+      {
         label: "LOADING",
         type: "variable",
         info: "return the amount of assets that are loading",
