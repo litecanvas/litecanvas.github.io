@@ -503,9 +503,21 @@ export default function customCompletions(context) {
         info: "Load a font",
       },
       {
+        label: "loadJSON",
+        type: "function",
+        apply: "loadJSON(",
+        detail: "(url, callback, fetchOptions)",
+        info: "Load a JSON file",
+      },
+      {
         label: "LOADING",
         type: "variable",
         info: "return the amount of assets that are loading",
+      },
+      {
+        label: "ASSETS",
+        type: "variable",
+        info: "list of all loaded assets",
       },
     ],
   };
