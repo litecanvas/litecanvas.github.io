@@ -1,5 +1,5 @@
 const cacheName = "luizbills.litecanvas-editor-v1";
-const version = "2.52.1";
+const version = "2.52.2";
 
 const precacheResources = [
   "/",
