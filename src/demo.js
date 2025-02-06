@@ -2,36 +2,35 @@ export default () =>
   `// Welcome to litecanvas playground!
 // Learn more tapping on the question mark (?) above.
 // Join our discord: https://discord.com/invite/r2c3rGsvH3
+
+let x, y, size, speed
+
 litecanvas()
 
-// this function run once before the game starts
+// run once before the game starts
 function init() {
-  bg = 0
-  color = 3
-  radius = 32
-  posx = CENTERX
-  posy = CENTERY
-  speed = HEIGHT
+  x = CENTERX
+  y = CENTERY
+  size = 32
+  speed = 250
 }
 
-// this function detect touches/clicks
-function tapped(x, y) {
-  posx = x
-  posy = y
-  sfx() // play a sound effect
+// called when touches/clicks happens
+function tapped(tapx, tapy) {
+  x = tapx
+  y = tapy
 }
 
 // this function controls the game logic
 function update(dt) {
-  posy += speed * dt
-  if (posy > HEIGHT - radius) {
-    posy = HEIGHT - radius
-  }
+  x += speed * dt * (iskeydown('D') - iskeydown('A'))
+  y += speed * dt * (iskeydown('S') - iskeydown('W'))
 }
 
 // this function render the game scene
 function draw() {
-  cls(bg) // clear the screen
-  circfill(posx, posy, radius, color) // draw a circle
+  cls(0)
+  rectfill(x, y, size, size, 4)
+  text(0, 0, 'use WASD keys to move')
 }
 `;
