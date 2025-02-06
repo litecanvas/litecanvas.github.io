@@ -17,13 +17,13 @@
   "author": "Luiz Bills",
   "license": "MIT",
   "devDependencies": {
-    "esbuild": "^0.24.0"
+    "esbuild": "^0.24.2"
   },
   "dependencies": {
-    "@codemirror/lang-javascript": "^6.2.1",
+    "@codemirror/lang-javascript": "^6.2.2",
     "@codemirror/theme-one-dark": "^6.1.2",
-    "@litecanvas/plugin-asset-loader": "*",
-    "@litecanvas/utils": "*",
+    "@litecanvas/plugin-asset-loader": "^0.13.2",
+    "@litecanvas/utils": "^0.26.0",
     "codemirror": "^6.0.1",
     "eslint-linter-browserify": "9.13.0",
     "litecanvas": "*",

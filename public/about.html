@@ -54,8 +54,11 @@
       main {
         max-width: 1000px;
         margin: auto;
-        margin-bottom: 5rem;
+        margin-bottom: 1rem;
         padding: 20px 10px;
+      }
+      footer {
+        padding: 1rem
       }
       main header {
         text-align: center;
@@ -121,6 +124,10 @@
       }
       .copy.copy-size-bg svg {
         font-size: 1.5em;
+      }
+      .visitors-counter {
+        display: block;
+        text-align: center;
       }
 
       @media print {
@@ -477,10 +484,10 @@ paint(width, height, data: string[]|function, options?): OffscreenCanvas
 // see: https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D
 ctx(context?: CanvasRenderingContext2D): CanvasRenderingContext2D
 
-// save the canvas context
+// save the canvas state
 push(): void
 
-// restore the canvas context
+// restore the canvas state to the last saved state
 pop(): void
 
 // Adds a translation transformation to the current matrix
@@ -492,13 +499,6 @@ scale(x: number, y?: number): void
 
 // Adds a rotation to the transformation matrix
 rotate(radians: number): void
-
-// Updates the transformation matrix
-// when `resetFirst = true` uses `context.setTransform()`
-// see: https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/setTransform
-// when `resetFirst = false` uses `context.transform()`
-// see: https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/transform
-transform(a, b, c, d, e, f, resetFirst = true): void
 
 // Sets the alpha (opacity) value to apply when drawing new shapes and images
 // see: https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/globalAlpha
@@ -817,6 +817,10 @@ function draw() {
         </li>
       </ul>
     </main>
+
+    <footer>
+      <a class="visitors-counter" href="https://hits.seeyoufarm.com"><img src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Flitecanvas.js.org%2Fabout.html&count_bg=%2363C64D&title_bg=%236A7799&icon=&icon_color=%23E7E7E7&title=Visitors&edge_flat=false"/></a>
+    </footer>
 
     <script src="prism/prism.js"></script>
     <script src="prism/prism-typescript.js"></script>

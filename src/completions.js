@@ -148,12 +148,6 @@ export default function customCompletions(context) {
         info: "Creates a offscreen canvas to draw on it",
       },
       {
-        label: "transform",
-        type: "function",
-        apply: "transform(",
-        detail: "(a, b, c, d, e, f, reset=true)",
-      },
-      {
         label: "translate",
         type: "function",
         apply: "translate(",
