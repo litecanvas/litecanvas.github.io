@@ -1,5 +1,5 @@
 const cacheName = "luizbills.litecanvas-editor-v1";
-const version = "2.54.0";
+const version = "2.55.0";
 
 const precacheResources = [
   "/",
@@ -24,6 +24,7 @@ const precacheResources = [
   "/fonts/monogram.ttf",
   "/manifest.json",
   "/tools/pixel-art-editor.html",
+  "/tools/pixel-art-editor.js",
 ];
 
 self.addEventListener("install", (event) => {
