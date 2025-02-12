@@ -437,24 +437,19 @@ linedash(value: number[], ofsset?: number): void
 
 // Draw a text
 // style can be "normal", "italic" and/or "bold"
-text(x, y, text, color? = 3, style = 'normal'): void
+text(x, y, text, color? = 3, style? = 'normal'): void
 
 // Sets the text alignment and baseline
 // default values: align = 'start', baseline = 'top'
 // see: https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/textAlign
 // see: https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/textBaseline
-textalign(align: string, baseline: string): void
+textalign(align?: string, baseline?: string): void
 
 // Sets the font family for texts
 textfont(fontName: string): void
 
 // Sets the font size (default: 32)
 textsize(size: number): void
-
-// Returns the text dimensions like width and height
-// when size is omitted, it will use the current
-// font size defined by textsize()
-textmetrics(text: string, size?: number)
 
 /**
  * IMAGE DRAWING-RELATED FUNCTIONS
