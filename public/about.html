@@ -436,7 +436,8 @@ linedash(value: number[], ofsset?: number): void
  */
 
 // Draw a text
-text(x, y, text, color? = 3): void
+// style can be "normal", "italic" and/or "bold"
+text(x, y, text, color? = 3, style = 'normal'): void
 
 // Sets the text alignment and baseline
 // default values: align = 'start', baseline = 'top'
@@ -449,10 +450,6 @@ textfont(fontName: string): void
 
 // Sets the font size (default: 32)
 textsize(size: number): void
-
-// Used to draw a text as 'bold' or/and 'italic'
-// use "normal" or empty string to reset the font style
-textstyle(style: string)
 
 // Returns the text dimensions like width and height
 // when size is omitted, it will use the current

@@ -100,7 +100,7 @@ export default function customCompletions(context) {
         label: "text",
         type: "function",
         apply: "text(",
-        detail: "(x, y, text, color=3)",
+        detail: "(x, y, text, color=3, style='normal')",
       },
       {
         label: "textfont",
@@ -121,18 +121,6 @@ export default function customCompletions(context) {
         type: "function",
         apply: "textalign(",
         detail: "(align, baseline)",
-      },
-      {
-        label: "textstyle",
-        type: "function",
-        apply: "textstyle(",
-        detail: "(style)",
-      },
-      {
-        label: "textmetrics",
-        type: "function",
-        apply: "textmetrics(",
-        detail: "(text, [size])",
       },
       {
         label: "image",
