@@ -31,6 +31,6 @@ function update(dt) {
 function draw() {
   cls(0)
   rectfill(x, y, size, size, 4)
-  text(0, 0, 'use WASD keys to move')
+  text(0, 0, 'use WASD keys or taps/clicks')
 }
 `;
