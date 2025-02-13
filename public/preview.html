@@ -65,6 +65,11 @@
       handleError = (e) => {
         if (errorMessage) return;
         errorMessage = e.message || e.reason;
+        if (errorMessage.includes("Potential infinite loop")) {
+          errorMessage = "Error: Potential infinite loop";
+          window["err-tip"].textContent =
+            "Tip: Check your code loops (for, while, etc)";
+        }
         console.error(errorMessage);
         err.prepend(errorMessage);
         err.style.display = "block";

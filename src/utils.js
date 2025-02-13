@@ -1,3 +1,6 @@
+import Babel from "babel-standalone";
+import loopProtection from "./loop-protect";
+
 /**
  * @param {HTMLElement} el
  */
@@ -30,4 +33,17 @@ export function $(selector, parent = document) {
  */
 export function $$(selector, parent = document) {
   return parent.querySelectorAll(selector);
+}
+
+/**
+ * @param {string} code
+ * @returns {string}
+ */
+export function prepareCode(code) {
+  const timeout = 500;
+  Babel.registerPlugin("loopProtection", loopProtection(timeout));
+
+  return Babel.transform(code, {
+    plugins: ["loopProtection"],
+  }).code;
 }

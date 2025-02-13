@@ -12,8 +12,8 @@ import { indentWithTab } from "@codemirror/commands";
 import { oneDark } from "@codemirror/theme-one-dark";
 import * as eslint from "eslint-linter-browserify";
 
+import { show, hide, $, prepareCode } from "./utils";
 import editorSetup from "./editorSetup";
-import { show, hide, $ } from "./utils";
 import demo from "./demo";
 import customCompletions from "./completions";
 import mobileBar from "./mobileBar";
@@ -157,7 +157,8 @@ function runCode() {
 
 function loadCode() {
   const code = window.codeEditor.state.doc.toString();
-  getIframe().contentDocument.querySelector("#code").innerHTML = code;
+  getIframe().contentDocument.querySelector("#code").innerHTML =
+    prepareCode(code);
 }
 
 /**
