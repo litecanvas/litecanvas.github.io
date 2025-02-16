@@ -550,7 +550,7 @@ rand(min = 0, max = 1.0): number;
 randi(min = 0, max = 1): number;
 
 // If a value is passed, initializes the random number generator (RNG)
-// with an explicit seed value. Otherwise, returns the current seed state.
+// with an explicit seed value (a number >= 0). Otherwise, returns the current seed state.
 // By default, the initial seed is the current timestamp (from `Date.now()`).
 seed(value: number | null): number;
 
@@ -578,7 +578,7 @@ wrap(value, min, max): number
 
 // Re-maps a number from one range to another.
 // example: map(2, 0, 10, 0, 100) returns 20
-map(val, min1, max1, min2, max2, withinBounds = false ): number
+map(val, start1, stop1, start2, stop2, withinBounds = false ): number
 
 // Maps a number from one range to a value between 0 and 1.
 // example: norm(50, 0, 100) returns 0.5
