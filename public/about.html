@@ -223,13 +223,14 @@
       <p>Create a text file named <code>index.html</code>, put the code below and open it your browser.</p>
       <pre><code class="language-html" data-copy="pos-absolute size-bg">&lt;!DOCTYPE html&gt;
 &lt;html&gt;
+  &lt;head&gt;
+    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0, user-scalable=no&quot;/&gt;
+  &lt;/head&gt;
   &lt;body&gt;
     &lt;script src=&quot;https://unpkg.com/litecanvas/dist/dist.dev.js&quot;&gt;&lt;/script&gt;
     &lt;script&gt;
-      // setup the engine
-      litecanvas({
-        loop: { draw }
-      });
+      // start the engine
+      litecanvas();
 
       function draw() {
         // clear the screen with black (color #0)
