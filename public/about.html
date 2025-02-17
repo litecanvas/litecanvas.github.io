@@ -343,9 +343,6 @@ settings.pauseOnBlur = true
 // scale to fill the canvas
 settings.autoscale = true
 
-// target FPS
-settings.fps = 60
-
 // enable smooth drawing
 settings.antialias = false
 
@@ -541,19 +538,7 @@ iskeydown(key: string): boolean</code></pre>
 
       <h2><a id="math">Math</a></h2>
 
-      <pre><code class="language-typescript">
-// Generates a pseudo-random float between min (inclusive)
-// and max (exclusive)
-rand(min = 0, max = 1.0): number;
-
-// Generates a pseudo-random integer between min (inclusive)
-// and max (inclusive)
-randi(min = 0, max = 1): number;
-
-// If a value is passed, initializes the random number generator (RNG)
-// with an explicit seed value (a number >= 0). Otherwise, returns the current seed state.
-// By default, the initial seed is the current timestamp (from `Date.now()`).
-seed(value: number | null): number;
+      <pre><code class="language-typescript">/** General Math */
 
 // Calculates a linear (interpolation) value over `t`.
 // example: lerp(0, 50, 0.5) returns 25
@@ -644,7 +629,22 @@ sqrt(n: number): number
 // If the number is 0, it will returns 0.
 sign(n: number): number
 
-/** UTILS */
+/** Random Number Generator (RNG) */
+
+// Generates a pseudo-random float between min (inclusive)
+// and max (exclusive)
+rand(min = 0, max = 1.0): number;
+
+// Generates a pseudo-random integer between min (inclusive)
+// and max (inclusive)
+randi(min = 0, max = 1): number;
+
+// If a value is passed, initializes the random number generator (RNG)
+// with an explicit seed value (a number >= 0). Otherwise, returns the current seed state.
+// By default, the initial seed is the current timestamp (from `Date.now()`).
+seed(value: number | null): number;
+
+/** Collision Check (AABB) */
 
 // Check a collision between two rectangles.
 // All arguments are required and must be numbers.
@@ -671,10 +671,6 @@ emit(event: string, arg1?, arg2?, arg3?, arg4?): void
 // Also, emits the "resized" (use `listen` to observe this event).
 resize(width: number, height: number): void
 
-// shutdown the engine
-// also emits the "quit" event
-quit(): void
-
 // Sets the scale of the game's delta time (dt).
 // By default is equal to 1.
 // Values higher than 1 increase the speed of time,
@@ -682,7 +678,7 @@ quit(): void
 // A value of 0 freezes time (equivalent to pausing).
 timescale(value: number): void
 
-// Sets the target FPS at runtime
+// Sets the target FPS (frames per second or frame rate)
 setfps(value: number): void
 
 // the following functions are most used by plugins...
@@ -694,7 +690,9 @@ setvar(name: string, value: any): void
 // example: getcolor(0) returns "#111"
 getcolor(index: number): string
 
-</code></pre>
+// shutdown the engine
+// also emits the "quit" event
+quit(): void</code></pre>
 
       <h2><a id="advanced">Playground Features</a></h2>
 
