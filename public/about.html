@@ -80,7 +80,11 @@
         margin-top: 0;
       }
       h2 {
-        margin-top: 2rem !important;
+        margin-top: 3rem;
+        border-bottom: 1px solid;
+        padding-bottom: 0.15em;
+        font-size: 1.2rem;
+        text-transform: uppercase;
       }
       ul li {
         font-size: 1.2rem;
@@ -536,7 +540,7 @@ volume(value: number): void</code></pre>
 // note: to check the space key use `iskeydown(" ")`.
 iskeydown(key: string): boolean</code></pre>
 
-      <h2><a id="math">Math</a></h2>
+      <h2><a id="math">Functions for Math</a></h2>
 
       <pre><code class="language-typescript">/** General Math */
 
@@ -655,6 +659,8 @@ colrect(x1, y1, w1, h1, x2, y2, w2, h2): boolean
 colcirc(x1, y1, r1, x2, y2, r2): boolean</code></pre>
 
       <h2><a id="engine-api">Engine API</a></h2>
+
+      <p>The following functions are most used internally, but also very useful when creating plugins.</p>
 
       <pre><code class="language-typescript">// Loads a plugin.
 // see: https://github.com/litecanvas/game-engine/blob/main/samples/plugin-basics/plugin-basics.js
