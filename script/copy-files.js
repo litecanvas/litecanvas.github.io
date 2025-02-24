@@ -26,7 +26,7 @@ await esbuild.build({
   entryPoints: [engineFile],
   outfile: engineFile,
   bundle: true,
-  minify: true,
+  // minify: true,
   legalComments: "eof",
   allowOverwrite: true,
 });

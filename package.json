@@ -26,7 +26,7 @@
     "@litecanvas/utils": "latest",
     "babel-standalone": "^6.26.0",
     "codemirror": "^6.0.1",
-    "eslint-linter-browserify": "9.20.1",
+    "eslint-linter-browserify": "9.21.0",
     "litecanvas": "latest",
     "pako": "^2.1.0"
   }
