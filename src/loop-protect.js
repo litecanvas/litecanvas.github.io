@@ -93,12 +93,10 @@ function randomString(length) {
   const result = [];
   const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
   const charactersLength = characters.length;
-  let counter = 0;
-  while (counter < length) {
+  for (let counter = 0; counter < length; counter++) {
     result.push(
       characters.charAt(Math.floor(Math.random() * charactersLength))
     );
-    counter += 1;
   }
   return result.join("");
 }
