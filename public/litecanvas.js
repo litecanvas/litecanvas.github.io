@@ -307,7 +307,7 @@
         },
         /** BASIC GRAPHICS API */
         /**
-         * Clear the game screen
+         * Clear the game screen with an optional color
          *
          * @param {number?} color The background color (index) or null (for transparent)
          */
@@ -315,14 +315,19 @@
           if (true) {
             assert(
               null == color || isFinite(color) && color >= 0,
-              "cls: 1st param must be a number"
+              "cls: 1st param must be a positive number or zero or null"
             );
           }
-          let width = _ctx.canvas.width, height = _ctx.canvas.height;
           if (null == color) {
-            _ctx.clearRect(0, 0, width, height);
+            _ctx.clearRect(0, 0, _ctx.canvas.width, _ctx.canvas.height);
           } else {
-            instance.rectfill(0, 0, width, height, color);
+            instance.rectfill(
+              0,
+              0,
+              _ctx.canvas.width,
+              _ctx.canvas.height,
+              color
+            );
           }
         },
         /**
@@ -667,8 +672,8 @@
         /**
          * Get or set the canvas context 2D
          *
-         * @param {CanvasRenderingContext2D} [context]
-         * @returns {CanvasRenderingContext2D}
+         * @param {CanvasRenderingContext2D|OffscreenCanvasRenderingContext2D} [context]
+         * @returns {CanvasRenderingContext2D|OffscreenCanvasRenderingContext2D}
          * @see https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D
          */
         ctx(context) {
@@ -852,7 +857,7 @@
             return false;
           }
           zzfxParams = zzfxParams || instance.DEFAULT_SFX;
-          if (pitchSlide > 0 || volumeFactor !== 1) {
+          if (pitchSlide !== 0 || volumeFactor !== 1) {
             zzfxParams = zzfxParams.slice();
             zzfxParams[0] = volumeFactor * (zzfxParams[0] || 1);
             zzfxParams[10] = ~~zzfxParams[10] + pitchSlide;
@@ -919,7 +924,7 @@
             assert(isFinite(y2), "colcirc: 5th param must be a number");
             assert(isFinite(r2), "colcirc: 6th param must be a number");
           }
-          return (x2 - x1) ** 2 + (y2 - y1) ** 2 <= (r1 + r2) ** 2;
+          return (x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1) <= (r1 + r2) * (r1 + r2);
         },
         /** PLUGINS API */
         /**
