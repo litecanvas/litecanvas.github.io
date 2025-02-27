@@ -63,7 +63,7 @@
         animate: true
       };
       settings = Object.assign(defaults, settings);
-      let _initialized = false, _plugins = [], _canvas = settings.canvas || document.createElement("canvas"), _fullscreen = settings.fullscreen, _autoscale = settings.autoscale, _animated = settings.animate, _scale = 1, _ctx, _outline_fix = 0.5, _timeScale = 1, _lastFrameTime, _fixedDeltaTime, _accumulated, _focused = true, _fontFamily = "sans-serif", _fontSize = 32, _rng_seed = Date.now(), _global = settings.global, _events = {
+      let _initialized = false, _plugins = [], _canvas = settings.canvas || document.createElement("canvas"), _fullscreen = settings.fullscreen, _autoscale = settings.autoscale, _animated = settings.animate, _scale = 1, _ctx, _outline_fix = 0.5, _timeScale = 1, _lastFrameTime, _deltaTime, _accumulated = 0, _rafid, _fontFamily = "sans-serif", _fontSize = 32, _rng_seed = Date.now(), _global = settings.global, _events = {
         init: null,
         update: null,
         draw: null,
@@ -593,11 +593,20 @@
         textalign(align, baseline) {
           if (true) {
             assert(
-              null == align || "string" === typeof align,
+              null == align || ["left", "right", "center", "start", "end"].includes(
+                align
+              ),
               "textalign: 1st param must be a string"
             );
             assert(
-              null == baseline || "string" === typeof baseline,
+              null == baseline || [
+                "top",
+                "bottom",
+                "middle",
+                "hanging",
+                "alphabetic",
+                "ideographic"
+              ].includes(baseline),
               "textalign: 2nd param must be a string"
             );
           }
@@ -1015,7 +1024,6 @@
               "setvar: 1st param must be a string"
             );
             if (value == null) {
-              console.warn(`setvar: key "${key}" was defined as ${value}`);
             }
           }
           instance[key] = value;
@@ -1063,8 +1071,7 @@
               "setfps: 1st param must be a positive number"
             );
           }
-          _fixedDeltaTime = 1 / ~~value;
-          _accumulated = 0;
+          _deltaTime = 1 / ~~value;
         },
         /**
          * Stops the litecanvas instance and remove all event listeners.
@@ -1074,7 +1081,8 @@
           for (const removeListener of _browserEventListeners) {
             removeListener();
           }
-          _focused = _events = false;
+          cancelAnimationFrame(_rafid);
+          _events = false;
           if (_global) {
             for (const key in instance) {
               delete root[key];
@@ -1231,37 +1239,41 @@
         }
         if (settings.pauseOnBlur) {
           on(root, "blur", () => {
-            _focused = false;
+            _rafid = cancelAnimationFrame(_rafid);
           });
           on(root, "focus", () => {
-            _focused = true;
-            raf(drawFrame);
+            if (!_rafid) {
+              _lastFrameTime = performance.now();
+              _rafid = raf(drawFrame);
+            }
           });
         }
         instance.setfps(60);
         instance.emit("init", instance);
         _lastFrameTime = performance.now();
-        raf(drawFrame);
+        _rafid = raf(drawFrame);
       }
       function drawFrame(now) {
-        let shouldRender = !_animated, frameTime = (now - _lastFrameTime) / 1e3, frameTimeMax = _fixedDeltaTime * 5;
-        _accumulated += frameTime > frameTimeMax ? frameTimeMax : frameTime;
+        if (_animated) {
+          _rafid = raf(drawFrame);
+        }
+        let updated = 0, frameTime = (now - _lastFrameTime) / 1e3;
+        _accumulated += frameTime;
         _lastFrameTime = now;
-        while (_accumulated >= _fixedDeltaTime) {
-          instance.emit("update", _fixedDeltaTime * _timeScale);
+        if (!_animated) {
+          _accumulated = _deltaTime;
+        }
+        for (; _accumulated >= _deltaTime; _accumulated -= _deltaTime) {
+          instance.emit("update", _deltaTime * _timeScale);
           instance.setvar(
             "ELAPSED",
-            instance.ELAPSED + _fixedDeltaTime * _timeScale
+            instance.ELAPSED + _deltaTime * _timeScale
           );
-          _accumulated -= _fixedDeltaTime;
-          shouldRender = true;
+          updated++;
         }
-        if (shouldRender) {
+        if (updated) {
           instance.textalign("start", "top");
           instance.emit("draw");
-        }
-        if (_focused && _animated) {
-          raf(drawFrame);
         }
       }
       function setupCanvas() {
