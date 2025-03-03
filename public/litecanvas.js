@@ -1243,7 +1243,6 @@
           });
           on(root, "focus", () => {
             if (!_rafid) {
-              _lastFrameTime = performance.now();
               _rafid = raf(drawFrame);
             }
           });
@@ -1258,8 +1257,9 @@
           _rafid = raf(drawFrame);
         }
         let updated = 0, frameTime = (now - _lastFrameTime) / 1e3;
-        _accumulated += frameTime;
         _lastFrameTime = now;
+        if (frameTime > 1) return;
+        _accumulated += frameTime;
         if (!_animated) {
           _accumulated = _deltaTime;
         }
