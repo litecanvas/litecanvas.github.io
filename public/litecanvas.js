@@ -2,27 +2,10 @@
   // public/litecanvas.js
   (() => {
     var zzfxX = /* @__PURE__ */ new AudioContext();
-    var zzfx = (p = 1, k = 0.05, b = 220, e = 0, r = 0, t = 0.1, q = 0, D = 1, u = 0, y = 0, v = 0, z = 0, l = 0, E = 0, A = 0, F = 0, c = 0, w = 1, m = 0, B = 0, N = 0) => {
-      let M = Math, d = 2 * M.PI, R = 44100, G = u *= 500 * d / R / R, C = b *= (1 - k + 2 * k * M.random(k = [])) * d / R, g = 0, H = 0, a = 0, n = 1, I = 0, J = 0, f = 0, h = N < 0 ? -1 : 1, x = d * h * N * 2 / R, L = M.cos(x), Z = M.sin, K = Z(x) / 4, O = 1 + K, X = -2 * L / O, Y = (1 - K) / O, P = (1 + h * L) / 2 / O, Q = -(h + L) / O, S = P, T = 0, U = 0, V = 0, W = 0;
-      e = R * e + 9;
-      m *= R;
-      r *= R;
-      t *= R;
-      c *= R;
-      y *= 500 * d / R ** 3;
-      A *= d / R;
-      v *= d / R;
-      z *= R;
-      l = R * l | 0;
-      p *= 0.3 * (globalThis.zzfxV || 1);
-      for (h = e + m + r + t + c | 0; a < h; k[a++] = f * p)
-        ++J % (100 * F | 0) || (f = q ? 1 < q ? 2 < q ? 3 < q ? Z(g * g) : M.max(M.min(M.tan(g), 1), -1) : 1 - (2 * g / d % 2 + 2) % 2 : 1 - 4 * M.abs(M.round(g / d) - g / d) : Z(g), f = (l ? 1 - B + B * Z(d * a / l) : 1) * (f < 0 ? -1 : 1) * M.abs(f) ** D * (a < e ? a / e : a < e + m ? 1 - (a - e) / m * (1 - w) : a < e + m + r ? w : a < h - c ? (h - a - c) / t * w : 0), f = c ? f / 2 + (c > a ? 0 : (a < h - c ? 1 : (h - a) / c) * k[a - c | 0] / 2 / p) : f, N ? f = W = S * T + Q * (T = U) + P * (U = f) - Y * V - X * (V = W) : 0), x = (b += u += y) * M.cos(A * H++), g += x + x * E * Z(a ** 5), n && ++n > z && (b += v, C += v, n = 0), !l || ++I % l || (b = C, u = G, n = n || 1);
-      p = zzfxX.createBuffer(1, h, R);
-      p.getChannelData(0).set(k);
-      b = zzfxX.createBufferSource();
-      b.buffer = p;
-      b.connect(zzfxX.destination);
-      b.start();
+    var zzfx = (i = 1, d = 0.05, z = 220, e = 0, P = 0, S = 0.1, I = 0, c = 1, T = 0, H = 0, V = 0, J = 0, h = 0, j = 0, K = 0, E = 0, r = 0, B = 1, X = 0, L = 0, D = 0) => {
+      let n = Math, t = 2 * n.PI, a = 44100, F = T *= 500 * t / a / a, O = z *= (1 - d + 2 * d * n.random(d = [])) * t / a, x = 0, _ = 0, f = 0, g = 1, $ = 0, l = 0, o = 0, s = D < 0 ? -1 : 1, u = t * s * D * 2 / a, G = n.cos(u), C = n.sin, Q = C(u) / 4, M = 1 + Q, m = -2 * G / M, y = (1 - Q) / M, R = (1 + s * G) / 2 / M, A = -(s + G) / M, v = R, U = 0, W = 0, Y = 0, Z = 0;
+      for (e = a * e + 9, X *= a, P *= a, S *= a, r *= a, H *= 500 * t / a ** 3, K *= t / a, V *= t / a, J *= a, h = a * h | 0, i *= 0.3 * (globalThis.zzfxV || 1), s = e + X + P + S + r | 0; f < s; d[f++] = o * i) ++l % (100 * E | 0) || (o = I ? 1 < I ? 2 < I ? 3 < I ? C(x * x) : n.max(n.min(n.tan(x), 1), -1) : 1 - (2 * x / t % 2 + 2) % 2 : 1 - 4 * n.abs(n.round(x / t) - x / t) : C(x), o = (h ? 1 - L + L * C(t * f / h) : 1) * (o < 0 ? -1 : 1) * n.abs(o) ** c * (f < e ? f / e : f < e + X ? 1 - (f - e) / X * (1 - B) : f < e + X + P ? B : f < s - r ? (s - f - r) / S * B : 0), o = r ? o / 2 + (r > f ? 0 : (f < s - r ? 1 : (s - f) / r) * d[f - r | 0] / 2 / i) : o, D && (o = Z = v * U + A * (U = W) + R * (W = o) - y * Y - m * (Y = Z))), u = (z += T += H) * n.cos(K * _++), x += u + u * j * C(f ** 5), g && ++g > J && (z += V, O += V, g = 0), !h || ++$ % h || (z = O, T = F, g = g || 1);
+      i = zzfxX.createBuffer(1, s, a), i.getChannelData(0).set(d), z = zzfxX.createBufferSource(), z.buffer = i, z.connect(zzfxX.destination), z.start();
     };
     var colors = [
       "#111",
@@ -97,13 +80,6 @@
         DEFAULT_SFX: [0.5, , 1675, , 0.06, 0.2, 1, 1.8, , , 637, 0.06],
         /** MATH API */
         /**
-         * The value of the mathematical constant PI (π).
-         * Approximately 3.14159
-         *
-         * @type {number}
-         */
-        PI,
-        /**
          * Twice the value of the mathematical constant PI (π).
          * Approximately 6.28318
          *
@@ -119,7 +95,7 @@
          *
          * @type {number}
          */
-        HALF_PI: PI * 0.5,
+        HALF_PI: PI / 2,
         /**
          * Calculates a linear (interpolation) value over t%.
          *
@@ -135,7 +111,7 @@
             assert(isFinite(end), "lerp: 2nd param must be a number");
             assert(isFinite(t), "lerp: 3rd param must be a number");
           }
-          return start + t * (end - start);
+          return t * (end - start) + start;
         },
         /**
          * Convert degrees to radians
@@ -1091,24 +1067,7 @@
           }
         }
       };
-      for (const k of [
-        "sin",
-        "cos",
-        "atan2",
-        "hypot",
-        "tan",
-        "abs",
-        "ceil",
-        "round",
-        "floor",
-        "trunc",
-        "min",
-        "max",
-        "pow",
-        "sqrt",
-        "sign",
-        "exp"
-      ]) {
+      for (const k of "PI,sin,cos,atan2,hypot,tan,abs,ceil,round,floor,trunc,min,max,pow,sqrt,sign,exp".split(",")) {
         instance[k] = Math[k];
       }
       function init() {
@@ -1143,17 +1102,32 @@
             const tap = _taps.get(id) || _registerTap(id);
             tap.x = x;
             tap.y = y;
-          }, _checkTapped = (tap) => tap && performance.now() - tap.ts <= 200;
+          }, _checkTapped = (tap) => tap && performance.now() - tap.ts <= 200, preventDefault = (ev) => ev.preventDefault();
           let _pressingMouse = false;
           on(_canvas, "mousedown", (ev) => {
-            ev.preventDefault();
-            const [x, y] = _getXY(ev.pageX, ev.pageY);
-            instance.emit("tap", x, y, 0);
-            _registerTap(0, x, y);
-            _pressingMouse = true;
+            if (ev.button === 0) {
+              preventDefault(ev);
+              const [x, y] = _getXY(ev.pageX, ev.pageY);
+              instance.emit("tap", x, y, 0);
+              _registerTap(0, x, y);
+              _pressingMouse = true;
+            }
+          });
+          on(_canvas, "mouseup", (ev) => {
+            if (ev.button === 0) {
+              preventDefault(ev);
+              const tap = _taps.get(0);
+              const [x, y] = _getXY(ev.pageX, ev.pageY);
+              if (_checkTapped(tap)) {
+                instance.emit("tapped", tap.startX, tap.startY, 0);
+              }
+              instance.emit("untap", x, y, 0);
+              _taps.delete(0);
+              _pressingMouse = false;
+            }
           });
           on(_canvas, "mousemove", (ev) => {
-            ev.preventDefault();
+            preventDefault(ev);
             const [x, y] = _getXY(ev.pageX, ev.pageY);
             instance.setvar("MOUSEX", x);
             instance.setvar("MOUSEY", y);
@@ -1161,19 +1135,8 @@
             instance.emit("tapping", x, y, 0);
             _updateTap(0, x, y);
           });
-          on(_canvas, "mouseup", (ev) => {
-            ev.preventDefault();
-            const tap = _taps.get(0);
-            const [x, y] = _getXY(ev.pageX, ev.pageY);
-            if (_checkTapped(tap)) {
-              instance.emit("tapped", tap.startX, tap.startY, 0);
-            }
-            instance.emit("untap", x, y, 0);
-            _taps.delete(0);
-            _pressingMouse = false;
-          });
           on(_canvas, "touchstart", (ev) => {
-            ev.preventDefault();
+            preventDefault(ev);
             const touches = ev.changedTouches;
             for (const touch of touches) {
               const [x, y] = _getXY(touch.pageX, touch.pageY);
@@ -1182,7 +1145,7 @@
             }
           });
           on(_canvas, "touchmove", (ev) => {
-            ev.preventDefault();
+            preventDefault(ev);
             const touches = ev.changedTouches;
             for (const touch of touches) {
               const [x, y] = _getXY(touch.pageX, touch.pageY);
@@ -1191,7 +1154,7 @@
             }
           });
           const _touchEndHandler = (ev) => {
-            ev.preventDefault();
+            preventDefault(ev);
             const existing = [];
             if (ev.targetTouches.length > 0) {
               for (const touch of ev.targetTouches) {
@@ -1258,7 +1221,8 @@
         }
         let updated = 0, frameTime = (now - _lastFrameTime) / 1e3;
         _lastFrameTime = now;
-        if (frameTime > 1) return;
+        if (frameTime > _deltaTime * 30)
+          return void 0;
         _accumulated += frameTime;
         if (!_animated) {
           _accumulated = _deltaTime;
@@ -1278,6 +1242,20 @@
       }
       function setupCanvas() {
         _canvas = "string" === typeof _canvas ? document.querySelector(_canvas) : _canvas;
+        if (true) {
+          assert(
+            _canvas && _canvas.tagName === "CANVAS",
+            "Invalid canvas element"
+          );
+          assert(
+            null === instance.WIDTH || instance.WIDTH > 0,
+            `Litecanvas' "width" option should be null or a positive number`
+          );
+          assert(
+            null === instance.HEIGHT || instance.HEIGHT > 0,
+            `Litecanvas' "width" option should be null or a positive number`
+          );
+        }
         instance.setvar("CANVAS", _canvas);
         _ctx = _canvas.getContext("2d");
         on(_canvas, "click", () => root.focus());
@@ -1311,7 +1289,7 @@
         instance.setvar("CENTERY", instance.HEIGHT / 2);
         if (!settings.antialias || settings.pixelart) {
           _ctx.imageSmoothingEnabled = false;
-          _canvas.style.imageRendering = "pixelated";
+          styles.imageRendering = "pixelated";
         }
         instance.emit("resized", _scale);
         if (!_animated) {
@@ -1326,10 +1304,14 @@
       }
       function loadPlugin(callback, config) {
         const pluginData = callback(instance, _helpers, config);
-        if ("object" === typeof pluginData) {
-          for (const key of Object.keys(pluginData)) {
-            instance.setvar(key, pluginData[key]);
-          }
+        if (true) {
+          assert(
+            null == pluginData || "object" === typeof pluginData,
+            "Litecanvas plugins should return an object or nothing"
+          );
+        }
+        for (const key in pluginData) {
+          instance.setvar(key, pluginData[key]);
         }
       }
       if (_global) {
