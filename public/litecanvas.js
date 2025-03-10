@@ -31,7 +31,6 @@
           () => elem.removeEventListener(evt, callback, false)
         );
       }, isFinite = Number.isFinite, defaults = {
-        fullscreen: true,
         width: null,
         height: null,
         autoscale: true,
@@ -46,7 +45,7 @@
         animate: true
       };
       settings = Object.assign(defaults, settings);
-      let _initialized = false, _plugins = [], _canvas = settings.canvas || document.createElement("canvas"), _fullscreen = settings.fullscreen, _autoscale = settings.autoscale, _animated = settings.animate, _scale = 1, _ctx, _outline_fix = 0.5, _timeScale = 1, _lastFrameTime, _deltaTime, _accumulated = 0, _rafid, _fontFamily = "sans-serif", _fontSize = 32, _rng_seed = Date.now(), _global = settings.global, _events = {
+      let _initialized = false, _plugins = [], _canvas = settings.canvas || document.createElement("canvas"), _autoscale = settings.autoscale, _animated = settings.animate, _scale = 1, _ctx, _outline_fix = 0.5, _timeScale = 1, _lastFrameTime, _deltaTime, _accumulated = 0, _rafid, _fontFamily = "sans-serif", _fontSize = 32, _rng_seed = Date.now(), _global = settings.global, _events = {
         init: null,
         update: null,
         draw: null,
@@ -889,9 +888,11 @@
             "string" === typeof eventName,
             "emit: 1st param must be a string"
           );
-          triggerEvent("before:" + eventName, arg1, arg2, arg3, arg4);
-          triggerEvent(eventName, arg1, arg2, arg3, arg4);
-          triggerEvent("after:" + eventName, arg1, arg2, arg3, arg4);
+          if (_initialized) {
+            triggerEvent("before:" + eventName, arg1, arg2, arg3, arg4);
+            triggerEvent(eventName, arg1, arg2, arg3, arg4);
+            triggerEvent("after:" + eventName, arg1, arg2, arg3, arg4);
+          }
         },
         /**
          * Get a color by index
@@ -932,11 +933,19 @@
          * @param {number} height
          */
         resize(width, height) {
-          DEV: assert(isFinite(width), "resize: 1st param must be a number");
-          DEV: assert(isFinite(height), "resize: 2nd param must be a number");
+          DEV: assert(
+            isFinite(width) && width > 0,
+            "resize: 1st param must be a number"
+          );
+          DEV: assert(
+            isFinite(height) && height > 0,
+            "resize: 2nd param must be a number"
+          );
           instance.setvar("WIDTH", _canvas.width = width);
           instance.setvar("HEIGHT", _canvas.height = height);
-          pageResized();
+          instance.setvar("CENTERX", instance.WIDTH / 2);
+          instance.setvar("CENTERY", instance.HEIGHT / 2);
+          onResize();
         },
         /**
          * The scale of the game's delta time (dt).
@@ -994,10 +1003,9 @@
         for (const [callback, config] of _plugins) {
           loadPlugin(callback, config);
         }
-        if (_fullscreen || _autoscale) {
-          on(root, "resize", pageResized);
+        if (_autoscale) {
+          on(root, "resize", onResize);
         }
-        pageResized();
         if (settings.tapEvents) {
           const _getXY = (pageX, pageY) => [
             (pageX - _canvas.offsetLeft) / _scale,
@@ -1134,21 +1142,23 @@
         }
         let updated = 0, frameTime = (now - _lastFrameTime) / 1e3;
         _lastFrameTime = now;
-        if (frameTime > _deltaTime * 30)
-          return console.log("skipping too long frame");
-        _accumulated += frameTime;
-        if (!_animated) {
-          _accumulated = _deltaTime;
+        if (frameTime > _deltaTime * 30) {
+          console.log("skipping too long frame");
+        } else {
+          _accumulated += frameTime;
+          if (!_animated) {
+            _accumulated = _deltaTime;
+          }
+          for (; _accumulated >= _deltaTime; _accumulated -= _deltaTime) {
+            instance.emit("update", _deltaTime * _timeScale);
+            instance.setvar(
+              "ELAPSED",
+              instance.ELAPSED + _deltaTime * _timeScale
+            );
+            updated++;
+          }
         }
-        for (; _accumulated >= _deltaTime; _accumulated -= _deltaTime) {
-          instance.emit("update", _deltaTime * _timeScale);
-          instance.setvar(
-            "ELAPSED",
-            instance.ELAPSED + _deltaTime * _timeScale
-          );
-          updated++;
-        }
-        if (updated) {
+        if (updated || !_animated) {
           instance.textalign("start", "top");
           instance.emit("draw");
         }
@@ -1160,44 +1170,43 @@
           "Invalid canvas element"
         );
         DEV: assert(
-          null === instance.WIDTH || instance.WIDTH > 0,
+          null == instance.WIDTH || instance.WIDTH > 0,
           `Litecanvas' "width" option should be null or a positive number`
         );
         DEV: assert(
-          null === instance.HEIGHT || instance.HEIGHT > 0,
+          null == instance.HEIGHT || instance.HEIGHT > 0,
           `Litecanvas' "width" option should be null or a positive number`
+        );
+        DEV: assert(
+          null == instance.HEIGHT || instance.WIDTH > 0 && instance.HEIGHT > 0,
+          `Litecanvas' "width" is required when "heigth" is passed`
         );
         instance.setvar("CANVAS", _canvas);
         _ctx = _canvas.getContext("2d");
         on(_canvas, "click", () => root.focus());
-        if (instance.WIDTH > 0) {
-          _fullscreen = false;
-        }
         _canvas.style = "";
-        _canvas.width = instance.WIDTH;
-        _canvas.height = instance.HEIGHT || instance.WIDTH;
+        if (!instance.WIDTH) {
+          instance.WIDTH = root.innerWidth;
+          instance.HEIGHT = root.innerHeight;
+        }
+        instance.resize(instance.WIDTH, instance.HEIGHT, false);
         if (!_canvas.parentNode) document.body.appendChild(_canvas);
       }
-      function pageResized() {
-        const pageWidth = root.innerWidth, pageHeight = root.innerHeight, styles = _canvas.style;
-        styles.display = "block";
-        if (_fullscreen) {
-          styles.position = "absolute";
-          styles.inset = 0;
-          instance.setvar("WIDTH", _canvas.width = pageWidth);
-          instance.setvar("HEIGHT", _canvas.height = pageHeight);
-        } else if (_autoscale) {
-          styles.margin = "auto";
+      function onResize() {
+        const styles = _canvas.style;
+        if (_autoscale) {
+          if (!styles.display) {
+            styles.display = "block";
+            styles.margin = "auto";
+          }
           _scale = Math.min(
-            pageWidth / instance.WIDTH,
-            pageHeight / instance.HEIGHT
+            root.innerWidth / instance.WIDTH,
+            root.innerHeight / instance.HEIGHT
           );
           _scale = (settings.pixelart ? ~~_scale : _scale) || 1;
           styles.width = instance.WIDTH * _scale + "px";
           styles.height = instance.HEIGHT * _scale + "px";
         }
-        instance.setvar("CENTERX", instance.WIDTH / 2);
-        instance.setvar("CENTERY", instance.HEIGHT / 2);
         if (!settings.antialias || settings.pixelart) {
           _ctx.imageSmoothingEnabled = false;
           styles.imageRendering = "pixelated";

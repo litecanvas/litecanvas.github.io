@@ -272,8 +272,7 @@ function draw() {
 }
 
 function resized() {
-  // called when the browser was resized
-  // also called once before init()
+  // called when the canvas is resized
 }
 
 function tap(x, y, tapId) {
@@ -334,11 +333,8 @@ settings.loop = {
 // the canvas (by default a new canvas is created)
 settings.canvas = null
 
-// make the game screen fill the entire screen
-settings.fullscreen = true
-
 // the game screen size
-// by default, the game fills the entire screen
+// by default, the game fills the entire webpage
 settings.width = null
 settings.height = settings.width || null
 
@@ -677,7 +673,7 @@ listen(event: string, callback: Function): Function
 emit(event: string, arg1?, arg2?, arg3?, arg4?): void
 
 // Resizes the game canvas.
-// Also, emits the "resized" (use `listen` to observe this event).
+// Also, emits the "resized" event.
 resize(width: number, height: number): void
 
 // Sets the scale of the game's delta time (dt).
