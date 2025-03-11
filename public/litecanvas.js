@@ -1104,22 +1104,23 @@
           });
         }
         if (settings.keyboardEvents) {
-          const _keys = /* @__PURE__ */ new Set();
+          const _keyDownList = /* @__PURE__ */ new Set();
           const iskeydown = (key) => {
             DEV: assert(
               "string" === typeof key,
               "iskeydown: 1st param must be a string"
             );
-            return "any" === key ? _keys.size > 0 : _keys.has(key.toLowerCase());
+            key = key.toLowerCase();
+            return "any" === key ? _keyDownList.size > 0 : _keyDownList.has("space" === key ? " " : key);
           };
           instance.setvar("iskeydown", iskeydown);
           on(root, "keydown", (event) => {
-            _keys.add(event.key.toLowerCase());
+            _keyDownList.add(event.key.toLowerCase());
           });
           on(root, "keyup", (event) => {
-            _keys.delete(event.key.toLowerCase());
+            _keyDownList.delete(event.key.toLowerCase());
           });
-          on(root, "blur", () => _keys.clear());
+          on(root, "blur", () => _keyDownList.clear());
         }
         if (settings.pauseOnBlur) {
           on(root, "blur", () => {
