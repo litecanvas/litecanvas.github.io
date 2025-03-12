@@ -40,10 +40,20 @@ export function $$(selector, parent = document) {
  * @returns {string}
  */
 export function prepareCode(code) {
-  const timeout = 500;
-  Babel.registerPlugin("loopProtection", loopProtection(timeout));
-
   return Babel.transform(code, {
-    plugins: ["loopProtection"],
+    presets: [
+      [Babel.availablePresets["es2017"]],
+      [Babel.availablePresets["stage-2"]],
+    ],
+    plugins: [
+      "loopProtection",
+      [
+        Babel.availablePlugins["transform-es2015-modules-commonjs"],
+        { strictMode: false },
+      ],
+    ],
   }).code;
 }
+
+// window.Babel = Babel;
+Babel.registerPlugin("loopProtection", loopProtection(500));
