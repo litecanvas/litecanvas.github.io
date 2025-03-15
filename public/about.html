@@ -361,7 +361,7 @@ settings.global = true
 // useful to create your own mouse/touch handler
 settings.tapEvents = true
 
-// set to `false` to disable the `iskeydown()` method
+// set to `false` to disable the built in keyboard functions
 // useful to create your own keyboard handler
 settings.keyboardEvents = true</code></pre>
 
@@ -454,7 +454,7 @@ textalign(align?: string, baseline?: string): void
 // Sets the font family for texts
 textfont(fontName: string): void
 
-// Sets the font size (default: 32)
+// Sets the font size (default: 18)
 textsize(size: number): void
 
 /**
@@ -534,9 +534,15 @@ volume(value: number): void</code></pre>
 
       <h2><a id="keyboard">Functions for Keyboard</a></h2>
 
-      <pre><code class="language-typescript">// Checks if which key is currently pressed in your keyboard.
-// note: you can check if any key is pressed using `iskeydown("any")`.
-iskeydown(key: string): boolean</code></pre>
+      <pre><code class="language-typescript">// Checks if any or which key is currently pressed in your keyboard.
+// example: iskeydown('space') // returns true if space bar is down
+// example: iskeydown() // returns true for any key
+iskeydown(key: string): boolean
+
+// Checks if any or which key just got pressed in your keyboard.
+// example: iskeypressed('space') // returns true if space bar is pressed
+// example: iskeypressed() // returns true for any key
+iskeypressed(key: string): boolean</code></pre>
 
       <h2><a id="math">Functions for Math</a></h2>
 
@@ -552,6 +558,11 @@ deg2rad(n: number): number
 
 // Convert radians to degrees
 rad2deg(n: number): number
+
+// Returns the rounded value of an number to optional precision.
+// example: round(PI) return 3
+// example: round(PI, 3) return 3.142
+round(value: number, precision = 0): number
 
 // Constrains a number between `min` and `max`.
 // example: clamp(50, 0, 100) return 50
