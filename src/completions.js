@@ -227,7 +227,7 @@ export default function customCompletions(context) {
       {
         label: "iskeypressed",
         type: "function",
-        apply: "iskeydown(",
+        apply: "iskeypressed(",
         detail: "(key?)",
       },
       {
