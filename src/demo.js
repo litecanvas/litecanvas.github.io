@@ -3,7 +3,7 @@ export default () =>
 // Learn more tapping on the question mark (?) above.
 // Join our discord: https://discord.com/invite/r2c3rGsvH3
 
-let x, y, size, speed
+let x, y, size, speed, color
 
 litecanvas()
 
@@ -13,6 +13,7 @@ function init() {
   y = CENTERY
   size = 32
   speed = 250
+  color = 4
 }
 
 // called when touches/clicks happens
@@ -30,7 +31,7 @@ function update(dt) {
 // this function render the game scene
 function draw() {
   cls(0)
-  rectfill(x, y, size, size, 4)
+  rectfill(x, y, size, size, color)
   text(0, 0, 'use WASD keys or taps/clicks')
 }
 `;
