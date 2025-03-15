@@ -222,7 +222,13 @@ export default function customCompletions(context) {
         label: "iskeydown",
         type: "function",
         apply: "iskeydown(",
-        detail: "(key)",
+        detail: "(key?)",
+      },
+      {
+        label: "iskeypressed",
+        type: "function",
+        apply: "iskeydown(",
+        detail: "(key?)",
       },
       {
         label: "seed",
@@ -328,7 +334,7 @@ export default function customCompletions(context) {
         label: "round",
         type: "function",
         apply: "round(",
-        detail: "(value)",
+        detail: "(value, decimals = 0)",
       },
       {
         label: "floor",
