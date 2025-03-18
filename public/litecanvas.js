@@ -1149,28 +1149,27 @@
         _rafid = raf(drawFrame);
       }
       function drawFrame(now) {
-        if (_animated) {
-          _rafid = raf(drawFrame);
-        }
         let updated = 0, frameTime = (now - _lastFrameTime) / 1e3;
         _lastFrameTime = now;
-        if (frameTime > _deltaTime * 30) {
-          console.warn("skipping too long frame");
-        } else {
-          _accumulated += frameTime;
-          if (!_animated) {
-            _accumulated = _deltaTime;
+        if (_animated) {
+          _rafid = raf(drawFrame);
+          if (frameTime > 0.3) {
+            return console.warn("skipping too long frame");
           }
-          for (; _accumulated >= _deltaTime; _accumulated -= _deltaTime) {
+          _accumulated += frameTime;
+          while (_accumulated >= _deltaTime) {
             instance.emit("update", _deltaTime * _timeScale);
             instance.setvar(
               "ELAPSED",
               instance.ELAPSED + _deltaTime * _timeScale
             );
             updated++;
+            _accumulated -= _deltaTime;
           }
+        } else {
+          updated = 1;
         }
-        if (updated || !_animated) {
+        if (updated) {
           instance.textalign("start", "top");
           instance.emit("draw");
         }
