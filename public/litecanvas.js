@@ -45,7 +45,7 @@
         animate: true
       };
       settings = Object.assign(defaults, settings);
-      let _initialized = false, _plugins = [], _canvas = settings.canvas || document.createElement("canvas"), _animated = settings.animate, _scale = 1, _ctx, _outline_fix = 0.5, _timeScale = 1, _lastFrameTime, _deltaTime = 1 / 60, _accumulated = 0, _rafid, _fontFamily = "sans-serif", _fontSize = 18, _rng_seed = Date.now(), _global = settings.global, _events = {
+      let _initialized = false, _plugins = [], _canvas = settings.canvas || document.createElement("canvas"), _animated = settings.animate, _scale = 1, _ctx, _outline_fix = 0.5, _timeScale = 1, _lastFrameTime, _deltaTime = 1 / 60, _accumulated = 0, _rafid, _fontFamily = "sans-serif", _fontSize = 20, _rng_seed = Date.now(), _global = settings.global, _events = {
         init: null,
         update: null,
         draw: null,
@@ -903,27 +903,6 @@
           }
         },
         /**
-         * Resizes the game canvas and emit the "resized" event
-         *
-         * @param {number} width
-         * @param {number} height
-         */
-        resize(width, height) {
-          DEV: assert(
-            isFinite(width) && width > 0,
-            "resize: 1st param must be a number"
-          );
-          DEV: assert(
-            isFinite(height) && height > 0,
-            "resize: 2nd param must be a number"
-          );
-          instance.setvar("WIDTH", _canvas.width = width);
-          instance.setvar("HEIGHT", _canvas.height = height);
-          instance.setvar("CENTERX", instance.WIDTH / 2);
-          instance.setvar("CENTERY", instance.HEIGHT / 2);
-          onResize();
-        },
-        /**
          * The scale of the game's delta time (dt).
          * Values higher than 1 increase the speed of time, while values smaller than 1 decrease it.
          * A value of 0 freezes time and is effectively equivalent to pausing.
@@ -980,7 +959,7 @@
           loadPlugin(callback, config);
         }
         if (settings.autoscale) {
-          on(root, "resize", onResize);
+          on(root, "resize", resizeCanvas);
         }
         if (settings.tapEvents) {
           const _getXY = (pageX, pageY) => [
@@ -1180,47 +1159,47 @@
           _canvas && _canvas.tagName === "CANVAS",
           "Invalid canvas element"
         );
-        DEV: assert(
-          null == instance.WIDTH || instance.WIDTH > 0,
-          `Litecanvas' "width" option should be null or a positive number`
-        );
-        DEV: assert(
-          null == instance.HEIGHT || instance.HEIGHT > 0,
-          `Litecanvas' "width" option should be null or a positive number`
-        );
-        DEV: assert(
-          null == instance.HEIGHT || instance.WIDTH > 0 && instance.HEIGHT > 0,
-          `Litecanvas' "width" is required when "heigth" is passed`
-        );
         instance.setvar("CANVAS", _canvas);
         _ctx = _canvas.getContext("2d");
         on(_canvas, "click", () => root.focus());
         _canvas.style = "";
-        if (!instance.WIDTH) {
-          instance.WIDTH = root.innerWidth;
-          instance.HEIGHT = root.innerHeight;
-        }
-        instance.resize(instance.WIDTH, instance.HEIGHT, false);
+        resizeCanvas();
         if (!_canvas.parentNode) document.body.appendChild(_canvas);
       }
-      function onResize() {
-        const styles = _canvas.style;
+      function resizeCanvas() {
+        DEV: assert(
+          null == settings.width || isFinite(settings.width) && settings.width > 0,
+          `Litecanvas' option "width" should be a positive number when defined`
+        );
+        DEV: assert(
+          null == settings.height || isFinite(settings.height) && settings.height > 0,
+          `Litecanvas' option "height" should be a positive number when defined`
+        );
+        DEV: assert(
+          null == settings.height || settings.width > 0 && settings.height > 0,
+          `Litecanvas' option "width" is required when the option "height" is defined`
+        );
+        const width = settings.width || root.innerWidth, height = settings.height || settings.width || root.innerHeight;
+        instance.setvar("WIDTH", _canvas.width = width);
+        instance.setvar("HEIGHT", _canvas.height = height);
+        instance.setvar("CENTERX", instance.WIDTH / 2);
+        instance.setvar("CENTERY", instance.HEIGHT / 2);
         if (settings.autoscale) {
-          if (!styles.display) {
-            styles.display = "block";
-            styles.margin = "auto";
+          if (!_canvas.style.display) {
+            _canvas.style.display = "block";
+            _canvas.style.margin = "auto";
           }
           _scale = math.min(
             root.innerWidth / instance.WIDTH,
             root.innerHeight / instance.HEIGHT
           );
           _scale = (settings.pixelart ? ~~_scale : _scale) || 1;
-          styles.width = instance.WIDTH * _scale + "px";
-          styles.height = instance.HEIGHT * _scale + "px";
+          _canvas.style.width = instance.WIDTH * _scale + "px";
+          _canvas.style.height = instance.HEIGHT * _scale + "px";
         }
         if (!settings.antialias || settings.pixelart) {
           _ctx.imageSmoothingEnabled = false;
-          styles.imageRendering = "pixelated";
+          _canvas.style.imageRendering = "pixelated";
         }
         instance.emit("resized", _scale);
         if (!_animated) {
