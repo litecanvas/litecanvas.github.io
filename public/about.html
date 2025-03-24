@@ -682,10 +682,6 @@ listen(event: string, callback: Function): Function
 // Triggers a game event and call its registered callbacks.
 emit(event: string, arg1?, arg2?, arg3?, arg4?): void
 
-// Resizes the game canvas.
-// Also, emits the "resized" event.
-resize(width: number, height: number): void
-
 // Sets the scale of the game's delta time (dt).
 // By default is equal to 1.
 // Values higher than 1 increase the speed of time,

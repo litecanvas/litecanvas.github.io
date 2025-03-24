@@ -449,13 +449,6 @@ export default function customCompletions(context) {
         detail: "(event, a1, a2, a3, a4)",
       },
       {
-        label: "resize",
-        type: "function",
-        apply: "resize(",
-        detail: "(width, height)",
-        info: "resizes the game canvas",
-      },
-      {
         label: "setfps",
         type: "function",
         apply: "setfps(",
