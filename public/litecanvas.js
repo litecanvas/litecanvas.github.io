@@ -25,12 +25,12 @@
       if (!condition) throw new Error(message);
     };
     function litecanvas(settings = {}) {
-      const root = globalThis, math = Math, PI = math.PI, TWO_PI = PI * 2, raf = requestAnimationFrame, _browserEventListeners = [], on = (elem, evt, callback) => {
+      const root = globalThis, math = Math, TWO_PI = math.PI * 2, raf = requestAnimationFrame, _browserEventListeners = [], on = (elem, evt, callback) => {
         elem.addEventListener(evt, callback, false);
         _browserEventListeners.push(
           () => elem.removeEventListener(evt, callback, false)
         );
-      }, isFinite = Number.isFinite, defaults = {
+      }, isNumber = Number.isFinite, defaults = {
         width: null,
         height: null,
         autoscale: true,
@@ -45,26 +45,26 @@
         animate: true
       };
       settings = Object.assign(defaults, settings);
-      let _initialized = false, _plugins = [], _canvas = settings.canvas || document.createElement("canvas"), _animated = settings.animate, _scale = 1, _ctx, _outline_fix = 0.5, _timeScale = 1, _lastFrameTime, _deltaTime = 1 / 60, _accumulated = 0, _rafid, _fontFamily = "sans-serif", _fontSize = 20, _rng_seed = Date.now(), _global = settings.global, _events = {
-        init: null,
-        update: null,
-        draw: null,
-        resized: null,
-        tap: null,
-        untap: null,
-        tapping: null,
-        tapped: null
+      let _initialized = false, _plugins = [], _canvas, _scale = 1, _ctx, _outline_fix = 0.5, _timeScale = 1, _lastFrameTime, _deltaTime = 1 / 60, _accumulated = 0, _rafid, _fontFamily = "sans-serif", _fontSize = 20, _rng_seed = Date.now(), _events = {
+        init: false,
+        update: false,
+        draw: false,
+        resized: false,
+        tap: false,
+        untap: false,
+        tapping: false,
+        tapped: false
       }, _helpers = {
         settings: Object.assign({}, settings),
         colors
       };
       const instance = {
         /** @type {number} */
-        WIDTH: settings.width,
+        WIDTH: 0,
         /** @type {number} */
-        HEIGHT: settings.height || settings.width,
+        HEIGHT: 0,
         /** @type {HTMLCanvasElement} */
-        CANVAS: null,
+        CANVAS: false,
         /** @type {number} */
         ELAPSED: 0,
         /** @type {number} */
@@ -76,7 +76,7 @@
         /** @type {number} */
         MOUSEY: -1,
         /** @type {number[]} */
-        DEFAULT_SFX: [0.5, , 1675, , 0.06, 0.2, 1, 1.8, , , 637, 0.06],
+        DEFAULT_SFX: [0.5, 0, 1750, , , 0.3, 1, , , , 600, 0.1],
         /** MATH API */
         /**
          * Twice the value of the mathematical constant PI (π).
@@ -94,7 +94,7 @@
          *
          * @type {number}
          */
-        HALF_PI: PI / 2,
+        HALF_PI: math.PI / 2,
         /**
          * Calculates a linear (interpolation) value over t%.
          *
@@ -105,9 +105,9 @@
          * @tutorial https://gamedev.net/tutorials/programming/general-and-gameplay-programming/a-brief-introduction-to-lerp-r4954/
          */
         lerp: (start, end, t) => {
-          DEV: assert(isFinite(start), "lerp: 1st param must be a number");
-          DEV: assert(isFinite(end), "lerp: 2nd param must be a number");
-          DEV: assert(isFinite(t), "lerp: 3rd param must be a number");
+          DEV: assert(isNumber(start), "lerp: 1st param must be a number");
+          DEV: assert(isNumber(end), "lerp: 2nd param must be a number");
+          DEV: assert(isNumber(t), "lerp: 3rd param must be a number");
           return t * (end - start) + start;
         },
         /**
@@ -117,8 +117,8 @@
          * @returns {number} the value in radians
          */
         deg2rad: (degs) => {
-          DEV: assert(isFinite(degs), "deg2rad: 1st param must be a number");
-          return PI / 180 * degs;
+          DEV: assert(isNumber(degs), "deg2rad: 1st param must be a number");
+          return math.PI / 180 * degs;
         },
         /**
          * Convert radians to degrees
@@ -127,8 +127,8 @@
          * @returns {number} the value in degrees
          */
         rad2deg: (rads) => {
-          DEV: assert(isFinite(rads), "rad2deg: 1st param must be a number");
-          return 180 / PI * rads;
+          DEV: assert(isNumber(rads), "rad2deg: 1st param must be a number");
+          return 180 / math.PI * rads;
         },
         /**
          * Returns the rounded value of an number to optional precision (number of digits after the decimal point).
@@ -140,9 +140,9 @@
          * @returns {number} rounded number.
          */
         round: (n, precision = 0) => {
-          DEV: assert(isFinite(n), "round: 1st param must be a number");
+          DEV: assert(isNumber(n), "round: 1st param must be a number");
           DEV: assert(
-            null === precision || isFinite(precision) && precision >= 0,
+            null == precision || isNumber(precision) && precision >= 0,
             "round: 2nd param must be a positive number or zero"
           );
           if (!precision) {
@@ -160,9 +160,9 @@
          * @returns {number}
          */
         clamp: (value, min, max) => {
-          DEV: assert(isFinite(value), "clamp: 1st param must be a number");
-          DEV: assert(isFinite(min), "clamp: 2nd param must be a number");
-          DEV: assert(isFinite(max), "clamp: 3rd param must be a number");
+          DEV: assert(isNumber(value), "clamp: 1st param must be a number");
+          DEV: assert(isNumber(min), "clamp: 2nd param must be a number");
+          DEV: assert(isNumber(max), "clamp: 3rd param must be a number");
           DEV: assert(
             max > min,
             "randi: the 2nd param must be less than the 3rd param"
@@ -180,9 +180,9 @@
          * @returns {number}
          */
         wrap: (value, min, max) => {
-          DEV: assert(isFinite(value), "wrap: 1st param must be a number");
-          DEV: assert(isFinite(min), "wrap: 2nd param must be a number");
-          DEV: assert(isFinite(max), "wrap: 3rd param must be a number");
+          DEV: assert(isNumber(value), "wrap: 1st param must be a number");
+          DEV: assert(isNumber(min), "wrap: 2nd param must be a number");
+          DEV: assert(isNumber(max), "wrap: 3rd param must be a number");
           DEV: assert(
             max > min,
             "randi: the 2nd param must be less than the 3rd param"
@@ -205,11 +205,11 @@
          * @returns {number} the remapped number
          */
         map(value, start1, stop1, start2, stop2, withinBounds) {
-          DEV: assert(isFinite(value), "map: 1st param must be a number");
-          DEV: assert(isFinite(start1), "map: 2nd param must be a number");
-          DEV: assert(isFinite(stop1), "map: 3rd param must be a number");
-          DEV: assert(isFinite(start2), "map: 4th param must be a number");
-          DEV: assert(isFinite(stop2), "map: 5th param must be a number");
+          DEV: assert(isNumber(value), "map: 1st param must be a number");
+          DEV: assert(isNumber(start1), "map: 2nd param must be a number");
+          DEV: assert(isNumber(stop1), "map: 3rd param must be a number");
+          DEV: assert(isNumber(start2), "map: 4th param must be a number");
+          DEV: assert(isNumber(stop2), "map: 5th param must be a number");
           const result = (value - start1) / (stop1 - start1) * (stop2 - start2) + start2;
           return withinBounds ? instance.clamp(result, start2, stop2) : result;
         },
@@ -224,9 +224,9 @@
          * @returns {number} the normalized number.
          */
         norm: (value, start, stop) => {
-          DEV: assert(isFinite(value), "norm: 1st param must be a number");
-          DEV: assert(isFinite(start), "norm: 2nd param must be a number");
-          DEV: assert(isFinite(stop), "norm: 3rd param must be a number");
+          DEV: assert(isNumber(value), "norm: 1st param must be a number");
+          DEV: assert(isNumber(start), "norm: 2nd param must be a number");
+          DEV: assert(isNumber(stop), "norm: 3rd param must be a number");
           return instance.map(value, start, stop, 0, 1);
         },
         /** RNG API */
@@ -239,8 +239,8 @@
          * @returns {number} the random number
          */
         rand: (min = 0, max = 1) => {
-          DEV: assert(isFinite(min), "rand: 1st param must be a number");
-          DEV: assert(isFinite(max), "rand: 2nd param must be a number");
+          DEV: assert(isNumber(min), "rand: 1st param must be a number");
+          DEV: assert(isNumber(max), "rand: 2nd param must be a number");
           DEV: assert(
             max > min,
             "rand: the 1st param must be less than the 2nd param"
@@ -259,8 +259,8 @@
          * @returns {number} the random number
          */
         randi: (min = 0, max = 1) => {
-          DEV: assert(isFinite(min), "randi: 1st param must be a number");
-          DEV: assert(isFinite(max), "randi: 2nd param must be a number");
+          DEV: assert(isNumber(min), "randi: 1st param must be a number");
+          DEV: assert(isNumber(max), "randi: 2nd param must be a number");
           DEV: assert(
             max > min,
             "randi: the 1st param must be less than the 2nd param"
@@ -276,7 +276,7 @@
          */
         seed: (value) => {
           DEV: assert(
-            null == value || isFinite(value) && value >= 0,
+            null == value || isNumber(value) && value >= 0,
             "seed: 1st param must be a positive number or zero"
           );
           return null == value ? _rng_seed : _rng_seed = ~~value;
@@ -285,11 +285,11 @@
         /**
          * Clear the game screen with an optional color
          *
-         * @param {number?} color The background color (index) or null/undefined (for transparent)
+         * @param {number} [color] The background color (index) or null/undefined (for transparent)
          */
         cls(color) {
           DEV: assert(
-            null == color || isFinite(color) && color >= 0,
+            null == color || isNumber(color) && color >= 0,
             "cls: 1st param must be a positive number or zero or undefined"
           );
           if (null == color) {
@@ -314,23 +314,23 @@
          * @param {number} [color=0] the color index
          * @param {number|number[]} [radii] A number or list specifying the radii used to draw a rounded-borders rectangle
          */
-        rect(x, y, width, height, color, radii = null) {
-          DEV: assert(isFinite(x), "rect: 1st param must be a number");
-          DEV: assert(isFinite(y), "rect: 2nd param must be a number");
+        rect(x, y, width, height, color, radii) {
+          DEV: assert(isNumber(x), "rect: 1st param must be a number");
+          DEV: assert(isNumber(y), "rect: 2nd param must be a number");
           DEV: assert(
-            isFinite(width) && width > 0,
+            isNumber(width) && width > 0,
             "rect: 3rd param must be a positive number"
           );
           DEV: assert(
-            isFinite(height) && height >= 0,
+            isNumber(height) && height >= 0,
             "rect: 4th param must be a positive number or zero"
           );
           DEV: assert(
-            null == color || isFinite(color) && color >= 0,
+            null == color || isNumber(color) && color >= 0,
             "rect: 5th param must be a positive number or zero"
           );
           DEV: assert(
-            null == radii || isFinite(radii) || Array.isArray(radii) && radii.length >= 1,
+            null == radii || isNumber(radii) || Array.isArray(radii) && radii.length >= 1,
             "rect: 6th param must be a number or array of numbers"
           );
           _ctx.beginPath();
@@ -353,23 +353,23 @@
          * @param {number} [color=0] the color index
          * @param {number|number[]} [radii] A number or list specifying the radii used to draw a rounded-borders rectangle
          */
-        rectfill(x, y, width, height, color, radii = null) {
-          DEV: assert(isFinite(x), "rectfill: 1st param must be a number");
-          DEV: assert(isFinite(y), "rectfill: 2nd param must be a number");
+        rectfill(x, y, width, height, color, radii) {
+          DEV: assert(isNumber(x), "rectfill: 1st param must be a number");
+          DEV: assert(isNumber(y), "rectfill: 2nd param must be a number");
           DEV: assert(
-            isFinite(width) && width >= 0,
+            isNumber(width) && width >= 0,
             "rectfill: 3rd param must be a positive number or zero"
           );
           DEV: assert(
-            isFinite(height) && height >= 0,
+            isNumber(height) && height >= 0,
             "rectfill: 4th param must be a positive number or zero"
           );
           DEV: assert(
-            null == color || isFinite(color) && color >= 0,
+            null == color || isNumber(color) && color >= 0,
             "rectfill: 5th param must be a positive number or zero"
           );
           DEV: assert(
-            null == radii || isFinite(radii) || Array.isArray(radii) && radii.length >= 1,
+            null == radii || isNumber(radii) || Array.isArray(radii) && radii.length >= 1,
             "rectfill: 6th param must be a number or array of at least 2 numbers"
           );
           _ctx.beginPath();
@@ -391,14 +391,14 @@
          * @param {number} [color=0] the color index
          */
         circ(x, y, radius, color) {
-          DEV: assert(isFinite(x), "circ: 1st param must be a number");
-          DEV: assert(isFinite(y), "circ: 2nd param must be a number");
+          DEV: assert(isNumber(x), "circ: 1st param must be a number");
+          DEV: assert(isNumber(y), "circ: 2nd param must be a number");
           DEV: assert(
-            isFinite(radius) && radius >= 0,
+            isNumber(radius) && radius >= 0,
             "circ: 3rd param must be a positive number or zero"
           );
           DEV: assert(
-            null == color || isFinite(color) && color >= 0,
+            null == color || isNumber(color) && color >= 0,
             "circ: 4th param must be a positive number or zero"
           );
           _ctx.beginPath();
@@ -414,14 +414,14 @@
          * @param {number} [color=0] the color index
          */
         circfill(x, y, radius, color) {
-          DEV: assert(isFinite(x), "circfill: 1st param must be a number");
-          DEV: assert(isFinite(y), "circfill: 2nd param must be a number");
+          DEV: assert(isNumber(x), "circfill: 1st param must be a number");
+          DEV: assert(isNumber(y), "circfill: 2nd param must be a number");
           DEV: assert(
-            isFinite(radius) && radius >= 0,
+            isNumber(radius) && radius >= 0,
             "circfill: 3rd param must be a positive number or zero"
           );
           DEV: assert(
-            null == color || isFinite(color) && color >= 0,
+            null == color || isNumber(color) && color >= 0,
             "circfill: 4th param must be a positive number or zero"
           );
           _ctx.beginPath();
@@ -438,18 +438,18 @@
          * @param {number} [color=0] the color index
          */
         line(x1, y1, x2, y2, color) {
-          DEV: assert(isFinite(x1), "line: 1st param must be a number");
-          DEV: assert(isFinite(y1), "line: 2nd param must be a number");
+          DEV: assert(isNumber(x1), "line: 1st param must be a number");
+          DEV: assert(isNumber(y1), "line: 2nd param must be a number");
           DEV: assert(
-            isFinite(x2),
+            isNumber(x2),
             "line: 3rd param must be a positive number or zero"
           );
           DEV: assert(
-            isFinite(y2),
+            isNumber(y2),
             "line: 4th param must be a positive number or zero"
           );
           DEV: assert(
-            null == color || isFinite(color) && color >= 0,
+            null == color || isNumber(color) && color >= 0,
             "line: 5th param must be a positive number or zero"
           );
           _ctx.beginPath();
@@ -467,11 +467,11 @@
          */
         linewidth(value) {
           DEV: assert(
-            isFinite(value) && ~~value > 0,
+            isNumber(value) && ~~value > 0,
             "linewidth: 1st param must be a positive number"
           );
           _ctx.lineWidth = ~~value;
-          _outline_fix = ~~value % 2 === 0 ? 0 : 0.5;
+          _outline_fix = 0 === ~~value % 2 ? 0 : 0.5;
         },
         /**
          * Sets the line dash pattern used when drawing lines
@@ -487,7 +487,7 @@
             "linedash: 1st param must be an array of numbers"
           );
           DEV: assert(
-            isFinite(offset),
+            isNumber(offset),
             "linedash: 2nd param must be a number"
           );
           _ctx.setLineDash(segments);
@@ -504,10 +504,10 @@
          * @param {string} [fontStyle] can be "normal" (default), "italic" and/or "bold".
          */
         text(x, y, message, color = 3, fontStyle = "normal") {
-          DEV: assert(isFinite(x), "text: 1st param must be a number");
-          DEV: assert(isFinite(y), "text: 2nd param must be a number");
+          DEV: assert(isNumber(x), "text: 1st param must be a number");
+          DEV: assert(isNumber(y), "text: 2nd param must be a number");
           DEV: assert(
-            null == color || isFinite(color) && color >= 0,
+            null == color || isNumber(color) && color >= 0,
             "text: 4th param must be a positive number or zero"
           );
           DEV: assert(
@@ -536,7 +536,7 @@
          * @param {number} size
          */
         textsize(size) {
-          DEV: assert(isFinite(size), "textsize: 1st param must be a number");
+          DEV: assert(isNumber(size), "textsize: 1st param must be a number");
           _fontSize = size;
         },
         /**
@@ -575,8 +575,8 @@
          * @param {OffscreenCanvas|HTMLImageElement|HTMLCanvasElement} source
          */
         image(x, y, source) {
-          DEV: assert(isFinite(x), "image: 1st param must be a number");
-          DEV: assert(isFinite(y), "image: 2nd param must be a number");
+          DEV: assert(isNumber(x), "image: 1st param must be a number");
+          DEV: assert(isNumber(y), "image: 2nd param must be a number");
           _ctx.drawImage(source, ~~x, ~~y);
         },
         /**
@@ -592,14 +592,14 @@
          * @see https://developer.mozilla.org/en-US/docs/Web/API/OffscreenCanvas
          */
         paint(width, height, drawing, options = {}) {
-          DEV: assert(isFinite(width), "paint: 1st param must be a number");
-          DEV: assert(isFinite(height), "paint: 2nd param must be a number");
+          DEV: assert(isNumber(width), "paint: 1st param must be a number");
+          DEV: assert(isNumber(height), "paint: 2nd param must be a number");
           DEV: assert(
             "function" === typeof drawing || Array.isArray(drawing),
             "paint: 3rd param must be a function or array"
           );
           DEV: assert(
-            options && !options.scale || isFinite(options.scale),
+            options && !options.scale || isNumber(options.scale),
             "paint: 4th param (options.scale) must be a number"
           );
           const canvas = options.canvas || new OffscreenCanvas(1, 1), scale = options.scale || 1, contextOriginal = _ctx;
@@ -659,8 +659,8 @@
          * @param {number} y
          */
         translate: (x, y) => {
-          DEV: assert(isFinite(x), "translate: 1st param must be a number");
-          DEV: assert(isFinite(y), "translate: 2nd param must be a number");
+          DEV: assert(isNumber(x), "translate: 1st param must be a number");
+          DEV: assert(isNumber(y), "translate: 2nd param must be a number");
           return _ctx.translate(~~x, ~~y);
         },
         /**
@@ -670,9 +670,9 @@
          * @param {number} [y]
          */
         scale: (x, y) => {
-          DEV: assert(isFinite(x), "scale: 1st param must be a number");
+          DEV: assert(isNumber(x), "scale: 1st param must be a number");
           DEV: assert(
-            y == null || isFinite(y),
+            null == y || isNumber(y),
             "scale: 2nd param must be a number"
           );
           return _ctx.scale(x, y || x);
@@ -683,7 +683,7 @@
          * @param {number} radians
          */
         rotate: (radians) => {
-          DEV: assert(isFinite(radians), "rotate: 1st param must be a number");
+          DEV: assert(isNumber(radians), "rotate: 1st param must be a number");
           return _ctx.rotate(radians);
         },
         /**
@@ -693,7 +693,7 @@
          * @see https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/globalAlpha
          */
         alpha(value) {
-          DEV: assert(isFinite(value), "alpha: 1st param must be a number");
+          DEV: assert(isNumber(value), "alpha: 1st param must be a number");
           _ctx.globalAlpha = instance.clamp(value, 0, 1);
         },
         /**
@@ -720,7 +720,7 @@
          */
         fill(color, path2) {
           DEV: assert(
-            null == color || isFinite(color) && color >= 0,
+            null == color || isNumber(color) && color >= 0,
             "fill: 1st param must be a positive number or zero"
           );
           DEV: assert(
@@ -742,7 +742,7 @@
          */
         stroke(color, path2) {
           DEV: assert(
-            null == color || isFinite(color) && color >= 0,
+            null == color || isNumber(color) && color >= 0,
             "stroke: 1st param must be a positive number or zero"
           );
           DEV: assert(
@@ -786,9 +786,9 @@
             null == zzfxParams || Array.isArray(zzfxParams),
             "sfx: 1st param must be an array"
           );
-          DEV: assert(isFinite(pitchSlide), "sfx: 2nd param must be a number");
+          DEV: assert(isNumber(pitchSlide), "sfx: 2nd param must be a number");
           DEV: assert(
-            isFinite(volumeFactor),
+            isNumber(volumeFactor),
             "sfx: 3rd param must be a number"
           );
           if (root.zzfxV <= 0 || navigator.userActivation && !navigator.userActivation.hasBeenActive) {
@@ -810,7 +810,7 @@
          * @param {number} value
          */
         volume(value) {
-          DEV: assert(isFinite(value), "volume: 1st param must be a number");
+          DEV: assert(isNumber(value), "volume: 1st param must be a number");
           root.zzfxV = value;
         },
         /** PLUGINS API */
@@ -878,7 +878,7 @@
          */
         getcolor: (index) => {
           DEV: assert(
-            null == index || isFinite(index) && index >= 0,
+            null == index || isNumber(index) && index >= 0,
             "getcolor: 1st param must be a number"
           );
           return colors[~~index % colors.length];
@@ -894,11 +894,11 @@
             "string" === typeof key,
             "setvar: 1st param must be a string"
           );
-          if (value == null) {
+          if (null == value) {
             console.warn(`setvar: key "${key}" was defined as ${value}`);
           }
           instance[key] = value;
-          if (_global) {
+          if (settings.global) {
             root[key] = value;
           }
         },
@@ -911,7 +911,7 @@
          */
         timescale(value) {
           DEV: assert(
-            isFinite(value),
+            isNumber(value),
             "timescale: 1st param must be a number"
           );
           _timeScale = value;
@@ -923,7 +923,7 @@
          */
         setfps(value) {
           DEV: assert(
-            isFinite(value) && value >= 1,
+            isNumber(value) && value >= 1,
             "setfps: 1st param must be a positive number"
           );
           _deltaTime = 1 / ~~value;
@@ -938,7 +938,7 @@
           for (const removeListener of _browserEventListeners) {
             removeListener();
           }
-          if (_global) {
+          if (settings.global) {
             for (const key in instance) {
               delete root[key];
             }
@@ -1084,7 +1084,7 @@
              * Checks if a which key is pressed (down) on the keyboard.
              * Note: use `iskeydown()` to check for any key.
              *
-             * @param {string?} key
+             * @param {string} [key]
              * @returns {boolean}
              */
             (key) => {
@@ -1101,7 +1101,7 @@
              * Checks if a which key just got pressed on the keyboard.
              * Note: use `iskeypressed()` to check for any key.
              *
-             * @param {string?} key
+             * @param {string} [key]
              * @returns {boolean}
              */
             (key) => {
@@ -1130,7 +1130,7 @@
       function drawFrame(now) {
         let updated = 0, frameTime = (now - _lastFrameTime) / 1e3;
         _lastFrameTime = now;
-        if (_animated) {
+        if (settings.animate) {
           _rafid = raf(drawFrame);
           if (frameTime > 0.3) {
             return console.warn("skipping too long frame");
@@ -1154,6 +1154,7 @@
         }
       }
       function setupCanvas() {
+        _canvas = settings.canvas || document.createElement("canvas");
         _canvas = "string" === typeof _canvas ? document.querySelector(_canvas) : _canvas;
         DEV: assert(
           _canvas && _canvas.tagName === "CANVAS",
@@ -1168,11 +1169,11 @@
       }
       function resizeCanvas() {
         DEV: assert(
-          null == settings.width || isFinite(settings.width) && settings.width > 0,
+          null == settings.width || isNumber(settings.width) && settings.width > 0,
           `Litecanvas' option "width" should be a positive number when defined`
         );
         DEV: assert(
-          null == settings.height || isFinite(settings.height) && settings.height > 0,
+          null == settings.height || isNumber(settings.height) && settings.height > 0,
           `Litecanvas' option "height" should be a positive number when defined`
         );
         DEV: assert(
@@ -1202,7 +1203,7 @@
           _canvas.style.imageRendering = "pixelated";
         }
         instance.emit("resized", _scale);
-        if (!_animated) {
+        if (!settings.animate) {
           raf(drawFrame);
         }
       }
@@ -1222,9 +1223,9 @@
           instance.setvar(key, pluginData[key]);
         }
       }
-      if (_global) {
+      if (settings.global) {
         if (root.ENGINE) {
-          throw "two global litecanvas detected";
+          throw new Error("two global litecanvas detected");
         }
         Object.assign(root, instance);
         root.ENGINE = instance;
