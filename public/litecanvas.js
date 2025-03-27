@@ -580,7 +580,7 @@
           _ctx.drawImage(source, ~~x, ~~y);
         },
         /**
-         * Creates a offscreen canvas to draw on it
+         * Draw in an OffscreenCanvas and returns its image.
          *
          * @param {number} width
          * @param {number} height
@@ -588,7 +588,7 @@
          * @param {object} [options]
          * @param {number} [options.scale=1]
          * @param {OffscreenCanvas | HTMLCanvasElement} [options.canvas]
-         * @returns {OffscreenCanvas}
+         * @returns {ImageBitmap}
          * @see https://developer.mozilla.org/en-US/docs/Web/API/OffscreenCanvas
          */
         paint(width, height, drawing, options = {}) {
@@ -624,7 +624,7 @@
             drawing(_ctx);
           }
           _ctx = contextOriginal;
-          return canvas;
+          return canvas.transferToImageBitmap();
         },
         /** ADVANCED GRAPHICS API */
         /**

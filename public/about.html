@@ -464,22 +464,21 @@ textsize(size: number): void
 // draw a image
 image(x, y, image: Image|HTMLCanvasElement): void
 
-// create a offcanvas and to make an image on it
+// create an OffscreenCanvas and draw on it to make an image
 // data can be a array of strings (to draw pixel art)
 // see: https://github.com/litecanvas/game-engine/blob/main/samples/pixelart/pixelart.js
 // or data can be a function with drawing operations
 // see: https://github.com/litecanvas/game-engine/blob/main/samples/paint/paint.js
 // the options are:
 //   * scale?: default = 1.
-//   * canvas?: by default creates a new canvas.
+//   * canvas?: by default creates a new offscreen canvas.
 paint(width, height, data: string[]|function, options?): OffscreenCanvas
 
 /**
  * ADVANCED DRAWING-RELATED FUNCTIONS
  */
 
-// Set or get the current canvas context 2D
-// see: https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D
+// get the current canvas context 2D or set a newly
 ctx(context?: CanvasRenderingContext2D): CanvasRenderingContext2D
 
 // save the canvas state

@@ -133,7 +133,7 @@ export default function customCompletions(context) {
         type: "function",
         apply: "paint(",
         detail: "(width, height, callback|array, options)",
-        info: "Creates a offscreen canvas to draw on it",
+        info: "Creates an image in offscreencanvas",
       },
       {
         label: "translate",
