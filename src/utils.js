@@ -1,4 +1,4 @@
-import Babel from "babel-standalone";
+import Babel from "@babel/standalone";
 import loopProtection from "./loop-protect";
 
 /**
@@ -41,19 +41,10 @@ export function $$(selector, parent = document) {
  */
 export function prepareCode(code) {
   return Babel.transform(code, {
-    presets: [
-      [Babel.availablePresets["es2017"]],
-      [Babel.availablePresets["stage-2"]],
-    ],
-    plugins: [
-      "loopProtection",
-      [
-        Babel.availablePlugins["transform-es2015-modules-commonjs"],
-        { strictMode: false },
-      ],
-    ],
+    presets: [[Babel.availablePresets["env"], { loose: true, modules: false }]],
+    plugins: ["loopProtection"],
   }).code;
 }
 
-// window.Babel = Babel;
+window.Babel = Babel;
 Babel.registerPlugin("loopProtection", loopProtection(500));

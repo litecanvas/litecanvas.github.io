@@ -550,7 +550,7 @@
         textalign(align, baseline) {
           DEV: assert(
             null == align || ["left", "right", "center", "start", "end"].includes(align),
-            "textalign: 1st param must be a string"
+            "textalign: 1st param must be null or one of the following values: center, left, right, start or end."
           );
           DEV: assert(
             null == baseline || [
@@ -561,7 +561,7 @@
               "alphabetic",
               "ideographic"
             ].includes(baseline),
-            "textalign: 2nd param must be a string"
+            "textalign: 2nd param must be null or one of the following values: middle, top, bottom, hanging, alphabetic or ideographic."
           );
           if (align) _ctx.textAlign = align;
           if (baseline) _ctx.textBaseline = baseline;
