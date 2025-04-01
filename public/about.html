@@ -539,7 +539,7 @@ volume(value: number): void</code></pre>
 iskeydown(key: string): boolean
 
 // Checks if any or which key just got pressed in your keyboard.
-// example: iskeypressed('space') // returns true if space bar is pressed
+// example: iskeypressed('space') // returns true if space bar was pressed
 // example: iskeypressed() // returns true for any key
 iskeypressed(key: string): boolean</code></pre>
 
@@ -645,26 +645,16 @@ sign(n: number): number
 
 // Generates a pseudo-random float between min (inclusive)
 // and max (exclusive)
-rand(min = 0, max = 1.0): number;
+rand(min = 0, max = 1.0): number
 
 // Generates a pseudo-random integer between min (inclusive)
 // and max (inclusive)
-randi(min = 0, max = 1): number;
+randi(min = 0, max = 1): number
 
 // If a value is passed, initializes the random number generator (RNG)
 // with an explicit seed value (a number >= 0). Otherwise, returns the current seed state.
 // By default, the initial seed is the current timestamp (from `Date.now()`).
-seed(value: number | null): number;
-
-/** Collision Check (AABB) */
-
-// Check a collision between two rectangles.
-// All arguments are required and must be numbers.
-colrect(x1, y1, w1, h1, x2, y2, w2, h2): boolean
-
-// Check a collision between two circles.
-// All arguments are required and must be numbers.
-colcirc(x1, y1, r1, x2, y2, r2): boolean</code></pre>
+seed(value: number | null): number</code></pre>
 
       <h2><a id="engine-api">Engine API</a></h2>
 

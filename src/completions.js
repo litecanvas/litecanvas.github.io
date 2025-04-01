@@ -397,20 +397,6 @@ export default function customCompletions(context) {
         detail: "(x)",
       },
       {
-        label: "colrect",
-        type: "function",
-        apply: "colrect(",
-        detail: "(x1, y1, w1, h1, x2, y2, w2, h2)",
-        info: "Check collision between 2 rectangles",
-      },
-      {
-        label: "colcirc",
-        type: "function",
-        apply: "colcirc(",
-        detail: "(x1, y1, r1, x2, y2, r2)",
-        info: "Check collision between 2 circles",
-      },
-      {
         label: "timescale",
         type: "function",
         apply: "timescale(",
