@@ -35,16 +35,25 @@ export function $$(selector, parent = document) {
   return parent.querySelectorAll(selector);
 }
 
+// window.Babel = Babel;
+Babel.registerPlugin("loopProtection", loopProtection(500));
+
 /**
  * @param {string} code
  * @returns {string}
  */
 export function prepareCode(code) {
-  return Babel.transform(code, {
-    presets: [[Babel.availablePresets["env"], { loose: true, modules: false }]],
-    plugins: ["loopProtection"],
-  }).code;
+  let result;
+  try {
+    result = Babel.transform(code, {
+      presets: [
+        [Babel.availablePresets["env"], { loose: true, modules: false }],
+      ],
+      plugins: ["loopProtection"],
+    }).code;
+  } catch (e) {
+    const message = e.message.split("\n")[0];
+    result = `throw new SyntaxError(\`${message}\`);`;
+  }
+  return result;
 }
-
-window.Babel = Babel;
-Babel.registerPlugin("loopProtection", loopProtection(500));

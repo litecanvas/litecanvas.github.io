@@ -322,11 +322,22 @@ if (isMobile) {
   mobileBar(window.codeEditor);
 }
 
+if (!smallScreen) {
+  show(hideEditor);
+  if (autoplay) runCode();
+} else {
+  show(playButton);
+  hide(game);
+}
+
 window.isUpdateAvailable = new Promise(function (resolve) {
   if (
     url.searchParams.get("test_service_worker") === "on" ||
     ("serviceWorker" in navigator &&
-      location.hostname.indexOf("127.0.0") === -1)
+      location.protocol === "https:" &&
+      location.hostname.indexOf("127.0.0") === -1 &&
+      location.hostname.indexOf("192.168.") === -1 &&
+      location.hostname.indexOf("172.") === -1)
   ) {
     // register service worker file
     navigator.serviceWorker
@@ -366,11 +377,3 @@ window.isUpdateAvailable.then((isAvailable) => {
   if (!isAvailable) return;
   alert("New Update available! Reload the webapp to see the latest changes.");
 });
-
-if (!smallScreen) {
-  show(hideEditor);
-  if (autoplay) runCode();
-} else {
-  show(playButton);
-  hide(game);
-}
