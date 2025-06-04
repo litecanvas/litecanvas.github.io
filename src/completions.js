@@ -36,6 +36,11 @@ export default function customCompletions(context) {
         label: "DEFAULT_SFX",
         type: "variable",
       },
+      {
+        label: "COLORS",
+        type: "variable",
+        info: "the current color palette",
+      },
       { label: "PI", type: "constant" },
       { label: "TWO_PI", type: "constant" },
       { label: "HALF_PI", type: "constant" },
@@ -192,6 +197,12 @@ export default function customCompletions(context) {
         info: "restore the rendering context",
       },
       {
+        label: "pal",
+        type: "function",
+        apply: "pal(colors?)",
+        info: "set or reset the color palette",
+      },
+      {
         label: "ctx",
         type: "function",
         apply: "ctx(value?)",
@@ -262,12 +273,6 @@ export default function customCompletions(context) {
         type: "function",
         apply: "norm(",
         detail: "(val, min, max)",
-      },
-      {
-        label: "diff",
-        type: "function",
-        apply: "diff(",
-        detail: "(a, b)",
       },
       {
         label: "clamp",

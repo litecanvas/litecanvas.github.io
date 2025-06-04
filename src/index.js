@@ -230,7 +230,7 @@ const state = EditorState.create({
     EditorView.updateListener.of((update) => {
       if (update.docChanged) config.codeChanged = true;
     }),
-    scrollPastEnd(),
+    // scrollPastEnd(),
     ...desktopExtensions,
   ],
 });

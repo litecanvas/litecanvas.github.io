@@ -7,7 +7,7 @@
       for (e = a * e + 9, X *= a, P *= a, S *= a, r *= a, H *= 500 * t / a ** 3, K *= t / a, V *= t / a, J *= a, h = a * h | 0, i *= 0.3 * (globalThis.zzfxV || 1), s = e + X + P + S + r | 0; f < s; d[f++] = o * i) ++l % (100 * E | 0) || (o = I ? 1 < I ? 2 < I ? 3 < I ? C(x * x) : n.max(n.min(n.tan(x), 1), -1) : 1 - (2 * x / t % 2 + 2) % 2 : 1 - 4 * n.abs(n.round(x / t) - x / t) : C(x), o = (h ? 1 - L + L * C(t * f / h) : 1) * (o < 0 ? -1 : 1) * n.abs(o) ** c * (f < e ? f / e : f < e + X ? 1 - (f - e) / X * (1 - B) : f < e + X + P ? B : f < s - r ? (s - f - r) / S * B : 0), o = r ? o / 2 + (r > f ? 0 : (f < s - r ? 1 : (s - f) / r) * d[f - r | 0] / 2 / i) : o, D && (o = Z = v * U + A * (U = W) + R * (W = o) - y * Y - m * (Y = Z))), u = (z += T += H) * n.cos(K * _++), x += u + u * j * C(f ** 5), g && ++g > J && (z += V, O += V, g = 0), !h || ++$ % h || (z = O, T = F, g = g || 1);
       i = zzfxX.createBuffer(1, s, a), i.getChannelData(0).set(d), z = zzfxX.createBufferSource(), z.buffer = i, z.connect(zzfxX.destination), z.start();
     };
-    var colors = [
+    var defaultPalette = [
       "#111",
       "#6a7799",
       "#aec2c2",
@@ -45,7 +45,7 @@
         animate: true
       };
       settings = Object.assign(defaults, settings);
-      let _initialized = false, _plugins = [], _canvas, _scale = 1, _ctx, _outline_fix = 0.5, _timeScale = 1, _lastFrameTime, _deltaTime = 1 / 60, _accumulated = 0, _rafid, _fontFamily = "sans-serif", _fontSize = 20, _rng_seed = Date.now(), _events = {
+      let _initialized = false, _plugins = [], _canvas, _scale = 1, _ctx, _outline_fix = 0.5, _timeScale = 1, _lastFrameTime, _deltaTime = 1 / 60, _accumulated = 0, _rafid, _fontFamily = "sans-serif", _fontSize = 20, _rng_seed = Date.now(), _colors = defaultPalette, _events = {
         init: false,
         update: false,
         draw: false,
@@ -55,8 +55,7 @@
         tapping: false,
         tapped: false
       }, _helpers = {
-        settings: Object.assign({}, settings),
-        colors
+        settings: Object.assign({}, settings)
       };
       const instance = {
         /** @type {number} */
@@ -77,6 +76,8 @@
         MOUSEY: -1,
         /** @type {number[]} */
         DEFAULT_SFX: [0.5, 0, 1750, , , 0.3, 1, , , , 600, 0.1],
+        /** @type {string[]} */
+        COLORS: _colors,
         /** MATH API */
         /**
          * Twice the value of the mathematical constant PI (π).
@@ -871,6 +872,19 @@
           }
         },
         /**
+         * Set or reset the color palette
+         *
+         * @param {string[]} [colors]
+         */
+        pal(colors = defaultPalette) {
+          DEV: assert(
+            Array.isArray(colors) && colors.length > 0,
+            "pal: 1st param must be a array of strings"
+          );
+          _colors = colors;
+          instance.setvar("COLORS", _colors);
+        },
+        /**
          * Get a color by index
          *
          * @param {number} [index=0] The color number
@@ -881,7 +895,7 @@
             null == index || isNumber(index) && index >= 0,
             "getcolor: 1st param must be a number"
           );
-          return colors[~~index % colors.length];
+          return _colors[~~index % _colors.length];
         },
         /**
          * Create or update a instance variable
@@ -1119,6 +1133,7 @@
           });
           on(root, "focus", () => {
             if (!_rafid) {
+              _accumulated = 0;
               _rafid = raf(drawFrame);
             }
           });
