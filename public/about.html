@@ -396,6 +396,9 @@ MOUSEY: number
 // the default sound played in `sfx()`
 DEFAULT_SFX: number[]
 
+// the list of colors in the current palette
+COLORS: string[]
+
 // Math constants
 PI: number // approximately 3.14 radians (180°)
 
@@ -685,6 +688,11 @@ setfps(value: number): void
 
 // Create or update an global variables (and instance properties)
 setvar(name: string, value: any): void
+
+// Update or reset the palette color
+// example: pal(['#000', '#FFF']) is a 1-bit color palette
+// example: pal() resets the default color palette
+pal(index: string[]): void
 
 // Gets the color value given its index.
 // example: getcolor(0) returns "#111"
