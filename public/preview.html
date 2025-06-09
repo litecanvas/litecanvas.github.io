@@ -88,25 +88,15 @@
       utils.global(false);
 
       window.printPage = window.print;
-      window.print = () => {
-        console.log("warning: print() is no longer alias for text()");
-      };
-      window.clear = () => {
-        console.log("warning: clear() is no longer alias for cls()");
-      };
-      // add global FPS to not break old examples
-      window.FPS = "";
 
-      ((lc) => {
+      ((_litecanvas) => {
         window.litecanvas = (settings = {}) => {
-          const loop =
-            settings.loop && settings.loop.init ? settings.loop : globalThis;
-          const _init = loop.init;
-          loop.init = (instance) => {
+          const instance = _litecanvas(settings);
+          instance.use(pluginMigrate);
+          instance.listen("before:init", () => {
             instance.use(pluginAssetLoader);
-            if (_init) _init(instance);
-          };
-          return lc(settings);
+          });
+          return instance;
         };
       })(window.litecanvas);
     </script>

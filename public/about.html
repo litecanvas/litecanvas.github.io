@@ -370,34 +370,28 @@ settings.keyboardEvents = true</code></pre>
       <pre><code class="language-typescript">// the game canvas
 CANVAS: HTMLCanvasElement
 
+// the amount of time since the game started
+T: number
+
 // the game screen width
-WIDTH: number
+W: number
 
 // the game screen height
-HEIGHT: number
+H: number
 
 // the center X of game screen
-CENTERX: number
+CX: number
 
 // the center Y of game screen
-CENTERY: number
-
-// the amount of time since the game started
-ELAPSED: number
+CY: number
 
 // the current mouse's X-position
 // or -1 (if the mouse was not used or detected)
-MOUSEX: number
+MX: number
 
 // the current mouse's Y-position
 // or -1 (if the mouse was not used or detected)
-MOUSEY: number
-
-// the default sound played in `sfx()`
-DEFAULT_SFX: number[]
-
-// the list of colors in the current palette
-COLORS: string[]
+MY: number
 
 // Math constants
 PI: number // approximately 3.14 radians (180°)
@@ -585,6 +579,10 @@ map(val, start1, stop1, start2, stop2, withinBounds = false ): number
 // example: norm(50, 0, 100) returns 0.5
 norm(value, min, max): number
 
+// Interpolate between 2 values using a periodic function (by default is Math.sin).
+// example: wave(-100, 100, T)
+wave(from: number, to: number, t: number, fn = Math.sin): number
+
 // Returns the sine of a number in radians.
 sin(angle: number): number
 
@@ -654,10 +652,10 @@ rand(min = 0, max = 1.0): number
 // and max (inclusive)
 randi(min = 0, max = 1): number
 
-// If a value is passed, initializes the random number generator (RNG)
-// with an explicit seed value (a number >= 0). Otherwise, returns the current seed state.
+// initializes the random number generator (RNG) with an explicit seed value
 // By default, the initial seed is the current timestamp (from `Date.now()`).
-seed(value: number | null): number</code></pre>
+// Note: The value should be a integer number greater than or equal to zero.
+rseed(value: number): void</code></pre>
 
       <h2><a id="engine-api">Engine API</a></h2>
 
@@ -681,26 +679,38 @@ emit(event: string, arg1?, arg2?, arg3?, arg4?): void
 // A value of 0 freezes time (equivalent to pausing).
 timescale(value: number): void
 
-// Sets the target FPS (frames per second or frame rate)
-setfps(value: number): void
+// Sets the target FPS (frames per second)
+framerate(value: number): void
 
 // the following functions are most used by plugins...
 
-// Create or update an global variables (and instance properties)
-setvar(name: string, value: any): void
+// Defines or updates an instance property or method
+def(name: string, value: any): void
 
 // Update or reset the palette color
 // example: pal(['#000', '#FFF']) is a 1-bit color palette
 // example: pal() resets the default color palette
 pal(index: string[]): void
 
-// Gets the color value given its index.
-// example: getcolor(0) returns "#111"
-getcolor(index: number): string
-
 // shutdown the engine
 // also emits the "quit" event
-quit(): void</code></pre>
+quit(): void
+
+// use `stat() to get internal informations about an litecanvas' instance
+// stat(0) the settings passed to that instance
+// stat(1) returns true if the "init" event has already been emitted
+// stat(2) the current ID returned by last requestAnimationFrame
+// stat(3) the current canvas element scale (not the context 2D scale)
+// stat(4) the attached event callbacks
+// stat(5) the current color palette
+// stat(6) the default sound used by `sfx()`
+// stat(7) the current time scale
+// stat(8) the current volume used by ZzFX
+// stat(9) the current RNG state
+// stat(10) the current font size
+// stat(11) the current font family
+// any other value returns undefined
+stat(n: number): any</code></pre>
 
       <h2><a id="advanced">Playground Features</a></h2>
 

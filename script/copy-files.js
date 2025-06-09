@@ -4,7 +4,9 @@ import esbuild from "esbuild";
 const root = process.env["PWD"];
 const engineFile = root + "/public/litecanvas.js";
 
-await unlink(engineFile);
+try {
+  await unlink(engineFile);
+} catch (e) {}
 
 await copyFile(root + "/node_modules/litecanvas/dist/dist.dev.js", engineFile);
 
@@ -21,6 +23,13 @@ const pluginAssetLoader = await readFile(
 );
 
 await appendFile(engineFile, "\n" + pluginAssetLoader);
+
+const pluginMigrate = await readFile(
+  root + "/node_modules/@litecanvas/plugin-migrate/dist/dist.js",
+  { encoding: "utf8" }
+);
+
+await appendFile(engineFile, "\n" + pluginMigrate);
 
 await esbuild.build({
   entryPoints: [engineFile],

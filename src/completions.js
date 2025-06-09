@@ -7,39 +7,30 @@ export default function customCompletions(context) {
     options: [
       // global constants
       { label: "CANVAS", type: "constant", info: "game canvas HTML element" },
-      { label: "WIDTH", type: "variable", info: "width of the game screen" },
-      { label: "HEIGHT", type: "variable", info: "height of the game screen" },
+      { label: "W", type: "variable", info: "width of the game screen" },
+      { label: "H", type: "variable", info: "height of the game screen" },
       {
-        label: "ELAPSED",
+        label: "T",
         type: "variable",
         info: "seconds since the game started",
       },
       {
-        label: "CENTERX",
+        label: "CX",
         type: "variable",
         info: "middle X of the game screen",
       },
       {
-        label: "CENTERY",
+        label: "CY",
         type: "variable",
         info: "middle Y of the game screen",
       },
       {
-        label: "MOUSEX",
+        label: "MX",
         type: "variable",
       },
       {
-        label: "MOUSEY",
+        label: "MY",
         type: "variable",
-      },
-      {
-        label: "DEFAULT_SFX",
-        type: "variable",
-      },
-      {
-        label: "COLORS",
-        type: "variable",
-        info: "the current color palette",
       },
       { label: "PI", type: "constant" },
       { label: "TWO_PI", type: "constant" },
@@ -112,7 +103,7 @@ export default function customCompletions(context) {
         type: "function",
         apply: "textfont(",
         detail: "(fontName)",
-        info: "default font: 'sans-serif'",
+        info: "default: sans-serif",
       },
       {
         label: "textsize",
@@ -242,9 +233,9 @@ export default function customCompletions(context) {
         detail: "(key?)",
       },
       {
-        label: "seed",
+        label: "rseed",
         type: "function",
-        apply: "seed(",
+        apply: "rseed(",
         detail: "(value?)",
         info: "initialize the RNG with a seed value",
       },
@@ -304,6 +295,12 @@ export default function customCompletions(context) {
         type: "function",
         apply: "rad2deg(",
         detail: "(radians)",
+      },
+      {
+        label: "wave",
+        type: "function",
+        apply: "wave(",
+        detail: "(from, to, t, fn)",
       },
       {
         label: "sin",
@@ -416,16 +413,10 @@ export default function customCompletions(context) {
         info: "Loads a plugin to extend the litecanvas engine",
       },
       {
-        label: "setvar",
+        label: "def",
         type: "function",
-        apply: "setvar(",
+        apply: "def(",
         detail: "(name, value)",
-      },
-      {
-        label: "getcolor",
-        type: "function",
-        apply: "getcolor(",
-        detail: "(index)",
       },
       {
         label: "listen",
@@ -440,10 +431,17 @@ export default function customCompletions(context) {
         detail: "(event, a1, a2, a3, a4)",
       },
       {
-        label: "setfps",
+        label: "framerate",
         type: "function",
-        apply: "setfps(",
+        apply: "framerate(",
         detail: "(value)",
+      },
+      {
+        label: "stat",
+        type: "function",
+        apply: "stat(",
+        detail: "(n)",
+        info: "returns internal informations",
       },
       {
         label: "quit",

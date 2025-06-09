@@ -9,8 +9,8 @@ litecanvas()
 
 // run once before the game starts
 function init() {
-  x = CENTERX
-  y = CENTERY
+  x = CX
+  y = CY
   size = 32
   speed = 250
   color = 4

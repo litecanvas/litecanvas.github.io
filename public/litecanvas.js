@@ -3,8 +3,8 @@
   (() => {
     var zzfxX = /* @__PURE__ */ new AudioContext();
     var zzfx = (i = 1, d = 0.05, z = 220, e = 0, P = 0, S = 0.1, I = 0, c = 1, T = 0, H = 0, V = 0, J = 0, h = 0, j = 0, K = 0, E = 0, r = 0, B = 1, X = 0, L = 0, D = 0) => {
-      let n = Math, t = 2 * n.PI, a = 44100, F = T *= 500 * t / a / a, O = z *= (1 - d + 2 * d * n.random(d = [])) * t / a, x = 0, _ = 0, f = 0, g = 1, $ = 0, l = 0, o = 0, s = D < 0 ? -1 : 1, u = t * s * D * 2 / a, G = n.cos(u), C = n.sin, Q = C(u) / 4, M = 1 + Q, m = -2 * G / M, y = (1 - Q) / M, R = (1 + s * G) / 2 / M, A = -(s + G) / M, v = R, U = 0, W = 0, Y = 0, Z = 0;
-      for (e = a * e + 9, X *= a, P *= a, S *= a, r *= a, H *= 500 * t / a ** 3, K *= t / a, V *= t / a, J *= a, h = a * h | 0, i *= 0.3 * (globalThis.zzfxV || 1), s = e + X + P + S + r | 0; f < s; d[f++] = o * i) ++l % (100 * E | 0) || (o = I ? 1 < I ? 2 < I ? 3 < I ? C(x * x) : n.max(n.min(n.tan(x), 1), -1) : 1 - (2 * x / t % 2 + 2) % 2 : 1 - 4 * n.abs(n.round(x / t) - x / t) : C(x), o = (h ? 1 - L + L * C(t * f / h) : 1) * (o < 0 ? -1 : 1) * n.abs(o) ** c * (f < e ? f / e : f < e + X ? 1 - (f - e) / X * (1 - B) : f < e + X + P ? B : f < s - r ? (s - f - r) / S * B : 0), o = r ? o / 2 + (r > f ? 0 : (f < s - r ? 1 : (s - f) / r) * d[f - r | 0] / 2 / i) : o, D && (o = Z = v * U + A * (U = W) + R * (W = o) - y * Y - m * (Y = Z))), u = (z += T += H) * n.cos(K * _++), x += u + u * j * C(f ** 5), g && ++g > J && (z += V, O += V, g = 0), !h || ++$ % h || (z = O, T = F, g = g || 1);
+      let n = Math, t = 2 * n.PI, a = 44100, F = T *= 500 * t / a / a, O = z *= (1 - d + 2 * d * n.random(d = [])) * t / a, x2 = 0, _ = 0, f = 0, g = 1, $ = 0, l = 0, o = 0, s = D < 0 ? -1 : 1, u = t * s * D * 2 / a, G = n.cos(u), C = n.sin, Q = C(u) / 4, M = 1 + Q, m = -2 * G / M, y2 = (1 - Q) / M, R = (1 + s * G) / 2 / M, A = -(s + G) / M, v = R, U = 0, W = 0, Y = 0, Z = 0;
+      for (e = a * e + 9, X *= a, P *= a, S *= a, r *= a, H *= 500 * t / a ** 3, K *= t / a, V *= t / a, J *= a, h = a * h | 0, i *= 0.3 * (globalThis.zzfxV || 1), s = e + X + P + S + r | 0; f < s; d[f++] = o * i) ++l % (100 * E | 0) || (o = I ? 1 < I ? 2 < I ? 3 < I ? C(x2 * x2) : n.max(n.min(n.tan(x2), 1), -1) : 1 - (2 * x2 / t % 2 + 2) % 2 : 1 - 4 * n.abs(n.round(x2 / t) - x2 / t) : C(x2), o = (h ? 1 - L + L * C(t * f / h) : 1) * (o < 0 ? -1 : 1) * n.abs(o) ** c * (f < e ? f / e : f < e + X ? 1 - (f - e) / X * (1 - B) : f < e + X + P ? B : f < s - r ? (s - f - r) / S * B : 0), o = r ? o / 2 + (r > f ? 0 : (f < s - r ? 1 : (s - f) / r) * d[f - r | 0] / 2 / i) : o, D && (o = Z = v * U + A * (U = W) + R * (W = o) - y2 * Y - m * (Y = Z))), u = (z += T += H) * n.cos(K * _++), x2 += u + u * j * C(f ** 5), g && ++g > J && (z += V, O += V, g = 0), !h || ++$ % h || (z = O, T = F, g = g || 1);
       i = zzfxX.createBuffer(1, s, a), i.getChannelData(0).set(d), z = zzfxX.createBufferSource(), z.buffer = i, z.connect(zzfxX.destination), z.start();
     };
     var defaultPalette = [
@@ -45,39 +45,33 @@
         animate: true
       };
       settings = Object.assign(defaults, settings);
-      let _initialized = false, _plugins = [], _canvas, _scale = 1, _ctx, _outline_fix = 0.5, _timeScale = 1, _lastFrameTime, _deltaTime = 1 / 60, _accumulated = 0, _rafid, _fontFamily = "sans-serif", _fontSize = 20, _rng_seed = Date.now(), _colors = defaultPalette, _events = {
-        init: false,
-        update: false,
-        draw: false,
-        resized: false,
-        tap: false,
-        untap: false,
-        tapping: false,
-        tapped: false
-      }, _helpers = {
-        settings: Object.assign({}, settings)
+      let _initialized = false, _plugins = [], _canvas, _scale = 1, _ctx, _outline_fix = 0.5, _timeScale = 1, _lastFrameTime, _deltaTime = 1 / 60, _accumulated = 0, _rafid, _fontFamily = "sans-serif", _fontSize = 20, _rngSeed = Date.now(), _colors = defaultPalette, _defaultSound = [0.5, 0, 1750, , , 0.3, 1, , , , 600, 0.1], _events = {
+        init: null,
+        update: null,
+        draw: null,
+        resized: null,
+        tap: null,
+        untap: null,
+        tapping: null,
+        tapped: null
       };
       const instance = {
-        /** @type {number} */
-        WIDTH: 0,
-        /** @type {number} */
-        HEIGHT: 0,
         /** @type {HTMLCanvasElement} */
-        CANVAS: false,
+        CANVAS: null,
         /** @type {number} */
-        ELAPSED: 0,
+        W: 0,
         /** @type {number} */
-        CENTERX: 0,
+        H: 0,
         /** @type {number} */
-        CENTERY: 0,
+        T: 0,
         /** @type {number} */
-        MOUSEX: -1,
+        CX: 0,
         /** @type {number} */
-        MOUSEY: -1,
-        /** @type {number[]} */
-        DEFAULT_SFX: [0.5, 0, 1750, , , 0.3, 1, , , , 600, 0.1],
-        /** @type {string[]} */
-        COLORS: _colors,
+        CY: 0,
+        /** @type {number} */
+        MX: -1,
+        /** @type {number} */
+        MY: -1,
         /** MATH API */
         /**
          * Twice the value of the mathematical constant PI (π).
@@ -230,6 +224,15 @@
           DEV: assert(isNumber(stop), "norm: 3rd param must be a number");
           return instance.map(value, start, stop, 0, 1);
         },
+        /**
+         * Interpolate between 2 values using a periodic function.
+         *
+         * @param {number} from - the lower bound
+         * @param {number} to - the higher bound
+         * @param {number} t - the amount
+         * @param {(n: number) => number} fn - the periodic function (which default to `Math.sin`)
+         */
+        wave: (from, to, t, fn = Math.sin) => from + (fn(t) + 1) / 2 * (to - from),
         /** RNG API */
         /**
          * Generates a pseudorandom float between min (inclusive) and max (exclusive)
@@ -249,8 +252,8 @@
           const a = 1664525;
           const c = 1013904223;
           const m = 4294967296;
-          _rng_seed = (a * _rng_seed + c) % m;
-          return _rng_seed / m * (max - min) + min;
+          _rngSeed = (a * _rngSeed + c) % m;
+          return _rngSeed / m * (max - min) + min;
         },
         /**
          * Generates a pseudorandom integer between min (inclusive) and max (inclusive)
@@ -269,18 +272,18 @@
           return math.floor(instance.rand(min, max + 1));
         },
         /**
-         * If a value is passed, initializes the random number generator with an explicit seed value.
-         * Otherwise, returns the current seed state.
+         * Initializes the random number generator with an explicit seed value.
+         *
+         * Note: The seed should be a integer number greater than or equal to zero.
          *
          * @param {number} value
-         * @returns {number} the seed state
          */
-        seed: (value) => {
+        rseed(value) {
           DEV: assert(
             null == value || isNumber(value) && value >= 0,
-            "seed: 1st param must be a positive number or zero"
+            "rseed: 1st param must be a positive number or zero"
           );
-          return null == value ? _rng_seed : _rng_seed = ~~value;
+          _rngSeed = ~~value;
         },
         /** BASIC GRAPHICS API */
         /**
@@ -315,9 +318,9 @@
          * @param {number} [color=0] the color index
          * @param {number|number[]} [radii] A number or list specifying the radii used to draw a rounded-borders rectangle
          */
-        rect(x, y, width, height, color, radii) {
-          DEV: assert(isNumber(x), "rect: 1st param must be a number");
-          DEV: assert(isNumber(y), "rect: 2nd param must be a number");
+        rect(x2, y2, width, height, color, radii) {
+          DEV: assert(isNumber(x2), "rect: 1st param must be a number");
+          DEV: assert(isNumber(y2), "rect: 2nd param must be a number");
           DEV: assert(
             isNumber(width) && width > 0,
             "rect: 3rd param must be a positive number"
@@ -336,8 +339,8 @@
           );
           _ctx.beginPath();
           _ctx[radii ? "roundRect" : "rect"](
-            ~~x - _outline_fix,
-            ~~y - _outline_fix,
+            ~~x2 - _outline_fix,
+            ~~y2 - _outline_fix,
             ~~width + _outline_fix * 2,
             ~~height + _outline_fix * 2,
             radii
@@ -354,9 +357,9 @@
          * @param {number} [color=0] the color index
          * @param {number|number[]} [radii] A number or list specifying the radii used to draw a rounded-borders rectangle
          */
-        rectfill(x, y, width, height, color, radii) {
-          DEV: assert(isNumber(x), "rectfill: 1st param must be a number");
-          DEV: assert(isNumber(y), "rectfill: 2nd param must be a number");
+        rectfill(x2, y2, width, height, color, radii) {
+          DEV: assert(isNumber(x2), "rectfill: 1st param must be a number");
+          DEV: assert(isNumber(y2), "rectfill: 2nd param must be a number");
           DEV: assert(
             isNumber(width) && width >= 0,
             "rectfill: 3rd param must be a positive number or zero"
@@ -375,8 +378,8 @@
           );
           _ctx.beginPath();
           _ctx[radii ? "roundRect" : "rect"](
-            ~~x,
-            ~~y,
+            ~~x2,
+            ~~y2,
             ~~width,
             ~~height,
             radii
@@ -391,9 +394,9 @@
          * @param {number} radius
          * @param {number} [color=0] the color index
          */
-        circ(x, y, radius, color) {
-          DEV: assert(isNumber(x), "circ: 1st param must be a number");
-          DEV: assert(isNumber(y), "circ: 2nd param must be a number");
+        circ(x2, y2, radius, color) {
+          DEV: assert(isNumber(x2), "circ: 1st param must be a number");
+          DEV: assert(isNumber(y2), "circ: 2nd param must be a number");
           DEV: assert(
             isNumber(radius) && radius >= 0,
             "circ: 3rd param must be a positive number or zero"
@@ -403,7 +406,7 @@
             "circ: 4th param must be a positive number or zero"
           );
           _ctx.beginPath();
-          _ctx.arc(~~x, ~~y, ~~radius, 0, TWO_PI);
+          _ctx.arc(~~x2, ~~y2, ~~radius, 0, TWO_PI);
           instance.stroke(color);
         },
         /**
@@ -414,9 +417,9 @@
          * @param {number} radius
          * @param {number} [color=0] the color index
          */
-        circfill(x, y, radius, color) {
-          DEV: assert(isNumber(x), "circfill: 1st param must be a number");
-          DEV: assert(isNumber(y), "circfill: 2nd param must be a number");
+        circfill(x2, y2, radius, color) {
+          DEV: assert(isNumber(x2), "circfill: 1st param must be a number");
+          DEV: assert(isNumber(y2), "circfill: 2nd param must be a number");
           DEV: assert(
             isNumber(radius) && radius >= 0,
             "circfill: 3rd param must be a positive number or zero"
@@ -426,7 +429,7 @@
             "circfill: 4th param must be a positive number or zero"
           );
           _ctx.beginPath();
-          _ctx.arc(~~x, ~~y, ~~radius, 0, TWO_PI);
+          _ctx.arc(~~x2, ~~y2, ~~radius, 0, TWO_PI);
           instance.fill(color);
         },
         /**
@@ -504,9 +507,9 @@
          * @param {number} [color=3] the color index
          * @param {string} [fontStyle] can be "normal" (default), "italic" and/or "bold".
          */
-        text(x, y, message, color = 3, fontStyle = "normal") {
-          DEV: assert(isNumber(x), "text: 1st param must be a number");
-          DEV: assert(isNumber(y), "text: 2nd param must be a number");
+        text(x2, y2, message, color = 3, fontStyle = "normal") {
+          DEV: assert(isNumber(x2), "text: 1st param must be a number");
+          DEV: assert(isNumber(y2), "text: 2nd param must be a number");
           DEV: assert(
             null == color || isNumber(color) && color >= 0,
             "text: 4th param must be a positive number or zero"
@@ -516,8 +519,8 @@
             "text: 5th param must be a string"
           );
           _ctx.font = `${fontStyle} ${_fontSize}px ${_fontFamily}`;
-          _ctx.fillStyle = instance.getcolor(color);
-          _ctx.fillText(message, ~~x, ~~y);
+          _ctx.fillStyle = _colors[~~color % _colors.length];
+          _ctx.fillText(message, ~~x2, ~~y2);
         },
         /**
          * Set the font family
@@ -543,15 +546,15 @@
         /**
          * Sets the alignment used when drawing texts
          *
-         * @param {string} align the horizontal alignment. Possible values: "left", "right", "center", "start" or "end"
-         * @param {string} baseline the vertical alignment. Possible values: "top", "bottom", "middle", "hanging" or "ideographic"
+         * @param {CanvasTextAlign} align the horizontal alignment. Possible values: "left", "right", "center", "start" or "end"
+         * @param {CanvasTextBaseline} baseline the vertical alignment. Possible values: "top", "bottom", "middle", "hanging" or "ideographic"
          * @see https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/textBaseline
          * @see https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/textAlign
          */
         textalign(align, baseline) {
           DEV: assert(
             null == align || ["left", "right", "center", "start", "end"].includes(align),
-            "textalign: 1st param must be null or one of the following values: center, left, right, start or end."
+            "textalign: 1st param must be null or one of the following strings: center, left, right, start or end."
           );
           DEV: assert(
             null == baseline || [
@@ -562,7 +565,7 @@
               "alphabetic",
               "ideographic"
             ].includes(baseline),
-            "textalign: 2nd param must be null or one of the following values: middle, top, bottom, hanging, alphabetic or ideographic."
+            "textalign: 2nd param must be null or one of the following strings: middle, top, bottom, hanging, alphabetic or ideographic."
           );
           if (align) _ctx.textAlign = align;
           if (baseline) _ctx.textBaseline = baseline;
@@ -575,10 +578,10 @@
          * @param {number} y
          * @param {OffscreenCanvas|HTMLImageElement|HTMLCanvasElement} source
          */
-        image(x, y, source) {
-          DEV: assert(isNumber(x), "image: 1st param must be a number");
-          DEV: assert(isNumber(y), "image: 2nd param must be a number");
-          _ctx.drawImage(source, ~~x, ~~y);
+        image(x2, y2, source) {
+          DEV: assert(isNumber(x2), "image: 1st param must be a number");
+          DEV: assert(isNumber(y2), "image: 2nd param must be a number");
+          _ctx.drawImage(source, ~~x2, ~~y2);
         },
         /**
          * Draw in an OffscreenCanvas and returns its image.
@@ -588,7 +591,7 @@
          * @param {string[]|drawCallback} drawing
          * @param {object} [options]
          * @param {number} [options.scale=1]
-         * @param {OffscreenCanvas | HTMLCanvasElement} [options.canvas]
+         * @param {OffscreenCanvas} [options.canvas]
          * @returns {ImageBitmap}
          * @see https://developer.mozilla.org/en-US/docs/Web/API/OffscreenCanvas
          */
@@ -609,17 +612,17 @@
           _ctx = canvas.getContext("2d");
           _ctx.scale(scale, scale);
           if (drawing.push) {
-            let x = 0, y = 0;
+            let x2 = 0, y2 = 0;
             _ctx.imageSmoothingEnabled = false;
-            for (const str of drawing) {
-              for (const color of str) {
+            for (const str2 of drawing) {
+              for (const color of str2) {
                 if (" " !== color && "." !== color) {
-                  instance.rectfill(x, y, 1, 1, parseInt(color, 16));
+                  instance.rectfill(x2, y2, 1, 1, parseInt(color, 16));
                 }
-                x++;
+                x2++;
               }
-              y++;
-              x = 0;
+              y2++;
+              x2 = 0;
             }
           } else {
             drawing(_ctx);
@@ -659,10 +662,10 @@
          * @param {number} x
          * @param {number} y
          */
-        translate: (x, y) => {
-          DEV: assert(isNumber(x), "translate: 1st param must be a number");
-          DEV: assert(isNumber(y), "translate: 2nd param must be a number");
-          return _ctx.translate(~~x, ~~y);
+        translate: (x2, y2) => {
+          DEV: assert(isNumber(x2), "translate: 1st param must be a number");
+          DEV: assert(isNumber(y2), "translate: 2nd param must be a number");
+          return _ctx.translate(~~x2, ~~y2);
         },
         /**
          * Adds a scaling transformation to the canvas units horizontally and/or vertically.
@@ -670,13 +673,13 @@
          * @param {number} x
          * @param {number} [y]
          */
-        scale: (x, y) => {
-          DEV: assert(isNumber(x), "scale: 1st param must be a number");
+        scale: (x2, y2) => {
+          DEV: assert(isNumber(x2), "scale: 1st param must be a number");
           DEV: assert(
-            null == y || isNumber(y),
+            null == y2 || isNumber(y2),
             "scale: 2nd param must be a number"
           );
-          return _ctx.scale(x, y || x);
+          return _ctx.scale(x2, y2 || x2);
         },
         /**
          * Adds a rotation to the transformation matrix.
@@ -728,7 +731,7 @@
             null == path2 || path2 instanceof Path2D,
             "fill: 2nd param must be a Path2D instance"
           );
-          _ctx.fillStyle = instance.getcolor(color);
+          _ctx.fillStyle = _colors[~~color % _colors.length];
           if (path2) {
             _ctx.fill(path2);
           } else {
@@ -750,7 +753,7 @@
             null == path2 || path2 instanceof Path2D,
             "stroke: 2nd param must be a Path2D instance"
           );
-          _ctx.strokeStyle = instance.getcolor(color);
+          _ctx.strokeStyle = _colors[~~color % _colors.length];
           if (path2) {
             _ctx.stroke(path2);
           } else {
@@ -795,7 +798,7 @@
           if (root.zzfxV <= 0 || navigator.userActivation && !navigator.userActivation.hasBeenActive) {
             return false;
           }
-          zzfxParams = zzfxParams || instance.DEFAULT_SFX;
+          zzfxParams = zzfxParams || _defaultSound;
           if (pitchSlide !== 0 || volumeFactor !== 1) {
             zzfxParams = zzfxParams.slice();
             zzfxParams[0] = volumeFactor * (zzfxParams[0] || 1);
@@ -882,34 +885,22 @@
             "pal: 1st param must be a array of strings"
           );
           _colors = colors;
-          instance.setvar("COLORS", _colors);
         },
         /**
-         * Get a color by index
-         *
-         * @param {number} [index=0] The color number
-         * @returns {string} the color code
-         */
-        getcolor: (index) => {
-          DEV: assert(
-            null == index || isNumber(index) && index >= 0,
-            "getcolor: 1st param must be a number"
-          );
-          return _colors[~~index % _colors.length];
-        },
-        /**
-         * Create or update a instance variable
+         * Define or update a instance property.
          *
          * @param {string} key
          * @param {*} value
          */
-        setvar(key, value) {
+        def(key, value) {
           DEV: assert(
             "string" === typeof key,
-            "setvar: 1st param must be a string"
+            "def: 1st param must be a string"
           );
-          if (null == value) {
-            console.warn(`setvar: key "${key}" was defined as ${value}`);
+          DEV: if (null == value) {
+            console.warn(
+              `def: key "${key}" was defined as ${value} but now is null`
+            );
           }
           instance[key] = value;
           if (settings.global) {
@@ -925,22 +916,61 @@
          */
         timescale(value) {
           DEV: assert(
-            isNumber(value),
-            "timescale: 1st param must be a number"
+            isNumber(value) && value >= 0,
+            "timescale: 1st param must be a positive number or zero"
           );
           _timeScale = value;
         },
         /**
-         * Set the target FPS at runtime.
+         * Set the target FPS (frames per second).
          *
          * @param {number} value
          */
-        setfps(value) {
+        framerate(value) {
           DEV: assert(
             isNumber(value) && value >= 1,
-            "setfps: 1st param must be a positive number"
+            "framerate: 1st param must be a positive number"
           );
           _deltaTime = 1 / ~~value;
+        },
+        /**
+         * Returns information about that engine instance.
+         *
+         * @param {number} n
+         * @returns {any}
+         */
+        stat(n) {
+          DEV: assert(
+            isNumber(n) && n >= 0,
+            "stat: 1st param must be a positive number"
+          );
+          const list = [
+            // 0
+            settings,
+            // 1
+            _initialized,
+            // 2
+            _rafid,
+            // 3
+            _scale,
+            // 4
+            _events,
+            // 5
+            _colors,
+            // 6
+            _defaultSound,
+            // 7
+            _timeScale,
+            // 8
+            root.zzfxV || 1,
+            // 9
+            _rngSeed,
+            // 10
+            _fontSize,
+            //  11
+            _fontFamily
+          ];
+          return list[n];
         },
         /**
          * Stops the litecanvas instance and remove all event listeners.
@@ -948,10 +978,10 @@
         quit() {
           cancelAnimationFrame(_rafid);
           instance.emit("quit");
-          _events = [];
           for (const removeListener of _browserEventListeners) {
             removeListener();
           }
+          _events = {};
           if (settings.global) {
             for (const key in instance) {
               delete root[key];
@@ -964,7 +994,6 @@
         instance[k] = math[k];
       }
       function init() {
-        _initialized = true;
         const source = settings.loop ? settings.loop : root;
         for (const event in _events) {
           if (source[event]) instance.listen(event, source[event]);
@@ -979,72 +1008,107 @@
           const _getXY = (pageX, pageY) => [
             (pageX - _canvas.offsetLeft) / _scale,
             (pageY - _canvas.offsetTop) / _scale
-          ], _taps = /* @__PURE__ */ new Map(), _registerTap = (id, x, y) => {
+          ], _taps = /* @__PURE__ */ new Map(), _registerTap = (id, x2, y2) => {
             const tap = {
-              x,
-              y,
-              startX: x,
-              startY: y,
+              x: x2,
+              y: y2,
+              startX: x2,
+              startY: y2,
               // timestamp
               ts: performance.now()
             };
             _taps.set(id, tap);
             return tap;
-          }, _updateTap = (id, x, y) => {
+          }, _updateTap = (id, x2, y2) => {
             const tap = _taps.get(id) || _registerTap(id);
-            tap.x = x;
-            tap.y = y;
+            tap.x = x2;
+            tap.y = y2;
           }, _checkTapped = (tap) => tap && performance.now() - tap.ts <= 300, preventDefault = (ev) => ev.preventDefault();
           let _pressingMouse = false;
-          on(_canvas, "mousedown", (ev) => {
-            if (ev.button === 0) {
-              preventDefault(ev);
-              const [x, y] = _getXY(ev.pageX, ev.pageY);
-              instance.emit("tap", x, y, 0);
-              _registerTap(0, x, y);
-              _pressingMouse = true;
-            }
-          });
-          on(_canvas, "mouseup", (ev) => {
-            if (ev.button === 0) {
-              preventDefault(ev);
-              const tap = _taps.get(0);
-              const [x, y] = _getXY(ev.pageX, ev.pageY);
-              if (_checkTapped(tap)) {
-                instance.emit("tapped", tap.startX, tap.startY, 0);
+          on(
+            _canvas,
+            "mousedown",
+            /**
+             * @param {MouseEvent} ev
+             */
+            (ev) => {
+              if (ev.button === 0) {
+                preventDefault(ev);
+                const [x2, y2] = _getXY(ev.pageX, ev.pageY);
+                instance.emit("tap", x2, y2, 0);
+                _registerTap(0, x2, y2);
+                _pressingMouse = true;
               }
-              instance.emit("untap", x, y, 0);
-              _taps.delete(0);
-              _pressingMouse = false;
             }
-          });
-          on(_canvas, "mousemove", (ev) => {
-            preventDefault(ev);
-            const [x, y] = _getXY(ev.pageX, ev.pageY);
-            instance.setvar("MOUSEX", x);
-            instance.setvar("MOUSEY", y);
-            if (!_pressingMouse) return;
-            instance.emit("tapping", x, y, 0);
-            _updateTap(0, x, y);
-          });
-          on(_canvas, "touchstart", (ev) => {
-            preventDefault(ev);
-            const touches = ev.changedTouches;
-            for (const touch of touches) {
-              const [x, y] = _getXY(touch.pageX, touch.pageY);
-              instance.emit("tap", x, y, touch.identifier + 1);
-              _registerTap(touch.identifier + 1, x, y);
+          );
+          on(
+            _canvas,
+            "mouseup",
+            /**
+             * @param {MouseEvent} ev
+             */
+            (ev) => {
+              if (ev.button === 0) {
+                preventDefault(ev);
+                const tap = _taps.get(0);
+                const [x2, y2] = _getXY(ev.pageX, ev.pageY);
+                if (_checkTapped(tap)) {
+                  instance.emit("tapped", tap.startX, tap.startY, 0);
+                }
+                instance.emit("untap", x2, y2, 0);
+                _taps.delete(0);
+                _pressingMouse = false;
+              }
             }
-          });
-          on(_canvas, "touchmove", (ev) => {
-            preventDefault(ev);
-            const touches = ev.changedTouches;
-            for (const touch of touches) {
-              const [x, y] = _getXY(touch.pageX, touch.pageY);
-              instance.emit("tapping", x, y, touch.identifier + 1);
-              _updateTap(touch.identifier + 1, x, y);
+          );
+          on(
+            _canvas,
+            "mousemove",
+            /**
+             * @param {MouseEvent} ev
+             */
+            (ev) => {
+              preventDefault(ev);
+              const [x2, y2] = _getXY(ev.pageX, ev.pageY);
+              instance.def("MX", x2);
+              instance.def("MY", y2);
+              if (!_pressingMouse) return;
+              instance.emit("tapping", x2, y2, 0);
+              _updateTap(0, x2, y2);
             }
-          });
+          );
+          on(
+            _canvas,
+            "touchstart",
+            /**
+             * @param {TouchEvent} ev
+             */
+            (ev) => {
+              preventDefault(ev);
+              const touches = ev.changedTouches;
+              for (const touch of touches) {
+                const [x2, y2] = _getXY(touch.pageX, touch.pageY);
+                instance.emit("tap", x2, y2, touch.identifier + 1);
+                _registerTap(touch.identifier + 1, x2, y2);
+              }
+            }
+          );
+          on(
+            _canvas,
+            "touchmove",
+            /**
+             * @param {TouchEvent} ev
+             */
+            (ev) => {
+              preventDefault(ev);
+              const touches = ev.changedTouches;
+              for (const touch of touches) {
+                const [x2, y2] = _getXY(touch.pageX, touch.pageY);
+                instance.emit("tapping", x2, y2, touch.identifier + 1);
+                _updateTap(touch.identifier + 1, x2, y2);
+              }
+            }
+          );
           const _touchEndHandler = (ev) => {
             preventDefault(ev);
             const existing = [];
@@ -1092,7 +1156,7 @@
           });
           on(root, "blur", () => _keysDown.clear());
           instance.listen("after:draw", () => _keysPress.clear());
-          instance.setvar(
+          instance.def(
             "iskeydown",
             /**
              * Checks if a which key is pressed (down) on the keyboard.
@@ -1109,7 +1173,7 @@
               return keyCheck(_keysDown, key);
             }
           );
-          instance.setvar(
+          instance.def(
             "iskeypressed",
             /**
              * Checks if a which key just got pressed on the keyboard.
@@ -1138,6 +1202,7 @@
             }
           });
         }
+        _initialized = true;
         instance.emit("init", instance);
         _lastFrameTime = performance.now();
         _rafid = raf(drawFrame);
@@ -1153,10 +1218,7 @@
           _accumulated += frameTime;
           while (_accumulated >= _deltaTime) {
             instance.emit("update", _deltaTime * _timeScale);
-            instance.setvar(
-              "ELAPSED",
-              instance.ELAPSED + _deltaTime * _timeScale
-            );
+            instance.def("T", instance.T + _deltaTime * _timeScale);
             updated++;
             _accumulated -= _deltaTime;
           }
@@ -1169,18 +1231,23 @@
         }
       }
       function setupCanvas() {
-        _canvas = settings.canvas || document.createElement("canvas");
-        _canvas = "string" === typeof _canvas ? document.querySelector(_canvas) : _canvas;
+        if ("string" === typeof settings.canvas) {
+          _canvas = document.querySelector(settings.canvas);
+        } else {
+          _canvas = settings.canvas || document.createElement("canvas");
+        }
         DEV: assert(
           _canvas && _canvas.tagName === "CANVAS",
           "Invalid canvas element"
         );
-        instance.setvar("CANVAS", _canvas);
+        instance.def("CANVAS", _canvas);
         _ctx = _canvas.getContext("2d");
         on(_canvas, "click", () => root.focus());
         _canvas.style = "";
         resizeCanvas();
-        if (!_canvas.parentNode) document.body.appendChild(_canvas);
+        if (!_canvas.parentNode) {
+          document.body.appendChild(_canvas);
+        }
       }
       function resizeCanvas() {
         DEV: assert(
@@ -1196,28 +1263,29 @@
           `Litecanvas' option "width" is required when the option "height" is defined`
         );
         const width = settings.width || root.innerWidth, height = settings.height || settings.width || root.innerHeight;
-        instance.setvar("WIDTH", _canvas.width = width);
-        instance.setvar("HEIGHT", _canvas.height = height);
-        instance.setvar("CENTERX", instance.WIDTH / 2);
-        instance.setvar("CENTERY", instance.HEIGHT / 2);
+        instance.def("W", _canvas.width = width);
+        instance.def("H", _canvas.height = height);
+        instance.def("CX", instance.W / 2);
+        instance.def("CY", instance.H / 2);
         if (settings.autoscale) {
           if (!_canvas.style.display) {
             _canvas.style.display = "block";
             _canvas.style.margin = "auto";
           }
           _scale = math.min(
-            root.innerWidth / instance.WIDTH,
-            root.innerHeight / instance.HEIGHT
+            root.innerWidth / instance.W,
+            root.innerHeight / instance.H
           );
           _scale = (settings.pixelart ? ~~_scale : _scale) || 1;
-          _canvas.style.width = instance.WIDTH * _scale + "px";
-          _canvas.style.height = instance.HEIGHT * _scale + "px";
+          _canvas.style.width = instance.W * _scale + "px";
+          _canvas.style.height = instance.H * _scale + "px";
         }
         if (!settings.antialias || settings.pixelart) {
           _ctx.imageSmoothingEnabled = false;
           _canvas.style.imageRendering = "pixelated";
         }
         instance.emit("resized", _scale);
+        instance.cls(0);
         if (!settings.animate) {
           raf(drawFrame);
         }
@@ -1229,13 +1297,13 @@
         }
       }
       function loadPlugin(callback, config) {
-        const pluginData = callback(instance, _helpers, config);
+        const pluginData = callback(instance, config);
         DEV: assert(
           null == pluginData || "object" === typeof pluginData,
           "Litecanvas plugins should return an object or nothing"
         );
         for (const key in pluginData) {
-          instance.setvar(key, pluginData[key]);
+          instance.def(key, pluginData[key]);
         }
       }
       if (settings.global) {
@@ -1265,8 +1333,8 @@
       for (let t in globalThis.utils) t !== "global" && (e || globalThis[t] === void 0) && (globalThis[t] = globalThis.utils[t]);
     };
     var z = {};
-    It(z, { ANCHOR_BOT_LEFT: () => te, ANCHOR_BOT_RIGHT: () => ee, ANCHOR_CENTER: () => Qt, ANCHOR_TOP_LEFT: () => J, ANCHOR_TOP_RIGHT: () => Jt, Actor: () => F, BACK_IN: () => oe, BACK_IN_OUT: () => ue, BACK_OUT: () => ne, BOUNCE_IN: () => mt, BOUNCE_IN_OUT: () => ce, BOUNCE_OUT: () => H, Camera: () => y, DOWN: () => Zt, EASE_IN: () => re, EASE_IN_OUT: () => ie, EASE_OUT: () => ae, ELASTIC_IN: () => le, ELASTIC_IN_OUT: () => me, ELASTIC_OUT: () => he, Grid: () => M, LEFT: () => Kt, LINEAR: () => ht, Noise: () => Y, ONE: () => Vt, RIGHT: () => $t, TypedGrid: () => C, UP: () => Wt, Vector: () => w, ZERO: () => Q, advance: () => rt, choose: () => wt, colcirc: () => j, colrect: () => B, diff: () => tt, dist: () => it, flipImage: () => ft, fract: () => st, head: () => Nt, intersection: () => E, last: () => Tt, lerpAngle: () => lt, mag: () => ot, makeCircle: () => xt, makeRectangle: () => gt, mean: () => nt, median: () => ut, mod: () => at, range: () => _t, resolverect: () => U, scaleImage: () => bt, shuffle: () => yt, sum: () => A, tail: () => Et, tintImage: () => dt, tween: () => se, vec: () => o, vecAbs: () => zt, vecAdd: () => S, vecAngle: () => Ft, vecAngleBetween: () => Rt, vecCeil: () => Xt, vecClamp: () => jt, vecCross: () => Ht, vecDist: () => Lt, vecDist2: () => Dt, vecDiv: () => I, vecDot: () => K, vecEq: () => O, vecFloor: () => Ut, vecIsZero: () => Gt, vecLerp: () => vt, vecLimit: () => St, vecMag: () => $, vecMag2: () => Z, vecMove: () => qt, vecMult: () => N, vecNorm: () => D, vecRand: () => Yt, vecReflect: () => Ct, vecRotate: () => Pt, vecRound: () => Bt, vecSet: () => W, vecSetMag: () => Ot, vecSub: () => L, wave: () => et });
-    var y = class {
+    It(z, { ANCHOR_BOT_LEFT: () => te, ANCHOR_BOT_RIGHT: () => ee, ANCHOR_CENTER: () => Qt, ANCHOR_TOP_LEFT: () => J, ANCHOR_TOP_RIGHT: () => Jt, Actor: () => F, BACK_IN: () => oe, BACK_IN_OUT: () => ue, BACK_OUT: () => ne, BOUNCE_IN: () => mt, BOUNCE_IN_OUT: () => ce, BOUNCE_OUT: () => H, Camera: () => y2, DOWN: () => Zt, EASE_IN: () => re, EASE_IN_OUT: () => ie, EASE_OUT: () => ae, ELASTIC_IN: () => le, ELASTIC_IN_OUT: () => me, ELASTIC_OUT: () => he, Grid: () => M, LEFT: () => Kt, LINEAR: () => ht, Noise: () => Y, ONE: () => Vt, RIGHT: () => $t, TypedGrid: () => C, UP: () => Wt, Vector: () => w, ZERO: () => Q, advance: () => rt, choose: () => wt, colcirc: () => j, colrect: () => B, diff: () => tt, dist: () => it, flipImage: () => ft, fract: () => st, head: () => Nt, intersection: () => E, last: () => Tt, lerpAngle: () => lt, mag: () => ot, makeCircle: () => xt, makeRectangle: () => gt, mean: () => nt, median: () => ut, mod: () => at, range: () => _t, resolverect: () => U, scaleImage: () => bt, shuffle: () => yt, sum: () => A, tail: () => Et, tintImage: () => dt, tween: () => se, vec: () => o, vecAbs: () => zt, vecAdd: () => S, vecAngle: () => Ft, vecAngleBetween: () => Rt, vecCeil: () => Xt, vecClamp: () => jt, vecCross: () => Ht, vecDist: () => Lt, vecDist2: () => Dt, vecDiv: () => I, vecDot: () => K, vecEq: () => O, vecFloor: () => Ut, vecIsZero: () => Gt, vecLerp: () => vt, vecLimit: () => St, vecMag: () => $, vecMag2: () => Z, vecMove: () => qt, vecMult: () => N, vecNorm: () => D, vecRand: () => Yt, vecReflect: () => Ct, vecRotate: () => Pt, vecRound: () => Bt, vecSet: () => W, vecSetMag: () => Ot, vecSub: () => L, wave: () => et });
+    var y2 = class {
       _engine = null;
       x = 0;
       y = 0;
@@ -1335,12 +1403,12 @@
       }
     };
     var E = (e, t, s, r, a, i, n, u) => {
-      let h = Math.max(e, a), d = Math.min(e + s, a + n) - h, m = Math.max(t, i), x = Math.min(t + r, i + u) - m;
-      return [h, m, d, x];
+      let h = Math.max(e, a), d = Math.min(e + s, a + n) - h, m = Math.max(t, i), x2 = Math.min(t + r, i + u) - m;
+      return [h, m, d, x2];
     };
     var U = (e, t, s, r, a, i, n, u) => {
-      let [h, d, m, x] = E(e, t, s, r, a, i, n, u), b = "", _ = e, l = t;
-      return m < x ? e < a ? (b = "right", _ = a - s) : (b = "left", _ = a + n) : t < i ? (b = "bottom", l = i - r) : (b = "top", l = i + u), { direction: b, x: _, y: l };
+      let [h, d, m, x2] = E(e, t, s, r, a, i, n, u), b = "", _ = e, l = t;
+      return m < x2 ? e < a ? (b = "right", _ = a - s) : (b = "left", _ = a + n) : t < i ? (b = "bottom", l = i - r) : (b = "top", l = i + u), { direction: b, x: _, y: l };
     };
     var B = (e, t, s, r, a, i, n, u) => e < a + n && e + s > a && t < i + u && t + r > i;
     var j = (e, t, s, r, a, i) => (r - e) * (r - e) + (a - t) * (a - t) <= (s + i) * (s + i);
@@ -1640,10 +1708,10 @@
       }
       noise(t, s = 0, r = 0) {
         t < 0 && (t = -t), s < 0 && (s = -s), r < 0 && (r = -r);
-        let a = Math.floor(t), i = Math.floor(s), n = Math.floor(r), u = t - a, h = s - i, d = r - n, m, x, b = 0, _ = 0.5, l, c, T;
+        let a = Math.floor(t), i = Math.floor(s), n = Math.floor(r), u = t - a, h = s - i, d = r - n, m, x2, b = 0, _ = 0.5, l, c, T;
         for (let X = 0; X < this._po; X++) {
           let p = a + (i << ct) + (n << pt);
-          m = v(u), x = v(h), l = this._p[p & f], l += m * (this._p[p + 1 & f] - l), c = this._p[p + P & f], c += m * (this._p[p + P + 1 & f] - c), l += x * (c - l), p += pe, c = this._p[p & f], c += m * (this._p[p + 1 & f] - c), T = this._p[p + P & f], T += m * (this._p[p + P + 1 & f] - T), c += x * (T - c), l += v(d) * (c - l), b += l * _, _ *= this._pf, a <<= 1, u *= 2, i <<= 1, h *= 2, n <<= 1, d *= 2, u >= 1 && (a++, u--), h >= 1 && (i++, h--), d >= 1 && (n++, d--);
+          m = v(u), x2 = v(h), l = this._p[p & f], l += m * (this._p[p + 1 & f] - l), c = this._p[p + P & f], c += m * (this._p[p + P + 1 & f] - c), l += x2 * (c - l), p += pe, c = this._p[p & f], c += m * (this._p[p + 1 & f] - c), T = this._p[p + P & f], T += m * (this._p[p + P + 1 & f] - T), c += x2 * (T - c), l += v(d) * (c - l), b += l * _, _ *= this._pf, a <<= 1, u *= 2, i <<= 1, h *= 2, n <<= 1, d *= 2, u >= 1 && (a++, u--), h >= 1 && (i++, h--), d >= 1 && (n++, d--);
         }
         return b;
       }
@@ -1693,121 +1761,121 @@
     globalThis.utils = Object.assign(globalThis.utils || {}, z);
   })();
   (() => {
-    function m(t) {
+    function c(t) {
       return t.split("\\").pop().split("/").pop().split(".")[0];
     }
-    function S(t, n) {
-      return n && !b(t) && (t = n + t), t;
+    function b(t, e) {
+      return e && !I(t) && (t = e + t), t;
     }
-    function b(t) {
+    function I(t) {
       try {
         return !!new URL(t).protocol;
       } catch {
       }
       return false;
     }
-    var E = { crossOrigin: "anonymous", baseURL: null, allowSoundInterruptions: true, ignoreErrors: false }, d = (t, n) => {
-      let e = "LOADING";
-      t.setvar(e, ~~t[e] + ~~n);
+    var h = { crossOrigin: "anonymous", baseURL: null, allowSoundInterruptions: true, ignoreErrors: false }, f = (t, e) => {
+      let i = "LOADING";
+      t.def(i, ~~t[i] + ~~e);
     };
-    function T(t, n, e = {}) {
-      return e = Object.assign({}, E, e), t.setvar("ASSETS", t.ASSETS || {}), t.ASSETS.font = {}, { loadFont: async (o, r, i) => {
-        let { baseURL: p, ignoreErrors: l } = e, c = m(r);
-        r = S(r, p);
-        let a = new FontFace(o, `url(${r})`), s = { asset: a, type: "font", fontName: o, src: r, id: c };
-        t.emit("filter-asset", a, s), document.fonts.add(a), d(t, 1);
-        let f = a.load();
-        return f.then((h) => {
-          ASSETS.font[c] = h, i && i(h), t.emit("asset-load", s), d(t, -1);
-        }).catch((h) => {
-          if (console.error(h), !l) throw new Error("Failed to load font from " + r);
-          i && i(), t.emit("asset-error", s);
-        }), f;
+    function y2(t, e = {}) {
+      return e = Object.assign({}, h, e), t.def("ASSETS", t.ASSETS || {}), t.ASSETS.font = {}, { loadFont: async (r, a, l) => {
+        let { baseURL: m, ignoreErrors: p } = e, o = c(a);
+        a = b(a, m);
+        let n = new FontFace(r, `url(${a})`), u = { asset: n, type: "font", fontName: r, src: a, id: o };
+        t.emit("filter-asset", n, u), document.fonts.add(n), f(t, 1);
+        let s = n.load();
+        return s.then((d) => {
+          t.ASSETS.font[o] = d, l && l(d), t.emit("asset-load", u), f(t, -1);
+        }).catch((d) => {
+          if (console.error(d), !p) throw new Error("Failed to load font from " + a);
+          l && l(), t.emit("asset-error", u);
+        }), s;
       } };
     }
-    function x(t, { colors: n }, e = {}) {
-      return e = Object.assign({}, E, e), t.setvar("ASSETS", t.ASSETS || {}), t.ASSETS.image = {}, { loadImage: async (o, r) => {
-        let { baseURL: i, ignoreErrors: p, crossOrigin: l } = e, c = { splitFrames: H, convertColors: F(n) }, a = m(o);
-        o = S(o, i);
-        let s = new Image(), f = { asset: s, type: "image", src: o, id: a };
-        return new Promise((h) => {
-          d(t, 1), s.crossOrigin = l, s.onerror = (w) => {
-            console.error(w);
-            let g = "Failed to load image from " + o;
-            if (!p) throw new Error(g);
-            r && r(), t.emit("asset-error", f);
+    function A(t, e = {}) {
+      return e = Object.assign({}, h, e), t.def("ASSETS", t.ASSETS || {}), t.ASSETS.image = {}, { loadImage: async (r, a) => {
+        let { baseURL: l, ignoreErrors: m, crossOrigin: p } = e, o = t.stat(5), n = { splitFrames: F, convertColors: j(o) }, u = c(r);
+        r = b(r, l);
+        let s = new Image(), d = { asset: s, type: "image", src: r, id: u };
+        return new Promise((w) => {
+          f(t, 1), s.crossOrigin = p, s.onerror = (g) => {
+            console.error(g);
+            let S = "Failed to load image from " + r;
+            if (!m) throw new Error(S);
+            a && a(), t.emit("asset-error", d);
           }, s.onload = () => {
-            t.ASSETS.image[a] = s, r && r(s, c), t.emit("asset-load", f), d(t, -1), h(s);
-          }, t.emit("filter-asset", s, f), s.src = o;
+            t.ASSETS.image[u] = s, a && a(s, n), t.emit("asset-load", d), f(t, -1), w(s);
+          }, t.emit("filter-asset", s, d), s.src = r;
         });
       } };
     }
-    function H(t, n, e, u = 0, o = 0) {
-      let r = [], i = Math.floor((t.width + o) / (n + o)), p = Math.floor((t.height + o) / (e + o));
-      for (let l = 0; l < p; l++) for (let c = 0; c < i; c++) {
-        let a = new OffscreenCanvas(n, e);
-        a.getContext("2d").drawImage(t, u + c * n + c * o, u + l * e + l * o, n, e, 0, 0, n, e), r.push(a);
+    function F(t, e, i, r = 0, a = 0) {
+      let l = [], m = Math.floor((t.width + a) / (e + a)), p = Math.floor((t.height + a) / (i + a));
+      for (let o = 0; o < p; o++) for (let n = 0; n < m; n++) {
+        let u = new OffscreenCanvas(e, i);
+        u.getContext("2d").drawImage(t, r + n * e + n * a, r + o * i + o * a, e, i, 0, 0, e, i), l.push(u);
       }
-      return r;
+      return l;
     }
-    function F(t) {
-      return (n, e = false) => {
-        let u = new OffscreenCanvas(n.width, n.height), o = u.getContext("2d");
-        o.drawImage(n, 0, 0);
-        let r = o.getImageData(0, 0, n.width, n.height), i = r.data, p = /* @__PURE__ */ new Map();
-        for (let l = 0, c = i.length; l < c; l += 4) {
-          let a = i[l], s = i[l + 1], f = i[l + 2], h = [a, s, f], w = h.join(","), g = p.get(w);
-          g || (g = R(h, t), p.set(w, g));
-          let D = g.startsWith("#") ? I(g) : O(g);
-          i[l] = D[0], i[l + 1] = D[1], i[l + 2] = D[2], i[l + 3] = e ? i[l + 3] : 255;
+    function j(t) {
+      return (e, i = false) => {
+        let r = new OffscreenCanvas(e.width, e.height), a = r.getContext("2d");
+        a.drawImage(e, 0, 0);
+        let l = a.getImageData(0, 0, e.width, e.height), m = l.data, p = /* @__PURE__ */ new Map();
+        for (let o = 0, n = m.length; o < n; o += 4) {
+          let u = m[o], s = m[o + 1], d = m[o + 2], w = [u, s, d], g = w.join(","), S = p.get(g);
+          S || (S = P(w, t), p.set(g, S));
+          let _ = S.startsWith("#") ? O(S) : D(S);
+          m[o] = _[0], m[o + 1] = _[1], m[o + 2] = _[2], m[o + 3] = i ? m[o + 3] : 255;
         }
-        return o.putImageData(r, 0, 0), u;
+        return a.putImageData(l, 0, 0), r;
       };
     }
-    function I(t) {
-      let n = 0, e = 0, u = 0;
-      return t.length === 4 ? (n = "0x" + t[1] + t[1], e = "0x" + t[2] + t[2], u = "0x" + t[3] + t[3]) : t.length === 7 && (n = "0x" + t[1] + t[2], e = "0x" + t[3] + t[4], u = "0x" + t[5] + t[6]), [~~n, ~~e, ~~u];
-    }
     function O(t) {
-      let n = t.indexOf(",") > -1 ? "," : " ";
-      t = t.substr(4).split(")")[0].split(n);
-      let e = (+t[0]).toString(16), u = (+t[1]).toString(16), o = (+t[2]).toString(16);
-      return e.length === 1 && (e = "0" + e), u.length === 1 && (u = "0" + u), o.length === 1 && (o = "0" + o), [e | 0, u | 0, o | 0];
+      let e = 0, i = 0, r = 0;
+      return t.length === 4 ? (e = "0x" + t[1] + t[1], i = "0x" + t[2] + t[2], r = "0x" + t[3] + t[3]) : t.length === 7 && (e = "0x" + t[1] + t[2], i = "0x" + t[3] + t[4], r = "0x" + t[5] + t[6]), [~~e, ~~i, ~~r];
     }
-    function R(t, n) {
-      let e = 1 / 0, u = null, [o, r, i] = t;
-      return n.forEach((p) => {
-        let [l, c, a] = p.startsWith("#") ? I(p) : O(p), s = Math.sqrt((o - l) ** 2 + (r - c) ** 2 + (i - a) ** 2);
-        s < e && (e = s, u = p);
-      }), u;
+    function D(t) {
+      let e = t.indexOf(",") > -1 ? "," : " ";
+      t = t.substr(4).split(")")[0].split(e);
+      let i = (+t[0]).toString(16), r = (+t[1]).toString(16), a = (+t[2]).toString(16);
+      return i.length === 1 && (i = "0" + i), r.length === 1 && (r = "0" + r), a.length === 1 && (a = "0" + a), [i | 0, r | 0, a | 0];
     }
-    function L(t, n, e = {}) {
-      return e = Object.assign({}, E, e), t.setvar("ASSETS", t.ASSETS || {}), t.ASSETS.script = {}, { loadScript: async (o, r) => {
-        let { baseURL: i, ignoreErrors: p, crossOrigin: l } = e, c = m(o);
-        o = S(o, i);
-        let a = document.createElement("script"), s = { asset: a, type: "script", src: o, id: c };
-        return new Promise((f) => {
-          d(t, 1), a.crossOrigin = l, a.onerror = (h) => {
-            if (console.error(h), !p) throw new Error("Failed to load " + o);
-            r && r(), t.emit("asset-error", s);
-          }, a.onload = () => {
-            t.ASSETS.script[c] = a, r && r(a), t.emit("asset-load", s), d(t, -1), f(a);
-          }, t.emit("filter-asset", a, s), a.src = o, document.head.appendChild(a);
+    function P(t, e) {
+      let i = 1 / 0, r = null, [a, l, m] = t;
+      return e.forEach((p) => {
+        let [o, n, u] = p.startsWith("#") ? O(p) : D(p), s = Math.sqrt((a - o) ** 2 + (l - n) ** 2 + (m - u) ** 2);
+        s < i && (i = s, r = p);
+      }), r;
+    }
+    function E(t, e = {}) {
+      return e = Object.assign({}, h, e), t.def("ASSETS", t.ASSETS || {}), t.ASSETS.script = {}, { loadScript: async (r, a) => {
+        let { baseURL: l, ignoreErrors: m, crossOrigin: p } = e, o = c(r);
+        r = b(r, l);
+        let n = document.createElement("script"), u = { asset: n, type: "script", src: r, id: o };
+        return new Promise((s) => {
+          f(t, 1), n.crossOrigin = p, n.onerror = (d) => {
+            if (console.error(d), !m) throw new Error("Failed to load " + r);
+            a && a(), t.emit("asset-error", u);
+          }, n.onload = () => {
+            t.ASSETS.script[o] = n, a && a(n), t.emit("asset-load", u), f(t, -1), s(n);
+          }, t.emit("filter-asset", n, u), n.src = r, document.head.appendChild(n);
         });
       } };
     }
-    function y(t, n, e = {}) {
-      return e = Object.assign({}, E, e), t.setvar("ASSETS", t.ASSETS || {}), t.ASSETS.sound = {}, { loadSound: async (o, r) => {
-        let { crossOrigin: i, ignoreErrors: p, allowSoundInterruptions: l, baseURL: c } = e, a = m(o);
-        o = S(o, c);
-        let s = new Audio(), f = { asset: s, type: "sound", src: o, id: a };
-        return new Promise((h) => {
-          d(t, 1), s.crossOrigin = i, s.onerror = (w) => {
-            if (console.error(w), !p) throw new Error("Failed to load " + o);
-            r && r(null), t.emit("asset-error", f);
-          }, s[l ? "oncanplay" : "oncanplaythrough"] = () => {
-            t.ASSETS.sound[a] = s, r && r(s), t.emit("asset-load", f), d(t, -1), h(s);
-          }, t.emit("filter-asset", s, f), s.src = o;
+    function x2(t, e = {}) {
+      return e = Object.assign({}, h, e), t.def("ASSETS", t.ASSETS || {}), t.ASSETS.sound = {}, { loadSound: async (r, a) => {
+        let { crossOrigin: l, ignoreErrors: m, allowSoundInterruptions: p, baseURL: o } = e, n = c(r);
+        r = b(r, o);
+        let u = new Audio(), s = { asset: u, type: "sound", src: r, id: n };
+        return new Promise((d) => {
+          f(t, 1), u.crossOrigin = l, u.onerror = (w) => {
+            if (console.error(w), !m) throw new Error("Failed to load " + r);
+            a && a(null), t.emit("asset-error", s);
+          }, u[p ? "oncanplay" : "oncanplaythrough"] = () => {
+            t.ASSETS.sound[n] = u, a && a(u), t.emit("asset-load", s), f(t, -1), d(u);
+          }, t.emit("filter-asset", u, s), u.src = r;
         });
       } };
     }
@@ -1816,31 +1884,145 @@
     }, restart() {
       this.pause(), this.currentTime = 0, this.play();
     } });
-    function v(t, n, e = {}) {
-      return e = Object.assign({}, E, e), t.setvar("ASSETS", t.ASSETS || {}), t.ASSETS.json = {}, { loadJSON: async (o, r, i) => {
-        let { baseURL: p, ignoreErrors: l } = e, c = m(o);
-        o = S(o, p);
-        let a = { type: "json", src: o, id: c };
-        t.emit("filter-asset", null, a), d(t, 1), t.ASSETS.json = {};
-        let s = fetch(o, i);
-        return s.then((f) => f.json()).then((f) => {
-          ASSETS.json[c] = f, a.json = f, r && r(f), t.emit("asset-load", a), d(t, -1);
-        }).catch((f) => {
-          if (console.error(f), !l) throw new Error("Failed to load JSON from " + o);
-          r && r(), t.emit("asset-error", a);
-        }), s;
+    function L(t, e = {}) {
+      return e = Object.assign({}, h, e), t.def("ASSETS", t.ASSETS || {}), t.ASSETS.json = {}, { loadJSON: async (r, a, l) => {
+        let { baseURL: m, ignoreErrors: p } = e, o = c(r);
+        r = b(r, m);
+        let n = { type: "json", src: r, id: o };
+        t.emit("filter-asset", null, n), f(t, 1), t.ASSETS.json = {};
+        let u = fetch(r, l);
+        return u.then((s) => s.json()).then((s) => {
+          ASSETS.json[o] = s, n.json = s, a && a(s), t.emit("asset-load", n), f(t, -1);
+        }).catch((s) => {
+          if (console.error(s), !p) throw new Error("Failed to load JSON from " + r);
+          a && a(), t.emit("asset-error", n);
+        }), u;
       } };
     }
-    function _(t) {
-      return { load: (e) => new Promise((u, o) => {
-        d(t, 1), e((i) => (d(t, -1), u(i)), o);
+    function T(t) {
+      return { load: (i) => new Promise((r, a) => {
+        f(t, 1), i((m) => (f(t, -1), r(m)), a);
       }) };
     }
-    function A(t, n, e = {}) {
-      t.use(T, e), t.use(x, e), t.use(L, e), t.use(y, e), t.use(v, e), t.use(_);
+    function v(t, e = {}) {
+      t.use(y2, e), t.use(A, e), t.use(E, e), t.use(x2, e), t.use(L, e), t.use(T);
     }
-    window.pluginAssetLoader = A;
+    window.pluginAssetLoader = v;
+  })();
+  (() => {
+    var v = { mute: false };
+    function p(a, b = v) {
+      if (a.stat(1)) throw 'Plugin Migrate should be loaded before the "init" event';
+      let l = a.stat(0);
+      function n(t, e, s = "") {
+        b.mute || console.warn(`[Migrate] warning: ${t} is removed. ` + (e ? `Use ${e} instead. ` : "") + s);
+      }
+      function d(t) {
+        return n("seed()", "rseed()"), t && a.rseed(t), a.stat(9);
+      }
+      let c = "";
+      function h(t) {
+        n("textstyle()", "the 5th param of text()"), c = t;
+      }
+      let g = a.text;
+      function f(t, e, s, o = 3, i = c) {
+        g(t, e, s, o, i);
+      }
+      function w(t, e, s, o) {
+        n("print()", "text()"), f(t, e, s, o);
+      }
+      function _(t, e) {
+        n("textmetrics()", "ctx().measureText()");
+        let s = a.ctx(), o = a.stat(10), i = a.stat(11);
+        s.font = `${c || ""} ${~~(e || o)}px ${i}`;
+        let m = s.measureText(t);
+        return m.height = m.actualBoundingBoxAscent + m.actualBoundingBoxDescent, m;
+      }
+      function A(t, e, s, o) {
+        n("cliprect()", "clip()");
+        let i = a.ctx();
+        i.beginPath(), i.rect(t, e, s, o), i.clip();
+      }
+      function E(t, e, s) {
+        n("clipcirc()", "clip()");
+        let o = a.ctx();
+        o.beginPath(), o.arc(t, e, s, 0, a.TWO_PI), o.clip();
+      }
+      function C(t) {
+        n("getcolor()", "stat(5)");
+        let e = stat(5);
+        return e[~~t % e.length];
+      }
+      function T(t) {
+        n("blendmode()", "ctx().globalCompositeOperation");
+        let e = a.ctx();
+        e.globalCompositeOperation = t;
+      }
+      function k(t) {
+        n("clear()", "cls()"), a.cls(x, y, str, t);
+      }
+      function M(t, e, s, o, i, m, D = true) {
+        return n("transform()", "ctx().setTransform() or ctx().transform()"), a.ctx()[D ? "setTransform" : "transform"](t, e, s, o, i, m);
+      }
+      function Y() {
+        return n("mousepos()", "MX and MY"), [MX, MY];
+      }
+      function S(t) {
+        n("setfps()", "framerate()"), a.framerate(t);
+      }
+      let r = a.def;
+      function u(t, e) {
+        switch (t) {
+          case "W":
+          case "WIDTH":
+            r("W", e), r("WIDTH", e);
+            break;
+          case "H":
+          case "HEIGHT":
+            r("H", e), r("HEIGHT", e);
+            break;
+          case "T":
+          case "ELAPSED":
+            r("T", e), r("ELAPSED", e);
+            break;
+          case "CX":
+          case "CENTERX":
+            r("CX", e), r("CENTERX", e);
+            break;
+          case "CY":
+          case "CENTERY":
+            r("CY", e), r("CENTERY", e);
+            break;
+          case "MX":
+          case "MOUSEX":
+            r("MX", e), r("MOUSEX", e);
+            break;
+          case "MY":
+          case "MOUSEY":
+            r("MY", e), r("MOUSEY", e);
+            break;
+          default:
+            r(t, e);
+            break;
+        }
+      }
+      function X(t, e) {
+        n("setvar()", "def()"), u(t, e);
+      }
+      function P(t, e) {
+        if (l.autoscale) throw "resize() don't works with autoscale enabled";
+        n("resize()", null, "Avoid changing the canvas dimensions at runtime."), a.CANVAS.width = t, u("W", t), u("CX", t / 2), a.CANVAS.height = e, u("H", e), u("CY", e / 2), a.emit("resized", 1);
+      }
+      for (let t of ["W", "H", "T", "CX", "CY", "MX", "MY"]) a[t] != null && u(t, a[t]);
+      if (n("FPS", "some library to measure the FPS", "Recommendation: https://github.com/mrdoob/stats.js/"), r("FPS", ""), l.fps && a.framerate(l.fps), l.background >= 0) {
+        let t = stat(5);
+        a.CANVAS.style.backgroundColor = t[~~l.background % t.length];
+      }
+      return { def: u, seed: d, print: w, clear: k, setfps: S, setvar: X, textstyle: h, textmetrics: _, text: f, cliprect: A, clipcirc: E, blendmode: T, transform: M, getcolor: C, mousepos: Y, resize: P };
+    }
+    window.pluginMigrate = p;
   })();
 })();
 /*! @litecanvas/utils by Luiz Bills | MIT Licensed */
 /*! Asset Loader plugin for litecanvas by Luiz Bills | MIT Licensed */
+/*! pluginMigrate for litecanvas v0.0.1 by Luiz Bills | MIT Licensed */
