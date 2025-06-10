@@ -1324,16 +1324,16 @@
     globalThis.litecanvas = litecanvas;
   })();
   (() => {
-    var Mt = Object.defineProperty;
-    var It = (e, t) => {
-      for (var s in t) Mt(e, s, { get: t[s], enumerable: true });
+    var Tt = Object.defineProperty;
+    var kt = (e, t) => {
+      for (var s in t) Tt(e, s, { get: t[s], enumerable: true });
     };
     globalThis.utils = globalThis.utils || {};
     globalThis.utils.global = (e = true) => {
       for (let t in globalThis.utils) t !== "global" && (e || globalThis[t] === void 0) && (globalThis[t] = globalThis.utils[t]);
     };
-    var z = {};
-    It(z, { ANCHOR_BOT_LEFT: () => te, ANCHOR_BOT_RIGHT: () => ee, ANCHOR_CENTER: () => Qt, ANCHOR_TOP_LEFT: () => J, ANCHOR_TOP_RIGHT: () => Jt, Actor: () => F, BACK_IN: () => oe, BACK_IN_OUT: () => ue, BACK_OUT: () => ne, BOUNCE_IN: () => mt, BOUNCE_IN_OUT: () => ce, BOUNCE_OUT: () => H, Camera: () => y2, DOWN: () => Zt, EASE_IN: () => re, EASE_IN_OUT: () => ie, EASE_OUT: () => ae, ELASTIC_IN: () => le, ELASTIC_IN_OUT: () => me, ELASTIC_OUT: () => he, Grid: () => M, LEFT: () => Kt, LINEAR: () => ht, Noise: () => Y, ONE: () => Vt, RIGHT: () => $t, TypedGrid: () => C, UP: () => Wt, Vector: () => w, ZERO: () => Q, advance: () => rt, choose: () => wt, colcirc: () => j, colrect: () => B, diff: () => tt, dist: () => it, flipImage: () => ft, fract: () => st, head: () => Nt, intersection: () => E, last: () => Tt, lerpAngle: () => lt, mag: () => ot, makeCircle: () => xt, makeRectangle: () => gt, mean: () => nt, median: () => ut, mod: () => at, range: () => _t, resolverect: () => U, scaleImage: () => bt, shuffle: () => yt, sum: () => A, tail: () => Et, tintImage: () => dt, tween: () => se, vec: () => o, vecAbs: () => zt, vecAdd: () => S, vecAngle: () => Ft, vecAngleBetween: () => Rt, vecCeil: () => Xt, vecClamp: () => jt, vecCross: () => Ht, vecDist: () => Lt, vecDist2: () => Dt, vecDiv: () => I, vecDot: () => K, vecEq: () => O, vecFloor: () => Ut, vecIsZero: () => Gt, vecLerp: () => vt, vecLimit: () => St, vecMag: () => $, vecMag2: () => Z, vecMove: () => qt, vecMult: () => N, vecNorm: () => D, vecRand: () => Yt, vecReflect: () => Ct, vecRotate: () => Pt, vecRound: () => Bt, vecSet: () => W, vecSetMag: () => Ot, vecSub: () => L, wave: () => et });
+    var X = {};
+    kt(X, { ANCHOR_BOT_LEFT: () => Jt, ANCHOR_BOT_RIGHT: () => te, ANCHOR_CENTER: () => Kt, ANCHOR_TOP_LEFT: () => J, ANCHOR_TOP_RIGHT: () => Qt, Actor: () => R, BACK_IN: () => ie, BACK_IN_OUT: () => ne, BACK_OUT: () => oe, BOUNCE_IN: () => ht, BOUNCE_IN_OUT: () => me, BOUNCE_OUT: () => z, Camera: () => y2, DOWN: () => Zt, EASE_IN: () => se, EASE_IN_OUT: () => ae, EASE_OUT: () => re, ELASTIC_IN: () => ue, ELASTIC_IN_OUT: () => he, ELASTIC_OUT: () => le, Grid: () => k, LEFT: () => Gt, LINEAR: () => lt, Noise: () => D, ONE: () => jt, RIGHT: () => $t, TypedGrid: () => C, UP: () => Wt, Vector: () => w, ZERO: () => Q, advance: () => st, choose: () => yt, colcirc: () => q, colrect: () => U, diff: () => tt, dist: () => at, flipImage: () => pt, fract: () => et, head: () => wt, intersection: () => T, last: () => Nt, lerpAngle: () => ut, mag: () => it, makeCircle: () => bt, makeRectangle: () => xt, mean: () => ot, median: () => nt, mod: () => rt, range: () => gt, resolverect: () => H, scaleImage: () => ft, shuffle: () => _t, sum: () => E, tail: () => Mt, tintImage: () => dt, tween: () => ee, vec: () => o, vecAbs: () => Dt, vecAdd: () => L, vecAngle: () => Ft, vecAngleBetween: () => Rt, vecCeil: () => Xt, vecClamp: () => Ut, vecCross: () => Yt, vecDist: () => Lt, vecDist2: () => St, vecDiv: () => A, vecDot: () => K, vecEq: () => O, vecFloor: () => Bt, vecIsZero: () => Vt, vecLerp: () => zt, vecLimit: () => Ot, vecMag: () => Z, vecMag2: () => G, vecMove: () => qt, vecMult: () => N, vecNorm: () => F, vecRand: () => vt, vecReflect: () => Pt, vecRotate: () => It, vecRound: () => Ht, vecSet: () => $, vecSetMag: () => Ct, vecSub: () => S });
     var y2 = class {
       _engine = null;
       x = 0;
@@ -1345,7 +1345,7 @@
       rotation = 0;
       scale = 1;
       constructor(t = null, s = 0, r = 0, a = null, i = null) {
-        this._engine = t || globalThis, this.ox = s, this.oy = r, this.resize(a || this._engine.WIDTH - s, i || this._engine.HEIGHT - r), this.x = this.width / 2, this.y = this.height / 2, this._shake = { x: 0, y: 0, removeListener: null };
+        this._engine = t || globalThis, this.ox = s, this.oy = r, this.resize(a || this._engine.W - s, i || this._engine.H - r), this.x = this.width / 2, this.y = this.height / 2, this._shake = { x: 0, y: 0, removeListener: null };
       }
       resize(t, s) {
         this.width = t, this.height = s, this._engine.emit("camera-resized", this);
@@ -1402,17 +1402,17 @@
         return this._shake.removeListener !== null;
       }
     };
-    var E = (e, t, s, r, a, i, n, u) => {
-      let h = Math.max(e, a), d = Math.min(e + s, a + n) - h, m = Math.max(t, i), x2 = Math.min(t + r, i + u) - m;
-      return [h, m, d, x2];
+    var T = (e, t, s, r, a, i, n, u) => {
+      let h = Math.max(e, a), b = Math.min(e + s, a + n) - h, m = Math.max(t, i), x2 = Math.min(t + r, i + u) - m;
+      return [h, m, b, x2];
     };
-    var U = (e, t, s, r, a, i, n, u) => {
-      let [h, d, m, x2] = E(e, t, s, r, a, i, n, u), b = "", _ = e, l = t;
-      return m < x2 ? e < a ? (b = "right", _ = a - s) : (b = "left", _ = a + n) : t < i ? (b = "bottom", l = i - r) : (b = "top", l = i + u), { direction: b, x: _, y: l };
+    var H = (e, t, s, r, a, i, n, u) => {
+      let [h, b, m, x2] = T(e, t, s, r, a, i, n, u), d = "", _ = e, l = t;
+      return m < x2 ? e < a ? (d = "right", _ = a - s) : (d = "left", _ = a + n) : t < i ? (d = "bottom", l = i - r) : (d = "top", l = i + u), { direction: d, x: _, y: l };
     };
-    var B = (e, t, s, r, a, i, n, u) => e < a + n && e + s > a && t < i + u && t + r > i;
-    var j = (e, t, s, r, a, i) => (r - e) * (r - e) + (a - t) * (a - t) <= (s + i) * (s + i);
-    var M = class e {
+    var U = (e, t, s, r, a, i, n, u) => e < a + n && e + s > a && t < i + u && t + r > i;
+    var q = (e, t, s, r, a, i) => (r - e) * (r - e) + (a - t) * (a - t) <= (s + i) * (s + i);
+    var k = class e {
       _w;
       _h;
       _c;
@@ -1473,10 +1473,10 @@
         });
       }
       clampX(t) {
-        return q(t, 0, this._w - 1);
+        return V(t, 0, this._w - 1);
       }
       clampY(t) {
-        return q(t, 0, this._h - 1);
+        return V(t, 0, this._h - 1);
       }
       toArray() {
         return this._c.slice();
@@ -1489,7 +1489,7 @@
         }), r.join(`
 `);
       }
-    }, C = class e extends M {
+    }, C = class e extends k {
       constructor(t, s, r = Uint8Array) {
         super(t, s, null), this._c = new r(this._w * this._h);
       }
@@ -1503,10 +1503,10 @@
         }), t;
       }
     };
-    function q(e, t, s) {
+    function V(e, t, s) {
       return e < t ? t : e > s ? s : e;
     }
-    var At = Math.sqrt, G = Math.cos, V = Math.sin, kt = 2 * Math.PI, w = class {
+    var At = Math.sqrt, j = Math.cos, W = Math.sin, Et = 2 * Math.PI, w = class {
       x;
       y;
       constructor(t = 0, s = t) {
@@ -1515,26 +1515,26 @@
       toString() {
         return `Vector (${this.x}, ${this.y})`;
       }
-    }, g = (e) => e instanceof w, o = (e = 0, t = e) => (g(e) && (t = e.y, e = e.x), new w(e, t)), O = (e, t, s = t) => g(t) ? O(e, t.x, t.y) : e.x === t && e.y === s, W = (e, t, s = t) => (g(t) ? W(e, t.x, t.y) : (e.x = t, e.y = s), e), S = (e, t, s = t) => g(t) ? S(e, t.x, t.y) : (e.x += t, e.y += s, e), L = (e, t, s = t) => g(t) ? L(e, t.x, t.y) : (e.x -= t, e.y -= s, e), N = (e, t, s = t) => g(t) ? N(e, t.x, t.y) : (e.x *= t, e.y *= s, e), I = (e, t, s = t) => g(t) ? I(e, t.x, t.y) : (e.x /= t || 1, e.y /= s || 1, e), Pt = (e, t) => {
-      let s = G(t), r = V(t);
+    }, g = (e) => e instanceof w, o = (e = 0, t = e) => (g(e) && (t = e.y, e = e.x), new w(e, t)), O = (e, t, s = t) => g(t) ? O(e, t.x, t.y) : e.x === t && e.y === s, $ = (e, t, s = t) => (g(t) ? $(e, t.x, t.y) : (e.x = t, e.y = s), e), L = (e, t, s = t) => g(t) ? L(e, t.x, t.y) : (e.x += t, e.y += s, e), S = (e, t, s = t) => g(t) ? S(e, t.x, t.y) : (e.x -= t, e.y -= s, e), N = (e, t, s = t) => g(t) ? N(e, t.x, t.y) : (e.x *= t, e.y *= s, e), A = (e, t, s = t) => g(t) ? A(e, t.x, t.y) : (e.x /= t || 1, e.y /= s || 1, e), It = (e, t) => {
+      let s = j(t), r = W(t);
       return e.x = s * e.x - r * e.y, e.y = r * e.x + s * e.y, e;
-    }, Ct = (e, t) => {
-      let s = D(o(t));
-      return L(e, N(s, 2 * K(e, s)));
-    }, Ot = (e, t) => (D(e), N(e, t), e), $ = (e) => Math.hypot(e.x, e.y), Z = (e) => e.x * e.x + e.y * e.y, D = (e) => {
-      let t = $(e);
-      return t > 0 && I(e, t), e;
-    }, St = (e, t = 1) => {
-      let s = Z(e);
-      return s > t * t && (I(e, At(s)), N(e, t)), e;
-    }, Lt = (e, t) => Math.hypot(t.x - e.x, t.y - e.y), Dt = (e, t) => {
+    }, Pt = (e, t) => {
+      let s = F(o(t));
+      return S(e, N(s, 2 * K(e, s)));
+    }, Ct = (e, t) => (F(e), N(e, t), e), Z = (e) => Math.hypot(e.x, e.y), G = (e) => e.x * e.x + e.y * e.y, F = (e) => {
+      let t = Z(e);
+      return t > 0 && A(e, t), e;
+    }, Ot = (e, t = 1) => {
+      let s = G(e);
+      return s > t * t && (A(e, At(s)), N(e, t)), e;
+    }, Lt = (e, t) => Math.hypot(t.x - e.x, t.y - e.y), St = (e, t) => {
       let s = e.x - t.x, r = e.y - t.y;
       return s * s + r * r;
-    }, Ft = (e) => Math.atan2(e.y, e.x), Rt = (e, t) => Math.atan2(t.y - e.y, t.x - e.x), K = (e, t) => e.x * t.x + e.y * t.y, Ht = (e, t) => e.x * t.y - e.y * t.x, vt = (e, t, s) => (e.x += (t.x - e.x) * s || 0, e.y += (t.y - e.y) * s || 0, e), Yt = (e = 1, t = e, s = globalThis.rand || Math.random) => {
-      let r = s() * kt, a = s() * (t - e) + e;
-      return o(G(r) * a, V(r) * a);
-    }, zt = (e) => (e.x = Math.abs(e.x), e.y = Math.abs(e.y), e), Xt = (e) => (e.x = Math.ceil(e.x), e.y = Math.ceil(e.y), e), Ut = (e) => (e.x = Math.floor(e.x), e.y = Math.floor(e.y), e), Bt = (e) => (e.x = Math.round(e.x), e.y = Math.round(e.y), e), jt = (e, t, s) => (e.x < t.x && (e.x = t.x), e.x > s.x && (e.x = s.x), e.y < t.y && (e.y = t.y), e.y > s.y && (e.y = s.y), e), qt = (e, t, s = 1) => S(e, t.x * s, t.y * s), Gt = (e) => O(e, Q), Q = o(0, 0), Vt = o(1, 1), Wt = o(0, -1), $t = o(1, 0), Zt = o(0, 1), Kt = o(-1, 0);
-    var Qt = o(0.5, 0.5), J = o(0, 0), Jt = o(1, 0), te = o(0, 1), ee = o(1, 1), F = class {
+    }, Ft = (e) => Math.atan2(e.y, e.x), Rt = (e, t) => Math.atan2(t.y - e.y, t.x - e.x), K = (e, t) => e.x * t.x + e.y * t.y, Yt = (e, t) => e.x * t.y - e.y * t.x, zt = (e, t, s) => (e.x += (t.x - e.x) * s || 0, e.y += (t.y - e.y) * s || 0, e), vt = (e = 1, t = e, s = globalThis.rand || Math.random) => {
+      let r = s() * Et, a = s() * (t - e) + e;
+      return o(j(r) * a, W(r) * a);
+    }, Dt = (e) => (e.x = Math.abs(e.x), e.y = Math.abs(e.y), e), Xt = (e) => (e.x = Math.ceil(e.x), e.y = Math.ceil(e.y), e), Bt = (e) => (e.x = Math.floor(e.x), e.y = Math.floor(e.y), e), Ht = (e) => (e.x = Math.round(e.x), e.y = Math.round(e.y), e), Ut = (e, t, s) => (e.x < t.x && (e.x = t.x), e.x > s.x && (e.x = s.x), e.y < t.y && (e.y = t.y), e.y > s.y && (e.y = s.y), e), qt = (e, t, s = 1) => L(e, t.x * s, t.y * s), Vt = (e) => O(e, Q), Q = o(0, 0), jt = o(1, 1), Wt = o(0, -1), $t = o(1, 0), Zt = o(0, 1), Gt = o(-1, 0);
+    var Kt = o(0.5, 0.5), J = o(0, 0), Qt = o(1, 0), Jt = o(0, 1), te = o(1, 1), R = class {
       sprite;
       pos;
       _o;
@@ -1596,46 +1596,45 @@
       }
     };
     var tt = (e, t) => Math.abs(t - e) || 0;
-    var et = (e, t, s, r = Math.sin) => e + (r(s) + 1) / 2 * (t - e);
-    var st = (e) => e % 1 || 0;
-    var rt = advance = (e, t, s, r = 1) => {
+    var et = (e) => e % 1 || 0;
+    var st = advance = (e, t, s, r = 1) => {
       s && (t.x += s.x * r, t.y += s.y * r), e.x += t.x * r, e.y += t.y * r;
     };
-    var at = (e, t) => (t + e % t) % t;
-    var it = (e, t, s, r) => Math.hypot(s - e, r - t);
-    var ot = (e, t) => Math.hypot(e, t);
-    var A = (e) => {
+    var rt = (e, t) => (t + e % t) % t;
+    var at = (e, t, s, r) => Math.hypot(s - e, r - t);
+    var it = (e, t) => Math.hypot(e, t);
+    var E = (e) => {
       let t = 0;
       for (let s = 0; s < e.length; s++) t += e[s];
       return t;
     };
-    var nt = (e) => A(e) / e.length;
-    var ut = (...e) => {
+    var ot = (e) => E(e) / e.length;
+    var nt = (...e) => {
       let t = e.sort((r, a) => r - a), s = Math.floor(t.length / 2);
       return t.length % 2 === 0 ? (t[s - 1] + t[s]) / 2 : t[s];
     };
-    var lt = (e, t, s) => {
+    var ut = (e, t, s) => {
       let r = (t - e) % 360;
       return r > 180 ? r -= 360 : r < -180 && (r += 360), e + r * s;
     };
-    var k = Math.PI / 2, se = (e, t, s, r = 1, a = ht) => new R(e, t, s, r, a), ht = (e) => e, re = (e) => e * e, ae = (e) => -e * (e - 2), ie = (e) => e < 0.5 ? 2 * e * e : -2 * e * e + 4 * e - 1, oe = (e) => e * e * e - e * Math.sin(e * Math.PI), ne = (e) => {
+    var I = Math.PI / 2, ee = (e, t, s, r = 1, a = lt) => new Y(e, t, s, r, a), lt = (e) => e, se = (e) => e * e, re = (e) => -e * (e - 2), ae = (e) => e < 0.5 ? 2 * e * e : -2 * e * e + 4 * e - 1, ie = (e) => e * e * e - e * Math.sin(e * Math.PI), oe = (e) => {
       let t = 1 - e;
       return 1 - (t * t * t - t * Math.sin(t * Math.PI));
-    }, ue = (e) => {
+    }, ne = (e) => {
       if (e < 0.5) {
         let s = 2 * e;
         return 0.5 * (s * s * s - s * Math.sin(s * Math.PI));
       }
       let t = 1 - (2 * e - 1);
       return 0.5 * (1 - (t * t * t - t * Math.sin(e * Math.PI))) + 0.5;
-    }, le = (e) => Math.sin(13 * k * e) * Math.pow(2, 10 * (e - 1)), he = (e) => Math.sin(-13 * k * (e + 1)) * Math.pow(2, -10 * e) + 1, me = (e) => {
+    }, ue = (e) => Math.sin(13 * I * e) * Math.pow(2, 10 * (e - 1)), le = (e) => Math.sin(-13 * I * (e + 1)) * Math.pow(2, -10 * e) + 1, he = (e) => {
       if (e < 0.5) {
-        let r = Math.sin(13 * k * (2 * e)), a = Math.pow(2, 10 * (2 * e - 1));
+        let r = Math.sin(13 * I * (2 * e)), a = Math.pow(2, 10 * (2 * e - 1));
         return 0.5 * r * a;
       }
-      let t = Math.sin(-13 * k * (2 * e - 1 + 1)), s = Math.pow(2, -10 * (2 * e - 1));
+      let t = Math.sin(-13 * I * (2 * e - 1 + 1)), s = Math.pow(2, -10 * (2 * e - 1));
       return 0.5 * (t * s + 2);
-    }, mt = (e) => 1 - H(1 - e), H = (e) => e < 4 / 11 ? 121 * e * e / 16 : e < 8 / 11 ? 363 / 40 * e * e - 99 / 10 * e + 17 / 5 : e < 9 / 10 ? 4356 / 361 * e * e - 35442 / 1805 * e + 16061 / 1805 : 54 / 5 * e * e - 513 / 25 * e + 268 / 25, ce = (e) => e < 0.5 ? 0.5 * mt(e * 2) : 0.5 * H(e * 2 - 1) + 0.5, R = class {
+    }, ht = (e) => 1 - z(1 - e), z = (e) => e < 4 / 11 ? 121 * e * e / 16 : e < 8 / 11 ? 363 / 40 * e * e - 99 / 10 * e + 17 / 5 : e < 9 / 10 ? 4356 / 361 * e * e - 35442 / 1805 * e + 16061 / 1805 : 54 / 5 * e * e - 513 / 25 * e + 268 / 25, me = (e) => e < 0.5 ? 0.5 * ht(e * 2) : 0.5 * z(e * 2 - 1) + 0.5, Y = class {
       running = false;
       _o;
       _p;
@@ -1698,7 +1697,7 @@
         return this.running && this._t > this._w ? (this._t - this._w) / this._d : 0;
       }
     };
-    var ct = 4, P = 1 << ct, pt = 8, pe = 1 << pt, f = 4095, v = (e) => 0.5 * (1 - Math.cos(e * Math.PI)), Y = class {
+    var mt = 4, P = 1 << mt, ct = 8, ce = 1 << ct, f = 4095, v = (e) => 0.5 * (1 - Math.cos(e * Math.PI)), D = class {
       _p = [];
       _po = 4;
       _pf = 0.5;
@@ -1708,45 +1707,45 @@
       }
       noise(t, s = 0, r = 0) {
         t < 0 && (t = -t), s < 0 && (s = -s), r < 0 && (r = -r);
-        let a = Math.floor(t), i = Math.floor(s), n = Math.floor(r), u = t - a, h = s - i, d = r - n, m, x2, b = 0, _ = 0.5, l, c, T;
-        for (let X = 0; X < this._po; X++) {
-          let p = a + (i << ct) + (n << pt);
-          m = v(u), x2 = v(h), l = this._p[p & f], l += m * (this._p[p + 1 & f] - l), c = this._p[p + P & f], c += m * (this._p[p + P + 1 & f] - c), l += x2 * (c - l), p += pe, c = this._p[p & f], c += m * (this._p[p + 1 & f] - c), T = this._p[p + P & f], T += m * (this._p[p + P + 1 & f] - T), c += x2 * (T - c), l += v(d) * (c - l), b += l * _, _ *= this._pf, a <<= 1, u *= 2, i <<= 1, h *= 2, n <<= 1, d *= 2, u >= 1 && (a++, u--), h >= 1 && (i++, h--), d >= 1 && (n++, d--);
+        let a = Math.floor(t), i = Math.floor(s), n = Math.floor(r), u = t - a, h = s - i, b = r - n, m, x2, d = 0, _ = 0.5, l, c, M;
+        for (let B = 0; B < this._po; B++) {
+          let p = a + (i << mt) + (n << ct);
+          m = v(u), x2 = v(h), l = this._p[p & f], l += m * (this._p[p + 1 & f] - l), c = this._p[p + P & f], c += m * (this._p[p + P + 1 & f] - c), l += x2 * (c - l), p += ce, c = this._p[p & f], c += m * (this._p[p + 1 & f] - c), M = this._p[p + P & f], M += m * (this._p[p + P + 1 & f] - M), c += x2 * (M - c), l += v(b) * (c - l), d += l * _, _ *= this._pf, a <<= 1, u *= 2, i <<= 1, h *= 2, n <<= 1, b *= 2, u >= 1 && (a++, u--), h >= 1 && (i++, h--), b >= 1 && (n++, b--);
         }
-        return b;
+        return d;
       }
       noiseDetail(t, s) {
         t > 0 && (this._po = t), s > 0 && (this._pf = s);
       }
       noiseSeed(t = null) {
-        t != null && this._e.seed(t);
+        t != null && this._e.rseed(t);
         let s = this._e.rand || Math.random;
         for (let r = 0; r < f + 1; r++) this._p[r] = s();
       }
     };
-    var ft = (e, t = true, s = false, r = globalThis) => r.paint(e.width, e.height, (a) => {
+    var pt = (e, t = true, s = false, r = globalThis) => r.paint(e.width, e.height, (a) => {
       r.push(), r.scale(t ? -1 : 1, s ? -1 : 1), r.image(t ? -e.width : 0, s ? -e.height : 0, e), r.pop();
     });
-    var bt = (e, t, s = true, r = globalThis) => r.paint(e.width * t, e.height * t, (a) => {
+    var ft = (e, t, s = true, r = globalThis) => r.paint(e.width * t, e.height * t, (a) => {
       r.push(), a.imageSmoothingEnabled = !s, r.scale(t), r.image(0, 0, e), r.pop();
     });
     var dt = (e, t, s = 1, r = globalThis) => r.paint(e.width, e.height, (a) => {
       r.push(), r.alpha(s), r.rectfill(0, 0, e.width, e.height, t), a.globalCompositeOperation = "destination-atop", r.alpha(1), r.image(0, 0, e), r.pop();
     });
-    var xt = (e, t, { borderWidth: s = 0, borderColor: r = 0, engine: a = globalThis } = {}) => {
+    var bt = (e, t, { borderWidth: s = 0, borderColor: r = 0, engine: a = globalThis } = {}) => {
       let i = e * 2 + s;
       return a.paint(i, i, () => {
         a.circfill(i / 2, i / 2, e, t), s > 0 && (a.linewidth(s), a.stroke(r));
       });
     };
-    var gt = (e, t, s, { borderWidth: r = 0, borderColor: a = 0, engine: i = globalThis } = {}) => {
+    var xt = (e, t, s, { borderWidth: r = 0, borderColor: a = 0, engine: i = globalThis } = {}) => {
       let n = e + r * 2, u = t + r * 2;
       return i.paint(n, u, () => {
         i.rectfill(r > 0 ? r : 0, r > 0 ? r : 0, e, t, s), r > 0 && (i.linewidth(r), i.stroke(a));
       });
     };
-    var _t = (e, t = 0, s = 1) => [...new Array(e).keys()].map((r) => t + s * r);
-    var yt = (e, t = globalThis.rand || Math.random) => {
+    var gt = (e, t = 0, s = 1) => [...new Array(e).keys()].map((r) => t + s * r);
+    var _t = (e, t = globalThis.rand || Math.random) => {
       e = [...e];
       for (let s = e.length - 1; s > 0; s--) {
         let r = Math.floor(t() * (s + 1)), a = e[s];
@@ -1754,11 +1753,11 @@
       }
       return e;
     };
-    var wt = (e, t = globalThis.rand || Math.random) => e[Math.floor(t() * e.length)];
-    var Nt = (e) => e[0];
-    var Tt = (e) => e[e.length - 1];
-    var Et = (e) => e.slice(1);
-    globalThis.utils = Object.assign(globalThis.utils || {}, z);
+    var yt = (e, t = globalThis.rand || Math.random) => e[Math.floor(t() * e.length)];
+    var wt = (e) => e[0];
+    var Nt = (e) => e[e.length - 1];
+    var Mt = (e) => e.slice(1);
+    globalThis.utils = Object.assign(globalThis.utils || {}, X);
   })();
   (() => {
     function c(t) {

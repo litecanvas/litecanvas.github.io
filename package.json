@@ -27,7 +27,7 @@
     "@litecanvas/plugin-migrate": "latest",
     "@litecanvas/utils": "latest",
     "codemirror": "^6.0.1",
-    "eslint-linter-browserify": "9.21.0",
+    "eslint-linter-browserify": "9.28.0",
     "litecanvas": "latest",
     "pako": "^2.1.0"
   }
