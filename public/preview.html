@@ -93,6 +93,9 @@
         window.litecanvas = (settings = {}) => {
           const instance = _litecanvas(settings);
           instance.use(pluginMigrate);
+          instance.use(pluginFrameRateMeter, {
+            hidden: true,
+          });
           instance.listen("before:init", () => {
             instance.use(pluginAssetLoader);
           });

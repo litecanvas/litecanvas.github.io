@@ -849,6 +849,7 @@
             "function" === typeof callback,
             "listen: 2nd param must be a function"
           );
+          eventName = eventName.toLowerCase();
           _events[eventName] = _events[eventName] || /* @__PURE__ */ new Set();
           _events[eventName].add(callback);
           return () => _events[eventName].delete(callback);
@@ -868,6 +869,7 @@
             "emit: 1st param must be a string"
           );
           if (_initialized) {
+            eventName = eventName.toLowerCase();
             triggerEvent("before:" + eventName, arg1, arg2, arg3, arg4);
             triggerEvent(eventName, arg1, arg2, arg3, arg4);
             triggerEvent("after:" + eventName, arg1, arg2, arg3, arg4);
@@ -969,7 +971,9 @@
             //  11
             _fontFamily
           ];
-          return list[n];
+          const data = { index: n, value: list[n] };
+          instance.emit("stat", data);
+          return data.value;
         },
         /**
          * Stops the litecanvas instance and remove all event listeners.
@@ -1137,25 +1141,24 @@
           });
         }
         if (settings.keyboardEvents) {
-          const toLowerCase = (s) => s.toLowerCase();
           const _keysDown = /* @__PURE__ */ new Set();
           const _keysPress = /* @__PURE__ */ new Set();
-          const keyCheck = (keysSet, key) => {
-            return !key ? keysSet.size > 0 : keysSet.has(
-              "space" === toLowerCase(key) ? " " : toLowerCase(key)
-            );
+          const keyCheck = (keySet, key = "") => {
+            key = key.toLowerCase();
+            return !key ? keySet.size > 0 : keySet.has("space" === key ? " " : key);
           };
           on(root, "keydown", (event) => {
-            if (!_keysDown.has(toLowerCase(event.key))) {
-              _keysDown.add(toLowerCase(event.key));
-              _keysPress.add(toLowerCase(event.key));
+            const key = event.key.toLowerCase();
+            if (!_keysDown.has(key)) {
+              _keysDown.add(key);
+              _keysPress.add(key);
             }
           });
           on(root, "keyup", (event) => {
-            _keysDown.delete(toLowerCase(event.key));
+            _keysDown.delete(event.key.toLowerCase());
           });
           on(root, "blur", () => _keysDown.clear());
-          instance.listen("after:draw", () => _keysPress.clear());
+          instance.listen("after:update", () => _keysPress.clear());
           instance.def(
             "iskeydown",
             /**
@@ -2014,7 +2017,84 @@
     }
     window.pluginMigrate = p;
   })();
+  (() => {
+    function A() {
+      let o = 0, a = true, i = document.createElement("div"), r = [], p = () => (performance || Date).now();
+      i.style.cssText = "position:absolute;top:0;right:0;cursor:pointer;opacity:0.8;z-index:10000", i.addEventListener("click", function(e) {
+        e.preventDefault(), l(++o % i.children.length);
+      }, false);
+      function u(e, n, _, t) {
+        let w = new P(e, n, _, i, t);
+        return r.push(w), w;
+      }
+      function l(e) {
+        for (let n = 0; n < i.children.length; n++) i.children[n].style.display = n === e ? "block" : "none";
+        o = e;
+      }
+      function f() {
+        o++, o >= i.children.length && (o = 0), l(o);
+      }
+      function s(e = "all") {
+        if (e === "all") for (let n = 0; n < r.length; n++) r[n].reset();
+        else r[e] && r[e].reset();
+        h = p(), y2 = 0;
+      }
+      function g(e = true) {
+        a = !!e, i.style.display = a ? "" : "none";
+      }
+      let b = p(), h = b, y2 = 0, c = u("FPS", "#0ff", "#002"), d = u("MS", "#0f0", "#020"), m;
+      return self.performance && self.performance.memory && (m = u("MB", "#f08", "#201")), l(0), { dom: i, addPanel: u, showPanel: l, nextPanel: f, resetPanel: s, display: g, get hidden() {
+        return !a;
+      }, begin: function() {
+        b = p();
+      }, end: function() {
+        y2++;
+        let e = p();
+        if (d.update(e - b, 200), e >= h + 1e3 && (c.update(y2 * 1e3 / (e - h), 100), h = e, y2 = 0, m)) {
+          let n = performance.memory;
+          m.update(n.usedJSHeapSize / 1048576, n.jsHeapSizeLimit / 1048576);
+        }
+        return e;
+      }, update: function() {
+        b = this.end();
+      } };
+    }
+    function P(o, a, i, r, p = {}) {
+      let u = Math.round, l = 1 / 0, f = 0, s = u(window.devicePixelRatio || 1), g = (p.width || 80) * s, b = 48 * s, h = 3 * s, y2 = 2 * s, c = 3 * s, d = 15 * s, m = (g - 6) * s, e = 30 * s, n = document.createElement("canvas");
+      n.width = g, n.height = b;
+      let _ = r.children.length;
+      r.appendChild(n);
+      let t = n.getContext("2d");
+      t.font = "bold " + 9 * s + "px Helvetica,Arial,sans-serif", t.textBaseline = "top";
+      function w() {
+        t.fillStyle = i, t.fillRect(0, 0, g, b), t.fillStyle = a, t.fillText(o, h, y2), t.fillRect(c, d, m, e), t.fillStyle = i, t.globalAlpha = 0.9, t.fillRect(c, d, m, e);
+      }
+      return w(), { id: _, dom: n, reset: w, update: function(x2, E) {
+        l = Math.min(l, x2), f = Math.max(f, x2), t.fillStyle = i, t.globalAlpha = 1, t.fillRect(0, 0, g, d), t.fillStyle = a;
+        let T = [u(x2), o];
+        p.labelBefore && T.reverse(), t.fillText(T.join(" ") + " (" + u(l) + "-" + u(f) + ")", h, y2), t.drawImage(n, c + s, d, m - s, e, c, d, m - s, e), t.fillRect(c + m - s, d, s, e), t.fillStyle = i, t.globalAlpha = 0.9, t.fillRect(c + m - s, d, s, u((1 - x2 / E) * e));
+      } };
+    }
+    var S = { hotkeyShow: "F1", hotkeyNext: "F2", css: {}, hidden: false, id: "" };
+    function v(o, a = {}) {
+      a = Object.assign({}, S, a);
+      let i = o.stat(0), r = new A(), p = r.display, u = (l = true) => {
+        console.log("display", l), a.hidden = !l, p(l), r.resetPanel();
+      };
+      a.id && (r.dom.id = a.id);
+      for (let [l, f] of Object.entries(a.css || {})) r.dom.style[l] = f;
+      return o.CANVAS.parentElement.appendChild(r.dom), u(!a.hidden), i.keyboardEvents && listen("update", () => {
+        a.hotkeyShow && o.iskeypressed(a.hotkeyShow) && u(a.hidden), a.hotkeyNext && o.iskeypressed(a.hotkeyNext) && r.nextPanel();
+      }), listen("before:update", (l, f = 1) => {
+        a.hidden || f === 1 && r.begin();
+      }), listen("after:draw", () => {
+        a.hidden || r.end();
+      }), r.display = u, { FPS_METER: r };
+    }
+    window.pluginFrameRateMeter = v;
+  })();
 })();
 /*! @litecanvas/utils by Luiz Bills | MIT Licensed */
 /*! Asset Loader plugin for litecanvas by Luiz Bills | MIT Licensed */
 /*! pluginMigrate for litecanvas v0.0.1 by Luiz Bills | MIT Licensed */
+/*! pluginFrameRateMeter for litecanvas by Luiz Bills | MIT Licensed */

@@ -31,6 +31,13 @@ const pluginMigrate = await readFile(
 
 await appendFile(engineFile, "\n" + pluginMigrate);
 
+const pluginFrameRateMeter = await readFile(
+  root + "/node_modules/@litecanvas/plugin-frame-rate-meter/dist/dist.js",
+  { encoding: "utf8" }
+);
+
+await appendFile(engineFile, "\n" + pluginFrameRateMeter);
+
 await esbuild.build({
   entryPoints: [engineFile],
   outfile: engineFile,

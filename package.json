@@ -24,6 +24,7 @@
     "@codemirror/lang-javascript": "^6.2.4",
     "@codemirror/theme-one-dark": "^6.1.2",
     "@litecanvas/plugin-asset-loader": "latest",
+    "@litecanvas/plugin-frame-rate-meter": "latest",
     "@litecanvas/plugin-migrate": "latest",
     "@litecanvas/utils": "latest",
     "codemirror": "^6.0.1",
