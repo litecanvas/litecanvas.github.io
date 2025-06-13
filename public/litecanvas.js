@@ -27,9 +27,7 @@
     function litecanvas(settings = {}) {
       const root = globalThis, math = Math, TWO_PI = math.PI * 2, raf = requestAnimationFrame, _browserEventListeners = [], on = (elem, evt, callback) => {
         elem.addEventListener(evt, callback, false);
-        _browserEventListeners.push(
-          () => elem.removeEventListener(evt, callback, false)
-        );
+        _browserEventListeners.push(() => elem.removeEventListener(evt, callback, false));
       }, isNumber = Number.isFinite, defaults = {
         width: null,
         height: null,
@@ -88,7 +86,7 @@
          *
          * @type {number}
          */
-        HALF_PI: math.PI / 2,
+        HALF_PI: TWO_PI / 4,
         /**
          * Calculates a linear (interpolation) value over t%.
          *
@@ -153,16 +151,13 @@
          * @param {number} max
          * @returns {number}
          */
-        clamp: (value, min, max) => {
+        clamp: (value, min2, max2) => {
           DEV: assert(isNumber(value), "clamp: 1st param must be a number");
-          DEV: assert(isNumber(min), "clamp: 2nd param must be a number");
-          DEV: assert(isNumber(max), "clamp: 3rd param must be a number");
-          DEV: assert(
-            max > min,
-            "randi: the 2nd param must be less than the 3rd param"
-          );
-          if (value < min) return min;
-          if (value > max) return max;
+          DEV: assert(isNumber(min2), "clamp: 2nd param must be a number");
+          DEV: assert(isNumber(max2), "clamp: 3rd param must be a number");
+          DEV: assert(max2 > min2, "clamp: the 2nd param must be less than the 3rd param");
+          if (value < min2) return min2;
+          if (value > max2) return max2;
           return value;
         },
         /**
@@ -173,19 +168,12 @@
          * @param {number} max
          * @returns {number}
          */
-        wrap: (value, min, max) => {
+        wrap: (value, min2, max2) => {
           DEV: assert(isNumber(value), "wrap: 1st param must be a number");
-          DEV: assert(isNumber(min), "wrap: 2nd param must be a number");
-          DEV: assert(isNumber(max), "wrap: 3rd param must be a number");
-          DEV: assert(
-            max > min,
-            "randi: the 2nd param must be less than the 3rd param"
-          );
-          DEV: assert(
-            max !== min,
-            "randi: the 2nd param must be not equal to the 3rd param"
-          );
-          return value - (max - min) * math.floor((value - min) / (max - min));
+          DEV: assert(isNumber(min2), "wrap: 2nd param must be a number");
+          DEV: assert(isNumber(max2), "wrap: 3rd param must be a number");
+          DEV: assert(max2 > min2, "wrap: the 2nd param must be less than the 3rd param");
+          return value - (max2 - min2) * math.floor((value - min2) / (max2 - min2));
         },
         /**
          * Re-maps a number from one range to another.
@@ -204,6 +192,7 @@
           DEV: assert(isNumber(stop1), "map: 3rd param must be a number");
           DEV: assert(isNumber(start2), "map: 4th param must be a number");
           DEV: assert(isNumber(stop2), "map: 5th param must be a number");
+          DEV: assert(max !== min, "map: the 3rd param must be different than the 2nd param");
           const result = (value - start1) / (stop1 - start1) * (stop2 - start2) + start2;
           return withinBounds ? instance.clamp(result, start2, stop2) : result;
         },
@@ -228,10 +217,19 @@
          *
          * @param {number} from - the lower bound
          * @param {number} to - the higher bound
-         * @param {number} t - the amount
-         * @param {(n: number) => number} fn - the periodic function (which default to `Math.sin`)
+         * @param {number} t - value passed to the periodic function
+         * @param {(n: number) => number} [fn] - the periodic function (which default to `Math.sin`)
          */
-        wave: (from, to, t, fn = Math.sin) => from + (fn(t) + 1) / 2 * (to - from),
+        wave: (from, to, t, fn = Math.sin) => {
+          DEV: assert(isNumber(from), "wave: 1st param must be a number");
+          DEV: assert(isNumber(to), "wave: 2nd param must be a number");
+          DEV: assert(isNumber(t), "wave: 3rd param must be a number");
+          DEV: assert(
+            "function" === typeof fn,
+            "wave: 4rd param must be a function (n: number) => number"
+          );
+          return from + (fn(t) + 1) / 2 * (to - from);
+        },
         /** RNG API */
         /**
          * Generates a pseudorandom float between min (inclusive) and max (exclusive)
@@ -241,18 +239,15 @@
          * @param {number} [max=1.0]
          * @returns {number} the random number
          */
-        rand: (min = 0, max = 1) => {
-          DEV: assert(isNumber(min), "rand: 1st param must be a number");
-          DEV: assert(isNumber(max), "rand: 2nd param must be a number");
-          DEV: assert(
-            max > min,
-            "rand: the 1st param must be less than the 2nd param"
-          );
+        rand: (min2 = 0, max2 = 1) => {
+          DEV: assert(isNumber(min2), "rand: 1st param must be a number");
+          DEV: assert(isNumber(max2), "rand: 2nd param must be a number");
+          DEV: assert(max2 > min2, "rand: the 1st param must be less than the 2nd param");
           const a = 1664525;
           const c = 1013904223;
           const m = 4294967296;
           _rngSeed = (a * _rngSeed + c) % m;
-          return _rngSeed / m * (max - min) + min;
+          return _rngSeed / m * (max2 - min2) + min2;
         },
         /**
          * Generates a pseudorandom integer between min (inclusive) and max (inclusive)
@@ -261,14 +256,11 @@
          * @param {number} [max=1]
          * @returns {number} the random number
          */
-        randi: (min = 0, max = 1) => {
-          DEV: assert(isNumber(min), "randi: 1st param must be a number");
-          DEV: assert(isNumber(max), "randi: 2nd param must be a number");
-          DEV: assert(
-            max > min,
-            "randi: the 1st param must be less than the 2nd param"
-          );
-          return math.floor(instance.rand(min, max + 1));
+        randi: (min2 = 0, max2 = 1) => {
+          DEV: assert(isNumber(min2), "randi: 1st param must be a number");
+          DEV: assert(isNumber(max2), "randi: 2nd param must be a number");
+          DEV: assert(max2 > min2, "randi: the 1st param must be less than the 2nd param");
+          return math.floor(instance.rand(min2, max2 + 1));
         },
         /**
          * Initializes the random number generator with an explicit seed value.
@@ -298,13 +290,7 @@
           if (null == color) {
             _ctx.clearRect(0, 0, _ctx.canvas.width, _ctx.canvas.height);
           } else {
-            instance.rectfill(
-              0,
-              0,
-              _ctx.canvas.width,
-              _ctx.canvas.height,
-              color
-            );
+            instance.rectfill(0, 0, _ctx.canvas.width, _ctx.canvas.height, color);
           }
         },
         /**
@@ -316,14 +302,13 @@
          * @param {number} height
          * @param {number} [color=0] the color index
          * @param {number|number[]} [radii] A number or list specifying the radii used to draw a rounded-borders rectangle
+         *
+         * @see https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/roundRect
          */
         rect(x2, y2, width, height, color, radii) {
           DEV: assert(isNumber(x2), "rect: 1st param must be a number");
           DEV: assert(isNumber(y2), "rect: 2nd param must be a number");
-          DEV: assert(
-            isNumber(width) && width > 0,
-            "rect: 3rd param must be a positive number"
-          );
+          DEV: assert(isNumber(width) && width > 0, "rect: 3rd param must be a positive number");
           DEV: assert(
             isNumber(height) && height >= 0,
             "rect: 4th param must be a positive number or zero"
@@ -376,13 +361,7 @@
             "rectfill: 6th param must be a number or array of at least 2 numbers"
           );
           _ctx.beginPath();
-          _ctx[radii ? "roundRect" : "rect"](
-            ~~x2,
-            ~~y2,
-            ~~width,
-            ~~height,
-            radii
-          );
+          _ctx[radii ? "roundRect" : "rect"](~~x2, ~~y2, ~~width, ~~height, radii);
           instance.fill(color);
         },
         /**
@@ -443,14 +422,8 @@
         line(x1, y1, x2, y2, color) {
           DEV: assert(isNumber(x1), "line: 1st param must be a number");
           DEV: assert(isNumber(y1), "line: 2nd param must be a number");
-          DEV: assert(
-            isNumber(x2),
-            "line: 3rd param must be a positive number or zero"
-          );
-          DEV: assert(
-            isNumber(y2),
-            "line: 4th param must be a positive number or zero"
-          );
+          DEV: assert(isNumber(x2), "line: 3rd param must be a positive number or zero");
+          DEV: assert(isNumber(y2), "line: 4th param must be a positive number or zero");
           DEV: assert(
             null == color || isNumber(color) && color >= 0,
             "line: 5th param must be a positive number or zero"
@@ -489,10 +462,7 @@
             Array.isArray(segments) && segments.length > 0,
             "linedash: 1st param must be an array of numbers"
           );
-          DEV: assert(
-            isNumber(offset),
-            "linedash: 2nd param must be a number"
-          );
+          DEV: assert(isNumber(offset), "linedash: 2nd param must be a number");
           _ctx.setLineDash(segments);
           _ctx.lineDashOffset = offset;
         },
@@ -513,10 +483,7 @@
             null == color || isNumber(color) && color >= 0,
             "text: 4th param must be a positive number or zero"
           );
-          DEV: assert(
-            "string" === typeof fontStyle,
-            "text: 5th param must be a string"
-          );
+          DEV: assert("string" === typeof fontStyle, "text: 5th param must be a string");
           _ctx.font = `${fontStyle} ${_fontSize}px ${_fontFamily}`;
           _ctx.fillStyle = _colors[~~color % _colors.length];
           _ctx.fillText(message, ~~x2, ~~y2);
@@ -527,10 +494,7 @@
          * @param {string} family
          */
         textfont(family) {
-          DEV: assert(
-            "string" === typeof family,
-            "textfont: 1st param must be a string"
-          );
+          DEV: assert("string" === typeof family, "textfont: 1st param must be a string");
           _fontFamily = family;
         },
         /**
@@ -556,14 +520,9 @@
             "textalign: 1st param must be null or one of the following strings: center, left, right, start or end."
           );
           DEV: assert(
-            null == baseline || [
-              "top",
-              "bottom",
-              "middle",
-              "hanging",
-              "alphabetic",
-              "ideographic"
-            ].includes(baseline),
+            null == baseline || ["top", "bottom", "middle", "hanging", "alphabetic", "ideographic"].includes(
+              baseline
+            ),
             "textalign: 2nd param must be null or one of the following strings: middle, top, bottom, hanging, alphabetic or ideographic."
           );
           if (align) _ctx.textAlign = align;
@@ -674,10 +633,7 @@
          */
         scale: (x2, y2) => {
           DEV: assert(isNumber(x2), "scale: 1st param must be a number");
-          DEV: assert(
-            null == y2 || isNumber(y2),
-            "scale: 2nd param must be a number"
-          );
+          DEV: assert(null == y2 || isNumber(y2), "scale: 2nd param must be a number");
           return _ctx.scale(x2, y2 || x2);
         },
         /**
@@ -762,14 +718,13 @@
         /**
          * Turn given path into a clipping region.
          *
+         * Note: always call `push()` before and `pop()` after.
+         *
          * @param {Path2D} path
          * @see https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/clip
          */
         clip(path2) {
-          DEV: assert(
-            path2 instanceof Path2D,
-            "clip: 1st param must be a Path2D instance"
-          );
+          DEV: assert(path2 instanceof Path2D, "clip: 1st param must be a Path2D instance");
           _ctx.clip(path2);
         },
         /** SOUND API */
@@ -790,10 +745,7 @@
             "sfx: 1st param must be an array"
           );
           DEV: assert(isNumber(pitchSlide), "sfx: 2nd param must be a number");
-          DEV: assert(
-            isNumber(volumeFactor),
-            "sfx: 3rd param must be a number"
-          );
+          DEV: assert(isNumber(volumeFactor), "sfx: 3rd param must be a number");
           if (root.zzfxV <= 0 || navigator.userActivation && !navigator.userActivation.hasBeenActive) {
             return false;
           }
@@ -823,15 +775,13 @@
          * @param {pluginCallback} callback
          */
         use(callback, config = {}) {
-          DEV: assert(
-            "function" === typeof callback,
-            "use: 1st param must be a function"
-          );
-          DEV: assert(
-            "object" === typeof config,
-            "use: 2nd param must be an object"
-          );
-          _initialized ? loadPlugin(callback, config) : _plugins.push([callback, config]);
+          DEV: assert("function" === typeof callback, "use: 1st param must be a function");
+          DEV: assert("object" === typeof config, "use: 2nd param must be an object");
+          if (_initialized) {
+            loadPlugin(callback, config);
+          } else {
+            _plugins.push([callback, config]);
+          }
         },
         /**
          * Add a game event listener
@@ -841,14 +791,8 @@
          * @returns {Function} a function to remove the listener
          */
         listen(eventName, callback) {
-          DEV: assert(
-            "string" === typeof eventName,
-            "listen: 1st param must be a string"
-          );
-          DEV: assert(
-            "function" === typeof callback,
-            "listen: 2nd param must be a function"
-          );
+          DEV: assert("string" === typeof eventName, "listen: 1st param must be a string");
+          DEV: assert("function" === typeof callback, "listen: 2nd param must be a function");
           eventName = eventName.toLowerCase();
           _events[eventName] = _events[eventName] || /* @__PURE__ */ new Set();
           _events[eventName].add(callback);
@@ -864,10 +808,7 @@
          * @param {*} [arg4] any data to be passed over the listeners
          */
         emit(eventName, arg1, arg2, arg3, arg4) {
-          DEV: assert(
-            "string" === typeof eventName,
-            "emit: 1st param must be a string"
-          );
+          DEV: assert("string" === typeof eventName, "emit: 1st param must be a string");
           if (_initialized) {
             eventName = eventName.toLowerCase();
             triggerEvent("before:" + eventName, arg1, arg2, arg3, arg4);
@@ -894,14 +835,9 @@
          * @param {*} value
          */
         def(key, value) {
-          DEV: assert(
-            "string" === typeof key,
-            "def: 1st param must be a string"
-          );
+          DEV: assert("string" === typeof key, "def: 1st param must be a string");
           DEV: if (null == value) {
-            console.warn(
-              `def: key "${key}" was defined as ${value} but now is null`
-            );
+            console.warn(`def: key "${key}" was defined as ${value} but now is null`);
           }
           instance[key] = value;
           if (settings.global) {
@@ -941,10 +877,7 @@
          * @returns {any}
          */
         stat(n) {
-          DEV: assert(
-            isNumber(n) && n >= 0,
-            "stat: 1st param must be a positive number"
-          );
+          DEV: assert(isNumber(n) && n >= 0, "stat: 1st param must be a positive number");
           const list = [
             // 0
             settings,
@@ -1009,25 +942,50 @@
           on(root, "resize", resizeCanvas);
         }
         if (settings.tapEvents) {
-          const _getXY = (pageX, pageY) => [
-            (pageX - _canvas.offsetLeft) / _scale,
-            (pageY - _canvas.offsetTop) / _scale
-          ], _taps = /* @__PURE__ */ new Map(), _registerTap = (id, x2, y2) => {
-            const tap = {
-              x: x2,
-              y: y2,
-              startX: x2,
-              startY: y2,
-              // timestamp
-              ts: performance.now()
-            };
-            _taps.set(id, tap);
-            return tap;
-          }, _updateTap = (id, x2, y2) => {
-            const tap = _taps.get(id) || _registerTap(id);
-            tap.x = x2;
-            tap.y = y2;
-          }, _checkTapped = (tap) => tap && performance.now() - tap.ts <= 300, preventDefault = (ev) => ev.preventDefault();
+          const _getXY = (
+            /**
+             * @param {number} pageX
+             * @param {number} pageY
+             */
+            (pageX, pageY) => [
+              (pageX - _canvas.offsetLeft) / _scale,
+              (pageY - _canvas.offsetTop) / _scale
+            ]
+          ), _taps = /* @__PURE__ */ new Map(), _registerTap = (
+            /**
+             * @param {number} id
+             * @param {number} [x]
+             * @param {number} [y]
+             */
+            (id, x2, y2) => {
+              const tap = {
+                x: x2,
+                y: y2,
+                startX: x2,
+                startY: y2,
+                // timestamp
+                ts: performance.now()
+              };
+              _taps.set(id, tap);
+              return tap;
+            }
+          ), _updateTap = (
+            /**
+             * @param {number} id
+             * @param {number} x
+             * @param {number} y
+             */
+            (id, x2, y2) => {
+              const tap = _taps.get(id) || _registerTap(id);
+              tap.x = x2;
+              tap.y = y2;
+            }
+          ), _checkTapped = (
+            /**
+             * @param {{ts: number}} tap
+             */
+            (tap) => tap && performance.now() - tap.ts <= 300
+          ), preventDefault = (ev) => ev.preventDefault();
           let _pressingMouse = false;
           on(
             _canvas,
@@ -1232,10 +1190,7 @@
           _canvas = document.querySelector(settings.canvas);
         }
         _canvas = _canvas || document.createElement("canvas");
-        DEV: assert(
-          _canvas && _canvas.tagName === "CANVAS",
-          "Invalid canvas element"
-        );
+        DEV: assert(_canvas && _canvas.tagName === "CANVAS", "Invalid canvas element");
         instance.def("CANVAS", _canvas);
         _ctx = _canvas.getContext("2d");
         on(_canvas, "click", () => root.focus());
@@ -1268,10 +1223,7 @@
             _canvas.style.display = "block";
             _canvas.style.margin = "auto";
           }
-          _scale = math.min(
-            root.innerWidth / instance.W,
-            root.innerHeight / instance.H
-          );
+          _scale = math.min(root.innerWidth / instance.W, root.innerHeight / instance.H);
           _scale = (settings.pixelart ? ~~_scale : _scale) || 1;
           _canvas.style.width = instance.W * _scale + "px";
           _canvas.style.height = instance.H * _scale + "px";
