@@ -3,35 +3,40 @@ export default () =>
 // Learn more tapping on the question mark (?) above.
 // Join our discord: https://discord.com/invite/r2c3rGsvH3
 
-let x, y, size, speed, color
+// Start the engine
+litecanvas({
+    loop: { init, update, draw, tapped },
+})
 
-litecanvas()
+let bg, color, radius, posx, posy
 
-// run once before the game starts
+// this function runs once at the beginning
 function init() {
-  x = CX
-  y = CY
-  size = 32
-  speed = 250
-  color = 4
+    bg = 0 // the color #0 (black)
+    color = 3 // the color #3 (white)
+    radius = W / 10 // the canvas width/10
+    posx = CX // center X (or canvas width/2)
+    posy = CY // center Y (or canvas width/2)
 }
 
-// called when touches/clicks happens
-function tapped(tapx, tapy) {
-  x = tapx
-  y = tapy
+// this function detect clicks/touches
+function tapped(x, y) {
+    // changes the circle position
+    // based on the position of the tap
+    posx = x
+    posy = y
 }
 
-// this function controls the game logic
+// put the game logic in this function
 function update(dt) {
-  x += speed * dt * (iskeydown('D') - iskeydown('A'))
-  y += speed * dt * (iskeydown('S') - iskeydown('W'))
+    // make the circle falls 100 pixels per second
+    posy += 200 * dt
 }
 
-// this function render the game scene
+// put the game rendering in this function
 function draw() {
-  cls(0)
-  rectfill(x, y, size, size, color)
-  text(0, 0, 'use WASD keys or taps/clicks')
+    cls(bg) // clear the screen
+    circfill(posx, posy, radius, color) // draw a circle
+    text(10, 10, 'Tap anywhere') // draw a text
 }
 `;
