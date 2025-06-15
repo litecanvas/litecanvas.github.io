@@ -1970,21 +1970,21 @@
     window.pluginMigrate = p;
   })();
   (() => {
-    function A() {
-      let o = 0, a = true, i = document.createElement("div"), r = [], p = () => (performance || Date).now();
+    function _() {
+      let u = 0, a = true, i = document.createElement("div"), r = [], p = () => (performance || Date).now();
       i.style.cssText = "position:absolute;top:0;right:0;cursor:pointer;opacity:0.8;z-index:10000", i.addEventListener("click", function(e) {
-        e.preventDefault(), l(++o % i.children.length);
+        e.preventDefault(), o(++u % i.children.length);
       }, false);
-      function u(e, n, _, t) {
-        let w = new P(e, n, _, i, t);
+      function l(e, n, v, t) {
+        let w = new P(e, n, v, i, t);
         return r.push(w), w;
       }
-      function l(e) {
+      function o(e) {
         for (let n = 0; n < i.children.length; n++) i.children[n].style.display = n === e ? "block" : "none";
-        o = e;
+        u = e;
       }
       function f() {
-        o++, o >= i.children.length && (o = 0), l(o);
+        u++, u >= i.children.length && (u = 0), o(u);
       }
       function s(e = "all") {
         if (e === "all") for (let n = 0; n < r.length; n++) r[n].reset();
@@ -1994,8 +1994,8 @@
       function g(e = true) {
         a = !!e, i.style.display = a ? "" : "none";
       }
-      let b = p(), h = b, y2 = 0, c = u("FPS", "#0ff", "#002"), d = u("MS", "#0f0", "#020"), m;
-      return self.performance && self.performance.memory && (m = u("MB", "#f08", "#201")), l(0), { dom: i, addPanel: u, showPanel: l, nextPanel: f, resetPanel: s, display: g, get hidden() {
+      let b = p(), h = b, y2 = 0, c = l("FPS", "#0ff", "#002"), d = l("MS", "#0f0", "#020"), m;
+      return self.performance && self.performance.memory && (m = l("MB", "#f08", "#201")), o(0), { dom: i, addPanel: l, showPanel: o, nextPanel: f, resetPanel: s, display: g, get hidden() {
         return !a;
       }, begin: function() {
         b = p();
@@ -2011,39 +2011,39 @@
         b = this.end();
       } };
     }
-    function P(o, a, i, r, p = {}) {
-      let u = Math.round, l = 1 / 0, f = 0, s = u(window.devicePixelRatio || 1), g = (p.width || 80) * s, b = 48 * s, h = 3 * s, y2 = 2 * s, c = 3 * s, d = 15 * s, m = (g - 6) * s, e = 30 * s, n = document.createElement("canvas");
+    function P(u, a, i, r, p = {}) {
+      let l = Math.round, o = 1 / 0, f = 0, s = l(window.devicePixelRatio || 1), g = (p.width || 80) * s, b = 48 * s, h = 3 * s, y2 = 2 * s, c = 3 * s, d = 15 * s, m = (g - 6) * s, e = 30 * s, n = document.createElement("canvas");
       n.width = g, n.height = b;
-      let _ = r.children.length;
+      let v = r.children.length;
       r.appendChild(n);
       let t = n.getContext("2d");
       t.font = "bold " + 9 * s + "px Helvetica,Arial,sans-serif", t.textBaseline = "top";
       function w() {
-        t.fillStyle = i, t.fillRect(0, 0, g, b), t.fillStyle = a, t.fillText(o, h, y2), t.fillRect(c, d, m, e), t.fillStyle = i, t.globalAlpha = 0.9, t.fillRect(c, d, m, e);
+        t.fillStyle = i, t.fillRect(0, 0, g, b), t.fillStyle = a, t.fillText(u, h, y2), t.fillRect(c, d, m, e), t.fillStyle = i, t.globalAlpha = 0.9, t.fillRect(c, d, m, e);
       }
-      return w(), { id: _, dom: n, reset: w, update: function(x2, E) {
-        l = Math.min(l, x2), f = Math.max(f, x2), t.fillStyle = i, t.globalAlpha = 1, t.fillRect(0, 0, g, d), t.fillStyle = a;
-        let T = [u(x2), o];
-        p.labelBefore && T.reverse(), t.fillText(T.join(" ") + " (" + u(l) + "-" + u(f) + ")", h, y2), t.drawImage(n, c + s, d, m - s, e, c, d, m - s, e), t.fillRect(c + m - s, d, s, e), t.fillStyle = i, t.globalAlpha = 0.9, t.fillRect(c + m - s, d, s, u((1 - x2 / E) * e));
+      return w(), { id: v, dom: n, reset: w, update: function(x2, E) {
+        o = Math.min(o, x2), f = Math.max(f, x2), t.fillStyle = i, t.globalAlpha = 1, t.fillRect(0, 0, g, d), t.fillStyle = a;
+        let T = [l(x2), u];
+        p.labelBefore && T.reverse(), t.fillText(T.join(" ") + " (" + l(o) + "-" + l(f) + ")", h, y2), t.drawImage(n, c + s, d, m - s, e, c, d, m - s, e), t.fillRect(c + m - s, d, s, e), t.fillStyle = i, t.globalAlpha = 0.9, t.fillRect(c + m - s, d, s, l((1 - x2 / E) * e));
       } };
     }
     var S = { hotkeyShow: "F1", hotkeyNext: "F2", css: {}, hidden: false, id: "" };
-    function v(o, a = {}) {
+    function A(u, a = {}) {
       a = Object.assign({}, S, a);
-      let i = o.stat(0), r = new A(), p = r.display, u = (l = true) => {
-        console.log("display", l), a.hidden = !l, p(l), r.resetPanel();
+      let i = u.stat(0), r = new _(), p = r.display, l = (o = true) => {
+        a.hidden = !o, p(o), r.resetPanel();
       };
       a.id && (r.dom.id = a.id);
-      for (let [l, f] of Object.entries(a.css || {})) r.dom.style[l] = f;
-      return o.CANVAS.parentElement.appendChild(r.dom), u(!a.hidden), i.keyboardEvents && listen("update", () => {
-        a.hotkeyShow && o.iskeypressed(a.hotkeyShow) && u(a.hidden), a.hotkeyNext && o.iskeypressed(a.hotkeyNext) && r.nextPanel();
-      }), listen("before:update", (l, f = 1) => {
+      for (let [o, f] of Object.entries(a.css || {})) r.dom.style[o] = f;
+      return u.CANVAS.parentElement.appendChild(r.dom), l(!a.hidden), i.keyboardEvents && listen("update", () => {
+        a.hotkeyShow && u.iskeypressed(a.hotkeyShow) && l(a.hidden), a.hotkeyNext && u.iskeypressed(a.hotkeyNext) && r.nextPanel();
+      }), listen("before:update", (o, f = 1) => {
         a.hidden || f === 1 && r.begin();
       }), listen("after:draw", () => {
         a.hidden || r.end();
-      }), r.display = u, { FPS_METER: r };
+      }), r.display = l, { FPS_METER: r };
     }
-    window.pluginFrameRateMeter = v;
+    window.pluginFrameRateMeter = A;
   })();
 })();
 /*! @litecanvas/utils by Luiz Bills | MIT Licensed */
