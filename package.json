@@ -22,13 +22,13 @@
   "dependencies": {
     "@babel/standalone": "^7.27.6",
     "@codemirror/lang-javascript": "^6.2.4",
-    "@codemirror/theme-one-dark": "^6.1.2",
+    "@codemirror/theme-one-dark": "^6.1.3",
     "@litecanvas/plugin-asset-loader": "latest",
     "@litecanvas/plugin-frame-rate-meter": "latest",
     "@litecanvas/plugin-migrate": "latest",
     "@litecanvas/utils": "latest",
-    "codemirror": "^6.0.1",
-    "eslint-linter-browserify": "9.28.0",
+    "codemirror": "^6.0.2",
+    "eslint-linter-browserify": "9.29.0",
     "litecanvas": "latest",
     "pako": "^2.1.0"
   }
