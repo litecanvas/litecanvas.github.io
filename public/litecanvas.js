@@ -1160,7 +1160,7 @@
       function drawFrame(now) {
         let updated = 0;
         if (settings.animate) {
-          _accumulated += math.min(0.2, (now - _lastFrameTime) / 1e3);
+          _accumulated += math.min(0.1, (now - _lastFrameTime) / 1e3);
           _lastFrameTime = now;
           while (_accumulated >= _deltaTime) {
             updated++;
