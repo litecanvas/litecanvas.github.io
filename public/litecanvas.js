@@ -3,8 +3,8 @@
   (() => {
     var zzfxX = /* @__PURE__ */ new AudioContext();
     var zzfx = (i = 1, d = 0.05, z = 220, e = 0, P = 0, S = 0.1, I = 0, c = 1, T = 0, H = 0, V = 0, J = 0, h = 0, j = 0, K = 0, E = 0, r = 0, B = 1, X = 0, L = 0, D = 0) => {
-      let n = Math, t = 2 * n.PI, a = 44100, F = T *= 500 * t / a / a, O = z *= (1 - d + 2 * d * n.random(d = [])) * t / a, x2 = 0, _ = 0, f = 0, g = 1, $ = 0, l = 0, o = 0, s = D < 0 ? -1 : 1, u = t * s * D * 2 / a, G = n.cos(u), C = n.sin, Q = C(u) / 4, M = 1 + Q, m = -2 * G / M, y2 = (1 - Q) / M, R = (1 + s * G) / 2 / M, A = -(s + G) / M, v = R, U = 0, W = 0, Y = 0, Z = 0;
-      for (e = a * e + 9, X *= a, P *= a, S *= a, r *= a, H *= 500 * t / a ** 3, K *= t / a, V *= t / a, J *= a, h = a * h | 0, i *= 0.3 * (globalThis.zzfxV || 1), s = e + X + P + S + r | 0; f < s; d[f++] = o * i) ++l % (100 * E | 0) || (o = I ? 1 < I ? 2 < I ? 3 < I ? C(x2 * x2) : n.max(n.min(n.tan(x2), 1), -1) : 1 - (2 * x2 / t % 2 + 2) % 2 : 1 - 4 * n.abs(n.round(x2 / t) - x2 / t) : C(x2), o = (h ? 1 - L + L * C(t * f / h) : 1) * (o < 0 ? -1 : 1) * n.abs(o) ** c * (f < e ? f / e : f < e + X ? 1 - (f - e) / X * (1 - B) : f < e + X + P ? B : f < s - r ? (s - f - r) / S * B : 0), o = r ? o / 2 + (r > f ? 0 : (f < s - r ? 1 : (s - f) / r) * d[f - r | 0] / 2 / i) : o, D && (o = Z = v * U + A * (U = W) + R * (W = o) - y2 * Y - m * (Y = Z))), u = (z += T += H) * n.cos(K * _++), x2 += u + u * j * C(f ** 5), g && ++g > J && (z += V, O += V, g = 0), !h || ++$ % h || (z = O, T = F, g = g || 1);
+      let n = Math, t = 2 * n.PI, a = 44100, F = T *= 500 * t / a / a, O = z *= (1 - d + 2 * d * n.random(d = [])) * t / a, x = 0, _ = 0, f = 0, g = 1, $ = 0, l = 0, o = 0, s = D < 0 ? -1 : 1, u = t * s * D * 2 / a, G = n.cos(u), C = n.sin, Q = C(u) / 4, M = 1 + Q, m = -2 * G / M, y = (1 - Q) / M, R = (1 + s * G) / 2 / M, A = -(s + G) / M, v = R, U = 0, W = 0, Y = 0, Z = 0;
+      for (e = a * e + 9, X *= a, P *= a, S *= a, r *= a, H *= 500 * t / a ** 3, K *= t / a, V *= t / a, J *= a, h = a * h | 0, i *= 0.3 * (globalThis.zzfxV || 1), s = e + X + P + S + r | 0; f < s; d[f++] = o * i) ++l % (100 * E | 0) || (o = I ? 1 < I ? 2 < I ? 3 < I ? C(x * x) : n.max(n.min(n.tan(x), 1), -1) : 1 - (2 * x / t % 2 + 2) % 2 : 1 - 4 * n.abs(n.round(x / t) - x / t) : C(x), o = (h ? 1 - L + L * C(t * f / h) : 1) * (o < 0 ? -1 : 1) * n.abs(o) ** c * (f < e ? f / e : f < e + X ? 1 - (f - e) / X * (1 - B) : f < e + X + P ? B : f < s - r ? (s - f - r) / S * B : 0), o = r ? o / 2 + (r > f ? 0 : (f < s - r ? 1 : (s - f) / r) * d[f - r | 0] / 2 / i) : o, D && (o = Z = v * U + A * (U = W) + R * (W = o) - y * Y - m * (Y = Z))), u = (z += T += H) * n.cos(K * _++), x += u + u * j * C(f ** 5), g && ++g > J && (z += V, O += V, g = 0), !h || ++$ % h || (z = O, T = F, g = g || 1);
       i = zzfxX.createBuffer(1, s, a), i.getChannelData(0).set(d), z = zzfxX.createBufferSource(), z.buffer = i, z.connect(zzfxX.destination), z.start();
     };
     var defaultPalette = [
@@ -305,9 +305,9 @@
          *
          * @see https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/roundRect
          */
-        rect(x2, y2, width, height, color, radii) {
-          DEV: assert(isNumber(x2), "rect: 1st param must be a number");
-          DEV: assert(isNumber(y2), "rect: 2nd param must be a number");
+        rect(x, y, width, height, color, radii) {
+          DEV: assert(isNumber(x), "rect: 1st param must be a number");
+          DEV: assert(isNumber(y), "rect: 2nd param must be a number");
           DEV: assert(isNumber(width) && width > 0, "rect: 3rd param must be a positive number");
           DEV: assert(
             isNumber(height) && height >= 0,
@@ -323,8 +323,8 @@
           );
           _ctx.beginPath();
           _ctx[radii ? "roundRect" : "rect"](
-            ~~x2 - _outline_fix,
-            ~~y2 - _outline_fix,
+            ~~x - _outline_fix,
+            ~~y - _outline_fix,
             ~~width + _outline_fix * 2,
             ~~height + _outline_fix * 2,
             radii
@@ -341,9 +341,9 @@
          * @param {number} [color=0] the color index
          * @param {number|number[]} [radii] A number or list specifying the radii used to draw a rounded-borders rectangle
          */
-        rectfill(x2, y2, width, height, color, radii) {
-          DEV: assert(isNumber(x2), "rectfill: 1st param must be a number");
-          DEV: assert(isNumber(y2), "rectfill: 2nd param must be a number");
+        rectfill(x, y, width, height, color, radii) {
+          DEV: assert(isNumber(x), "rectfill: 1st param must be a number");
+          DEV: assert(isNumber(y), "rectfill: 2nd param must be a number");
           DEV: assert(
             isNumber(width) && width >= 0,
             "rectfill: 3rd param must be a positive number or zero"
@@ -361,7 +361,7 @@
             "rectfill: 6th param must be a number or array of at least 2 numbers"
           );
           _ctx.beginPath();
-          _ctx[radii ? "roundRect" : "rect"](~~x2, ~~y2, ~~width, ~~height, radii);
+          _ctx[radii ? "roundRect" : "rect"](~~x, ~~y, ~~width, ~~height, radii);
           instance.fill(color);
         },
         /**
@@ -372,9 +372,9 @@
          * @param {number} radius
          * @param {number} [color=0] the color index
          */
-        circ(x2, y2, radius, color) {
-          DEV: assert(isNumber(x2), "circ: 1st param must be a number");
-          DEV: assert(isNumber(y2), "circ: 2nd param must be a number");
+        circ(x, y, radius, color) {
+          DEV: assert(isNumber(x), "circ: 1st param must be a number");
+          DEV: assert(isNumber(y), "circ: 2nd param must be a number");
           DEV: assert(
             isNumber(radius) && radius >= 0,
             "circ: 3rd param must be a positive number or zero"
@@ -384,7 +384,7 @@
             "circ: 4th param must be a positive number or zero"
           );
           _ctx.beginPath();
-          _ctx.arc(~~x2, ~~y2, ~~radius, 0, TWO_PI);
+          _ctx.arc(~~x, ~~y, ~~radius, 0, TWO_PI);
           instance.stroke(color);
         },
         /**
@@ -395,9 +395,9 @@
          * @param {number} radius
          * @param {number} [color=0] the color index
          */
-        circfill(x2, y2, radius, color) {
-          DEV: assert(isNumber(x2), "circfill: 1st param must be a number");
-          DEV: assert(isNumber(y2), "circfill: 2nd param must be a number");
+        circfill(x, y, radius, color) {
+          DEV: assert(isNumber(x), "circfill: 1st param must be a number");
+          DEV: assert(isNumber(y), "circfill: 2nd param must be a number");
           DEV: assert(
             isNumber(radius) && radius >= 0,
             "circfill: 3rd param must be a positive number or zero"
@@ -407,7 +407,7 @@
             "circfill: 4th param must be a positive number or zero"
           );
           _ctx.beginPath();
-          _ctx.arc(~~x2, ~~y2, ~~radius, 0, TWO_PI);
+          _ctx.arc(~~x, ~~y, ~~radius, 0, TWO_PI);
           instance.fill(color);
         },
         /**
@@ -476,9 +476,9 @@
          * @param {number} [color=3] the color index
          * @param {string} [fontStyle] can be "normal" (default), "italic" and/or "bold".
          */
-        text(x2, y2, message, color = 3, fontStyle = "normal") {
-          DEV: assert(isNumber(x2), "text: 1st param must be a number");
-          DEV: assert(isNumber(y2), "text: 2nd param must be a number");
+        text(x, y, message, color = 3, fontStyle = "normal") {
+          DEV: assert(isNumber(x), "text: 1st param must be a number");
+          DEV: assert(isNumber(y), "text: 2nd param must be a number");
           DEV: assert(
             null == color || isNumber(color) && color >= 0,
             "text: 4th param must be a positive number or zero"
@@ -486,7 +486,7 @@
           DEV: assert("string" === typeof fontStyle, "text: 5th param must be a string");
           _ctx.font = `${fontStyle} ${_fontSize}px ${_fontFamily}`;
           _ctx.fillStyle = _colors[~~color % _colors.length];
-          _ctx.fillText(message, ~~x2, ~~y2);
+          _ctx.fillText(message, ~~x, ~~y);
         },
         /**
          * Set the font family
@@ -536,10 +536,10 @@
          * @param {number} y
          * @param {OffscreenCanvas|HTMLImageElement|HTMLCanvasElement} source
          */
-        image(x2, y2, source) {
-          DEV: assert(isNumber(x2), "image: 1st param must be a number");
-          DEV: assert(isNumber(y2), "image: 2nd param must be a number");
-          _ctx.drawImage(source, ~~x2, ~~y2);
+        image(x, y, source) {
+          DEV: assert(isNumber(x), "image: 1st param must be a number");
+          DEV: assert(isNumber(y), "image: 2nd param must be a number");
+          _ctx.drawImage(source, ~~x, ~~y);
         },
         /**
          * Draw in an OffscreenCanvas and returns its image.
@@ -570,17 +570,17 @@
           _ctx = canvas.getContext("2d");
           _ctx.scale(scale, scale);
           if (drawing.push) {
-            let x2 = 0, y2 = 0;
+            let x = 0, y = 0;
             _ctx.imageSmoothingEnabled = false;
-            for (const str2 of drawing) {
-              for (const color of str2) {
+            for (const str of drawing) {
+              for (const color of str) {
                 if (" " !== color && "." !== color) {
-                  instance.rectfill(x2, y2, 1, 1, parseInt(color, 16));
+                  instance.rectfill(x, y, 1, 1, parseInt(color, 16));
                 }
-                x2++;
+                x++;
               }
-              y2++;
-              x2 = 0;
+              y++;
+              x = 0;
             }
           } else {
             drawing(_ctx);
@@ -620,10 +620,10 @@
          * @param {number} x
          * @param {number} y
          */
-        translate: (x2, y2) => {
-          DEV: assert(isNumber(x2), "translate: 1st param must be a number");
-          DEV: assert(isNumber(y2), "translate: 2nd param must be a number");
-          return _ctx.translate(~~x2, ~~y2);
+        translate: (x, y) => {
+          DEV: assert(isNumber(x), "translate: 1st param must be a number");
+          DEV: assert(isNumber(y), "translate: 2nd param must be a number");
+          return _ctx.translate(~~x, ~~y);
         },
         /**
          * Adds a scaling transformation to the canvas units horizontally and/or vertically.
@@ -631,10 +631,10 @@
          * @param {number} x
          * @param {number} [y]
          */
-        scale: (x2, y2) => {
-          DEV: assert(isNumber(x2), "scale: 1st param must be a number");
-          DEV: assert(null == y2 || isNumber(y2), "scale: 2nd param must be a number");
-          return _ctx.scale(x2, y2 || x2);
+        scale: (x, y) => {
+          DEV: assert(isNumber(x), "scale: 1st param must be a number");
+          DEV: assert(null == y || isNumber(y), "scale: 2nd param must be a number");
+          return _ctx.scale(x, y || x);
         },
         /**
          * Adds a rotation to the transformation matrix.
@@ -957,12 +957,12 @@
              * @param {number} [x]
              * @param {number} [y]
              */
-            (id, x2, y2) => {
+            (id, x, y) => {
               const tap = {
-                x: x2,
-                y: y2,
-                startX: x2,
-                startY: y2,
+                x,
+                y,
+                startX: x,
+                startY: y,
                 // timestamp
                 ts: performance.now()
               };
@@ -975,10 +975,10 @@
              * @param {number} x
              * @param {number} y
              */
-            (id, x2, y2) => {
+            (id, x, y) => {
               const tap = _taps.get(id) || _registerTap(id);
-              tap.x = x2;
-              tap.y = y2;
+              tap.x = x;
+              tap.y = y;
             }
           ), _checkTapped = (
             /**
@@ -996,9 +996,9 @@
             (ev) => {
               if (ev.button === 0) {
                 preventDefault(ev);
-                const [x2, y2] = _getXY(ev.pageX, ev.pageY);
-                instance.emit("tap", x2, y2, 0);
-                _registerTap(0, x2, y2);
+                const [x, y] = _getXY(ev.pageX, ev.pageY);
+                instance.emit("tap", x, y, 0);
+                _registerTap(0, x, y);
                 _pressingMouse = true;
               }
             }
@@ -1013,11 +1013,11 @@
               if (ev.button === 0) {
                 preventDefault(ev);
                 const tap = _taps.get(0);
-                const [x2, y2] = _getXY(ev.pageX, ev.pageY);
+                const [x, y] = _getXY(ev.pageX, ev.pageY);
                 if (_checkTapped(tap)) {
                   instance.emit("tapped", tap.startX, tap.startY, 0);
                 }
-                instance.emit("untap", x2, y2, 0);
+                instance.emit("untap", x, y, 0);
                 _taps.delete(0);
                 _pressingMouse = false;
               }
@@ -1031,12 +1031,12 @@
              */
             (ev) => {
               preventDefault(ev);
-              const [x2, y2] = _getXY(ev.pageX, ev.pageY);
-              instance.def("MX", x2);
-              instance.def("MY", y2);
+              const [x, y] = _getXY(ev.pageX, ev.pageY);
+              instance.def("MX", x);
+              instance.def("MY", y);
               if (!_pressingMouse) return;
-              instance.emit("tapping", x2, y2, 0);
-              _updateTap(0, x2, y2);
+              instance.emit("tapping", x, y, 0);
+              _updateTap(0, x, y);
             }
           );
           on(
@@ -1049,9 +1049,9 @@
               preventDefault(ev);
               const touches = ev.changedTouches;
               for (const touch of touches) {
-                const [x2, y2] = _getXY(touch.pageX, touch.pageY);
-                instance.emit("tap", x2, y2, touch.identifier + 1);
-                _registerTap(touch.identifier + 1, x2, y2);
+                const [x, y] = _getXY(touch.pageX, touch.pageY);
+                instance.emit("tap", x, y, touch.identifier + 1);
+                _registerTap(touch.identifier + 1, x, y);
               }
             }
           );
@@ -1065,9 +1065,9 @@
               preventDefault(ev);
               const touches = ev.changedTouches;
               for (const touch of touches) {
-                const [x2, y2] = _getXY(touch.pageX, touch.pageY);
-                instance.emit("tapping", x2, y2, touch.identifier + 1);
-                _updateTap(touch.identifier + 1, x2, y2);
+                const [x, y] = _getXY(touch.pageX, touch.pageY);
+                instance.emit("tapping", x, y, touch.identifier + 1);
+                _updateTap(touch.identifier + 1, x, y);
               }
             }
           );
@@ -1279,8 +1279,8 @@
       for (let t in globalThis.utils) t !== "global" && (e || globalThis[t] === void 0) && (globalThis[t] = globalThis.utils[t]);
     };
     var X = {};
-    kt(X, { ANCHOR_BOT_LEFT: () => Jt, ANCHOR_BOT_RIGHT: () => te, ANCHOR_CENTER: () => Kt, ANCHOR_TOP_LEFT: () => J, ANCHOR_TOP_RIGHT: () => Qt, Actor: () => R, BACK_IN: () => ie, BACK_IN_OUT: () => ne, BACK_OUT: () => oe, BOUNCE_IN: () => ht, BOUNCE_IN_OUT: () => me, BOUNCE_OUT: () => z, Camera: () => y2, DOWN: () => Zt, EASE_IN: () => se, EASE_IN_OUT: () => ae, EASE_OUT: () => re, ELASTIC_IN: () => ue, ELASTIC_IN_OUT: () => he, ELASTIC_OUT: () => le, Grid: () => k, LEFT: () => Gt, LINEAR: () => lt, Noise: () => D, ONE: () => jt, RIGHT: () => $t, TypedGrid: () => C, UP: () => Wt, Vector: () => w, ZERO: () => Q, advance: () => st, choose: () => yt, colcirc: () => q, colrect: () => U, diff: () => tt, dist: () => at, flipImage: () => pt, fract: () => et, head: () => wt, intersection: () => T, last: () => Nt, lerpAngle: () => ut, mag: () => it, makeCircle: () => bt, makeRectangle: () => xt, mean: () => ot, median: () => nt, mod: () => rt, range: () => gt, resolverect: () => H, scaleImage: () => ft, shuffle: () => _t, sum: () => E, tail: () => Mt, tintImage: () => dt, tween: () => ee, vec: () => o, vecAbs: () => Dt, vecAdd: () => L, vecAngle: () => Ft, vecAngleBetween: () => Rt, vecCeil: () => Xt, vecClamp: () => Ut, vecCross: () => Yt, vecDist: () => Lt, vecDist2: () => St, vecDiv: () => A, vecDot: () => K, vecEq: () => O, vecFloor: () => Bt, vecIsZero: () => Vt, vecLerp: () => zt, vecLimit: () => Ot, vecMag: () => Z, vecMag2: () => G, vecMove: () => qt, vecMult: () => N, vecNorm: () => F, vecRand: () => vt, vecReflect: () => Pt, vecRotate: () => It, vecRound: () => Ht, vecSet: () => $, vecSetMag: () => Ct, vecSub: () => S });
-    var y2 = class {
+    kt(X, { ANCHOR_BOT_LEFT: () => Jt, ANCHOR_BOT_RIGHT: () => te, ANCHOR_CENTER: () => Kt, ANCHOR_TOP_LEFT: () => J, ANCHOR_TOP_RIGHT: () => Qt, Actor: () => R, BACK_IN: () => ie, BACK_IN_OUT: () => ne, BACK_OUT: () => oe, BOUNCE_IN: () => ht, BOUNCE_IN_OUT: () => me, BOUNCE_OUT: () => z, Camera: () => y, DOWN: () => Zt, EASE_IN: () => se, EASE_IN_OUT: () => ae, EASE_OUT: () => re, ELASTIC_IN: () => ue, ELASTIC_IN_OUT: () => he, ELASTIC_OUT: () => le, Grid: () => k, LEFT: () => Gt, LINEAR: () => lt, Noise: () => D, ONE: () => jt, RIGHT: () => $t, TypedGrid: () => C, UP: () => Wt, Vector: () => w, ZERO: () => Q, advance: () => st, choose: () => yt, colcirc: () => q, colrect: () => U, diff: () => tt, dist: () => at, flipImage: () => pt, fract: () => et, head: () => wt, intersection: () => T, last: () => Nt, lerpAngle: () => ut, mag: () => it, makeCircle: () => bt, makeRectangle: () => xt, mean: () => ot, median: () => nt, mod: () => rt, range: () => gt, resolverect: () => H, scaleImage: () => ft, shuffle: () => _t, sum: () => E, tail: () => Mt, tintImage: () => dt, tween: () => ee, vec: () => o, vecAbs: () => Dt, vecAdd: () => L, vecAngle: () => Ft, vecAngleBetween: () => Rt, vecCeil: () => Xt, vecClamp: () => Ut, vecCross: () => Yt, vecDist: () => Lt, vecDist2: () => St, vecDiv: () => A, vecDot: () => K, vecEq: () => O, vecFloor: () => Bt, vecIsZero: () => Vt, vecLerp: () => zt, vecLimit: () => Ot, vecMag: () => Z, vecMag2: () => G, vecMove: () => qt, vecMult: () => N, vecNorm: () => F, vecRand: () => vt, vecReflect: () => Pt, vecRotate: () => It, vecRound: () => Ht, vecSet: () => $, vecSetMag: () => Ct, vecSub: () => S });
+    var y = class {
       _engine = null;
       x = 0;
       y = 0;
@@ -1349,12 +1349,12 @@
       }
     };
     var T = (e, t, s, r, a, i, n, u) => {
-      let h = Math.max(e, a), b = Math.min(e + s, a + n) - h, m = Math.max(t, i), x2 = Math.min(t + r, i + u) - m;
-      return [h, m, b, x2];
+      let h = Math.max(e, a), b = Math.min(e + s, a + n) - h, m = Math.max(t, i), x = Math.min(t + r, i + u) - m;
+      return [h, m, b, x];
     };
     var H = (e, t, s, r, a, i, n, u) => {
-      let [h, b, m, x2] = T(e, t, s, r, a, i, n, u), d = "", _ = e, l = t;
-      return m < x2 ? e < a ? (d = "right", _ = a - s) : (d = "left", _ = a + n) : t < i ? (d = "bottom", l = i - r) : (d = "top", l = i + u), { direction: d, x: _, y: l };
+      let [h, b, m, x] = T(e, t, s, r, a, i, n, u), d = "", _ = e, l = t;
+      return m < x ? e < a ? (d = "right", _ = a - s) : (d = "left", _ = a + n) : t < i ? (d = "bottom", l = i - r) : (d = "top", l = i + u), { direction: d, x: _, y: l };
     };
     var U = (e, t, s, r, a, i, n, u) => e < a + n && e + s > a && t < i + u && t + r > i;
     var q = (e, t, s, r, a, i) => (r - e) * (r - e) + (a - t) * (a - t) <= (s + i) * (s + i);
@@ -1653,10 +1653,10 @@
       }
       noise(t, s = 0, r = 0) {
         t < 0 && (t = -t), s < 0 && (s = -s), r < 0 && (r = -r);
-        let a = Math.floor(t), i = Math.floor(s), n = Math.floor(r), u = t - a, h = s - i, b = r - n, m, x2, d = 0, _ = 0.5, l, c, M;
+        let a = Math.floor(t), i = Math.floor(s), n = Math.floor(r), u = t - a, h = s - i, b = r - n, m, x, d = 0, _ = 0.5, l, c, M;
         for (let B = 0; B < this._po; B++) {
           let p = a + (i << mt) + (n << ct);
-          m = v(u), x2 = v(h), l = this._p[p & f], l += m * (this._p[p + 1 & f] - l), c = this._p[p + P & f], c += m * (this._p[p + P + 1 & f] - c), l += x2 * (c - l), p += ce, c = this._p[p & f], c += m * (this._p[p + 1 & f] - c), M = this._p[p + P & f], M += m * (this._p[p + P + 1 & f] - M), c += x2 * (M - c), l += v(b) * (c - l), d += l * _, _ *= this._pf, a <<= 1, u *= 2, i <<= 1, h *= 2, n <<= 1, b *= 2, u >= 1 && (a++, u--), h >= 1 && (i++, h--), b >= 1 && (n++, b--);
+          m = v(u), x = v(h), l = this._p[p & f], l += m * (this._p[p + 1 & f] - l), c = this._p[p + P & f], c += m * (this._p[p + P + 1 & f] - c), l += x * (c - l), p += ce, c = this._p[p & f], c += m * (this._p[p + 1 & f] - c), M = this._p[p + P & f], M += m * (this._p[p + P + 1 & f] - M), c += x * (M - c), l += v(b) * (c - l), d += l * _, _ *= this._pf, a <<= 1, u *= 2, i <<= 1, h *= 2, n <<= 1, b *= 2, u >= 1 && (a++, u--), h >= 1 && (i++, h--), b >= 1 && (n++, b--);
         }
         return d;
       }
@@ -1723,7 +1723,7 @@
       let i = "LOADING";
       t.def(i, ~~t[i] + ~~e);
     };
-    function y2(t, e = {}) {
+    function y(t, e = {}) {
       return e = Object.assign({}, h, e), l(t, 0), t.def("ASSETS", t.ASSETS || {}), t.ASSETS.font = {}, { loadFont: async (r, a, p) => {
         let { baseURL: m, ignoreErrors: f } = e, o = c(a);
         a = b(a, m);
@@ -1809,7 +1809,7 @@
         });
       } };
     }
-    function x2(t, e = {}) {
+    function x(t, e = {}) {
       return e = Object.assign({}, h, e), l(t, 0), t.def("ASSETS", t.ASSETS || {}), t.ASSETS.sound = {}, { loadSound: async (r, a) => {
         let { crossOrigin: p, ignoreErrors: m, allowSoundInterruptions: f, baseURL: o } = e, n = c(r);
         r = b(r, o);
@@ -1850,14 +1850,14 @@
       }) };
     }
     function v(t, e = {}) {
-      t.use(y2, e), t.use(A, e), t.use(E, e), t.use(x2, e), t.use(L, e), t.use(T);
+      t.use(y, e), t.use(A, e), t.use(E, e), t.use(x, e), t.use(L, e), t.use(T);
     }
     window.pluginAssetLoader = v;
   })();
   (() => {
-    var v = { mute: false };
+    var P = { mute: false };
     function f(a, c = {}) {
-      if (c = Object.assign({}, v, c), a.stat(1)) throw 'Plugin Migrate should be loaded before the "init" event';
+      if (c = Object.assign({}, P, c), a.stat(1)) throw 'Plugin Migrate should be loaded before the "init" event';
       let l = a.stat(0);
       function n(t, e, s = "") {
         c.mute || console.warn(`[Migrate] warning: ${t} is removed. ` + (e ? `Use ${e} instead. ` : "") + s);
@@ -1876,43 +1876,43 @@
       function w(t, e, s, o) {
         n("print()", "text()"), b(t, e, s, o);
       }
-      function _(t, e) {
+      function y(t, e) {
         n("textmetrics()", "ctx().measureText()");
         let s = a.ctx(), o = a.stat(10), i = a.stat(11);
         s.font = `${p || ""} ${~~(e || o)}px ${i}`;
         let m = s.measureText(t);
         return m.height = m.actualBoundingBoxAscent + m.actualBoundingBoxDescent, m;
       }
-      function A(t, e, s, o) {
+      function x(t, e, s, o) {
         n("cliprect()", "clip()");
         let i = a.ctx();
         i.beginPath(), i.rect(t, e, s, o), i.clip();
       }
-      function E(t, e, s) {
+      function _(t, e, s) {
         n("clipcirc()", "clip()");
         let o = a.ctx();
         o.beginPath(), o.arc(t, e, s, 0, a.TWO_PI), o.clip();
       }
-      function C(t) {
+      function A(t) {
         n("getcolor()", "stat(5)");
         let e = stat(5);
         return e[~~t % e.length];
       }
-      function T(t) {
+      function E(t) {
         n("blendmode()", "ctx().globalCompositeOperation");
         let e = a.ctx();
         e.globalCompositeOperation = t;
       }
-      function k(t) {
-        n("clear()", "cls()"), a.cls(x, y, str, t);
+      function C(t) {
+        n("clear()", "cls()"), a.cls(t);
       }
-      function M(t, e, s, o, i, m, D = true) {
-        return n("transform()", "ctx().setTransform() or ctx().transform()"), a.ctx()[D ? "setTransform" : "transform"](t, e, s, o, i, m);
+      function T(t, e, s, o, i, m, X = true) {
+        return n("transform()", "ctx().setTransform() or ctx().transform()"), a.ctx()[X ? "setTransform" : "transform"](t, e, s, o, i, m);
       }
-      function S() {
+      function k() {
         return n("mousepos()", "MX and MY"), [MX, MY];
       }
-      function Y(t) {
+      function M(t) {
         n("setfps()", "framerate()"), a.framerate(t);
       }
       let r = a.def;
@@ -1951,10 +1951,10 @@
             break;
         }
       }
-      function X(t, e) {
+      function S(t, e) {
         n("setvar()", "def()"), u(t, e);
       }
-      function P(t, e) {
+      function Y(t, e) {
         if (l.autoscale) throw "resize() don't works with autoscale enabled";
         n("resize()", null, "Avoid changing the canvas dimensions at runtime."), a.CANVAS.width = t, u("W", t), u("CX", t / 2), a.CANVAS.height = e, u("H", e), u("CY", e / 2), a.emit("resized", 1);
       }
@@ -1963,7 +1963,7 @@
         let t = stat(5);
         a.CANVAS.style.backgroundColor = t[~~l.background % t.length];
       }
-      return { def: u, seed: d, print: w, clear: k, setfps: Y, setvar: X, textstyle: h, textmetrics: _, text: b, cliprect: A, clipcirc: E, blendmode: T, transform: M, getcolor: C, mousepos: S, resize: P };
+      return { def: u, seed: d, print: w, clear: C, setfps: M, setvar: S, textstyle: h, textmetrics: y, text: b, cliprect: x, clipcirc: _, blendmode: E, transform: T, getcolor: A, mousepos: k, resize: Y };
     }
     window.pluginMigrate = f;
   })();
@@ -1987,20 +1987,20 @@
       function s(e = "all") {
         if (e === "all") for (let n = 0; n < r.length; n++) r[n].reset();
         else r[e] && r[e].reset();
-        h = p(), y2 = 0;
+        h = p(), y = 0;
       }
       function g(e = true) {
         a = !!e, i.style.display = a ? "" : "none";
       }
-      let b = p(), h = b, y2 = 0, c = l("FPS", "#0ff", "#002"), d = l("MS", "#0f0", "#020"), m;
+      let b = p(), h = b, y = 0, c = l("FPS", "#0ff", "#002"), d = l("MS", "#0f0", "#020"), m;
       return self.performance && self.performance.memory && (m = l("MB", "#f08", "#201")), o(0), { dom: i, addPanel: l, showPanel: o, nextPanel: f, resetPanel: s, display: g, get hidden() {
         return !a;
       }, begin: function() {
         b = p();
       }, end: function() {
-        y2++;
+        y++;
         let e = p();
-        if (d.update(e - b, 200), e >= h + 1e3 && (c.update(y2 * 1e3 / (e - h), 100), h = e, y2 = 0, m)) {
+        if (d.update(e - b, 200), e >= h + 1e3 && (c.update(y * 1e3 / (e - h), 100), h = e, y = 0, m)) {
           let n = performance.memory;
           m.update(n.usedJSHeapSize / 1048576, n.jsHeapSizeLimit / 1048576);
         }
@@ -2010,19 +2010,19 @@
       } };
     }
     function P(u, a, i, r, p = {}) {
-      let l = Math.round, o = 1 / 0, f = 0, s = l(window.devicePixelRatio || 1), g = (p.width || 80) * s, b = 48 * s, h = 3 * s, y2 = 2 * s, c = 3 * s, d = 15 * s, m = (g - 6) * s, e = 30 * s, n = document.createElement("canvas");
+      let l = Math.round, o = 1 / 0, f = 0, s = l(window.devicePixelRatio || 1), g = (p.width || 80) * s, b = 48 * s, h = 3 * s, y = 2 * s, c = 3 * s, d = 15 * s, m = (g - 6) * s, e = 30 * s, n = document.createElement("canvas");
       n.width = g, n.height = b;
       let v = r.children.length;
       r.appendChild(n);
       let t = n.getContext("2d");
       t.font = "bold " + 9 * s + "px Helvetica,Arial,sans-serif", t.textBaseline = "top";
       function w() {
-        t.fillStyle = i, t.fillRect(0, 0, g, b), t.fillStyle = a, t.fillText(u, h, y2), t.fillRect(c, d, m, e), t.fillStyle = i, t.globalAlpha = 0.9, t.fillRect(c, d, m, e);
+        t.fillStyle = i, t.fillRect(0, 0, g, b), t.fillStyle = a, t.fillText(u, h, y), t.fillRect(c, d, m, e), t.fillStyle = i, t.globalAlpha = 0.9, t.fillRect(c, d, m, e);
       }
-      return w(), { id: v, dom: n, reset: w, update: function(x2, E) {
-        o = Math.min(o, x2), f = Math.max(f, x2), t.fillStyle = i, t.globalAlpha = 1, t.fillRect(0, 0, g, d), t.fillStyle = a;
-        let T = [l(x2), u];
-        p.labelBefore && T.reverse(), t.fillText(T.join(" ") + " (" + l(o) + "-" + l(f) + ")", h, y2), t.drawImage(n, c + s, d, m - s, e, c, d, m - s, e), t.fillRect(c + m - s, d, s, e), t.fillStyle = i, t.globalAlpha = 0.9, t.fillRect(c + m - s, d, s, l((1 - x2 / E) * e));
+      return w(), { id: v, dom: n, reset: w, update: function(x, E) {
+        o = Math.min(o, x), f = Math.max(f, x), t.fillStyle = i, t.globalAlpha = 1, t.fillRect(0, 0, g, d), t.fillStyle = a;
+        let T = [l(x), u];
+        p.labelBefore && T.reverse(), t.fillText(T.join(" ") + " (" + l(o) + "-" + l(f) + ")", h, y), t.drawImage(n, c + s, d, m - s, e, c, d, m - s, e), t.fillRect(c + m - s, d, s, e), t.fillStyle = i, t.globalAlpha = 0.9, t.fillRect(c + m - s, d, s, l((1 - x / E) * e));
       } };
     }
     var S = { hotkeyShow: "F1", hotkeyNext: "F2", css: {}, hidden: false, id: "" };
