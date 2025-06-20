@@ -1856,30 +1856,30 @@
   })();
   (() => {
     var v = { mute: false };
-    function p(a, b = v) {
-      if (a.stat(1)) throw 'Plugin Migrate should be loaded before the "init" event';
+    function f(a, c = {}) {
+      if (c = Object.assign({}, v, c), a.stat(1)) throw 'Plugin Migrate should be loaded before the "init" event';
       let l = a.stat(0);
       function n(t, e, s = "") {
-        b.mute || console.warn(`[Migrate] warning: ${t} is removed. ` + (e ? `Use ${e} instead. ` : "") + s);
+        c.mute || console.warn(`[Migrate] warning: ${t} is removed. ` + (e ? `Use ${e} instead. ` : "") + s);
       }
       function d(t) {
         return n("seed()", "rseed()"), t && a.rseed(t), a.stat(9);
       }
-      let c = "";
+      let p = "";
       function h(t) {
-        n("textstyle()", "the 5th param of text()"), c = t;
+        n("textstyle()", "the 5th param of text()"), p = t;
       }
       let g = a.text;
-      function f(t, e, s, o = 3, i = c) {
+      function b(t, e, s, o = 3, i = p) {
         g(t, e, s, o, i);
       }
       function w(t, e, s, o) {
-        n("print()", "text()"), f(t, e, s, o);
+        n("print()", "text()"), b(t, e, s, o);
       }
       function _(t, e) {
         n("textmetrics()", "ctx().measureText()");
         let s = a.ctx(), o = a.stat(10), i = a.stat(11);
-        s.font = `${c || ""} ${~~(e || o)}px ${i}`;
+        s.font = `${p || ""} ${~~(e || o)}px ${i}`;
         let m = s.measureText(t);
         return m.height = m.actualBoundingBoxAscent + m.actualBoundingBoxDescent, m;
       }
@@ -1909,10 +1909,10 @@
       function M(t, e, s, o, i, m, D = true) {
         return n("transform()", "ctx().setTransform() or ctx().transform()"), a.ctx()[D ? "setTransform" : "transform"](t, e, s, o, i, m);
       }
-      function Y() {
+      function S() {
         return n("mousepos()", "MX and MY"), [MX, MY];
       }
-      function S(t) {
+      function Y(t) {
         n("setfps()", "framerate()"), a.framerate(t);
       }
       let r = a.def;
@@ -1963,9 +1963,9 @@
         let t = stat(5);
         a.CANVAS.style.backgroundColor = t[~~l.background % t.length];
       }
-      return { def: u, seed: d, print: w, clear: k, setfps: S, setvar: X, textstyle: h, textmetrics: _, text: f, cliprect: A, clipcirc: E, blendmode: T, transform: M, getcolor: C, mousepos: Y, resize: P };
+      return { def: u, seed: d, print: w, clear: k, setfps: Y, setvar: X, textstyle: h, textmetrics: _, text: b, cliprect: A, clipcirc: E, blendmode: T, transform: M, getcolor: C, mousepos: S, resize: P };
     }
-    window.pluginMigrate = p;
+    window.pluginMigrate = f;
   })();
   (() => {
     function _() {
