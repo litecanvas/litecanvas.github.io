@@ -1,11 +1,14 @@
 (() => {
   // public/litecanvas.js
   (() => {
-    var zzfxX = /* @__PURE__ */ new AudioContext();
-    var zzfx = (i = 1, d = 0.05, z = 220, e = 0, P = 0, S = 0.1, I = 0, c = 1, T = 0, H = 0, V = 0, J = 0, h = 0, j = 0, K = 0, E = 0, r = 0, B = 1, X = 0, L = 0, D = 0) => {
-      let n = Math, t = 2 * n.PI, a = 44100, F = T *= 500 * t / a / a, O = z *= (1 - d + 2 * d * n.random(d = [])) * t / a, x = 0, _ = 0, f = 0, g = 1, $ = 0, l = 0, o = 0, s = D < 0 ? -1 : 1, u = t * s * D * 2 / a, G = n.cos(u), C = n.sin, Q = C(u) / 4, M = 1 + Q, m = -2 * G / M, y = (1 - Q) / M, R = (1 + s * G) / 2 / M, A = -(s + G) / M, v = R, U = 0, W = 0, Y = 0, Z = 0;
-      for (e = a * e + 9, X *= a, P *= a, S *= a, r *= a, H *= 500 * t / a ** 3, K *= t / a, V *= t / a, J *= a, h = a * h | 0, i *= 0.3 * (globalThis.zzfxV || 1), s = e + X + P + S + r | 0; f < s; d[f++] = o * i) ++l % (100 * E | 0) || (o = I ? 1 < I ? 2 < I ? 3 < I ? C(x * x) : n.max(n.min(n.tan(x), 1), -1) : 1 - (2 * x / t % 2 + 2) % 2 : 1 - 4 * n.abs(n.round(x / t) - x / t) : C(x), o = (h ? 1 - L + L * C(t * f / h) : 1) * (o < 0 ? -1 : 1) * n.abs(o) ** c * (f < e ? f / e : f < e + X ? 1 - (f - e) / X * (1 - B) : f < e + X + P ? B : f < s - r ? (s - f - r) / S * B : 0), o = r ? o / 2 + (r > f ? 0 : (f < s - r ? 1 : (s - f) / r) * d[f - r | 0] / 2 / i) : o, D && (o = Z = v * U + A * (U = W) + R * (W = o) - y * Y - m * (Y = Z))), u = (z += T += H) * n.cos(K * _++), x += u + u * j * C(f ** 5), g && ++g > J && (z += V, O += V, g = 0), !h || ++$ % h || (z = O, T = F, g = g || 1);
-      i = zzfxX.createBuffer(1, s, a), i.getChannelData(0).set(d), z = zzfxX.createBufferSource(), z.buffer = i, z.connect(zzfxX.destination), z.start();
+    var setupZzFX = (global) => {
+      const zzfxX = new AudioContext();
+      global.zzfxV = 1;
+      return (i = 1, d = 0.05, z = 220, e = 0, P = 0, S = 0.1, I = 0, c = 1, T = 0, H = 0, V = 0, J = 0, h = 0, j = 0, K = 0, E = 0, r = 0, B = 1, X = 0, L = 0, D = 0) => {
+        let n = Math, t = 2 * n.PI, a = 44100, F = T *= 500 * t / a / a, O = z *= (1 - d + 2 * d * n.random(d = [])) * t / a, x = 0, _ = 0, f = 0, g = 1, $ = 0, l = 0, o = 0, s = D < 0 ? -1 : 1, u = t * s * D * 2 / a, G = n.cos(u), C = n.sin, Q = C(u) / 4, M = 1 + Q, m = -2 * G / M, y = (1 - Q) / M, R = (1 + s * G) / 2 / M, A = -(s + G) / M, v = R, U = 0, W = 0, Y = 0, Z = 0;
+        for (e = a * e + 9, X *= a, P *= a, S *= a, r *= a, H *= 500 * t / a ** 3, K *= t / a, V *= t / a, J *= a, h = a * h | 0, i *= 0.3 * global.zzfxV, s = e + X + P + S + r | 0; f < s; d[f++] = o * i) ++l % (100 * E | 0) || (o = I ? 1 < I ? 2 < I ? 3 < I ? C(x * x) : n.max(n.min(n.tan(x), 1), -1) : 1 - (2 * x / t % 2 + 2) % 2 : 1 - 4 * n.abs(n.round(x / t) - x / t) : C(x), o = (h ? 1 - L + L * C(t * f / h) : 1) * (o < 0 ? -1 : 1) * n.abs(o) ** c * (f < e ? f / e : f < e + X ? 1 - (f - e) / X * (1 - B) : f < e + X + P ? B : f < s - r ? (s - f - r) / S * B : 0), o = r ? o / 2 + (r > f ? 0 : (f < s - r ? 1 : (s - f) / r) * d[f - r | 0] / 2 / i) : o, D && (o = Z = v * U + A * (U = W) + R * (W = o) - y * Y - m * (Y = Z))), u = (z += T += H) * n.cos(K * _++), x += u + u * j * C(f ** 5), g && ++g > J && (z += V, O += V, g = 0), !h || ++$ % h || (z = O, T = F, g = g || 1);
+        i = zzfxX.createBuffer(1, s, a), i.getChannelData(0).set(d), z = zzfxX.createBufferSource(), z.buffer = i, z.connect(zzfxX.destination), z.start();
+      };
     };
     var defaultPalette = [
       "#111",
@@ -28,7 +31,7 @@
       const root = globalThis, math = Math, TWO_PI = math.PI * 2, raf = requestAnimationFrame, _browserEventListeners = [], on = (elem, evt, callback) => {
         elem.addEventListener(evt, callback, false);
         _browserEventListeners.push(() => elem.removeEventListener(evt, callback, false));
-      }, isNumber = Number.isFinite, defaults = {
+      }, zzfx = setupZzFX(root), isNumber = Number.isFinite, defaults = {
         width: null,
         height: null,
         autoscale: true,
@@ -53,18 +56,12 @@
         tapped: null
       };
       const instance = {
-        /** @type {HTMLCanvasElement} */
-        CANVAS: null,
         /** @type {number} */
         W: 0,
         /** @type {number} */
         H: 0,
         /** @type {number} */
         T: 0,
-        /** @type {number} */
-        CX: 0,
-        /** @type {number} */
-        CY: 0,
         /** @type {number} */
         MX: -1,
         /** @type {number} */
@@ -151,13 +148,13 @@
          * @param {number} max
          * @returns {number}
          */
-        clamp: (value, min2, max2) => {
+        clamp: (value, min, max) => {
           DEV: assert(isNumber(value), "clamp: 1st param must be a number");
-          DEV: assert(isNumber(min2), "clamp: 2nd param must be a number");
-          DEV: assert(isNumber(max2), "clamp: 3rd param must be a number");
-          DEV: assert(max2 > min2, "clamp: the 2nd param must be less than the 3rd param");
-          if (value < min2) return min2;
-          if (value > max2) return max2;
+          DEV: assert(isNumber(min), "clamp: 2nd param must be a number");
+          DEV: assert(isNumber(max), "clamp: 3rd param must be a number");
+          DEV: assert(max > min, "clamp: the 2nd param must be less than the 3rd param");
+          if (value < min) return min;
+          if (value > max) return max;
           return value;
         },
         /**
@@ -168,12 +165,12 @@
          * @param {number} max
          * @returns {number}
          */
-        wrap: (value, min2, max2) => {
+        wrap: (value, min, max) => {
           DEV: assert(isNumber(value), "wrap: 1st param must be a number");
-          DEV: assert(isNumber(min2), "wrap: 2nd param must be a number");
-          DEV: assert(isNumber(max2), "wrap: 3rd param must be a number");
-          DEV: assert(max2 > min2, "wrap: the 2nd param must be less than the 3rd param");
-          return value - (max2 - min2) * math.floor((value - min2) / (max2 - min2));
+          DEV: assert(isNumber(min), "wrap: 2nd param must be a number");
+          DEV: assert(isNumber(max), "wrap: 3rd param must be a number");
+          DEV: assert(max > min, "wrap: the 2nd param must be less than the 3rd param");
+          return value - (max - min) * math.floor((value - min) / (max - min));
         },
         /**
          * Re-maps a number from one range to another.
@@ -192,7 +189,7 @@
           DEV: assert(isNumber(stop1), "map: 3rd param must be a number");
           DEV: assert(isNumber(start2), "map: 4th param must be a number");
           DEV: assert(isNumber(stop2), "map: 5th param must be a number");
-          DEV: assert(max !== min, "map: the 3rd param must be different than the 2nd param");
+          DEV: assert(stop1 !== start1, "map: the 2nd param must be different than the 3rd param");
           const result = (value - start1) / (stop1 - start1) * (stop2 - start2) + start2;
           return withinBounds ? instance.clamp(result, start2, stop2) : result;
         },
@@ -239,15 +236,15 @@
          * @param {number} [max=1.0]
          * @returns {number} the random number
          */
-        rand: (min2 = 0, max2 = 1) => {
-          DEV: assert(isNumber(min2), "rand: 1st param must be a number");
-          DEV: assert(isNumber(max2), "rand: 2nd param must be a number");
-          DEV: assert(max2 > min2, "rand: the 1st param must be less than the 2nd param");
+        rand: (min = 0, max = 1) => {
+          DEV: assert(isNumber(min), "rand: 1st param must be a number");
+          DEV: assert(isNumber(max), "rand: 2nd param must be a number");
+          DEV: assert(max > min, "rand: the 1st param must be less than the 2nd param");
           const a = 1664525;
           const c = 1013904223;
           const m = 4294967296;
           _rngSeed = (a * _rngSeed + c) % m;
-          return _rngSeed / m * (max2 - min2) + min2;
+          return _rngSeed / m * (max - min) + min;
         },
         /**
          * Generates a pseudorandom integer between min (inclusive) and max (inclusive)
@@ -256,11 +253,11 @@
          * @param {number} [max=1]
          * @returns {number} the random number
          */
-        randi: (min2 = 0, max2 = 1) => {
-          DEV: assert(isNumber(min2), "randi: 1st param must be a number");
-          DEV: assert(isNumber(max2), "randi: 2nd param must be a number");
-          DEV: assert(max2 > min2, "randi: the 1st param must be less than the 2nd param");
-          return math.floor(instance.rand(min2, max2 + 1));
+        randi: (min = 0, max = 1) => {
+          DEV: assert(isNumber(min), "randi: 1st param must be a number");
+          DEV: assert(isNumber(max), "randi: 2nd param must be a number");
+          DEV: assert(max > min, "randi: the 1st param must be less than the 2nd param");
+          return math.floor(instance.rand(min, max + 1));
         },
         /**
          * Initializes the random number generator with an explicit seed value.
@@ -769,6 +766,14 @@
           root.zzfxV = value;
         },
         /** PLUGINS API */
+        /**
+         * Returns the canvas
+         *
+         * @returns {HTMLCanvasElement}
+         */
+        canvas() {
+          return _canvas;
+        },
         /**
          * Prepares a plugin to be loaded
          *
@@ -1855,117 +1860,133 @@
     window.pluginAssetLoader = v;
   })();
   (() => {
-    var P = { mute: false };
-    function f(a, c = {}) {
-      if (c = Object.assign({}, P, c), a.stat(1)) throw 'Plugin Migrate should be loaded before the "init" event';
-      let l = a.stat(0);
-      function n(t, e, s = "") {
-        c.mute || console.warn(`[Migrate] warning: ${t} is removed. ` + (e ? `Use ${e} instead. ` : "") + s);
+    var o = (r, a = "Assertion failed") => {
+      if (!r) throw new Error(a);
+    };
+    var _ = (r, a, c, n, s, p, f, b) => (o(isFinite(r), "colrect: 1st param must be a number"), o(isFinite(a), "colrect: 2nd param must be a number"), o(isFinite(c), "colrect: 3rd param must be a number"), o(isFinite(n), "colrect: 4th param must be a number"), o(isFinite(s), "colrect: 5th param must be a number"), o(isFinite(p), "colrect: 6th param must be a number"), o(isFinite(f), "colrect: 7th param must be a number"), o(isFinite(b), "colrect: 8th param must be a number"), r < s + f && r + c > s && a < p + b && a + n > p);
+    var x = (r, a, c, n, s, p) => (o(isFinite(r), "colcirc: 1st param must be a number"), o(isFinite(a), "colcirc: 2nd param must be a number"), o(isFinite(c), "colcirc: 3rd param must be a number"), o(isFinite(n), "colcirc: 4th param must be a number"), o(isFinite(s), "colcirc: 5th param must be a number"), o(isFinite(p), "colcirc: 6th param must be a number"), (n - r) * (n - r) + (s - a) * (s - a) <= (c + p) * (c + p));
+    var dt = 2 * Math.PI;
+    var N = advance = (r, a, c, n = 1) => {
+      c && (a.x += c.x * n, a.y += c.y * n), r.x += a.x * n, r.y += a.y * n;
+    };
+    var ee = Math.PI / 2;
+    var D = 4, ae = 1 << D, z = 8, ne = 1 << z;
+    var B = { warnings: true };
+    function g(r, a = {}) {
+      if (a = Object.assign({}, B, a), r.stat(1)) throw 'Plugin Migrate should be loaded before the "init" event';
+      let n = r.stat(0);
+      function s(t, e, u = "") {
+        a.warnings && console.warn(`[Migrate] warning: ${t} is removed. ` + (e ? `Use ${e} instead. ` : "") + u);
       }
-      function d(t) {
-        return n("seed()", "rseed()"), t && a.rseed(t), a.stat(9);
+      function p(t) {
+        return s("seed()", "rseed()"), t && r.rseed(t), r.stat(9);
       }
-      let p = "";
-      function h(t) {
-        n("textstyle()", "the 5th param of text()"), p = t;
+      let f = "";
+      function b(t) {
+        s("textstyle()", "the 5th param of text()"), f = t;
       }
-      let g = a.text;
-      function b(t, e, s, o = 3, i = p) {
-        g(t, e, s, o, i);
+      let M = r.text;
+      function y(t, e, u, h = 3, m = f) {
+        M(t, e, u, h, m);
       }
-      function w(t, e, s, o) {
-        n("print()", "text()"), b(t, e, s, o);
+      function E(t, e, u, h) {
+        s("print()", "text()"), y(t, e, u, h);
       }
-      function y(t, e) {
-        n("textmetrics()", "ctx().measureText()");
-        let s = a.ctx(), o = a.stat(10), i = a.stat(11);
-        s.font = `${p || ""} ${~~(e || o)}px ${i}`;
-        let m = s.measureText(t);
-        return m.height = m.actualBoundingBoxAscent + m.actualBoundingBoxDescent, m;
+      function T(t, e) {
+        s("textmetrics()", "ctx().measureText()");
+        let u = r.ctx(), h = r.stat(10), m = r.stat(11);
+        u.font = `${f || ""} ${~~(e || h)}px ${m}`;
+        let d = u.measureText(t);
+        return d.height = d.actualBoundingBoxAscent + d.actualBoundingBoxDescent, d;
       }
-      function x(t, e, s, o) {
-        n("cliprect()", "clip()");
-        let i = a.ctx();
-        i.beginPath(), i.rect(t, e, s, o), i.clip();
+      function A(t, e, u, h) {
+        s("cliprect()", "clip()");
+        let m = r.ctx();
+        m.beginPath(), m.rect(t, e, u, h), m.clip();
       }
-      function _(t, e, s) {
-        n("clipcirc()", "clip()");
-        let o = a.ctx();
-        o.beginPath(), o.arc(t, e, s, 0, a.TWO_PI), o.clip();
+      function C(t, e, u) {
+        s("clipcirc()", "clip()");
+        let h = r.ctx();
+        h.beginPath(), h.arc(t, e, u, 0, r.TWO_PI), h.clip();
       }
-      function A(t) {
-        n("getcolor()", "stat(5)");
+      function I(t) {
+        s("getcolor()", "stat(5)");
         let e = stat(5);
         return e[~~t % e.length];
       }
-      function E(t) {
-        n("blendmode()", "ctx().globalCompositeOperation");
-        let e = a.ctx();
+      function k(t) {
+        s("blendmode()", "ctx().globalCompositeOperation");
+        let e = r.ctx();
         e.globalCompositeOperation = t;
       }
-      function C(t) {
-        n("clear()", "cls()"), a.cls(t);
+      function P(t) {
+        s("clear()", "cls()"), r.cls(t);
       }
-      function T(t, e, s, o, i, m, X = true) {
-        return n("transform()", "ctx().setTransform() or ctx().transform()"), a.ctx()[X ? "setTransform" : "transform"](t, e, s, o, i, m);
+      function S(t, e, u, h, m, d, X = true) {
+        return s("transform()", "ctx().setTransform() or ctx().transform()"), r.ctx()[X ? "setTransform" : "transform"](t, e, u, h, m, d);
       }
-      function k() {
-        return n("mousepos()", "MX and MY"), [MX, MY];
+      function O() {
+        return s("mousepos()", "MX and MY"), [MX, MY];
       }
-      function M(t) {
-        n("setfps()", "framerate()"), a.framerate(t);
+      function L(t) {
+        s("setfps()", "framerate()"), r.framerate(t);
       }
-      let r = a.def;
-      function u(t, e) {
+      let i = r.def;
+      function l(t, e) {
         switch (t) {
           case "W":
           case "WIDTH":
-            r("W", e), r("WIDTH", e);
+            i("W", e), i("WIDTH", e);
             break;
           case "H":
           case "HEIGHT":
-            r("H", e), r("HEIGHT", e);
+            i("H", e), i("HEIGHT", e);
             break;
           case "T":
           case "ELAPSED":
-            r("T", e), r("ELAPSED", e);
+            i("T", e), i("ELAPSED", e);
             break;
           case "CX":
           case "CENTERX":
-            r("CX", e), r("CENTERX", e);
+            i("CX", e), i("CENTERX", e);
             break;
           case "CY":
           case "CENTERY":
-            r("CY", e), r("CENTERY", e);
+            i("CY", e), i("CENTERY", e);
             break;
           case "MX":
           case "MOUSEX":
-            r("MX", e), r("MOUSEX", e);
+            i("MX", e), i("MOUSEX", e);
             break;
           case "MY":
           case "MOUSEY":
-            r("MY", e), r("MOUSEY", e);
+            i("MY", e), i("MOUSEY", e);
             break;
           default:
-            r(t, e);
+            i(t, e);
             break;
         }
       }
-      function S(t, e) {
-        n("setvar()", "def()"), u(t, e);
-      }
       function Y(t, e) {
-        if (l.autoscale) throw "resize() don't works with autoscale enabled";
-        n("resize()", null, "Avoid changing the canvas dimensions at runtime."), a.CANVAS.width = t, u("W", t), u("CX", t / 2), a.CANVAS.height = e, u("H", e), u("CY", e / 2), a.emit("resized", 1);
+        s("setvar()", "def()"), l(t, e);
       }
-      for (let t of ["W", "H", "T", "CX", "CY", "MX", "MY"]) a[t] != null && u(t, a[t]);
-      if (n("FPS", "some library to measure the FPS", "Recommendation: https://github.com/mrdoob/stats.js/"), r("FPS", ""), l.fps && a.framerate(l.fps), l.background >= 0) {
+      r.listen("resized", w);
+      function w() {
+        l("CX", r.W / 2), l("CY", r.H / 2);
+      }
+      w(), l("CANVAS", r.canvas());
+      function R(t, e) {
+        if (n.autoscale) throw "resize() don't works with autoscale enabled";
+        s("resize()", null, "Avoid changing the canvas dimensions at runtime."), r.CANVAS.width = t, l("W", t), l("CX", t / 2), r.CANVAS.height = e, l("H", e), l("CY", e / 2), r.emit("resized", 1);
+      }
+      for (let t of ["W", "H", "T", "CX", "CY", "MX", "MY"]) r[t] != null && l(t, r[t]);
+      if (s("FPS", "some library to measure the FPS", "Recommendation: https://github.com/mrdoob/stats.js/"), i("FPS", ""), n.fps && r.framerate(n.fps), n.background >= 0) {
         let t = stat(5);
-        a.CANVAS.style.backgroundColor = t[~~l.background % t.length];
+        r.CANVAS.style.backgroundColor = t[~~n.background % t.length];
       }
-      return { def: u, seed: d, print: w, clear: C, setfps: M, setvar: S, textstyle: h, textmetrics: y, text: b, cliprect: x, clipcirc: _, blendmode: E, transform: T, getcolor: A, mousepos: k, resize: Y };
+      return { def: l, seed: p, print: E, clear: P, setfps: L, setvar: Y, textstyle: b, textmetrics: T, text: y, cliprect: A, clipcirc: C, blendmode: k, transform: S, getcolor: I, mousepos: O, resize: R, colrect: _, colcirc: x };
     }
-    window.pluginMigrate = f;
+    window.pluginMigrate = g;
   })();
   (() => {
     function _() {

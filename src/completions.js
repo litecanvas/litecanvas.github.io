@@ -6,23 +6,12 @@ export default function customCompletions(context) {
     from: word.from,
     options: [
       // global constants
-      { label: "CANVAS", type: "constant", info: "game canvas HTML element" },
       { label: "W", type: "variable", info: "width of the game screen" },
       { label: "H", type: "variable", info: "height of the game screen" },
       {
         label: "T",
         type: "variable",
         info: "seconds since the game started",
-      },
-      {
-        label: "CX",
-        type: "variable",
-        info: "middle X of the game screen",
-      },
-      {
-        label: "CY",
-        type: "variable",
-        info: "middle Y of the game screen",
       },
       {
         label: "MX",
@@ -404,6 +393,12 @@ export default function customCompletions(context) {
         apply: "timescale(",
         detail: "(value)",
         info: "Sets the scale of the game's delta time (dt)",
+      },
+      {
+        label: "canvas",
+        type: "function",
+        apply: "canvas()",
+        info: "returns the canvas",
       },
       {
         label: "use",

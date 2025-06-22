@@ -371,10 +371,7 @@ settings.keyboardEvents = true</code></pre>
 
       <h2><a id="globals">Global Variables</a></h2>
 
-      <pre><code class="language-typescript">// the game canvas
-CANVAS: HTMLCanvasElement
-
-// the amount of time since the game started
+      <pre><code class="language-typescript">// the amount of time since the game started
 T: number
 
 // the game screen width
@@ -382,12 +379,6 @@ W: number
 
 // the game screen height
 H: number
-
-// the center X of game screen
-CX: number
-
-// the center Y of game screen
-CY: number
 
 // the current mouse's X-position
 // or -1 (if the mouse was not used or detected)
@@ -665,7 +656,10 @@ rseed(value: number): void</code></pre>
 
       <p>The following functions are most used internally, but also very useful when creating plugins.</p>
 
-      <pre><code class="language-typescript">// Loads a plugin.
+      <pre><code class="language-typescript">// gets the canvas
+canvas(): HTMLCanvasElement
+
+// Loads a plugin.
 // see: https://github.com/litecanvas/game-engine/blob/main/samples/plugin-basics/plugin-basics.js
 use(callback): void
 

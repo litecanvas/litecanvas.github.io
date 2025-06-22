@@ -14,9 +14,9 @@ let bg, color, radius, posx, posy
 function init() {
     bg = 0 // the color #0 (black)
     color = 3 // the color #3 (white)
-    radius = W / 10 // the canvas width/10
-    posx = CX // center X (or canvas width/2)
-    posy = CY // center Y (or canvas width/2)
+    radius = W / 10 // canvas.width / 10
+    posx = W / 2 // center X or canvas.width / 2
+    posy = H / 2 // center Y or canvas.height / 2
 }
 
 // this function detect clicks/touches
@@ -29,7 +29,7 @@ function tapped(x, y) {
 
 // put the game logic in this function
 function update(dt) {
-    // make the circle falls 100 pixels per second
+    // make the circle falls 200 pixels per second
     posy += 200 * dt
 }
 
