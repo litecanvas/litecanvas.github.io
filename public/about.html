@@ -462,9 +462,9 @@ image(x, y, image: Image|HTMLCanvasElement): void
 // or data can be a function with drawing operations
 // see: https://github.com/litecanvas/game-engine/blob/main/samples/paint/paint.js
 // the options are:
-//   * scale?: default = 1.
-//   * canvas?: by default creates a new offscreen canvas.
-paint(width, height, data: string[]|function, options?): OffscreenCanvas
+//   * scale?: default is 1.
+//   * canvas?: a OffscreenCanvas (by default a new one).
+paint(width, height, data: string[]|function, options?): ImageBitmap
 
 /**
  * ADVANCED DRAWING-RELATED FUNCTIONS

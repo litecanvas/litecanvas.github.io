@@ -28,10 +28,10 @@
       if (!condition) throw new Error(message);
     };
     function litecanvas(settings = {}) {
-      const root = globalThis, math = Math, TWO_PI = math.PI * 2, raf = requestAnimationFrame, _browserEventListeners = [], on = (elem, evt, callback) => {
+      const root = window, math = Math, TWO_PI = math.PI * 2, raf = requestAnimationFrame, _browserEventListeners = [], on = (elem, evt, callback) => {
         elem.addEventListener(evt, callback, false);
         _browserEventListeners.push(() => elem.removeEventListener(evt, callback, false));
-      }, zzfx = setupZzFX(root), isNumber = Number.isFinite, defaults = {
+      }, isNumber = Number.isFinite, zzfx = setupZzFX(root), defaults = {
         width: null,
         height: null,
         autoscale: true,
@@ -551,8 +551,11 @@
          * @see https://developer.mozilla.org/en-US/docs/Web/API/OffscreenCanvas
          */
         paint(width, height, drawing, options = {}) {
-          DEV: assert(isNumber(width), "paint: 1st param must be a number");
-          DEV: assert(isNumber(height), "paint: 2nd param must be a number");
+          DEV: assert(isNumber(width) && width >= 1, "paint: 1st param must be a positive number");
+          DEV: assert(
+            isNumber(height) && height >= 1,
+            "paint: 2nd param must be a positive number"
+          );
           DEV: assert(
             "function" === typeof drawing || Array.isArray(drawing),
             "paint: 3rd param must be a function or array"
@@ -561,12 +564,16 @@
             options && !options.scale || isNumber(options.scale),
             "paint: 4th param (options.scale) must be a number"
           );
+          DEV: assert(
+            options && !options.canvas || options.canvas instanceof OffscreenCanvas,
+            "paint: 4th param (options.canvas) must be an OffscreenCanvas"
+          );
           const canvas = options.canvas || new OffscreenCanvas(1, 1), scale = options.scale || 1, contextOriginal = _ctx;
           canvas.width = width * scale;
           canvas.height = height * scale;
           _ctx = canvas.getContext("2d");
           _ctx.scale(scale, scale);
-          if (drawing.push) {
+          if (Array.isArray(drawing)) {
             let x = 0, y = 0;
             _ctx.imageSmoothingEnabled = false;
             for (const str of drawing) {
@@ -743,7 +750,10 @@
           );
           DEV: assert(isNumber(pitchSlide), "sfx: 2nd param must be a number");
           DEV: assert(isNumber(volumeFactor), "sfx: 3rd param must be a number");
-          if (root.zzfxV <= 0 || navigator.userActivation && !navigator.userActivation.hasBeenActive) {
+          if (
+            // @ts-ignore
+            root.zzfxV <= 0 || navigator.userActivation && !navigator.userActivation.hasBeenActive
+          ) {
             return false;
           }
           zzfxParams = zzfxParams || _defaultSound;
@@ -771,9 +781,7 @@
          *
          * @returns {HTMLCanvasElement}
          */
-        canvas() {
-          return _canvas;
-        },
+        canvas: () => _canvas,
         /**
          * Prepares a plugin to be loaded
          *
@@ -882,7 +890,7 @@
          * @returns {any}
          */
         stat(n) {
-          DEV: assert(isNumber(n) && n >= 0, "stat: 1st param must be a positive number");
+          DEV: assert(isNumber(n) && n >= 0, "stat: 1st param must be a number");
           const list = [
             // 0
             settings,
@@ -901,6 +909,7 @@
             // 7
             _timeScale,
             // 8
+            // @ts-ignore
             root.zzfxV || 1,
             // 9
             _rngSeed,
@@ -930,6 +939,7 @@
             }
             delete root.ENGINE;
           }
+          _initialized = false;
         }
       };
       for (const k of "PI,sin,cos,atan2,hypot,tan,abs,ceil,floor,trunc,min,max,pow,sqrt,sign,exp".split(",")) {
