@@ -561,11 +561,11 @@
             "paint: 3rd param must be a function or array"
           );
           DEV: assert(
-            options && !options.scale || isNumber(options.scale),
+            options && null == options.scale || isNumber(options.scale),
             "paint: 4th param (options.scale) must be a number"
           );
           DEV: assert(
-            options && !options.canvas || options.canvas instanceof OffscreenCanvas,
+            options && null == options.canvas || options.canvas instanceof OffscreenCanvas,
             "paint: 4th param (options.canvas) must be an OffscreenCanvas"
           );
           const canvas = options.canvas || new OffscreenCanvas(1, 1), scale = options.scale || 1, contextOriginal = _ctx;
@@ -1195,15 +1195,17 @@
         }
       }
       function setupCanvas() {
-        if (settings.canvas) {
-          DEV: assert(
-            "string" === typeof settings.canvas,
-            `Litecanvas' option "canvas" should be a string (a selector)`
-          );
+        if ("string" === typeof settings.canvas) {
           _canvas = document.querySelector(settings.canvas);
+          DEV: assert(null != _canvas, `Litecanvas' option "canvas" is an invalid CSS selector`);
+        } else {
+          _canvas = settings.canvas;
         }
         _canvas = _canvas || document.createElement("canvas");
-        DEV: assert(_canvas && _canvas.tagName === "CANVAS", "Invalid canvas element");
+        DEV: assert(
+          "CANVAS" === _canvas.tagName,
+          `Litecanvas' option "canvas" should be a canvas element or string (CSS selector)`
+        );
         _ctx = _canvas.getContext("2d");
         on(_canvas, "click", () => root.focus());
         _canvas.style = "";
