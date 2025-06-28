@@ -45,16 +45,7 @@
         animate: true
       };
       settings = Object.assign(defaults, settings);
-      let _initialized = false, _plugins = [], _canvas, _scale = 1, _ctx, _outline_fix = 0.5, _timeScale = 1, _lastFrameTime, _deltaTime = 1 / 60, _accumulated = 0, _rafid, _fontFamily = "sans-serif", _fontSize = 20, _rngSeed = Date.now(), _colors = defaultPalette, _defaultSound = [0.5, 0, 1750, , , 0.3, 1, , , , 600, 0.1], _events = {
-        init: null,
-        update: null,
-        draw: null,
-        resized: null,
-        tap: null,
-        untap: null,
-        tapping: null,
-        tapped: null
-      };
+      let _initialized = false, _plugins = [], _canvas, _scale = 1, _ctx, _outline_fix = 0.5, _timeScale = 1, _lastFrameTime, _deltaTime = 1 / 60, _accumulated = 0, _rafid, _fontFamily = "sans-serif", _fontSize = 20, _rngSeed = Date.now(), _colors = defaultPalette, _defaultSound = [0.5, 0, 1750, , , 0.3, 1, , , , 600, 0.1], _coreEvents = "init,update,draw,tap,untap,tapping,tapped,resized", _mathFunctions = "PI,sin,cos,atan2,hypot,tan,abs,ceil,floor,trunc,min,max,pow,sqrt,sign,exp", _eventListeners = {};
       const instance = {
         /** @type {number} */
         W: 0,
@@ -807,9 +798,9 @@
           DEV: assert("string" === typeof eventName, "listen: 1st param must be a string");
           DEV: assert("function" === typeof callback, "listen: 2nd param must be a function");
           eventName = eventName.toLowerCase();
-          _events[eventName] = _events[eventName] || /* @__PURE__ */ new Set();
-          _events[eventName].add(callback);
-          return () => _events[eventName].delete(callback);
+          _eventListeners[eventName] = _eventListeners[eventName] || /* @__PURE__ */ new Set();
+          _eventListeners[eventName].add(callback);
+          return () => _eventListeners && _eventListeners[eventName].delete(callback);
         },
         /**
          * Call all listeners attached to a game event
@@ -901,7 +892,7 @@
             // 3
             _scale,
             // 4
-            _events,
+            _eventListeners,
             // 5
             _colors,
             // 6
@@ -929,10 +920,10 @@
           cancelAnimationFrame(_rafid);
           _rafid = 0;
           instance.emit("quit");
+          _eventListeners = {};
           for (const removeListener of _browserEventListeners) {
             removeListener();
           }
-          _events = {};
           if (settings.global) {
             for (const key in instance) {
               delete root[key];
@@ -942,12 +933,12 @@
           _initialized = false;
         }
       };
-      for (const k of "PI,sin,cos,atan2,hypot,tan,abs,ceil,floor,trunc,min,max,pow,sqrt,sign,exp".split(",")) {
+      for (const k of _mathFunctions.split(",")) {
         instance[k] = math[k];
       }
       function init() {
         const source = settings.loop ? settings.loop : root;
-        for (const event in _events) {
+        for (const event of _coreEvents.split(",")) {
           if (source[event]) instance.listen(event, source[event]);
         }
         for (const [callback, config] of _plugins) {
@@ -1251,8 +1242,8 @@
         }
       }
       function triggerEvent(eventName, arg1, arg2, arg3, arg4) {
-        if (!_events[eventName]) return;
-        for (const callback of _events[eventName]) {
+        if (!_eventListeners[eventName]) return;
+        for (const callback of _eventListeners[eventName]) {
           callback(arg1, arg2, arg3, arg4);
         }
       }
@@ -1999,79 +1990,79 @@
   })();
   (() => {
     function _() {
-      let u = 0, a = true, i = document.createElement("div"), n = [], p = () => (performance || Date).now();
+      let u = 0, a = true, i = document.createElement("div"), s = [], l = () => (performance || Date).now();
       i.style.cssText = "position:absolute;top:0;right:0;cursor:pointer;opacity:0.8;z-index:10000", i.addEventListener("click", function(e) {
-        e.preventDefault(), o(++u % i.children.length);
+        e.preventDefault(), m(++u % i.children.length);
       }, false);
-      function l(e, r, x, t) {
+      function o(e, r, x, t) {
         let g = new T(e, r, x, i, t);
-        return n.push(g), g;
+        return s.push(g), g;
       }
-      function o(e) {
+      function m(e) {
         for (let r = 0; r < i.children.length; r++) i.children[r].style.display = r === e ? "block" : "none";
         u = e;
       }
       function f() {
-        u++, u >= i.children.length && (u = 0), o(u);
+        u++, u >= i.children.length && (u = 0), m(u);
       }
-      function s(e = "all") {
-        if (e === "all") for (let r = 0; r < n.length; r++) n[r].reset();
-        else n[e] && n[e].reset();
-        h = p(), y = 0;
+      function n(e = "all") {
+        if (e === "all") for (let r = 0; r < s.length; r++) s[r].reset();
+        else s[e] && s[e].reset();
+        h = l(), y = 0;
       }
       function w(e = true) {
         a = !!e, i.style.display = a ? "" : "none";
       }
-      let b = p(), h = b, y = 0, c = l("FPS", "#0ff", "#002"), d = l("MS", "#0f0", "#020"), m;
-      return self.performance && self.performance.memory && (m = l("MB", "#f08", "#201")), o(0), { dom: i, addPanel: l, showPanel: o, nextPanel: f, resetPanel: s, display: w, get hidden() {
+      let b = l(), h = b, y = 0, d = o("FPS", "#0ff", "#002"), c = o("MS", "#0f0", "#020"), p;
+      return self.performance && self.performance.memory && (p = o("MB", "#f08", "#201")), m(0), { dom: i, addPanel: o, showPanel: m, nextPanel: f, resetPanel: n, display: w, get hidden() {
         return !a;
       }, begin: function() {
-        b = p();
+        b = l();
       }, end: function() {
         y++;
-        let e = p();
-        if (d.update(e - b, 200), e >= h + 1e3 && (c.update(y * 1e3 / (e - h), 100), h = e, y = 0, m)) {
+        let e = l();
+        if (c.update(e - b, 200), e >= h + 1e3 && (d.update(y * 1e3 / (e - h), 100), h = e, y = 0, p)) {
           let r = performance.memory;
-          m.update(r.usedJSHeapSize / 1048576, r.jsHeapSizeLimit / 1048576);
+          p.update(r.usedJSHeapSize / 1048576, r.jsHeapSizeLimit / 1048576);
         }
         return e;
       }, update: function() {
         b = this.end();
       } };
     }
-    function T(u, a, i, n, p = {}) {
-      let l = Math.round, o = 1 / 0, f = 0, s = l(window.devicePixelRatio || 1), w = (p.width || 80) * s, b = 48 * s, h = 3 * s, y = 2 * s, c = 3 * s, d = 15 * s, m = (w - 6) * s, e = 30 * s, r = document.createElement("canvas");
-      r.width = w, r.height = b;
-      let x = n.children.length;
-      n.appendChild(r);
+    function T(u, a, i, s, l = {}) {
+      let o = Math.round, m = 1 / 0, f = 0, n = o(window.devicePixelRatio || 1), w = l.width || 80, b = 48, h = 3 * n, y = 2 * n, d = 3 * n, c = 15 * n, p = (w - 6) * n, e = 30 * n, r = document.createElement("canvas");
+      r.width = w * n, r.height = b * n, r.style.cssText = `width:${l.width};height:48px`;
+      let x = s.children.length;
+      s.appendChild(r);
       let t = r.getContext("2d");
-      t.font = "bold " + 9 * s + "px Helvetica,Arial,sans-serif", t.textBaseline = "top";
+      t.font = `bold ${9 * n}px Helvetica,Arial,sans-serif`, t.textBaseline = "top";
       function g() {
-        t.fillStyle = i, t.fillRect(0, 0, w, b), t.fillStyle = a, t.fillText(u, h, y), t.fillRect(c, d, m, e), t.fillStyle = i, t.globalAlpha = 0.9, t.fillRect(c, d, m, e);
+        t.fillStyle = i, t.fillRect(0, 0, w * n, b * n), t.fillStyle = a, t.fillText(u, h, y), t.fillRect(d, c, p, e), t.fillStyle = i, t.globalAlpha = 0.9, t.fillRect(d, c, p, e);
       }
-      return g(), { id: x, dom: r, reset: g, update: function(v, P) {
-        o = Math.min(o, v), f = Math.max(f, v), t.fillStyle = i, t.globalAlpha = 1, t.fillRect(0, 0, w, d), t.fillStyle = a;
-        let E = [l(v), u];
-        p.labelBefore && E.reverse(), t.fillText(E.join(" ") + " (" + l(o) + "-" + l(f) + ")", h, y), t.drawImage(r, c + s, d, m - s, e, c, d, m - s, e), t.fillRect(c + m - s, d, s, e), t.fillStyle = i, t.globalAlpha = 0.9, t.fillRect(c + m - s, d, s, l((1 - v / P) * e));
+      return g(), { id: x, dom: r, reset: g, update: function(v, S) {
+        m = Math.min(m, v), f = Math.max(f, v), t.fillStyle = i, t.globalAlpha = 1, t.fillRect(0, 0, w * n, c), t.fillStyle = a;
+        let E = [o(v), u];
+        l.labelBefore && E.reverse(), t.fillText(E.join(" ") + " (" + o(m) + "-" + o(f) + ")", h, y), t.drawImage(r, d + n, c, p - n, e, d, c, p - n, e), t.fillRect(d + p - n, c, n, e), t.fillStyle = i, t.globalAlpha = 0.9, t.fillRect(d + p - n, c, n, o((1 - v / S) * e));
       } };
     }
-    var k = { hotkeyShow: "F1", hotkeyNext: "F2", css: {}, hidden: false, id: "" };
+    var P = { hotkeyShow: "F1", hotkeyNext: "F2", css: {}, hidden: false, id: "" };
     function A(u, a = {}) {
-      a = Object.assign({}, k, a);
-      let i = u.stat(0), n = new _(), p = n.display, l = (o = true) => {
-        a.hidden = !o, p(o), n.resetPanel();
+      a = Object.assign({}, P, a);
+      let i = u.stat(0), s = new _(), l = s.display, o = (m = true) => {
+        a.hidden = !m, l(m), s.resetPanel();
       };
-      a.id && (n.dom.id = a.id);
-      for (let [o, f] of Object.entries(a.css || {})) n.dom.style[o] = f;
-      return u.canvas().parentElement.appendChild(n.dom), l(!a.hidden), i.keyboardEvents && listen("update", () => {
-        a.hotkeyShow && u.iskeypressed(a.hotkeyShow) && l(a.hidden), a.hotkeyNext && u.iskeypressed(a.hotkeyNext) && n.nextPanel();
-      }), listen("before:update", (o, f = 1) => {
-        a.hidden || f === 1 && n.begin();
+      a.id && (s.dom.id = a.id);
+      for (let [m, f] of Object.entries(a.css || {})) s.dom.style[m] = f;
+      return u.canvas().parentElement.appendChild(s.dom), o(!a.hidden), i.keyboardEvents && listen("update", () => {
+        a.hotkeyShow && u.iskeypressed(a.hotkeyShow) && o(a.hidden), a.hotkeyNext && u.iskeypressed(a.hotkeyNext) && s.nextPanel();
+      }), listen("before:update", (m, f = 1) => {
+        a.hidden || f === 1 && s.begin();
       }), listen("after:draw", () => {
-        a.hidden || n.end();
+        a.hidden || s.end();
       }), listen("quit", () => {
-        n.dom.remove();
-      }), n.display = l, { FPS_METER: n };
+        s.dom.remove();
+      }), s.display = o, { FPS_METER: s };
     }
     window.pluginFrameRateMeter = A;
   })();
