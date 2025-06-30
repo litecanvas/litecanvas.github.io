@@ -64,6 +64,18 @@ export default function customCompletions(context) {
         detail: "(x, y, radius, color=0)",
       },
       {
+        label: "oval",
+        type: "function",
+        apply: "oval(",
+        detail: "(x, y, rx, ry, color=0)",
+      },
+      {
+        label: "ovalfill",
+        type: "function",
+        apply: "ovalfill(",
+        detail: "(x, y, rx, ry, color=0)",
+      },
+      {
         label: "line",
         type: "function",
         apply: "line(",
