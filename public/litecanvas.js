@@ -27,6 +27,7 @@
     var assert = (condition, message = "Assertion failed") => {
       if (!condition) throw new Error(message);
     };
+    var version = "0.87.0";
     function litecanvas(settings = {}) {
       const root = window, math = Math, TWO_PI = math.PI * 2, raf = requestAnimationFrame, _browserEventListeners = [], on = (elem, evt, callback) => {
         elem.addEventListener(evt, callback, false);
@@ -85,9 +86,9 @@
          * @tutorial https://gamedev.net/tutorials/programming/general-and-gameplay-programming/a-brief-introduction-to-lerp-r4954/
          */
         lerp: (start, end, t) => {
-          DEV: assert(isNumber(start), "lerp: 1st param must be a number");
-          DEV: assert(isNumber(end), "lerp: 2nd param must be a number");
-          DEV: assert(isNumber(t), "lerp: 3rd param must be a number");
+          DEV: assert(isNumber(start), "[litecanvas] lerp() 1st param must be a number");
+          DEV: assert(isNumber(end), "[litecanvas] lerp() 2nd param must be a number");
+          DEV: assert(isNumber(t), "[litecanvas] lerp() 3rd param must be a number");
           return t * (end - start) + start;
         },
         /**
@@ -120,10 +121,10 @@
          * @returns {number} rounded number.
          */
         round: (n, precision = 0) => {
-          DEV: assert(isNumber(n), "round: 1st param must be a number");
+          DEV: assert(isNumber(n), "[litecanvas] round() 1st param must be a number");
           DEV: assert(
             null == precision || isNumber(precision) && precision >= 0,
-            "round: 2nd param must be a positive number or zero"
+            "[litecanvas] round() 2nd param must be a positive number or zero"
           );
           if (!precision) {
             return math.round(n);
@@ -140,10 +141,13 @@
          * @returns {number}
          */
         clamp: (value, min, max) => {
-          DEV: assert(isNumber(value), "clamp: 1st param must be a number");
-          DEV: assert(isNumber(min), "clamp: 2nd param must be a number");
-          DEV: assert(isNumber(max), "clamp: 3rd param must be a number");
-          DEV: assert(max > min, "clamp: the 2nd param must be less than the 3rd param");
+          DEV: assert(isNumber(value), "[litecanvas] clamp() 1st param must be a number");
+          DEV: assert(isNumber(min), "[litecanvas] clamp() 2nd param must be a number");
+          DEV: assert(isNumber(max), "[litecanvas] clamp() 3rd param must be a number");
+          DEV: assert(
+            max > min,
+            "[litecanvas] clamp() the 2nd param must be less than the 3rd param"
+          );
           if (value < min) return min;
           if (value > max) return max;
           return value;
@@ -157,10 +161,13 @@
          * @returns {number}
          */
         wrap: (value, min, max) => {
-          DEV: assert(isNumber(value), "wrap: 1st param must be a number");
-          DEV: assert(isNumber(min), "wrap: 2nd param must be a number");
-          DEV: assert(isNumber(max), "wrap: 3rd param must be a number");
-          DEV: assert(max > min, "wrap: the 2nd param must be less than the 3rd param");
+          DEV: assert(isNumber(value), "[litecanvas] wrap() 1st param must be a number");
+          DEV: assert(isNumber(min), "[litecanvas] wrap() 2nd param must be a number");
+          DEV: assert(isNumber(max), "[litecanvas] wrap() 3rd param must be a number");
+          DEV: assert(
+            max > min,
+            "[litecanvas] wrap() the 2nd param must be less than the 3rd param"
+          );
           return value - (max - min) * math.floor((value - min) / (max - min));
         },
         /**
@@ -175,12 +182,15 @@
          * @returns {number} the remapped number
          */
         map(value, start1, stop1, start2, stop2, withinBounds) {
-          DEV: assert(isNumber(value), "map: 1st param must be a number");
-          DEV: assert(isNumber(start1), "map: 2nd param must be a number");
-          DEV: assert(isNumber(stop1), "map: 3rd param must be a number");
-          DEV: assert(isNumber(start2), "map: 4th param must be a number");
-          DEV: assert(isNumber(stop2), "map: 5th param must be a number");
-          DEV: assert(stop1 !== start1, "map: the 2nd param must be different than the 3rd param");
+          DEV: assert(isNumber(value), "[litecanvas] map() 1st param must be a number");
+          DEV: assert(isNumber(start1), "[litecanvas] map() 2nd param must be a number");
+          DEV: assert(isNumber(stop1), "[litecanvas] map() 3rd param must be a number");
+          DEV: assert(isNumber(start2), "[litecanvas] map() 4th param must be a number");
+          DEV: assert(isNumber(stop2), "[litecanvas] map() 5th param must be a number");
+          DEV: assert(
+            stop1 !== start1,
+            "[litecanvas] map() the 2nd param must be different than the 3rd param"
+          );
           const result = (value - start1) / (stop1 - start1) * (stop2 - start2) + start2;
           return withinBounds ? instance.clamp(result, start2, stop2) : result;
         },
@@ -195,10 +205,13 @@
          * @returns {number} the normalized number.
          */
         norm: (value, start, stop) => {
-          DEV: assert(isNumber(value), "norm: 1st param must be a number");
-          DEV: assert(isNumber(start), "norm: 2nd param must be a number");
-          DEV: assert(isNumber(stop), "norm: 3rd param must be a number");
-          DEV: assert(start !== stop, "norm: the 2nd param must be different than the 3rd param");
+          DEV: assert(isNumber(value), "[litecanvas] norm() 1st param must be a number");
+          DEV: assert(isNumber(start), "[litecanvas] norm() 2nd param must be a number");
+          DEV: assert(isNumber(stop), "[litecanvas] norm() 3rd param must be a number");
+          DEV: assert(
+            start !== stop,
+            "[litecanvas] norm() the 2nd param must be different than the 3rd param"
+          );
           return instance.map(value, start, stop, 0, 1);
         },
         /**
@@ -210,12 +223,12 @@
          * @param {(n: number) => number} [fn] - the periodic function (which default to `Math.sin`)
          */
         wave: (from, to, t, fn = Math.sin) => {
-          DEV: assert(isNumber(from), "wave: 1st param must be a number");
-          DEV: assert(isNumber(to), "wave: 2nd param must be a number");
-          DEV: assert(isNumber(t), "wave: 3rd param must be a number");
+          DEV: assert(isNumber(from), "[litecanvas] wave() 1st param must be a number");
+          DEV: assert(isNumber(to), "[litecanvas] wave() 2nd param must be a number");
+          DEV: assert(isNumber(t), "[litecanvas] wave() 3rd param must be a number");
           DEV: assert(
             "function" === typeof fn,
-            "wave: 4rd param must be a function (n: number) => number"
+            "[litecanvas] wave() 4rd param must be a function (n: number) => number"
           );
           return from + (fn(t) + 1) / 2 * (to - from);
         },
@@ -229,9 +242,12 @@
          * @returns {number} the random number
          */
         rand: (min = 0, max = 1) => {
-          DEV: assert(isNumber(min), "rand: 1st param must be a number");
-          DEV: assert(isNumber(max), "rand: 2nd param must be a number");
-          DEV: assert(max > min, "rand: the 1st param must be less than the 2nd param");
+          DEV: assert(isNumber(min), "[litecanvas] rand() 1st param must be a number");
+          DEV: assert(isNumber(max), "[litecanvas] rand() 2nd param must be a number");
+          DEV: assert(
+            max > min,
+            "[litecanvas] rand() the 1st param must be less than the 2nd param"
+          );
           const a = 1664525;
           const c = 1013904223;
           const m = 4294967296;
@@ -246,9 +262,12 @@
          * @returns {number} the random number
          */
         randi: (min = 0, max = 1) => {
-          DEV: assert(isNumber(min), "randi: 1st param must be a number");
-          DEV: assert(isNumber(max), "randi: 2nd param must be a number");
-          DEV: assert(max > min, "randi: the 1st param must be less than the 2nd param");
+          DEV: assert(isNumber(min), "[litecanvas] randi() 1st param must be a number");
+          DEV: assert(isNumber(max), "[litecanvas] randi() 2nd param must be a number");
+          DEV: assert(
+            max > min,
+            "[litecanvas] randi() the 1st param must be less than the 2nd param"
+          );
           return math.floor(instance.rand(min, max + 1));
         },
         /**
@@ -261,7 +280,7 @@
         rseed(value) {
           DEV: assert(
             null == value || isNumber(value) && value >= 0,
-            "rseed: 1st param must be a positive number or zero"
+            "[litecanvas] rseed() 1st param must be a positive number or zero"
           );
           _rngSeed = ~~value;
         },
@@ -274,7 +293,7 @@
         cls(color) {
           DEV: assert(
             null == color || isNumber(color) && color >= 0,
-            "cls: 1st param must be a positive number or zero or undefined"
+            "[litecanvas] cls() 1st param must be a positive number or zero or undefined"
           );
           if (null == color) {
             _ctx.clearRect(0, 0, _ctx.canvas.width, _ctx.canvas.height);
@@ -295,20 +314,23 @@
          * @see https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/roundRect
          */
         rect(x, y, width, height, color, radii) {
-          DEV: assert(isNumber(x), "rect: 1st param must be a number");
-          DEV: assert(isNumber(y), "rect: 2nd param must be a number");
-          DEV: assert(isNumber(width) && width > 0, "rect: 3rd param must be a positive number");
+          DEV: assert(isNumber(x), "[litecanvas] rect() 1st param must be a number");
+          DEV: assert(isNumber(y), "[litecanvas] rect() 2nd param must be a number");
+          DEV: assert(
+            isNumber(width) && width > 0,
+            "[litecanvas] rect() 3rd param must be a positive number"
+          );
           DEV: assert(
             isNumber(height) && height >= 0,
-            "rect: 4th param must be a positive number or zero"
+            "[litecanvas] rect() 4th param must be a positive number or zero"
           );
           DEV: assert(
             null == color || isNumber(color) && color >= 0,
-            "rect: 5th param must be a positive number or zero"
+            "[litecanvas] rect() 5th param must be a positive number or zero"
           );
           DEV: assert(
             null == radii || isNumber(radii) || Array.isArray(radii) && radii.length >= 1,
-            "rect: 6th param must be a number or array of numbers"
+            "[litecanvas] rect() 6th param must be a number or array of numbers"
           );
           _ctx.beginPath();
           _ctx[radii ? "roundRect" : "rect"](
@@ -331,23 +353,23 @@
          * @param {number|number[]} [radii] A number or list specifying the radii used to draw a rounded-borders rectangle
          */
         rectfill(x, y, width, height, color, radii) {
-          DEV: assert(isNumber(x), "rectfill: 1st param must be a number");
-          DEV: assert(isNumber(y), "rectfill: 2nd param must be a number");
+          DEV: assert(isNumber(x), "[litecanvas] rectfill() 1st param must be a number");
+          DEV: assert(isNumber(y), "[litecanvas] rectfill() 2nd param must be a number");
           DEV: assert(
             isNumber(width) && width >= 0,
-            "rectfill: 3rd param must be a positive number or zero"
+            "[litecanvas] rectfill() 3rd param must be a positive number or zero"
           );
           DEV: assert(
             isNumber(height) && height >= 0,
-            "rectfill: 4th param must be a positive number or zero"
+            "[litecanvas] rectfill() 4th param must be a positive number or zero"
           );
           DEV: assert(
             null == color || isNumber(color) && color >= 0,
-            "rectfill: 5th param must be a positive number or zero"
+            "[litecanvas] rectfill() 5th param must be a positive number or zero"
           );
           DEV: assert(
             null == radii || isNumber(radii) || Array.isArray(radii) && radii.length >= 1,
-            "rectfill: 6th param must be a number or array of at least 2 numbers"
+            "[litecanvas] rectfill() 6th param must be a number or array of at least 2 numbers"
           );
           _ctx.beginPath();
           _ctx[radii ? "roundRect" : "rect"](~~x, ~~y, ~~width, ~~height, radii);
@@ -362,15 +384,15 @@
          * @param {number} [color=0] the color index
          */
         circ(x, y, radius, color) {
-          DEV: assert(isNumber(x), "circ: 1st param must be a number");
-          DEV: assert(isNumber(y), "circ: 2nd param must be a number");
+          DEV: assert(isNumber(x), "[litecanvas] circ() 1st param must be a number");
+          DEV: assert(isNumber(y), "[litecanvas] circ() 2nd param must be a number");
           DEV: assert(
             isNumber(radius) && radius >= 0,
-            "circ: 3rd param must be a positive number or zero"
+            "[litecanvas] circ() 3rd param must be a positive number or zero"
           );
           DEV: assert(
             null == color || isNumber(color) && color >= 0,
-            "circ: 4th param must be a positive number or zero"
+            "[litecanvas] circ() 4th param must be a positive number or zero"
           );
           _ctx.beginPath();
           _ctx.arc(~~x, ~~y, ~~radius, 0, TWO_PI);
@@ -385,15 +407,15 @@
          * @param {number} [color=0] the color index
          */
         circfill(x, y, radius, color) {
-          DEV: assert(isNumber(x), "circfill: 1st param must be a number");
-          DEV: assert(isNumber(y), "circfill: 2nd param must be a number");
+          DEV: assert(isNumber(x), "[litecanvas] circfill() 1st param must be a number");
+          DEV: assert(isNumber(y), "[litecanvas] circfill() 2nd param must be a number");
           DEV: assert(
             isNumber(radius) && radius >= 0,
-            "circfill: 3rd param must be a positive number or zero"
+            "[litecanvas] circfill() 3rd param must be a positive number or zero"
           );
           DEV: assert(
             null == color || isNumber(color) && color >= 0,
-            "circfill: 4th param must be a positive number or zero"
+            "[litecanvas] circfill() 4th param must be a positive number or zero"
           );
           _ctx.beginPath();
           _ctx.arc(~~x, ~~y, ~~radius, 0, TWO_PI);
@@ -409,19 +431,19 @@
          * @param {number} [color=0] the color index
          */
         oval(x, y, radiusX, radiusY, color) {
-          DEV: assert(isNumber(x), "oval: 1st param must be a number");
-          DEV: assert(isNumber(y), "oval: 2nd param must be a number");
+          DEV: assert(isNumber(x), "[litecanvas] oval() 1st param must be a number");
+          DEV: assert(isNumber(y), "[litecanvas] oval() 2nd param must be a number");
           DEV: assert(
             isNumber(radiusX) && radiusX >= 0,
-            "oval: 3rd param must be a positive number or zero"
+            "[litecanvas] oval() 3rd param must be a positive number or zero"
           );
           DEV: assert(
             isNumber(radiusY) && radiusY >= 0,
-            "oval: 4th param must be a positive number or zero"
+            "[litecanvas] oval() 4th param must be a positive number or zero"
           );
           DEV: assert(
             null == color || isNumber(color) && color >= 0,
-            "oval: 5th param must be a positive number or zero"
+            "[litecanvas] oval() 5th param must be a positive number or zero"
           );
           _ctx.beginPath();
           _ctx.ellipse(~~x, ~~y, ~~radiusX, ~~radiusY, 0, 0, TWO_PI);
@@ -437,19 +459,19 @@
          * @param {number} [color=0] the color index
          */
         ovalfill(x, y, radiusX, radiusY, color) {
-          DEV: assert(isNumber(x), "ovalfill: 1st param must be a number");
-          DEV: assert(isNumber(y), "ovalfill: 2nd param must be a number");
+          DEV: assert(isNumber(x), "[litecanvas] ovalfill() 1st param must be a number");
+          DEV: assert(isNumber(y), "[litecanvas] ovalfill() 2nd param must be a number");
           DEV: assert(
             isNumber(radiusX) && radiusX >= 0,
-            "ovalfill: 3rd param must be a positive number or zero"
+            "[litecanvas] ovalfill() 3rd param must be a positive number or zero"
           );
           DEV: assert(
             isNumber(radiusY) && radiusY >= 0,
-            "ovalfill: 4th param must be a positive number or zero"
+            "[litecanvas] ovalfill() 4th param must be a positive number or zero"
           );
           DEV: assert(
             null == color || isNumber(color) && color >= 0,
-            "ovalfill: 5th param must be a positive number or zero"
+            "[litecanvas] ovalfill() 5th param must be a positive number or zero"
           );
           _ctx.beginPath();
           _ctx.ellipse(~~x, ~~y, ~~radiusX, ~~radiusY, 0, 0, TWO_PI);
@@ -465,13 +487,19 @@
          * @param {number} [color=0] the color index
          */
         line(x1, y1, x2, y2, color) {
-          DEV: assert(isNumber(x1), "line: 1st param must be a number");
-          DEV: assert(isNumber(y1), "line: 2nd param must be a number");
-          DEV: assert(isNumber(x2), "line: 3rd param must be a positive number or zero");
-          DEV: assert(isNumber(y2), "line: 4th param must be a positive number or zero");
+          DEV: assert(isNumber(x1), "[litecanvas] line() 1st param must be a number");
+          DEV: assert(isNumber(y1), "[litecanvas] line() 2nd param must be a number");
+          DEV: assert(
+            isNumber(x2),
+            "[litecanvas] line() 3rd param must be a positive number or zero"
+          );
+          DEV: assert(
+            isNumber(y2),
+            "[litecanvas] line() 4th param must be a positive number or zero"
+          );
           DEV: assert(
             null == color || isNumber(color) && color >= 0,
-            "line: 5th param must be a positive number or zero"
+            "[litecanvas] line() 5th param must be a positive number or zero"
           );
           _ctx.beginPath();
           let xfix = _outline_fix !== 0 && ~~x1 === ~~x2 ? 0.5 : 0;
@@ -489,7 +517,7 @@
         linewidth(value) {
           DEV: assert(
             isNumber(value) && ~~value > 0,
-            "linewidth: 1st param must be a positive number"
+            "[litecanvas] linewidth() 1st param must be a positive number"
           );
           _ctx.lineWidth = ~~value;
           _outline_fix = 0 === ~~value % 2 ? 0 : 0.5;
@@ -505,9 +533,9 @@
         linedash(segments, offset = 0) {
           DEV: assert(
             Array.isArray(segments) && segments.length > 0,
-            "linedash: 1st param must be an array of numbers"
+            "[litecanvas] linedash() 1st param must be an array of numbers"
           );
-          DEV: assert(isNumber(offset), "linedash: 2nd param must be a number");
+          DEV: assert(isNumber(offset), "[litecanvas] linedash() 2nd param must be a number");
           _ctx.setLineDash(segments);
           _ctx.lineDashOffset = offset;
         },
@@ -522,13 +550,16 @@
          * @param {string} [fontStyle] can be "normal" (default), "italic" and/or "bold".
          */
         text(x, y, message, color = 3, fontStyle = "normal") {
-          DEV: assert(isNumber(x), "text: 1st param must be a number");
-          DEV: assert(isNumber(y), "text: 2nd param must be a number");
+          DEV: assert(isNumber(x), "[litecanvas] text() 1st param must be a number");
+          DEV: assert(isNumber(y), "[litecanvas] text() 2nd param must be a number");
           DEV: assert(
             null == color || isNumber(color) && color >= 0,
-            "text: 4th param must be a positive number or zero"
+            "[litecanvas] text() 4th param must be a positive number or zero"
           );
-          DEV: assert("string" === typeof fontStyle, "text: 5th param must be a string");
+          DEV: assert(
+            "string" === typeof fontStyle,
+            "[litecanvas] text() 5th param must be a string"
+          );
           _ctx.font = `${fontStyle} ${_fontSize}px ${_fontFamily}`;
           _ctx.fillStyle = _colors[~~color % _colors.length];
           _ctx.fillText(message, ~~x, ~~y);
@@ -539,7 +570,10 @@
          * @param {string} family
          */
         textfont(family) {
-          DEV: assert("string" === typeof family, "textfont: 1st param must be a string");
+          DEV: assert(
+            "string" === typeof family,
+            "[litecanvas] textfont() 1st param must be a string"
+          );
           _fontFamily = family;
         },
         /**
@@ -548,7 +582,7 @@
          * @param {number} size
          */
         textsize(size) {
-          DEV: assert(isNumber(size), "textsize: 1st param must be a number");
+          DEV: assert(isNumber(size), "[litecanvas] textsize() 1st param must be a number");
           _fontSize = size;
         },
         /**
@@ -562,13 +596,13 @@
         textalign(align, baseline) {
           DEV: assert(
             null == align || ["left", "right", "center", "start", "end"].includes(align),
-            "textalign: 1st param must be null or one of the following strings: center, left, right, start or end."
+            "[litecanvas] textalign() 1st param must be null or one of the following strings: center, left, right, start or end."
           );
           DEV: assert(
             null == baseline || ["top", "bottom", "middle", "hanging", "alphabetic", "ideographic"].includes(
               baseline
             ),
-            "textalign: 2nd param must be null or one of the following strings: middle, top, bottom, hanging, alphabetic or ideographic."
+            "[litecanvas] textalign() 2nd param must be null or one of the following strings: middle, top, bottom, hanging, alphabetic or ideographic."
           );
           if (align) _ctx.textAlign = align;
           if (baseline) _ctx.textBaseline = baseline;
@@ -582,8 +616,8 @@
          * @param {OffscreenCanvas|HTMLImageElement|HTMLCanvasElement} source
          */
         image(x, y, source) {
-          DEV: assert(isNumber(x), "image: 1st param must be a number");
-          DEV: assert(isNumber(y), "image: 2nd param must be a number");
+          DEV: assert(isNumber(x), "[litecanvas] image() 1st param must be a number");
+          DEV: assert(isNumber(y), "[litecanvas] image() 2nd param must be a number");
           _ctx.drawImage(source, ~~x, ~~y);
         },
         /**
@@ -599,22 +633,25 @@
          * @see https://developer.mozilla.org/en-US/docs/Web/API/OffscreenCanvas
          */
         paint(width, height, drawing, options = {}) {
-          DEV: assert(isNumber(width) && width >= 1, "paint: 1st param must be a positive number");
+          DEV: assert(
+            isNumber(width) && width >= 1,
+            "[litecanvas] paint() 1st param must be a positive number"
+          );
           DEV: assert(
             isNumber(height) && height >= 1,
-            "paint: 2nd param must be a positive number"
+            "[litecanvas] paint() 2nd param must be a positive number"
           );
           DEV: assert(
             "function" === typeof drawing || Array.isArray(drawing),
-            "paint: 3rd param must be a function or array"
+            "[litecanvas] paint() 3rd param must be a function or array"
           );
           DEV: assert(
             options && null == options.scale || isNumber(options.scale),
-            "paint: 4th param (options.scale) must be a number"
+            "[litecanvas] paint() 4th param (options.scale) must be a number"
           );
           DEV: assert(
             options && null == options.canvas || options.canvas instanceof OffscreenCanvas,
-            "paint: 4th param (options.canvas) must be an OffscreenCanvas"
+            "[litecanvas] paint() 4th param (options.canvas) must be an OffscreenCanvas"
           );
           const canvas = options.canvas || new OffscreenCanvas(1, 1), scale = options.scale || 1, contextOriginal = _ctx;
           canvas.width = width * scale;
@@ -673,8 +710,8 @@
          * @param {number} y
          */
         translate: (x, y) => {
-          DEV: assert(isNumber(x), "translate: 1st param must be a number");
-          DEV: assert(isNumber(y), "translate: 2nd param must be a number");
+          DEV: assert(isNumber(x), "[litecanvas] translate() 1st param must be a number");
+          DEV: assert(isNumber(y), "[litecanvas] translate() 2nd param must be a number");
           return _ctx.translate(~~x, ~~y);
         },
         /**
@@ -684,8 +721,8 @@
          * @param {number} [y]
          */
         scale: (x, y) => {
-          DEV: assert(isNumber(x), "scale: 1st param must be a number");
-          DEV: assert(null == y || isNumber(y), "scale: 2nd param must be a number");
+          DEV: assert(isNumber(x), "[litecanvas] scale() 1st param must be a number");
+          DEV: assert(null == y || isNumber(y), "[litecanvas] scale() 2nd param must be a number");
           return _ctx.scale(x, y || x);
         },
         /**
@@ -694,7 +731,7 @@
          * @param {number} radians
          */
         rotate: (radians) => {
-          DEV: assert(isNumber(radians), "rotate: 1st param must be a number");
+          DEV: assert(isNumber(radians), "[litecanvas] rotate() 1st param must be a number");
           return _ctx.rotate(radians);
         },
         /**
@@ -704,7 +741,7 @@
          * @see https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/globalAlpha
          */
         alpha(value) {
-          DEV: assert(isNumber(value), "alpha: 1st param must be a number");
+          DEV: assert(isNumber(value), "[litecanvas] alpha() 1st param must be a number");
           _ctx.globalAlpha = instance.clamp(value, 0, 1);
         },
         /**
@@ -719,7 +756,7 @@
         path: (arg) => {
           DEV: assert(
             null == arg || "string" === typeof arg || arg instanceof Path2D,
-            "path: 1st param must be a string or a Path2D instance"
+            "[litecanvas] path() 1st param must be a string or a Path2D instance"
           );
           return new Path2D(arg);
         },
@@ -732,11 +769,11 @@
         fill(color, path2) {
           DEV: assert(
             null == color || isNumber(color) && color >= 0,
-            "fill: 1st param must be a positive number or zero"
+            "[litecanvas] fill() 1st param must be a positive number or zero"
           );
           DEV: assert(
             null == path2 || path2 instanceof Path2D,
-            "fill: 2nd param must be a Path2D instance"
+            "[litecanvas] fill() 2nd param must be a Path2D instance"
           );
           _ctx.fillStyle = _colors[~~color % _colors.length];
           if (path2) {
@@ -754,11 +791,11 @@
         stroke(color, path2) {
           DEV: assert(
             null == color || isNumber(color) && color >= 0,
-            "stroke: 1st param must be a positive number or zero"
+            "[litecanvas] stroke() 1st param must be a positive number or zero"
           );
           DEV: assert(
             null == path2 || path2 instanceof Path2D,
-            "stroke: 2nd param must be a Path2D instance"
+            "[litecanvas] stroke() 2nd param must be a Path2D instance"
           );
           _ctx.strokeStyle = _colors[~~color % _colors.length];
           if (path2) {
@@ -776,7 +813,10 @@
          * @see https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/clip
          */
         clip(path2) {
-          DEV: assert(path2 instanceof Path2D, "clip: 1st param must be a Path2D instance");
+          DEV: assert(
+            path2 instanceof Path2D,
+            "[litecanvas] clip() 1st param must be a Path2D instance"
+          );
           _ctx.clip(path2);
         },
         /** SOUND API */
@@ -794,10 +834,10 @@
         sfx(zzfxParams, pitchSlide = 0, volumeFactor = 1) {
           DEV: assert(
             null == zzfxParams || Array.isArray(zzfxParams),
-            "sfx: 1st param must be an array"
+            "[litecanvas] sfx() 1st param must be an array"
           );
-          DEV: assert(isNumber(pitchSlide), "sfx: 2nd param must be a number");
-          DEV: assert(isNumber(volumeFactor), "sfx: 3rd param must be a number");
+          DEV: assert(isNumber(pitchSlide), "[litecanvas] sfx() 2nd param must be a number");
+          DEV: assert(isNumber(volumeFactor), "[litecanvas] sfx() 3rd param must be a number");
           if (
             // @ts-ignore
             root.zzfxV <= 0 || navigator.userActivation && !navigator.userActivation.hasBeenActive
@@ -820,7 +860,7 @@
          * @param {number} value
          */
         volume(value) {
-          DEV: assert(isNumber(value), "volume: 1st param must be a number");
+          DEV: assert(isNumber(value), "[litecanvas] volume() 1st param must be a number");
           root.zzfxV = value;
         },
         /** PLUGINS API */
@@ -836,8 +876,14 @@
          * @param {pluginCallback} callback
          */
         use(callback, config = {}) {
-          DEV: assert("function" === typeof callback, "use: 1st param must be a function");
-          DEV: assert("object" === typeof config, "use: 2nd param must be an object");
+          DEV: assert(
+            "function" === typeof callback,
+            "[litecanvas] use() 1st param must be a function"
+          );
+          DEV: assert(
+            "object" === typeof config,
+            "[litecanvas] use() 2nd param must be an object"
+          );
           if (_initialized) {
             loadPlugin(callback, config);
           } else {
@@ -852,8 +898,14 @@
          * @returns {Function} a function to remove the listener
          */
         listen(eventName, callback) {
-          DEV: assert("string" === typeof eventName, "listen: 1st param must be a string");
-          DEV: assert("function" === typeof callback, "listen: 2nd param must be a function");
+          DEV: assert(
+            "string" === typeof eventName,
+            "[litecanvas] listen() 1st param must be a string"
+          );
+          DEV: assert(
+            "function" === typeof callback,
+            "[litecanvas] listen() 2nd param must be a function"
+          );
           eventName = eventName.toLowerCase();
           _eventListeners[eventName] = _eventListeners[eventName] || /* @__PURE__ */ new Set();
           _eventListeners[eventName].add(callback);
@@ -869,7 +921,10 @@
          * @param {*} [arg4] any data to be passed over the listeners
          */
         emit(eventName, arg1, arg2, arg3, arg4) {
-          DEV: assert("string" === typeof eventName, "emit: 1st param must be a string");
+          DEV: assert(
+            "string" === typeof eventName,
+            "[litecanvas] emit() 1st param must be a string"
+          );
           if (_initialized) {
             eventName = eventName.toLowerCase();
             triggerEvent("before:" + eventName, arg1, arg2, arg3, arg4);
@@ -885,7 +940,7 @@
         pal(colors = defaultPalette) {
           DEV: assert(
             Array.isArray(colors) && colors.length > 0,
-            "pal: 1st param must be a array of strings"
+            "[litecanvas] pal() 1st param must be a array of strings"
           );
           _colors = colors;
         },
@@ -896,7 +951,7 @@
          * @param {*} value
          */
         def(key, value) {
-          DEV: assert("string" === typeof key, "def: 1st param must be a string");
+          DEV: assert("string" === typeof key, "[litecanvas] def() 1st param must be a string");
           DEV: if (null == value) {
             console.warn(`def: key "${key}" was defined as ${value} but now is null`);
           }
@@ -915,7 +970,7 @@
         timescale(value) {
           DEV: assert(
             isNumber(value) && value >= 0,
-            "timescale: 1st param must be a positive number or zero"
+            "[litecanvas] timescale() 1st param must be a positive number or zero"
           );
           _timeScale = value;
         },
@@ -927,7 +982,7 @@
         framerate(value) {
           DEV: assert(
             isNumber(value) && value >= 1,
-            "framerate: 1st param must be a positive number"
+            "[litecanvas] framerate() 1st param must be a positive number"
           );
           _deltaTime = 1 / ~~value;
         },
@@ -938,7 +993,7 @@
          * @returns {any}
          */
         stat(n) {
-          DEV: assert(isNumber(n) && n >= 0, "stat: 1st param must be a number");
+          DEV: assert(isNumber(n) && n >= 0, "[litecanvas] stat() 1st param must be a number");
           const list = [
             // 0
             settings,
@@ -996,6 +1051,9 @@
       function init() {
         const source = settings.loop ? settings.loop : root;
         for (const event of _coreEvents.split(",")) {
+          DEV: if (root === source && source[event]) {
+            console.info(`[litecanvas] using window.${event}()`);
+          }
           if (source[event]) instance.listen(event, source[event]);
         }
         for (const [callback, config] of _plugins) {
@@ -1192,7 +1250,7 @@
             (key) => {
               DEV: assert(
                 null == key || "string" === typeof key,
-                "iskeydown: 1st param must be a string or undefined"
+                "[litecanvas] iskeydown() 1st param must be a string or undefined"
               );
               return keyCheck(_keysDown, key);
             }
@@ -1209,7 +1267,7 @@
             (key) => {
               DEV: assert(
                 null == key || "string" === typeof key,
-                "iskeypressed: 1st param must be a string or undefined"
+                "[litecanvas] iskeypressed() 1st param must be a string or undefined"
               );
               return keyCheck(_keysPress, key);
             }
@@ -1245,14 +1303,17 @@
       function setupCanvas() {
         if ("string" === typeof settings.canvas) {
           _canvas = document.querySelector(settings.canvas);
-          DEV: assert(null != _canvas, `Litecanvas' option "canvas" is an invalid CSS selector`);
+          DEV: assert(
+            null != _canvas,
+            '[litecanvas] litecanvas() option "canvas" is an invalid CSS selector'
+          );
         } else {
           _canvas = settings.canvas;
         }
         _canvas = _canvas || document.createElement("canvas");
         DEV: assert(
           "CANVAS" === _canvas.tagName,
-          `Litecanvas' option "canvas" should be a canvas element or string (CSS selector)`
+          '[litecanvas] litecanvas() option "canvas" should be a canvas element or string (CSS selector)'
         );
         _ctx = _canvas.getContext("2d");
         on(_canvas, "click", () => root.focus());
@@ -1265,15 +1326,15 @@
       function resizeCanvas() {
         DEV: assert(
           null == settings.width || isNumber(settings.width) && settings.width > 0,
-          `Litecanvas' option "width" should be a positive number when defined`
+          '[litecanvas] litecanvas() option "width" should be a positive number when defined'
         );
         DEV: assert(
           null == settings.height || isNumber(settings.height) && settings.height > 0,
-          `Litecanvas' option "height" should be a positive number when defined`
+          '[litecanvas] litecanvas() option "height" should be a positive number when defined'
         );
         DEV: assert(
           null == settings.height || settings.width > 0 && settings.height > 0,
-          `Litecanvas' option "width" is required when the option "height" is defined`
+          '[litecanvas] litecanvas() option "width" is required when the option "height" is defined'
         );
         const width = settings.width || root.innerWidth, height = settings.height || settings.width || root.innerHeight;
         instance.def("W", width);
@@ -1310,7 +1371,7 @@
         const pluginData = callback(instance, config);
         DEV: assert(
           null == pluginData || "object" === typeof pluginData,
-          "Litecanvas plugins should return an object or nothing"
+          "[litecanvas] litecanvas() plugins should return an object or nothing"
         );
         for (const key in pluginData) {
           instance.def(key, pluginData[key]);
@@ -1318,11 +1379,13 @@
       }
       if (settings.global) {
         if (root.ENGINE) {
-          throw new Error("two global litecanvas detected");
+          throw new Error("only one global litecanvas is allowed");
         }
         Object.assign(root, instance);
         root.ENGINE = instance;
       }
+      DEV: console.info(`[litecanvas] version ${version} started`);
+      DEV: console.debug(`[litecanvas] litecanvas() options =`, settings);
       setupCanvas();
       if ("loading" === document.readyState) {
         on(root, "DOMContentLoaded", () => raf(init));
