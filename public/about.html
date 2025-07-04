@@ -501,20 +501,16 @@ alpha(value: number): void
 
 // Fills the current path
 // see: https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/fill
-fill(color: number, path?: Path2D): void
+fill(color: number): void
 
 // Outlines the current path
 // see: https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/stroke
-stroke(color: number, path?: Path2D): void
+stroke(color: number): void
 
-// Create a clipping region based in a Path2D instance
+// Create a clipping region based in a path (in the callback)
 // see: https://github.com/litecanvas/game-engine/blob/main/samples/clip/clip.js
 // note: before call `clip()` you must save the context using `push()` and `pop()`
-clip(path: Path2D)
-
-// Create (or clone) a Path2D instance
-// see: https://developer.mozilla.org/en-US/docs/Web/API/Path2D/Path2D
-path(arg?: Path2D | string): Path2D</code></pre>
+clip(callback: (ctx: CanvasRenderingContext2D) => void)</code></pre>
 
       <h2><a id="sound">Functions for Sound</a></h2>
 
@@ -695,6 +691,15 @@ def(name: string, value: any): void
 // example: pal(['#000', '#FFF']) is a 1-bit color palette
 // example: pal() resets the default color palette
 pal(colors: string[]): void
+
+// pauses the engine loop (update & draw)
+pause(): void
+
+// resumes the engine loop
+resume(): void
+
+// returns `true` if the engine loop is paused
+paused(): boolean
 
 // shutdown the engine
 // also emits the "quit" event

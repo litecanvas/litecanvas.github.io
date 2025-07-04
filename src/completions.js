@@ -160,19 +160,13 @@ export default function customCompletions(context) {
         label: "fill",
         type: "function",
         apply: "fill(",
-        detail: "(color, path?)",
+        detail: "(color)",
       },
       {
         label: "stroke",
         type: "function",
         apply: "stroke(",
-        detail: "(color, path?)",
-      },
-      {
-        label: "path",
-        type: "function",
-        apply: "path()",
-        detail: "(arg?: string|Path2D)",
+        detail: "(color)",
       },
       {
         label: "push",
@@ -204,8 +198,8 @@ export default function customCompletions(context) {
         label: "clip",
         type: "function",
         apply: "clip(",
-        detail: "(path)",
-        info: "create a clipping region based in a Path2D instance",
+        detail: "(callback)",
+        info: "create a clipping region based in a path (in the callback)",
       },
       {
         label: "sfx",
@@ -455,6 +449,21 @@ export default function customCompletions(context) {
         type: "function",
         apply: "quit()",
         detail: "shutdown a Litecanvas' instance",
+      },
+      {
+        label: "pause",
+        type: "function",
+        apply: "pause()",
+      },
+      {
+        label: "resume",
+        type: "function",
+        apply: "resume()",
+      },
+      {
+        label: "paused",
+        type: "function",
+        apply: "paused()",
       },
 
       // asset loader plugin

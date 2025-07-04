@@ -27,12 +27,12 @@
     var assert = (condition, message = "Assertion failed") => {
       if (!condition) throw new Error(message);
     };
-    var version = "0.87.0";
+    var version = "0.88.1";
     function litecanvas(settings = {}) {
       const root = window, math = Math, TWO_PI = math.PI * 2, raf = requestAnimationFrame, _browserEventListeners = [], on = (elem, evt, callback) => {
         elem.addEventListener(evt, callback, false);
         _browserEventListeners.push(() => elem.removeEventListener(evt, callback, false));
-      }, isNumber = Number.isFinite, zzfx = setupZzFX(root), defaults = {
+      }, beginPath = (c) => c.beginPath(), isNumber = Number.isFinite, zzfx = setupZzFX(root), defaults = {
         width: null,
         height: null,
         autoscale: true,
@@ -332,7 +332,7 @@
             null == radii || isNumber(radii) || Array.isArray(radii) && radii.length >= 1,
             "[litecanvas] rect() 6th param must be a number or array of numbers"
           );
-          _ctx.beginPath();
+          beginPath(_ctx);
           _ctx[radii ? "roundRect" : "rect"](
             ~~x - _outline_fix,
             ~~y - _outline_fix,
@@ -371,7 +371,7 @@
             null == radii || isNumber(radii) || Array.isArray(radii) && radii.length >= 1,
             "[litecanvas] rectfill() 6th param must be a number or array of at least 2 numbers"
           );
-          _ctx.beginPath();
+          beginPath(_ctx);
           _ctx[radii ? "roundRect" : "rect"](~~x, ~~y, ~~width, ~~height, radii);
           instance.fill(color);
         },
@@ -394,7 +394,7 @@
             null == color || isNumber(color) && color >= 0,
             "[litecanvas] circ() 4th param must be a positive number or zero"
           );
-          _ctx.beginPath();
+          beginPath(_ctx);
           _ctx.arc(~~x, ~~y, ~~radius, 0, TWO_PI);
           instance.stroke(color);
         },
@@ -417,7 +417,7 @@
             null == color || isNumber(color) && color >= 0,
             "[litecanvas] circfill() 4th param must be a positive number or zero"
           );
-          _ctx.beginPath();
+          beginPath(_ctx);
           _ctx.arc(~~x, ~~y, ~~radius, 0, TWO_PI);
           instance.fill(color);
         },
@@ -445,7 +445,7 @@
             null == color || isNumber(color) && color >= 0,
             "[litecanvas] oval() 5th param must be a positive number or zero"
           );
-          _ctx.beginPath();
+          beginPath(_ctx);
           _ctx.ellipse(~~x, ~~y, ~~radiusX, ~~radiusY, 0, 0, TWO_PI);
           instance.stroke(color);
         },
@@ -473,7 +473,7 @@
             null == color || isNumber(color) && color >= 0,
             "[litecanvas] ovalfill() 5th param must be a positive number or zero"
           );
-          _ctx.beginPath();
+          beginPath(_ctx);
           _ctx.ellipse(~~x, ~~y, ~~radiusX, ~~radiusY, 0, 0, TWO_PI);
           instance.fill(color);
         },
@@ -501,7 +501,7 @@
             null == color || isNumber(color) && color >= 0,
             "[litecanvas] line() 5th param must be a positive number or zero"
           );
-          _ctx.beginPath();
+          beginPath(_ctx);
           let xfix = _outline_fix !== 0 && ~~x1 === ~~x2 ? 0.5 : 0;
           let yfix = _outline_fix !== 0 && ~~y1 === ~~y2 ? 0.5 : 0;
           _ctx.moveTo(~~x1 + xfix, ~~y1 + yfix);
@@ -745,79 +745,45 @@
           _ctx.globalAlpha = instance.clamp(value, 0, 1);
         },
         /**
-         * Returns a newly instantiated Path2D object, optionally with another
-         * path as an argument (creates a copy), or optionally with a string
-         * consisting of SVG path data.
-         *
-         * @param {Path2D|string} [arg]
-         * @returns Path2D
-         * @see https://developer.mozilla.org/en-US/docs/Web/API/Path2D/Path2D
-         */
-        path: (arg) => {
-          DEV: assert(
-            null == arg || "string" === typeof arg || arg instanceof Path2D,
-            "[litecanvas] path() 1st param must be a string or a Path2D instance"
-          );
-          return new Path2D(arg);
-        },
-        /**
-         * Fills the current or given path with a given color.
+         * Fills the current path with a given color.
          *
          * @param {number} [color=0]
-         * @param {Path2D} [path]
          */
-        fill(color, path2) {
+        fill(color) {
           DEV: assert(
             null == color || isNumber(color) && color >= 0,
             "[litecanvas] fill() 1st param must be a positive number or zero"
           );
-          DEV: assert(
-            null == path2 || path2 instanceof Path2D,
-            "[litecanvas] fill() 2nd param must be a Path2D instance"
-          );
           _ctx.fillStyle = _colors[~~color % _colors.length];
-          if (path2) {
-            _ctx.fill(path2);
-          } else {
-            _ctx.fill();
-          }
+          _ctx.fill();
         },
         /**
-         * Outlines the current or given path with a given color.
+         * Outlines the current path with a given color.
          *
          * @param {number} [color=0]
-         * @param {Path2D} [path]
          */
-        stroke(color, path2) {
+        stroke(color) {
           DEV: assert(
             null == color || isNumber(color) && color >= 0,
             "[litecanvas] stroke() 1st param must be a positive number or zero"
           );
-          DEV: assert(
-            null == path2 || path2 instanceof Path2D,
-            "[litecanvas] stroke() 2nd param must be a Path2D instance"
-          );
           _ctx.strokeStyle = _colors[~~color % _colors.length];
-          if (path2) {
-            _ctx.stroke(path2);
-          } else {
-            _ctx.stroke();
-          }
+          _ctx.stroke();
         },
         /**
-         * Turn given path into a clipping region.
+         * Turns a path (in the callback) into the current clipping region.
          *
-         * Note: always call `push()` before and `pop()` after.
-         *
-         * @param {Path2D} path
+         * @param {clipCallback} callback
          * @see https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/clip
          */
-        clip(path2) {
+        clip(callback) {
           DEV: assert(
-            path2 instanceof Path2D,
-            "[litecanvas] clip() 1st param must be a Path2D instance"
+            "function" === typeof callback,
+            "[litecanvas] clip() 1st param must be a function"
           );
-          _ctx.clip(path2);
+          beginPath(_ctx);
+          callback(_ctx);
+          _ctx.clip();
         },
         /** SOUND API */
         /**
@@ -1000,7 +966,7 @@
             // 1
             _initialized,
             // 2
-            _rafid,
+            _deltaTime,
             // 3
             _scale,
             // 4
@@ -1029,8 +995,7 @@
          * Stops the litecanvas instance and remove all event listeners.
          */
         quit() {
-          cancelAnimationFrame(_rafid);
-          _rafid = 0;
+          instance.pause();
           instance.emit("quit");
           _eventListeners = {};
           for (const removeListener of _browserEventListeners) {
@@ -1043,6 +1008,29 @@
             delete root.ENGINE;
           }
           _initialized = false;
+        },
+        /**
+         * Pauses the engine loop (update & draw).
+         */
+        pause() {
+          cancelAnimationFrame(_rafid);
+          _rafid = 0;
+        },
+        /**
+         * Resumes (if paused) the engine loop.
+         */
+        resume() {
+          if (!_rafid && _initialized) {
+            _rafid = raf(drawFrame);
+          }
+        },
+        /**
+         * Returns `true` if the engine loop is paused.
+         *
+         * @returns {boolean}
+         */
+        paused() {
+          return !_rafid;
         }
       };
       for (const k of _mathFunctions.split(",")) {
@@ -1275,29 +1263,31 @@
         }
         _initialized = true;
         instance.emit("init", instance);
+        instance.textalign("start", "top");
         _lastFrameTime = performance.now();
-        _rafid = raf(drawFrame);
+        instance.resume();
       }
       function drawFrame(now) {
+        if (!settings.animate) {
+          return instance.emit("draw");
+        }
         let updated = 0;
-        if (settings.animate) {
-          _accumulated += math.min(0.1, (now - _lastFrameTime) / 1e3);
-          _lastFrameTime = now;
+        let frameTime = (now - _lastFrameTime) / 1e3;
+        _lastFrameTime = now;
+        if (frameTime < 0.1) {
+          _accumulated += frameTime;
           while (_accumulated >= _deltaTime) {
             updated++;
             instance.emit("update", _deltaTime * _timeScale, updated);
             instance.def("T", instance.T + _deltaTime * _timeScale);
             _accumulated -= _deltaTime;
           }
-          if (_rafid) {
-            _rafid = raf(drawFrame);
-          }
-        } else {
-          updated = 1;
         }
         if (updated) {
-          instance.textalign("start", "top");
           instance.emit("draw");
+        }
+        if (_rafid) {
+          _rafid = raf(drawFrame);
         }
       }
       function setupCanvas() {
@@ -1982,131 +1972,149 @@
     window.pluginAssetLoader = v;
   })();
   (() => {
-    var o = (r, a = "Assertion failed") => {
-      if (!r) throw new Error(a);
+    var o = (a, c = "Assertion failed") => {
+      if (!a) throw new Error(c);
     };
-    var _ = (r, a, c, n, s, p, f, b) => (o(isFinite(r), "colrect: 1st param must be a number"), o(isFinite(a), "colrect: 2nd param must be a number"), o(isFinite(c), "colrect: 3rd param must be a number"), o(isFinite(n), "colrect: 4th param must be a number"), o(isFinite(s), "colrect: 5th param must be a number"), o(isFinite(p), "colrect: 6th param must be a number"), o(isFinite(f), "colrect: 7th param must be a number"), o(isFinite(b), "colrect: 8th param must be a number"), r < s + f && r + c > s && a < p + b && a + n > p);
-    var x = (r, a, c, n, s, p) => (o(isFinite(r), "colcirc: 1st param must be a number"), o(isFinite(a), "colcirc: 2nd param must be a number"), o(isFinite(c), "colcirc: 3rd param must be a number"), o(isFinite(n), "colcirc: 4th param must be a number"), o(isFinite(s), "colcirc: 5th param must be a number"), o(isFinite(p), "colcirc: 6th param must be a number"), (n - r) * (n - r) + (s - a) * (s - a) <= (c + p) * (c + p));
-    var dt = 2 * Math.PI;
-    var N = advance = (r, a, c, n = 1) => {
-      c && (a.x += c.x * n, a.y += c.y * n), r.x += a.x * n, r.y += a.y * n;
-    };
-    var ee = Math.PI / 2;
-    var D = 4, ae = 1 << D, z = 8, ne = 1 << z;
-    var B = { warnings: true };
-    function g(r, a = {}) {
-      if (a = Object.assign({}, B, a), r.stat(1)) throw 'Plugin Migrate should be loaded before the "init" event';
-      let n = r.stat(0);
-      function s(t, e, u = "") {
-        a.warnings && console.warn(`[Migrate] warning: ${t} is removed. ` + (e ? `Use ${e} instead. ` : "") + u);
+    var _ = (a, c, m, l, s, h, f, b) => (o(isFinite(a), "colrect: 1st param must be a number"), o(isFinite(c), "colrect: 2nd param must be a number"), o(isFinite(m), "colrect: 3rd param must be a number"), o(isFinite(l), "colrect: 4th param must be a number"), o(isFinite(s), "colrect: 5th param must be a number"), o(isFinite(h), "colrect: 6th param must be a number"), o(isFinite(f), "colrect: 7th param must be a number"), o(isFinite(b), "colrect: 8th param must be a number"), a < s + f && a + m > s && c < h + b && c + l > h);
+    var x = (a, c, m, l, s, h) => (o(isFinite(a), "colcirc: 1st param must be a number"), o(isFinite(c), "colcirc: 2nd param must be a number"), o(isFinite(m), "colcirc: 3rd param must be a number"), o(isFinite(l), "colcirc: 4th param must be a number"), o(isFinite(s), "colcirc: 5th param must be a number"), o(isFinite(h), "colcirc: 6th param must be a number"), (l - a) * (l - a) + (s - c) * (s - c) <= (m + h) * (m + h));
+    var Et = 2 * Math.PI;
+    var he = Math.PI / 2;
+    var $ = 4, fe = 1 << $, V = 8, de = 1 << V;
+    var j = { warnings: true };
+    function g(a, c = {}) {
+      if (c = Object.assign({}, j, c), a.stat(1)) throw 'Plugin Migrate should be loaded before the "init" event';
+      let l = a.stat(0);
+      function s(t, e, r = "") {
+        c.warnings && console.warn(`[Migrate] warning: ${t} is removed. ` + (e ? `Use ${e} instead. ` : "") + r);
       }
-      function p(t) {
-        return s("seed()", "rseed()"), t && r.rseed(t), r.stat(9);
+      function h(t) {
+        return s("seed()", "rseed()"), t && a.rseed(t), a.stat(9);
       }
       let f = "";
       function b(t) {
         s("textstyle()", "the 5th param of text()"), f = t;
       }
-      let M = r.text;
-      function y(t, e, u, h = 3, m = f) {
-        M(t, e, u, h, m);
+      let w = a.text;
+      function y(t, e, r, i = 3, p = f) {
+        w(t, e, r, i, p);
       }
-      function E(t, e, u, h) {
-        s("print()", "text()"), y(t, e, u, h);
+      function M(t, e, r, i) {
+        s("print()", "text()"), y(t, e, r, i);
       }
-      function T(t, e) {
+      function E(t, e) {
         s("textmetrics()", "ctx().measureText()");
-        let u = r.ctx(), h = r.stat(10), m = r.stat(11);
-        u.font = `${f || ""} ${~~(e || h)}px ${m}`;
-        let d = u.measureText(t);
+        let r = a.ctx(), i = a.stat(10), p = a.stat(11);
+        r.font = `${f || ""} ${~~(e || i)}px ${p}`;
+        let d = r.measureText(t);
         return d.height = d.actualBoundingBoxAscent + d.actualBoundingBoxDescent, d;
       }
-      function A(t, e, u, h) {
+      function T(t, e, r, i) {
         s("cliprect()", "clip()");
-        let m = r.ctx();
-        m.beginPath(), m.rect(t, e, u, h), m.clip();
+        let p = a.ctx();
+        p.beginPath(), p.rect(t, e, r, i), p.clip();
       }
-      function C(t, e, u) {
+      function A(t, e, r) {
         s("clipcirc()", "clip()");
-        let h = r.ctx();
-        h.beginPath(), h.arc(t, e, u, 0, r.TWO_PI), h.clip();
+        let i = a.ctx();
+        i.beginPath(), i.arc(t, e, r, 0, a.TWO_PI), i.clip();
       }
-      function I(t) {
+      function C(t) {
         s("getcolor()", "stat(5)");
         let e = stat(5);
         return e[~~t % e.length];
       }
       function k(t) {
         s("blendmode()", "ctx().globalCompositeOperation");
-        let e = r.ctx();
+        let e = a.ctx();
         e.globalCompositeOperation = t;
       }
-      function P(t) {
-        s("clear()", "cls()"), r.cls(t);
+      function I(t) {
+        s("clear()", "cls()"), a.cls(t);
       }
-      function S(t, e, u, h, m, d, X = true) {
-        return s("transform()", "ctx().setTransform() or ctx().transform()"), r.ctx()[X ? "setTransform" : "transform"](t, e, u, h, m, d);
+      function S(t, e, r, i, p, d, B = true) {
+        return s("transform()", "ctx().setTransform() or ctx().transform()"), a.ctx()[B ? "setTransform" : "transform"](t, e, r, i, p, d);
       }
-      function O() {
+      function P() {
         return s("mousepos()", "MX and MY"), [MX, MY];
       }
-      function L(t) {
-        s("setfps()", "framerate()"), r.framerate(t);
+      function O(t) {
+        s("setfps()", "framerate()"), a.framerate(t);
       }
-      let i = r.def;
-      function l(t, e) {
+      let n = a.def;
+      function u(t, e) {
         switch (t) {
           case "W":
           case "WIDTH":
-            i("W", e), i("WIDTH", e);
+            n("W", e), n("WIDTH", e);
             break;
           case "H":
           case "HEIGHT":
-            i("H", e), i("HEIGHT", e);
+            n("H", e), n("HEIGHT", e);
             break;
           case "T":
           case "ELAPSED":
-            i("T", e), i("ELAPSED", e);
+            n("T", e), n("ELAPSED", e);
             break;
           case "CX":
           case "CENTERX":
-            i("CX", e), i("CENTERX", e);
+            n("CX", e), n("CENTERX", e);
             break;
           case "CY":
           case "CENTERY":
-            i("CY", e), i("CENTERY", e);
+            n("CY", e), n("CENTERY", e);
             break;
           case "MX":
           case "MOUSEX":
-            i("MX", e), i("MOUSEX", e);
+            n("MX", e), n("MOUSEX", e);
             break;
           case "MY":
           case "MOUSEY":
-            i("MY", e), i("MOUSEY", e);
+            n("MY", e), n("MOUSEY", e);
             break;
           default:
-            i(t, e);
+            n(t, e);
             break;
         }
       }
-      function Y(t, e) {
-        s("setvar()", "def()"), l(t, e);
-      }
-      r.listen("resized", w);
-      function w() {
-        l("CX", r.W / 2), l("CY", r.H / 2);
-      }
-      w(), l("CANVAS", r.canvas());
       function R(t, e) {
-        if (n.autoscale) throw "resize() don't works with autoscale enabled";
-        s("resize()", null, "Avoid changing the canvas dimensions at runtime."), r.CANVAS.width = t, l("W", t), l("CX", t / 2), r.CANVAS.height = e, l("H", e), l("CY", e / 2), r.emit("resized", 1);
+        s("setvar()", "def()"), u(t, e);
       }
-      for (let t of ["W", "H", "T", "CX", "CY", "MX", "MY"]) r[t] != null && l(t, r[t]);
-      if (s("FPS", "some library to measure the FPS", "Recommendation: https://github.com/mrdoob/stats.js/"), i("FPS", ""), n.fps && r.framerate(n.fps), n.background >= 0) {
+      a.listen("resized", v);
+      function v() {
+        u("CX", a.W / 2), u("CY", a.H / 2);
+      }
+      v(), u("CANVAS", a.canvas());
+      function F(t, e) {
+        if (l.autoscale) throw "resize() don't works with autoscale enabled";
+        s("resize()", null, "Avoid changing the canvas dimensions at runtime."), a.CANVAS.width = t, u("W", t), u("CX", t / 2), a.CANVAS.height = e, u("H", e), u("CY", e / 2), a.emit("resized", 1);
+      }
+      for (let t of ["W", "H", "T", "CX", "CY", "MX", "MY"]) a[t] != null && u(t, a[t]);
+      if (s("FPS", "some library to measure the FPS", "Recommendation: https://github.com/mrdoob/stats.js/"), n("FPS", ""), l.fps && a.framerate(l.fps), l.background >= 0) {
         let t = stat(5);
-        r.CANVAS.style.backgroundColor = t[~~n.background % t.length];
+        a.CANVAS.style.backgroundColor = t[~~l.background % t.length];
       }
-      return { def: l, seed: p, print: E, clear: P, setfps: L, setvar: Y, textstyle: b, textmetrics: T, text: y, cliprect: A, clipcirc: C, blendmode: k, transform: S, getcolor: I, mousepos: O, resize: R, colrect: _, colcirc: x };
+      function L(t) {
+        return s("path()", "`new Path2D`", "See https://developer.mozilla.org/en-US/docs/Web/API/Path2D"), new Path2D(t);
+      }
+      let Y = a.fill;
+      function z(t, e) {
+        if (s("fill(color, path)"), e instanceof Path2D) {
+          let r = a.stat(5), i = a.ctx();
+          i.fillStyle = r[~~t % r.length], a.ctx().fill(e);
+        } else Y(t);
+      }
+      let N = a.stroke;
+      function X(t, e) {
+        if (s("stroke(color, path)"), e instanceof Path2D) {
+          let r = a.stat(5), i = a.ctx();
+          i.strokeStyle = r[~~t % r.length], a.ctx().stroke(e);
+        } else N(t);
+      }
+      let H = a.clip;
+      function D(t) {
+        s("clip(path)", "clip(callback)", "E.g: `clip((ctx) => ctx.rect(0, 0, 200, 200))`"), t instanceof Path2D ? a.ctx().clip(t) : H(t);
+      }
+      return { def: u, seed: h, print: M, clear: I, setfps: O, setvar: R, textstyle: b, textmetrics: E, text: y, cliprect: T, clipcirc: A, blendmode: k, transform: S, getcolor: C, mousepos: P, resize: F, path: L, fill: z, stroke: X, clip: D, colrect: _, colcirc: x };
     }
     window.pluginMigrate = g;
   })();
