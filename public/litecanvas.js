@@ -27,7 +27,7 @@
     var assert = (condition, message = "Assertion failed") => {
       if (!condition) throw new Error(message);
     };
-    var version = "0.89.0";
+    var version = "0.89.2";
     function litecanvas(settings = {}) {
       const root = window, math = Math, TWO_PI = math.PI * 2, raf = requestAnimationFrame, _browserEventListeners = [], on = (elem, evt, callback) => {
         elem.addEventListener(evt, callback, false);
@@ -1272,7 +1272,6 @@
         }
         _initialized = true;
         instance.emit("init", instance);
-        instance.textalign("start", "top");
         _lastFrameTime = performance.now();
         instance.resume();
       }
@@ -1355,6 +1354,7 @@
           _ctx.imageSmoothingEnabled = false;
           _canvas.style.imageRendering = "pixelated";
         }
+        instance.textalign("start", "top");
         instance.emit("resized", _scale);
         instance.cls(0);
         if (!settings.animate) {
