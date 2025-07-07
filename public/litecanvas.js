@@ -2108,14 +2108,16 @@
       }
       let Y = a.fill;
       function z(t, e) {
-        if (s("fill(color, path)"), e instanceof Path2D) {
+        if (e instanceof Path2D) {
+          s("fill(color, path)");
           let r = a.stat(5), i = a.ctx();
           i.fillStyle = r[~~t % r.length], a.ctx().fill(e);
         } else Y(t);
       }
       let N = a.stroke;
       function X(t, e) {
-        if (s("stroke(color, path)"), e instanceof Path2D) {
+        if (e instanceof Path2D) {
+          s("stroke(color, path)");
           let r = a.stat(5), i = a.ctx();
           i.strokeStyle = r[~~t % r.length], a.ctx().stroke(e);
         } else N(t);
