@@ -27,7 +27,7 @@
     var assert = (condition, message = "Assertion failed") => {
       if (!condition) throw new Error(message);
     };
-    var version = "0.88.1";
+    var version = "0.89.0";
     function litecanvas(settings = {}) {
       const root = window, math = Math, TWO_PI = math.PI * 2, raf = requestAnimationFrame, _browserEventListeners = [], on = (elem, evt, callback) => {
         elem.addEventListener(evt, callback, false);
@@ -1068,12 +1068,16 @@
              */
             (id, x, y) => {
               const tap = {
+                // current x
                 x,
+                // current y
                 y,
-                startX: x,
-                startY: y,
+                // initial x
+                xi: x,
+                // initial y
+                yi: y,
                 // timestamp
-                ts: performance.now()
+                t: performance.now()
               };
               _taps.set(id, tap);
               return tap;
@@ -1091,10 +1095,15 @@
             }
           ), _checkTapped = (
             /**
-             * @param {{ts: number}} tap
+             * @param {{t: number}} tap
              */
-            (tap) => tap && performance.now() - tap.ts <= 300
-          ), preventDefault = (ev) => ev.preventDefault();
+            (tap) => tap && performance.now() - tap.t <= 300
+          ), preventDefault = (
+            /**
+             * @param {Event} ev
+             */
+            (ev) => ev.preventDefault()
+          );
           let _pressingMouse = false;
           on(
             _canvas,
@@ -1124,7 +1133,7 @@
                 const tap = _taps.get(0);
                 const [x, y] = _getXY(ev.pageX, ev.pageY);
                 if (_checkTapped(tap)) {
-                  instance.emit("tapped", tap.startX, tap.startY, 0);
+                  instance.emit("tapped", tap.xi, tap.yi, 0);
                 }
                 instance.emit("untap", x, y, 0);
                 _taps.delete(0);
@@ -1191,7 +1200,7 @@
             for (const [id, tap] of _taps) {
               if (existing.includes(id)) continue;
               if (_checkTapped(tap)) {
-                instance.emit("tapped", tap.startX, tap.startY, id);
+                instance.emit("tapped", tap.xi, tap.yi, id);
               }
               instance.emit("untap", tap.x, tap.y, id);
               _taps.delete(id);
@@ -1312,6 +1321,7 @@
         if (!_canvas.parentNode) {
           document.body.appendChild(_canvas);
         }
+        _canvas.oncontextmenu = () => false;
       }
       function resizeCanvas() {
         DEV: assert(
