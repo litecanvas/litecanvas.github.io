@@ -38,6 +38,13 @@ const pluginFrameRateMeter = await readFile(
 
 await appendFile(engineFile, "\n" + pluginFrameRateMeter);
 
+const pluginPixelFont = await readFile(
+  root + "/node_modules/@litecanvas/plugin-pixel-font/dist/dist.js",
+  { encoding: "utf8" }
+);
+
+await appendFile(engineFile, "\n" + pluginPixelFont);
+
 await esbuild.build({
   entryPoints: [engineFile],
   outfile: engineFile,

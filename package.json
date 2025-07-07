@@ -17,7 +17,7 @@
   "author": "Luiz Bills",
   "license": "MIT",
   "devDependencies": {
-    "esbuild": "^0.25.5"
+    "esbuild": "^0.25.6"
   },
   "dependencies": {
     "@babel/standalone": "^7.28.0",
@@ -26,6 +26,7 @@
     "@litecanvas/plugin-asset-loader": "latest",
     "@litecanvas/plugin-frame-rate-meter": "latest",
     "@litecanvas/plugin-migrate": "latest",
+    "@litecanvas/plugin-pixel-font": "^0.0.1",
     "@litecanvas/utils": "latest",
     "codemirror": "^6.0.2",
     "eslint-linter-browserify": "9.30.0",

@@ -96,6 +96,7 @@
           instance.use(pluginFrameRateMeter, {
             hidden: false,
           });
+          instance.use(pluginPixelFont);
           instance.listen("before:init", () => {
             instance.use(pluginAssetLoader);
           });
