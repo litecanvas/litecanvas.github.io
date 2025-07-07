@@ -743,7 +743,16 @@ stat(n: number): any</code></pre>
             </a>
           </strong>
           <br>
-          <small><em>Tip: Press <code>F1</code> to show the FPS monitor in the preview</em></small>
+          <small>Tip: Call <strong><code>FPS_METER.display(false)</code></strong> in your function <code>init()</code> to disable it.</small>
+        </li>
+        <li>
+          <strong>
+            <a href="https://github.com/litecanvas/plugin-pixel-font">
+              https://github.com/litecanvas/plugin-pixel-font
+            </a>
+          </strong>
+          <br>
+          <small>Tip: Call <strong><code>textfont(PIXEL_FONT_BASIC)</code></strong> to activate the pixel font.</small>
         </li>
         <li>
           <strong>
@@ -806,29 +815,6 @@ function draw() {
     }
   }
   pop()
-}</code></pre>
-
-      <p>
-        <strong
-          >Monogram font by
-          <a href="https://datagoblin.itch.io/monogram">datagoblin</a></strong
-        >
-      </p>
-
-      <pre><code class="language-typescript" data-copy="size-bg pos-absolute">litecanvas()
-
-function init() {
-  // first, load the font
-  loadFont('monogram', '/fonts/monogram.ttf')
-}
-
-function draw() {
-  cls(0)
-  if (LOADING) return; // wait the asset loader
-
-  textfont('monogram') // important: set the font family
-  textsize(64)
-  text(0, 0, 'Hello world')
 }</code></pre>
 
       <h2><a id="tools">Useful tools</a></h2>

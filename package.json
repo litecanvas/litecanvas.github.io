@@ -26,7 +26,7 @@
     "@litecanvas/plugin-asset-loader": "latest",
     "@litecanvas/plugin-frame-rate-meter": "latest",
     "@litecanvas/plugin-migrate": "latest",
-    "@litecanvas/plugin-pixel-font": "^0.0.1",
+    "@litecanvas/plugin-pixel-font": "latest",
     "@litecanvas/utils": "latest",
     "codemirror": "^6.0.2",
     "eslint-linter-browserify": "9.30.0",
