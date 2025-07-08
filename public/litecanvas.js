@@ -27,7 +27,7 @@
     var assert = (condition, message = "Assertion failed") => {
       if (!condition) throw new Error(message);
     };
-    var version = "0.89.2";
+    var version = "0.90.0";
     function litecanvas(settings = {}) {
       const root = window, math = Math, TWO_PI = math.PI * 2, raf = requestAnimationFrame, _browserEventListeners = [], on = (elem, evt, callback) => {
         elem.addEventListener(evt, callback, false);
@@ -1341,11 +1341,13 @@
         _canvas.width = width;
         _canvas.height = height;
         if (settings.autoscale) {
+          let maxScale = +settings.autoscale;
           if (!_canvas.style.display) {
             _canvas.style.display = "block";
             _canvas.style.margin = "auto";
           }
           _scale = math.min(root.innerWidth / width, root.innerHeight / height);
+          _scale = maxScale > 1 && _scale > maxScale ? maxScale : _scale;
           _scale = (settings.pixelart ? ~~_scale : _scale) || 1;
           _canvas.style.width = width * _scale + "px";
           _canvas.style.height = height * _scale + "px";
@@ -1995,7 +1997,7 @@
       if (c = Object.assign({}, j, c), a.stat(1)) throw 'Plugin Migrate should be loaded before the "init" event';
       let l = a.stat(0);
       function s(t, e, r = "") {
-        c.warnings && console.warn(`[Migrate] warning: ${t} is removed. ` + (e ? `Use ${e} instead. ` : "") + r);
+        c.warnings && console.warn(`[migrate] ${t} is removed. ` + (e ? `Use ${e} instead. ` : "") + r);
       }
       function h(t) {
         return s("seed()", "rseed()"), t && a.rseed(t), a.stat(9);
@@ -2086,7 +2088,7 @@
             break;
         }
       }
-      function R(t, e) {
+      function L(t, e) {
         s("setvar()", "def()"), u(t, e);
       }
       a.listen("resized", v);
@@ -2094,39 +2096,39 @@
         u("CX", a.W / 2), u("CY", a.H / 2);
       }
       v(), u("CANVAS", a.canvas());
-      function F(t, e) {
+      function R(t, e) {
         if (l.autoscale) throw "resize() don't works with autoscale enabled";
         s("resize()", null, "Avoid changing the canvas dimensions at runtime."), a.CANVAS.width = t, u("W", t), u("CX", t / 2), a.CANVAS.height = e, u("H", e), u("CY", e / 2), a.emit("resized", 1);
       }
       for (let t of ["W", "H", "T", "CX", "CY", "MX", "MY"]) a[t] != null && u(t, a[t]);
-      if (s("FPS", "some library to measure the FPS", "Recommendation: https://github.com/mrdoob/stats.js/"), n("FPS", ""), l.fps && a.framerate(l.fps), l.background >= 0) {
+      if (s("FPS", "", "but you can use our plugin to measure the fps: https://github.com/litecanvas/plugin-frame-rate-meter"), n("FPS", ""), l.fps && a.framerate(l.fps), l.background >= 0) {
         let t = stat(5);
         a.CANVAS.style.backgroundColor = t[~~l.background % t.length];
       }
-      function L(t) {
+      function F(t) {
         return s("path()", "`new Path2D`", "See https://developer.mozilla.org/en-US/docs/Web/API/Path2D"), new Path2D(t);
       }
-      let Y = a.fill;
-      function z(t, e) {
+      let z = a.fill;
+      function N(t, e) {
         if (e instanceof Path2D) {
           s("fill(color, path)");
           let r = a.stat(5), i = a.ctx();
           i.fillStyle = r[~~t % r.length], a.ctx().fill(e);
-        } else Y(t);
+        } else z(t);
       }
-      let N = a.stroke;
-      function X(t, e) {
+      let Y = a.stroke;
+      function H(t, e) {
         if (e instanceof Path2D) {
           s("stroke(color, path)");
           let r = a.stat(5), i = a.ctx();
           i.strokeStyle = r[~~t % r.length], a.ctx().stroke(e);
-        } else N(t);
+        } else Y(t);
       }
-      let H = a.clip;
+      let X = a.clip;
       function D(t) {
-        s("clip(path)", "clip(callback)", "E.g: `clip((ctx) => ctx.rect(0, 0, 200, 200))`"), t instanceof Path2D ? a.ctx().clip(t) : H(t);
+        s("clip(path)", "clip(callback)", "E.g: `clip((ctx) => ctx.rect(0, 0, 200, 200))`"), t instanceof Path2D ? a.ctx().clip(t) : X(t);
       }
-      return { def: u, seed: h, print: M, clear: I, setfps: O, setvar: R, textstyle: b, textmetrics: E, text: y, cliprect: T, clipcirc: A, blendmode: k, transform: S, getcolor: C, mousepos: P, resize: F, path: L, fill: z, stroke: X, clip: D, colrect: _, colcirc: x };
+      return { def: u, seed: h, print: M, clear: I, setfps: O, setvar: L, textstyle: b, textmetrics: E, text: y, cliprect: T, clipcirc: A, blendmode: k, transform: S, getcolor: C, mousepos: P, resize: R, path: F, fill: N, stroke: H, clip: D, colrect: _, colcirc: x };
     }
     window.pluginMigrate = g;
   })();
@@ -2213,7 +2215,7 @@
     function o(e, y = {}) {
       let p = e.text, f = e.textsize, b = e.textalign, d = { chars: u, first: 33, size: 8 }, n = 1, t = null, v = (a) => {
         n = Math.round(a / t.size);
-      }, h = () => console.warn("textalign() xxx has not yet been implemented for pixel font"), g = (a, c, x, l = 3) => {
+      }, h = () => console.warn("textalign() has not yet been implemented for pixel font"), g = (a, c, x, l = 3) => {
         let m = x.charCodeAt(0), r = t.chars[m - t.first];
         if (r) for (let s = 0; s < t.size; s++) for (let i = 0; i < t.size; i++) (r[s] | 0) & 1 << i && e.rectfill(a + i * n, c + s * n, n, n, l);
       }, w = (a, c, x, l = 3) => {
