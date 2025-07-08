@@ -2134,77 +2134,77 @@
   })();
   (() => {
     function _() {
-      let u = 0, a = true, i = document.createElement("div"), s = [], l = () => (performance || Date).now();
-      i.style.cssText = "position:absolute;top:0;right:0;cursor:pointer;opacity:0.8;z-index:10000", i.addEventListener("click", function(e) {
-        e.preventDefault(), m(++u % i.children.length);
+      let i = 0, t = true, l = document.createElement("div"), s = [], u = () => (performance || Date).now();
+      l.style.cssText = "position:absolute;top:0;right:0;cursor:pointer;opacity:0.8;z-index:10000", l.addEventListener("click", function(e) {
+        e.preventDefault(), m(++i % l.children.length);
       }, false);
-      function o(e, r, x, t) {
-        let g = new T(e, r, x, i, t);
-        return s.push(g), g;
+      function o(e, r, x, a) {
+        let w = new T(e, r, x, l, a);
+        return s.push(w), w;
       }
       function m(e) {
-        for (let r = 0; r < i.children.length; r++) i.children[r].style.display = r === e ? "block" : "none";
-        u = e;
+        for (let r = 0; r < l.children.length; r++) l.children[r].style.display = r === e ? "block" : "none";
+        i = e;
       }
-      function f() {
-        u++, u >= i.children.length && (u = 0), m(u);
+      function p() {
+        i++, i >= l.children.length && (i = 0), m(i);
       }
       function n(e = "all") {
         if (e === "all") for (let r = 0; r < s.length; r++) s[r].reset();
         else s[e] && s[e].reset();
-        h = l(), y = 0;
+        v = u(), h = 0;
       }
-      function w(e = true) {
-        a = !!e, i.style.display = a ? "" : "none";
+      function y(e = true) {
+        t = !!e, l.style.display = t ? "" : "none";
       }
-      let b = l(), h = b, y = 0, d = o("FPS", "#0ff", "#002"), c = o("MS", "#0f0", "#020"), p;
-      return self.performance && self.performance.memory && (p = o("MB", "#f08", "#201")), m(0), { dom: i, addPanel: o, showPanel: m, nextPanel: f, resetPanel: n, display: w, get hidden() {
-        return !a;
+      let b = u(), v = b, h = 0, d = o("FPS", "#0ff", "#002"), f = o("MS", "#0f0", "#020"), c;
+      return self.performance && self.performance.memory && (c = o("MB", "#f08", "#201")), m(0), { dom: l, addPanel: o, showPanel: m, nextPanel: p, resetPanel: n, display: y, get hidden() {
+        return !t;
       }, begin: function() {
-        b = l();
+        b = u();
       }, end: function() {
-        y++;
-        let e = l();
-        if (c.update(e - b, 200), e >= h + 1e3 && (d.update(y * 1e3 / (e - h), 100), h = e, y = 0, p)) {
+        h++;
+        let e = u();
+        if (f.update(e - b, 200), e >= v + 1e3 && (d.update(h * 1e3 / (e - v), 100), v = e, h = 0, c)) {
           let r = performance.memory;
-          p.update(r.usedJSHeapSize / 1048576, r.jsHeapSizeLimit / 1048576);
+          c.update(r.usedJSHeapSize / 1048576, r.jsHeapSizeLimit / 1048576);
         }
         return e;
       }, update: function() {
         b = this.end();
       } };
     }
-    function T(u, a, i, s, l = {}) {
-      let o = Math.round, m = 1 / 0, f = 0, n = o(window.devicePixelRatio || 1), w = l.width || 80, b = 48, h = 3 * n, y = 2 * n, d = 3 * n, c = 15 * n, p = (w - 6) * n, e = 30 * n, r = document.createElement("canvas");
-      r.width = w * n, r.height = b * n, r.style.cssText = `width:${l.width};height:48px`;
+    function T(i, t, l, s, u = {}) {
+      let o = Math.round, m = 1 / 0, p = 0, n = o(window.devicePixelRatio || 1), y = u.width || 80, b = 48, v = 3 * n, h = 2 * n, d = 3 * n, f = 15 * n, c = (y - 6) * n, e = 30 * n, r = document.createElement("canvas");
+      r.width = y * n, r.height = b * n, r.style.cssText = `width:${u.width};height:48px`;
       let x = s.children.length;
       s.appendChild(r);
-      let t = r.getContext("2d");
-      t.font = `bold ${9 * n}px Helvetica,Arial,sans-serif`, t.textBaseline = "top";
-      function g() {
-        t.fillStyle = i, t.fillRect(0, 0, w * n, b * n), t.fillStyle = a, t.fillText(u, h, y), t.fillRect(d, c, p, e), t.fillStyle = i, t.globalAlpha = 0.9, t.fillRect(d, c, p, e);
+      let a = r.getContext("2d");
+      a.font = `bold ${9 * n}px Helvetica,Arial,sans-serif`, a.textBaseline = "top";
+      function w() {
+        a.fillStyle = l, a.fillRect(0, 0, y * n, b * n), a.fillStyle = t, a.fillText(i, v, h), a.fillRect(d, f, c, e), a.fillStyle = l, a.globalAlpha = 0.9, a.fillRect(d, f, c, e);
       }
-      return g(), { id: x, dom: r, reset: g, update: function(v, S) {
-        m = Math.min(m, v), f = Math.max(f, v), t.fillStyle = i, t.globalAlpha = 1, t.fillRect(0, 0, w * n, c), t.fillStyle = a;
-        let E = [o(v), u];
-        l.labelBefore && E.reverse(), t.fillText(E.join(" ") + " (" + o(m) + "-" + o(f) + ")", h, y), t.drawImage(r, d + n, c, p - n, e, d, c, p - n, e), t.fillRect(d + p - n, c, n, e), t.fillStyle = i, t.globalAlpha = 0.9, t.fillRect(d + p - n, c, n, o((1 - v / S) * e));
+      return w(), { id: x, dom: r, reset: w, update: function(g, S) {
+        m = Math.min(m, g), p = Math.max(p, g), a.fillStyle = l, a.globalAlpha = 1, a.fillRect(0, 0, y * n, f), a.fillStyle = t;
+        let E = [o(g), i];
+        u.labelBefore && E.reverse(), a.fillText(E.join(" ") + " (" + o(m) + "-" + o(p) + ")", v, h), a.drawImage(r, d + n, f, c - n, e, d, f, c - n, e), a.fillRect(d + c - n, f, n, e), a.fillStyle = l, a.globalAlpha = 0.9, a.fillRect(d + c - n, f, n, o((1 - g / S) * e));
       } };
     }
-    var P = { hotkeyShow: "F1", hotkeyNext: "F2", css: {}, hidden: false, id: "" };
-    function A(u, a = {}) {
-      a = Object.assign({}, P, a);
-      let i = u.stat(0), s = new _(), l = s.display, o = (m = true) => {
-        a.hidden = !m, l(m), s.resetPanel();
+    var k = { hotkeyShow: "F1", hotkeyNext: "F2", css: {}, hidden: false, id: "" };
+    function A(i, t = {}) {
+      t = Object.assign({}, k, t);
+      let l = i.stat(0), s = new _(), u = s.display, o = (m = true) => {
+        t.hidden = !m, u(m), s.resetPanel();
       };
-      a.id && (s.dom.id = a.id);
-      for (let [m, f] of Object.entries(a.css || {})) s.dom.style[m] = f;
-      return u.canvas().parentElement.appendChild(s.dom), o(!a.hidden), i.keyboardEvents && listen("update", () => {
-        a.hotkeyShow && u.iskeypressed(a.hotkeyShow) && o(a.hidden), a.hotkeyNext && u.iskeypressed(a.hotkeyNext) && s.nextPanel();
-      }), listen("before:update", (m, f = 1) => {
-        a.hidden || f === 1 && s.begin();
-      }), listen("after:draw", () => {
-        a.hidden || s.end();
-      }), listen("quit", () => {
+      t.id && (s.dom.id = t.id);
+      for (let [m, p] of Object.entries(t.css || {})) s.dom.style[m] = p;
+      return i.canvas().parentElement.appendChild(s.dom), o(!t.hidden), l.keyboardEvents && i.listen("update", () => {
+        t.hotkeyShow && i.iskeypressed(t.hotkeyShow) && o(t.hidden), t.hotkeyNext && i.iskeypressed(t.hotkeyNext) && s.nextPanel();
+      }), i.listen("before:update", (m, p = 1) => {
+        t.hidden || p === 1 && s.begin();
+      }), i.listen("after:draw", () => {
+        t.hidden || s.end();
+      }), i.listen("quit", () => {
         s.dom.remove();
       }), s.display = o, { FPS_METER: s };
     }
