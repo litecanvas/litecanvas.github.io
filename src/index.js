@@ -20,7 +20,7 @@ import mobileBar from "./mobileBar";
 
 const config = {
   autosave: true,
-  autosaveInterval: 5000,
+  autosaveInterval: 1000,
   codeChanged: false,
 };
 
@@ -320,6 +320,7 @@ function resetStorage() {
 
 if (isMobile) {
   mobileBar(window.codeEditor);
+  window.codeEditor.dom.parentElement.style.marginBottom = "40px";
 }
 
 if (!smallScreen) {
