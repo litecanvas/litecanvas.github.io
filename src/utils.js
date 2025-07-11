@@ -36,7 +36,7 @@ export function $$(selector, parent = document) {
 }
 
 // window.Babel = Babel;
-Babel.registerPlugin("loopProtection", loopProtection(500));
+Babel.registerPlugin("loopProtection", loopProtection(1000));
 
 /**
  * @param {string} code
