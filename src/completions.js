@@ -191,8 +191,9 @@ export default function customCompletions(context) {
       {
         label: "ctx",
         type: "function",
-        apply: "ctx(value?)",
-        info: "set or get the canvas context",
+        apply: "ctx()",
+        detail: "(value?)",
+        info: "get or set the canvas context",
       },
       {
         label: "clip",
@@ -232,7 +233,7 @@ export default function customCompletions(context) {
         type: "function",
         apply: "rseed(",
         detail: "(value?)",
-        info: "initialize the RNG with a seed value",
+        info: "initialize the RNG with a seed value or get the current state",
       },
       {
         label: "rand",
@@ -385,7 +386,7 @@ export default function customCompletions(context) {
         label: "hypot",
         type: "function",
         apply: "hypot(",
-        detail: "(...values)",
+        detail: "(x, y, ...)",
       },
       {
         label: "exp",
@@ -410,7 +411,7 @@ export default function customCompletions(context) {
         label: "use",
         type: "function",
         apply: "use(",
-        detail: "(callback)",
+        detail: "(pluginFunction)",
         info: "Loads a plugin to extend the litecanvas engine",
       },
       {
