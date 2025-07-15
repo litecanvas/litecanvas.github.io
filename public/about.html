@@ -689,7 +689,7 @@ quit(): void
 // use `stat() to get internal informations about an litecanvas' instance
 // stat(0) the settings passed to that instance
 // stat(1) returns true if the "init" event has already been emitted
-// stat(2) the current ID returned by last requestAnimationFrame
+// stat(2) the current delta time (dt)
 // stat(3) the current canvas element scale (not the context 2D scale)
 // stat(4) the attached event callbacks
 // stat(5) the current color palette
@@ -699,7 +699,7 @@ quit(): void
 // stat(9) the current RNG state
 // stat(10) the current font size
 // stat(11) the current font family
-// any other value returns undefined
+// any other values probably will return undefined
 stat(n: number): any</code></pre>
 
       <h2><a id="advanced">Playground Features</a></h2>
