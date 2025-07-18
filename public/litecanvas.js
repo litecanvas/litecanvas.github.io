@@ -1987,15 +1987,14 @@
     };
     var _ = (a, c, m, l, s, h, f, b) => (o(isFinite(a), "colrect: 1st param must be a number"), o(isFinite(c), "colrect: 2nd param must be a number"), o(isFinite(m), "colrect: 3rd param must be a number"), o(isFinite(l), "colrect: 4th param must be a number"), o(isFinite(s), "colrect: 5th param must be a number"), o(isFinite(h), "colrect: 6th param must be a number"), o(isFinite(f), "colrect: 7th param must be a number"), o(isFinite(b), "colrect: 8th param must be a number"), a < s + f && a + m > s && c < h + b && c + l > h);
     var x = (a, c, m, l, s, h) => (o(isFinite(a), "colcirc: 1st param must be a number"), o(isFinite(c), "colcirc: 2nd param must be a number"), o(isFinite(m), "colcirc: 3rd param must be a number"), o(isFinite(l), "colcirc: 4th param must be a number"), o(isFinite(s), "colcirc: 5th param must be a number"), o(isFinite(h), "colcirc: 6th param must be a number"), (l - a) * (l - a) + (s - c) * (s - c) <= (m + h) * (m + h));
-    var Et = 2 * Math.PI;
-    var he = Math.PI / 2;
-    var $ = 4, fe = 1 << $, V = 8, de = 1 << V;
-    var j = { warnings: true };
+    var wt = 2 * Math.PI;
+    var oe = Math.PI / 2;
+    var Z = { warnings: true };
     function g(a, c = {}) {
-      if (c = Object.assign({}, j, c), a.stat(1)) throw 'Plugin Migrate should be loaded before the "init" event';
+      if (c = Object.assign({}, Z, c), a.stat(1)) throw 'Plugin Migrate should be loaded before the "init" event';
       let l = a.stat(0);
       function s(t, e, r = "") {
-        c.warnings && console.warn(`[migrate] ${t} is removed. ` + (e ? `Use ${e} instead. ` : "") + r);
+        c.warnings && console.warn(`[litecanvas/migrate] ${t} is removed. ` + (e ? `Use ${e} instead. ` : "") + r);
       }
       function h(t) {
         return s("seed()", "rseed()"), t && a.rseed(t), a.stat(9);
@@ -2005,20 +2004,20 @@
         s("textstyle()", "the 5th param of text()"), f = t;
       }
       let w = a.text;
-      function y(t, e, r, i = 3, p = f) {
+      function v(t, e, r, i = 3, p = f) {
         w(t, e, r, i, p);
       }
-      function M(t, e, r, i) {
-        s("print()", "text()"), y(t, e, r, i);
+      function E(t, e, r, i) {
+        s("print()", "text()"), v(t, e, r, i);
       }
-      function E(t, e) {
+      function M(t, e) {
         s("textmetrics()", "ctx().measureText()");
         let r = a.ctx(), i = a.stat(10), p = a.stat(11);
         r.font = `${f || ""} ${~~(e || i)}px ${p}`;
         let d = r.measureText(t);
         return d.height = d.actualBoundingBoxAscent + d.actualBoundingBoxDescent, d;
       }
-      function T(t, e, r, i) {
+      function I(t, e, r, i) {
         s("cliprect()", "clip()");
         let p = a.ctx();
         p.beginPath(), p.rect(t, e, r, i), p.clip();
@@ -2028,26 +2027,26 @@
         let i = a.ctx();
         i.beginPath(), i.arc(t, e, r, 0, a.TWO_PI), i.clip();
       }
-      function C(t) {
+      function T(t) {
         s("getcolor()", "stat(5)");
         let e = stat(5);
         return e[~~t % e.length];
       }
-      function k(t) {
+      function P(t) {
         s("blendmode()", "ctx().globalCompositeOperation");
         let e = a.ctx();
         e.globalCompositeOperation = t;
       }
-      function I(t) {
+      function R(t) {
         s("clear()", "cls()"), a.cls(t);
       }
-      function S(t, e, r, i, p, d, B = true) {
-        return s("transform()", "ctx().setTransform() or ctx().transform()"), a.ctx()[B ? "setTransform" : "transform"](t, e, r, i, p, d);
+      function C(t, e, r, i, p, d, D = true) {
+        return s("transform()", "ctx().setTransform() or ctx().transform()"), a.ctx()[D ? "setTransform" : "transform"](t, e, r, i, p, d);
       }
-      function P() {
+      function S() {
         return s("mousepos()", "MX and MY"), [MX, MY];
       }
-      function O(t) {
+      function k(t) {
         s("setfps()", "framerate()"), a.framerate(t);
       }
       let n = a.def;
@@ -2089,12 +2088,12 @@
       function L(t, e) {
         s("setvar()", "def()"), u(t, e);
       }
-      a.listen("resized", v);
-      function v() {
+      a.listen("resized", y);
+      function y() {
         u("CX", a.W / 2), u("CY", a.H / 2);
       }
-      v(), u("CANVAS", a.canvas());
-      function R(t, e) {
+      y(), u("CANVAS", a.canvas());
+      function N(t, e) {
         if (l.autoscale) throw "resize() don't works with autoscale enabled";
         s("resize()", null, "Avoid changing the canvas dimensions at runtime."), a.CANVAS.width = t, u("W", t), u("CX", t / 2), a.CANVAS.height = e, u("H", e), u("CY", e / 2), a.emit("resized", 1);
       }
@@ -2103,11 +2102,11 @@
         let t = stat(5);
         a.CANVAS.style.backgroundColor = t[~~l.background % t.length];
       }
-      function F(t) {
+      function O(t) {
         return s("path()", "`new Path2D`", "See https://developer.mozilla.org/en-US/docs/Web/API/Path2D"), new Path2D(t);
       }
       let z = a.fill;
-      function N(t, e) {
+      function F(t, e) {
         if (e instanceof Path2D) {
           s("fill(color, path)");
           let r = a.stat(5), i = a.ctx();
@@ -2122,11 +2121,11 @@
           i.strokeStyle = r[~~t % r.length], a.ctx().stroke(e);
         } else Y(t);
       }
-      let X = a.clip;
-      function D(t) {
-        s("clip(path)", "clip(callback)", "E.g: `clip((ctx) => ctx.rect(0, 0, 200, 200))`"), t instanceof Path2D ? a.ctx().clip(t) : X(t);
+      let W = a.clip;
+      function B(t) {
+        s("clip(path)", "clip(callback)", "E.g: `clip((ctx) => ctx.rect(0, 0, 200, 200))`"), t instanceof Path2D ? a.ctx().clip(t) : W(t);
       }
-      return { def: u, seed: h, print: M, clear: I, setfps: O, setvar: L, textstyle: b, textmetrics: E, text: y, cliprect: T, clipcirc: A, blendmode: k, transform: S, getcolor: C, mousepos: P, resize: R, path: F, fill: N, stroke: H, clip: D, colrect: _, colcirc: x };
+      return l.antialias && s('"antialias" option', '"pixelart" option'), { def: u, seed: h, print: E, clear: R, setfps: k, setvar: L, textstyle: b, textmetrics: M, text: v, cliprect: I, clipcirc: A, blendmode: P, transform: C, getcolor: T, mousepos: S, resize: N, path: O, fill: F, stroke: H, clip: B, colrect: _, colcirc: x };
     }
     window.pluginMigrate = g;
   })();
@@ -2249,6 +2248,6 @@
 })();
 /*! @litecanvas/utils by Luiz Bills | MIT Licensed */
 /*! Asset Loader plugin for litecanvas by Luiz Bills | MIT Licensed */
-/*! pluginMigrate for litecanvas by Luiz Bills | MIT Licensed */
+/*! Migrate for litecanvas by Luiz Bills | MIT Licensed */
 /*! pluginFrameRateMeter for litecanvas by Luiz Bills | MIT Licensed */
 /*! Plugin Pixel Font for litecanvas by Luiz Bills | MIT Licensed */
