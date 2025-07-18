@@ -248,43 +248,45 @@
 })
 
 function init(instance) {
+  // "instance" is the engine instance
   // run once before the game starts
 }
 
 function update(dt) {
   // called at 60 fps by default
-  // note: `dt` is a fixed deltatime (fps/1000)
+  // note: "dt" is a fixed deltatime (fps/1000)
 }
 
-function draw() {
+function draw(canvasContext2d) {
   // used to draw your graphics
 }
 
-function resized() {
+function resized(newScale) {
   // called when the canvas is resized
+  // use W and H to get the new width and height of the canvas
 }
 
-function tap(x, y, tapId) {
+function tap(x, y, touchId) {
   // called when a tap (click/touch) starts
   // equivalent to "mousedown" and "touchstart" browser events
 
   // Notes:
-  // - `tapId` is used to handle multiple touches
-  // - each touch has a unique `tapId` >= 1
-  // - mouse's `tapId` always equal to 0 (zero)
+  // - "touchId" is used to handle multiple touches
+  // - each touch has a unique touchId >= 1
+  // - mouse's touchId always equal to 0 (zero)
 }
 
-function untap(x, y, tapId) {
+function untap(x, y, touchId) {
   // called when a tap end
   // equivalent to "mouseup" and "touchend" browser events
 }
 
-function tapping(x, y, tapId) {
+function tapping(x, y, touchId) {
   // called when a tap moves
   // equivalent to "mousemove" and "touchmove" browser events
 }
 
-function tapped(x, y, tapId) {
+function tapped(x, y, touchId) {
   // called when a tap stars and ends in a short time
   // equivalent to "click" browser events (only for left mouse clicks)
 }
@@ -305,37 +307,36 @@ function tapped(x, y, tapId) {
       <pre><code class="language-typescript">// Initialize the game
 litecanvas(settings = {});
 
-// the game loop callbacks
-// if loop = undefined, will use global functions:
-// window.init(), window.update(dt), window.draw(), etc
+// the core game loop callbacks
+// if the loop option is null, the engine will uses
+// global functions with the same name as the events:
+// window.init(), window.update(), window.draw(), etc
 settings.loop = {
-  init: Function?,
-  update: Function?,
-  draw: Function?,
-  resized: Function?,
-  tap: Function?,
-  untap: Function?
-  tapping: Function?,
-  tapped: Function?
+  init: Function?, // (instance) => void
+  update: Function?, // (dt) => void
+  draw: Function?, // (ctx) => void
+  resized: Function?, // (scale) => void
+  tap: Function?, // (x, y, touchId) => void
+  untap: Function? // (x, y, touchId) => void
+  tapping: Function?, // (x, y, touchId) => void
+  tapped: Function? // (x, y, touchId) => void
 }
 
-// the canvas (by default a new canvas is created)
+// the canvas (by default a new canvas is created).
 settings.canvas = null
 
-// the game screen size
-// by default, the game fills the entire webpage
+// set the canvas (game screen) size
+// if width is null, the canvas fills the entire webpage.
 settings.width = null
 settings.height = settings.width || null
 
-// Determines whether the canvas should
-// scale to fill the canvas
+// Determines whether the canvas should scale to fill the screen,
+// but preserving the aspect ratio. Rather than a boolean you
+// can pass a number to determine a maximum scale.
 settings.autoscale = true
 
-// enable smooth drawing
-settings.antialias = false
-
-// disables antialias
-// and force the autoscale to use integers
+// If `true`, the pixel art images won't look blurry.
+// Also, disables canvas built-in antialias.
 settings.pixelart = false
 
 // exposes all methods and properties (see below)
@@ -350,7 +351,7 @@ settings.tapEvents = true
 // useful to create your own keyboard handler
 settings.keyboardEvents = true</code></pre>
 
-      <h2><a id="globals">Global Variables</a></h2>
+      <h2><a id="globals">Variables</a></h2>
 
       <pre><code class="language-typescript">// the amount of time since the game started
 T: number
@@ -454,7 +455,7 @@ image(x, y, image: Image|HTMLCanvasElement): void
 paint(width, height, data: string[]|function, options?): ImageBitmap
 
 /**
- * ADVANCED DRAWING-RELATED FUNCTIONS
+ * ADVANCED DRAWING FUNCTIONS
  */
 
 // get the current canvas context 2D or set a newly

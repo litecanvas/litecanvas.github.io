@@ -27,7 +27,7 @@
     var assert = (condition, message = "Assertion failed") => {
       if (!condition) throw new Error(message);
     };
-    var version = "0.92.3";
+    var version = "0.93.0";
     function litecanvas(settings = {}) {
       const root = window, math = Math, TWO_PI = math.PI * 2, raf = requestAnimationFrame, _browserEventListeners = [], on = (elem, evt, callback) => {
         elem.addEventListener(evt, callback, false);
@@ -37,7 +37,6 @@
         height: null,
         autoscale: true,
         pixelart: false,
-        antialias: false,
         canvas: null,
         global: true,
         loop: null,
@@ -804,7 +803,7 @@
           );
           DEV: assert(isNumber(pitchSlide), "[litecanvas] sfx() 2nd param must be a number");
           DEV: assert(isNumber(volumeFactor), "[litecanvas] sfx() 3rd param must be a number");
-          if (root.zzfxV <= 0 || navigator.userActivation && !navigator.userActivation.hasBeenActive) {
+          if (!root.zzfxV || navigator.userActivation && !navigator.userActivation.hasBeenActive) {
             return false;
           }
           zzfxParams = zzfxParams || _defaultSound;
@@ -823,7 +822,10 @@
          * @param {number} value
          */
         volume(value) {
-          DEV: assert(isNumber(value), "[litecanvas] volume() 1st param must be a number");
+          DEV: assert(
+            isNumber(value) && value >= 0,
+            "[litecanvas] volume() 1st param must be a positive number or zero"
+          );
           root.zzfxV = value;
         },
         /** PLUGINS API */
@@ -1311,7 +1313,7 @@
           '[litecanvas] litecanvas() option "canvas" should be a canvas element or string (CSS selector)'
         );
         _ctx = _canvas.getContext("2d");
-        on(_canvas, "click", () => root.focus());
+        on(_canvas, "click", () => focus());
         _canvas.style = "";
         resizeCanvas();
         if (!_canvas.parentNode) {
@@ -1332,7 +1334,7 @@
           null == settings.height || settings.width > 0 && settings.height > 0,
           '[litecanvas] litecanvas() option "width" is required when the option "height" is defined'
         );
-        const width = settings.width || root.innerWidth, height = settings.height || settings.width || root.innerHeight;
+        const width = settings.width > 0 ? settings.width : innerWidth, height = settings.width > 0 ? settings.height || settings.width : innerHeight;
         instance.def("W", width);
         instance.def("H", height);
         _canvas.width = width;
@@ -1343,13 +1345,12 @@
             _canvas.style.display = "block";
             _canvas.style.margin = "auto";
           }
-          _scale = math.min(root.innerWidth / width, root.innerHeight / height);
+          _scale = math.min(innerWidth / width, innerHeight / height);
           _scale = maxScale > 1 && _scale > maxScale ? maxScale : _scale;
-          _scale = (settings.pixelart ? ~~_scale : _scale) || 1;
           _canvas.style.width = width * _scale + "px";
           _canvas.style.height = height * _scale + "px";
         }
-        if (!settings.antialias || settings.pixelart) {
+        if (settings.pixelart) {
           _ctx.imageSmoothingEnabled = false;
           _canvas.style.imageRendering = "pixelated";
         }
@@ -2131,12 +2132,12 @@
   })();
   (() => {
     function _() {
-      let i = 0, t = true, l = document.createElement("div"), s = [], u = () => (performance || Date).now();
+      let i = 0, a = true, l = document.createElement("div"), s = [], c = () => (performance || Date).now();
       l.style.cssText = "position:absolute;top:0;right:0;cursor:pointer;opacity:0.8;z-index:10000", l.addEventListener("click", function(e) {
         e.preventDefault(), m(++i % l.children.length);
       }, false);
-      function o(e, r, x, a) {
-        let w = new T(e, r, x, l, a);
+      function o(e, r, x, t) {
+        let w = new T(e, r, x, l, t);
         return s.push(w), w;
       }
       function m(e) {
@@ -2149,58 +2150,58 @@
       function n(e = "all") {
         if (e === "all") for (let r = 0; r < s.length; r++) s[r].reset();
         else s[e] && s[e].reset();
-        v = u(), h = 0;
+        h = c(), y = 0;
       }
-      function y(e = true) {
-        t = !!e, l.style.display = t ? "" : "none";
+      function b(e = true) {
+        a = !!e, l.style.display = a ? "" : "none";
       }
-      let b = u(), v = b, h = 0, d = o("FPS", "#0ff", "#002"), f = o("MS", "#0f0", "#020"), c;
-      return self.performance && self.performance.memory && (c = o("MB", "#f08", "#201")), m(0), { dom: l, addPanel: o, showPanel: m, nextPanel: p, resetPanel: n, display: y, get hidden() {
-        return !t;
+      let v = c(), h = v, y = 0, d = o("FPS", "#0ff", "#002"), f = o("MS", "#0f0", "#020"), u;
+      return self.performance && self.performance.memory && (u = o("MB", "#f08", "#201")), m(0), { dom: l, addPanel: o, showPanel: m, nextPanel: p, resetPanel: n, display: b, get hidden() {
+        return !a;
       }, begin: function() {
-        b = u();
+        v = c();
       }, end: function() {
-        h++;
-        let e = u();
-        if (f.update(e - b, 200), e >= v + 1e3 && (d.update(h * 1e3 / (e - v), 100), v = e, h = 0, c)) {
+        y++;
+        let e = c();
+        if (f.update(e - v, 200), e >= h + 1e3 && (d.update(y * 1e3 / (e - h), 100), h = e, y = 0, u)) {
           let r = performance.memory;
-          c.update(r.usedJSHeapSize / 1048576, r.jsHeapSizeLimit / 1048576);
+          u.update(r.usedJSHeapSize / 1048576, r.jsHeapSizeLimit / 1048576);
         }
         return e;
       }, update: function() {
-        b = this.end();
+        v = this.end();
       } };
     }
-    function T(i, t, l, s, u = {}) {
-      let o = Math.round, m = 1 / 0, p = 0, n = o(window.devicePixelRatio || 1), y = u.width || 80, b = 48, v = 3 * n, h = 2 * n, d = 3 * n, f = 15 * n, c = (y - 6) * n, e = 30 * n, r = document.createElement("canvas");
-      r.width = y * n, r.height = b * n, r.style.cssText = `width:${u.width};height:48px`;
+    function T(i, a, l, s, c = {}) {
+      let o = Math.round, m = 1 / 0, p = 0, n = o(window.devicePixelRatio || 1), b = c.width || 80, v = 48, h = 3 * n, y = 2 * n, d = 3 * n, f = 15 * n, u = (b - 6) * n, e = 30 * n, r = document.createElement("canvas");
+      r.width = b * n, r.height = v * n, r.style.cssText = `width:${b}px;height:48px;`;
       let x = s.children.length;
       s.appendChild(r);
-      let a = r.getContext("2d");
-      a.font = `bold ${9 * n}px Helvetica,Arial,sans-serif`, a.textBaseline = "top";
+      let t = r.getContext("2d");
+      t.font = `bold ${9 * n}px Helvetica,Arial,sans-serif`, t.textBaseline = "top";
       function w() {
-        a.fillStyle = l, a.fillRect(0, 0, y * n, b * n), a.fillStyle = t, a.fillText(i, v, h), a.fillRect(d, f, c, e), a.fillStyle = l, a.globalAlpha = 0.9, a.fillRect(d, f, c, e);
+        t.fillStyle = l, t.fillRect(0, 0, b * n, v * n), t.fillStyle = a, t.fillText(i, h, y), t.fillRect(d, f, u, e), t.fillStyle = l, t.globalAlpha = 0.9, t.fillRect(d, f, u, e);
       }
       return w(), { id: x, dom: r, reset: w, update: function(g, S) {
-        m = Math.min(m, g), p = Math.max(p, g), a.fillStyle = l, a.globalAlpha = 1, a.fillRect(0, 0, y * n, f), a.fillStyle = t;
+        m = Math.min(m, g), p = Math.max(p, g), t.fillStyle = l, t.globalAlpha = 1, t.fillRect(0, 0, b * n, f), t.fillStyle = a;
         let E = [o(g), i];
-        u.labelBefore && E.reverse(), a.fillText(E.join(" ") + " (" + o(m) + "-" + o(p) + ")", v, h), a.drawImage(r, d + n, f, c - n, e, d, f, c - n, e), a.fillRect(d + c - n, f, n, e), a.fillStyle = l, a.globalAlpha = 0.9, a.fillRect(d + c - n, f, n, o((1 - g / S) * e));
+        c.labelBefore && E.reverse(), t.fillText(E.join(" ") + " (" + o(m) + "-" + o(p) + ")", h, y), t.drawImage(r, d + n, f, u - n, e, d, f, u - n, e), t.fillRect(d + u - n, f, n, e), t.fillStyle = l, t.globalAlpha = 0.9, t.fillRect(d + u - n, f, n, o((1 - g / S) * e));
       } };
     }
     var k = { hotkeyShow: "F1", hotkeyNext: "F2", css: {}, hidden: false, id: "" };
-    function A(i, t = {}) {
-      t = Object.assign({}, k, t);
-      let l = i.stat(0), s = new _(), u = s.display, o = (m = true) => {
-        t.hidden = !m, u(m), s.resetPanel();
+    function A(i, a = {}) {
+      a = Object.assign({}, k, a);
+      let l = i.stat(0), s = new _(), c = s.display, o = (m = true) => {
+        a.hidden = !m, c(m), s.resetPanel();
       };
-      t.id && (s.dom.id = t.id);
-      for (let [m, p] of Object.entries(t.css || {})) s.dom.style[m] = p;
-      return i.canvas().parentElement.appendChild(s.dom), o(!t.hidden), l.keyboardEvents && i.listen("update", () => {
-        t.hotkeyShow && i.iskeypressed(t.hotkeyShow) && o(t.hidden), t.hotkeyNext && i.iskeypressed(t.hotkeyNext) && s.nextPanel();
+      a.id && (s.dom.id = a.id);
+      for (let [m, p] of Object.entries(a.css || {})) s.dom.style[m] = p;
+      return i.canvas().parentElement.appendChild(s.dom), o(!a.hidden), l.keyboardEvents && i.listen("update", () => {
+        a.hotkeyShow && i.iskeypressed(a.hotkeyShow) && o(a.hidden), a.hotkeyNext && i.iskeypressed(a.hotkeyNext) && s.nextPanel();
       }), i.listen("before:update", (m, p = 1) => {
-        t.hidden || p === 1 && s.begin();
+        a.hidden || p === 1 && s.begin();
       }), i.listen("after:draw", () => {
-        t.hidden || s.end();
+        a.hidden || s.end();
       }), i.listen("quit", () => {
         s.dom.remove();
       }), s.display = o, { FPS_METER: s };
@@ -2208,45 +2209,46 @@
     window.pluginFrameRateMeter = A;
   })();
   (() => {
-    var S = [[24, 60, 60, 24, 24, , 24], [54, 54, , , , , ,], [54, 54, 127, 54, 127, 54, 54], [12, 62, 3, 30, 48, 31, 12], [, 99, 51, 24, 12, 102, 99], [28, 54, 28, 110, 59, 51, 110], [6, 6, 3, , , , ,], [24, 12, 6, 6, 6, 12, 24], [6, 12, 24, 24, 24, 12, 6], [, 102, 60, 255, 60, 102, ,], [, 12, 12, 63, 12, 12, ,], [, , , , , 12, 12, 6], [, , , 63, , , ,], [, , , , , 12, 12], [96, 48, 24, 12, 6, 3, 1], [62, 99, 115, 123, 111, 103, 62], [12, 14, 12, 12, 12, 12, 63], [30, 51, 48, 28, 6, 51, 63], [30, 51, 48, 28, 48, 51, 30], [56, 60, 54, 51, 127, 48, 120], [63, 3, 31, 48, 48, 51, 30], [28, 6, 3, 31, 51, 51, 30], [63, 51, 48, 24, 12, 12, 12], [30, 51, 51, 30, 51, 51, 30], [30, 51, 51, 62, 48, 24, 14], [, 12, 12, , , 12, 12], [, 12, 12, , , 12, 12, 6], [24, 12, 6, 3, 6, 12, 24], [, , 63, , , 63, ,], [6, 12, 24, 48, 24, 12, 6], [30, 51, 48, 24, 12, , 12], [62, 99, 123, 123, 123, 3, 30], [12, 30, 51, 51, 63, 51, 51], [63, 102, 102, 62, 102, 102, 63], [60, 102, 3, 3, 3, 102, 60], [31, 54, 102, 102, 102, 54, 31], [127, 70, 22, 30, 22, 70, 127], [127, 70, 22, 30, 22, 6, 15], [60, 102, 3, 3, 115, 102, 124], [51, 51, 51, 63, 51, 51, 51], [30, 12, 12, 12, 12, 12, 30], [120, 48, 48, 48, 51, 51, 30], [103, 102, 54, 30, 54, 102, 103], [15, 6, 6, 6, 70, 102, 127], [99, 119, 127, 127, 107, 99, 99], [99, 103, 111, 123, 115, 99, 99], [28, 54, 99, 99, 99, 54, 28], [63, 102, 102, 62, 6, 6, 15], [30, 51, 51, 51, 59, 30, 56], [63, 102, 102, 62, 54, 102, 103], [30, 51, 7, 14, 56, 51, 30], [63, 45, 12, 12, 12, 12, 30], [51, 51, 51, 51, 51, 51, 63], [51, 51, 51, 51, 51, 30, 12], [99, 99, 99, 107, 127, 119, 99], [99, 99, 54, 28, 28, 54, 99], [51, 51, 51, 30, 12, 12, 30], [127, 99, 49, 24, 76, 102, 127], [30, 6, 6, 6, 6, 6, 30], [3, 6, 12, 24, 48, 96, 64], [30, 24, 24, 24, 24, 24, 30], [8, 28, 54, 99, , , ,], [, , , , , , , 255], [12, 12, 24, , , , ,], [, , 30, 48, 62, 51, 110], [7, 6, 6, 62, 102, 102, 59], [, , 30, 51, 3, 51, 30], [56, 48, 48, 62, 51, 51, 110], [, , 30, 51, 63, 3, 30], [28, 54, 6, 15, 6, 6, 15], [, , 110, 51, 51, 62, 48, 31], [7, 6, 54, 110, 102, 102, 103], [12, , 14, 12, 12, 12, 30], [48, , 48, 48, 48, 51, 51, 30], [7, 6, 102, 54, 30, 54, 103], [14, 12, 12, 12, 12, 12, 30], [, , 51, 127, 127, 107, 99], [, , 31, 51, 51, 51, 51], [, , 30, 51, 51, 51, 30], [, , 59, 102, 102, 62, 6, 15], [, , 110, 51, 51, 62, 48, 120], [, , 59, 110, 102, 6, 15], [, , 62, 3, 30, 48, 31], [8, 12, 62, 12, 12, 44, 24], [, , 51, 51, 51, 51, 110], [, , 51, 51, 51, 30, 12], [, , 99, 107, 127, 127, 54], [, , 99, 54, 28, 54, 99], [, , 51, 51, 51, 62, 48, 31], [, , 63, 25, 12, 38, 63], [56, 12, 12, 7, 12, 12, 56], [24, 24, 24, , 24, 24, 24], [7, 12, 12, 56, 12, 12, 7], [110, 59, , , , , ,]], g = { id: "basic", chars: S, first: 33, w: 8 };
-    var w = plugin = (e, { cache: o = true } = {}) => {
-      let y = e.text, _ = e.textsize, A = e.textalign, E = e.textfont, z = g, c = o ? /* @__PURE__ */ new Map() : null, p = 5 * 60, s = 1, n = null, b = (a) => {
-        s = Math.round(a / n.w);
-      }, C = () => console.warn("[litecanvas/plugin-pixel-font] textalign() has not yet been implemented for pixel fonts"), d = (a, l, x, i = 3) => {
-        for (let t = 0; t < n.w; t++) for (let r = 0; r < n.w; r++) (x[t] | 0) & 1 << r && e.rectfill(a + r * s, l + t * s, s, s, i);
-      }, T = (a, l, x, i = 3) => {
+    var S = [[24, 60, 60, 24, 24, , 24], [54, 54, , , , , ,], [54, 54, 127, 54, 127, 54, 54], [12, 62, 3, 30, 48, 31, 12], [, 99, 51, 24, 12, 102, 99], [28, 54, 28, 110, 59, 51, 110], [6, 6, 3, , , , ,], [24, 12, 6, 6, 6, 12, 24], [6, 12, 24, 24, 24, 12, 6], [, 102, 60, 255, 60, 102, ,], [, 12, 12, 63, 12, 12, ,], [, , , , , 12, 12, 6], [, , , 63, , , ,], [, , , , , 12, 12], [96, 48, 24, 12, 6, 3, 1], [62, 99, 115, 123, 111, 103, 62], [12, 14, 12, 12, 12, 12, 63], [30, 51, 48, 28, 6, 51, 63], [30, 51, 48, 28, 48, 51, 30], [56, 60, 54, 51, 127, 48, 120], [63, 3, 31, 48, 48, 51, 30], [28, 6, 3, 31, 51, 51, 30], [63, 51, 48, 24, 12, 12, 12], [30, 51, 51, 30, 51, 51, 30], [30, 51, 51, 62, 48, 24, 14], [, 12, 12, , , 12, 12], [, 12, 12, , , 12, 12, 6], [24, 12, 6, 3, 6, 12, 24], [, , 63, , , 63, ,], [6, 12, 24, 48, 24, 12, 6], [30, 51, 48, 24, 12, , 12], [62, 99, 123, 123, 123, 3, 30], [12, 30, 51, 51, 63, 51, 51], [63, 102, 102, 62, 102, 102, 63], [60, 102, 3, 3, 3, 102, 60], [31, 54, 102, 102, 102, 54, 31], [127, 70, 22, 30, 22, 70, 127], [127, 70, 22, 30, 22, 6, 15], [60, 102, 3, 3, 115, 102, 124], [51, 51, 51, 63, 51, 51, 51], [30, 12, 12, 12, 12, 12, 30], [120, 48, 48, 48, 51, 51, 30], [103, 102, 54, 30, 54, 102, 103], [15, 6, 6, 6, 70, 102, 127], [99, 119, 127, 127, 107, 99, 99], [99, 103, 111, 123, 115, 99, 99], [28, 54, 99, 99, 99, 54, 28], [63, 102, 102, 62, 6, 6, 15], [30, 51, 51, 51, 59, 30, 56], [63, 102, 102, 62, 54, 102, 103], [30, 51, 7, 14, 56, 51, 30], [63, 45, 12, 12, 12, 12, 30], [51, 51, 51, 51, 51, 51, 63], [51, 51, 51, 51, 51, 30, 12], [99, 99, 99, 107, 127, 119, 99], [99, 99, 54, 28, 28, 54, 99], [51, 51, 51, 30, 12, 12, 30], [127, 99, 49, 24, 76, 102, 127], [30, 6, 6, 6, 6, 6, 30], [3, 6, 12, 24, 48, 96, 64], [30, 24, 24, 24, 24, 24, 30], [8, 28, 54, 99, , , ,], [, , , , , , , 255], [12, 12, 24, , , , ,], [, , 30, 48, 62, 51, 110], [7, 6, 6, 62, 102, 102, 59], [, , 30, 51, 3, 51, 30], [56, 48, 48, 62, 51, 51, 110], [, , 30, 51, 63, 3, 30], [28, 54, 6, 15, 6, 6, 15], [, , 110, 51, 51, 62, 48, 31], [7, 6, 54, 110, 102, 102, 103], [12, , 14, 12, 12, 12, 30], [48, , 48, 48, 48, 51, 51, 30], [7, 6, 102, 54, 30, 54, 103], [14, 12, 12, 12, 12, 12, 30], [, , 51, 127, 127, 107, 99], [, , 31, 51, 51, 51, 51], [, , 30, 51, 51, 51, 30], [, , 59, 102, 102, 62, 6, 15], [, , 110, 51, 51, 62, 48, 120], [, , 59, 110, 102, 6, 15], [, , 62, 3, 30, 48, 31], [8, 12, 62, 12, 12, 44, 24], [, , 51, 51, 51, 51, 110], [, , 51, 51, 51, 30, 12], [, , 99, 107, 127, 127, 54], [, , 99, 54, 28, 54, 99], [, , 51, 51, 51, 62, 48, 31], [, , 63, 25, 12, 38, 63], [56, 12, 12, 7, 12, 12, 56], [24, 24, 24, , 24, 24, 24], [7, 12, 12, 56, 12, 12, 7], [110, 59, , , , , ,]], w = { id: "basic", chars: S, first: 33, w: 8 };
+    var g = plugin = (e, { cache: o = true } = {}) => {
+      let y = e.text, _ = e.textsize, A = e.textalign, E = e.textfont, z = w, c = o ? /* @__PURE__ */ new Map() : null, p = 5 * 60, s = 1, n = null, b = (t) => {
+        s = Math.round(t / n.w);
+      }, C = () => console.warn("[litecanvas/plugin-pixel-font] textalign() has not yet been implemented for pixel fonts"), d = (t, l, x, i = 3) => {
+        for (let a = 0; a < n.w; a++) for (let r = 0; r < n.w; r++) (x[a] | 0) & 1 << r && e.rectfill(t + r * s, l + a * s, s, s, i);
+      }, T = (t, l, x, i = 3) => {
         if (x += "", !s || !x.length) return;
-        let t = s * n.w;
+        let a = s * n.w;
         for (let r = 0; r < x.length; r++) {
-          let u = x[r], v = u.charCodeAt(), m = n.chars[v - n.first];
-          if (m) if (o) {
-            let f = `${n.id}:${u}:${~~i}:${t}`;
-            c.has(f) || c.set(f, e.paint(t, t, () => {
-              d(0, 0, m, ~~i);
+          let m = x[r], v = m.charCodeAt(), u = n.chars[v - n.first];
+          if (u) if (o) {
+            let f = `${n.id}:${m}:${~~i}:${a}`;
+            c.has(f) || c.set(f, e.paint(a, a, () => {
+              d(0, 0, u, ~~i);
             }));
             let h = c.get(f);
-            h._ = e.T + p, e.image(a, l, h);
-          } else d(a, l, m, i);
-          a += t;
+            h._ = e.T + p, e.image(t, l, h);
+          } else d(t, l, u, i);
+          t += a;
         }
       };
       if (o) {
-        let a = setInterval(() => {
+        let t = setInterval(() => {
           let l = performance.now();
           for (let [x, i] of c) e.T > i._ && c.delete(x);
         }, 1e3 * (p / 5));
         e.listen("quit", () => {
-          clearInterval(a), c.clear();
+          clearInterval(t), c.clear();
         });
       }
-      return { PIXEL_FONT_BASIC: z, textfont: (a) => {
-        typeof a == "object" ? (e.def("text", T), e.def("textsize", b), e.def("textalign", C), n = a, b(n.w)) : (e.def("text", y), e.def("textsize", _), e.def("textalign", A), E(a));
+      return { PIXEL_FONT_BASIC: z, textfont: (t) => {
+        typeof t == "object" ? (e.def("text", T), e.def("textsize", b), e.def("textalign", C), n = t, b(n.w)) : (e.def("text", y), e.def("textsize", _), e.def("textalign", A), E(t));
       } };
     };
-    window.pluginPixelFont = w;
+    window.pluginPixelFont = g;
   })();
 })();
 /*! @litecanvas/utils by Luiz Bills | MIT Licensed */
 /*! Asset Loader plugin for litecanvas by Luiz Bills | MIT Licensed */
-/*! pluginMigrate for litecanvas v0.0.1 by Luiz Bills | MIT Licensed */
+/*! pluginMigrate for litecanvas by Luiz Bills | MIT Licensed */
 /*! pluginFrameRateMeter for litecanvas by Luiz Bills | MIT Licensed */
+/*! Plugin Pixel Font for litecanvas by Luiz Bills | MIT Licensed */
