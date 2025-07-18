@@ -63,6 +63,7 @@ const desktopExtensions = [];
 const code = $(".code");
 const game = $(".game");
 const playButton = $("#play");
+const screenshotButton = $("#screenshot");
 const stopButton = $("#stop");
 const shareButton = $("#share");
 const copyButton = $("#copy");
@@ -76,6 +77,7 @@ playButton.addEventListener("click", () => {
   show(game);
   hide(playButton);
   show(stopButton);
+  show(screenshotButton);
   runCode();
   if (smallScreen) {
     getIframe().focus();
@@ -90,6 +92,7 @@ function stopGame(evt) {
   hide(game);
   show(playButton);
   hide(stopButton);
+  hide(screenshotButton);
   getIframe().remove();
 }
 
@@ -145,6 +148,21 @@ hideEditor.addEventListener("click", (evt) => {
     hideEditor.classList.add("active");
   }
   getIframe().focus();
+});
+
+screenshotButton.addEventListener("click", () => {
+  var link = document.createElement("a");
+  link.download = "litecanvas-colors.png";
+  const iframe = getIframe();
+
+  if (!iframe) return;
+
+  const iframeDocument = iframe.contentDocument;
+  if (iframeDocument) {
+    const canvas = iframeDocument.querySelector("canvas");
+    link.href = canvas.toDataURL();
+    link.click();
+  }
 });
 
 function runCode() {
@@ -329,6 +347,7 @@ if (!smallScreen) {
 } else {
   show(playButton);
   hide(game);
+  hide(screenshotButton);
 }
 
 window.isUpdateAvailable = new Promise(function (resolve) {
