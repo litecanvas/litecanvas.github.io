@@ -27,7 +27,7 @@
     var assert = (condition, message = "Assertion failed") => {
       if (!condition) throw new Error(message);
     };
-    var version = "0.93.0";
+    var version = "0.93.1";
     function litecanvas(settings = {}) {
       const root = window, math = Math, TWO_PI = math.PI * 2, raf = requestAnimationFrame, _browserEventListeners = [], on = (elem, evt, callback) => {
         elem.addEventListener(evt, callback, false);
@@ -45,7 +45,7 @@
         animate: true
       };
       settings = Object.assign(defaults, settings);
-      let _initialized = false, _plugins = [], _canvas, _scale = 1, _ctx, _outline_fix = 0.5, _timeScale = 1, _lastFrameTime, _deltaTime = 1 / 60, _accumulated = 0, _rafid, _fontFamily = "sans-serif", _fontSize = 20, _rngSeed = Date.now(), _colors = defaultPalette, _defaultSound = [0.5, 0, 1750, , , 0.3, 1, , , , 600, 0.1], _coreEvents = "init,update,draw,tap,untap,tapping,tapped,resized", _mathFunctions = "PI,sin,cos,atan2,hypot,tan,abs,ceil,floor,trunc,min,max,pow,sqrt,sign,exp", _eventListeners = {};
+      let _initialized = false, _plugins = [], _canvas, _scale = 1, _ctx, _outline_fix = 0.5, _timeScale = 1, _lastFrameTime, _deltaTime = 1 / 60, _accumulated, _rafid, _fontFamily = "sans-serif", _fontSize = 20, _rngSeed = Date.now(), _colors = defaultPalette, _defaultSound = [0.5, 0, 1750, , , 0.3, 1, , , , 600, 0.1], _coreEvents = "init,update,draw,tap,untap,tapping,tapped,resized", _mathFunctions = "PI,sin,cos,atan2,hypot,tan,abs,ceil,floor,trunc,min,max,pow,sqrt,sign,exp", _eventListeners = {};
       const instance = {
         /** @type {number} */
         W: 0,
@@ -1020,7 +1020,9 @@
          * Resumes (if paused) the engine loop.
          */
         resume() {
-          if (!_rafid && _initialized) {
+          if (_initialized && !_rafid) {
+            _accumulated = 0;
+            _lastFrameTime = performance.now();
             _rafid = raf(drawFrame);
           }
         },
@@ -1269,14 +1271,20 @@
             }
           );
         }
+        on(root, "focus", () => {
+          DEV: console.warn('[litecanvas] engine loop restarted on "focus" event');
+          instance.pause();
+          instance.resume();
+        });
         _initialized = true;
         instance.emit("init", instance);
-        _lastFrameTime = performance.now();
         instance.resume();
       }
       function drawFrame(now) {
         if (!settings.animate) {
           return instance.emit("draw");
+        } else if (_rafid) {
+          _rafid = raf(drawFrame);
         }
         let updated = 0;
         let frameTime = (now - _lastFrameTime) / 1e3;
@@ -1292,9 +1300,6 @@
         }
         if (updated) {
           instance.emit("draw");
-        }
-        if (_rafid) {
-          _rafid = raf(drawFrame);
         }
       }
       function setupCanvas() {
