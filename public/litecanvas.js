@@ -1995,7 +1995,7 @@
     var wt = 2 * Math.PI;
     var oe = Math.PI / 2;
     var Z = { warnings: true };
-    function g(a, c = {}) {
+    function v(a, c = {}) {
       if (c = Object.assign({}, Z, c), a.stat(1)) throw 'Plugin Migrate should be loaded before the "init" event';
       let l = a.stat(0);
       function s(t, e, r = "") {
@@ -2009,11 +2009,11 @@
         s("textstyle()", "the 5th param of text()"), f = t;
       }
       let w = a.text;
-      function v(t, e, r, i = 3, p = f) {
+      function g(t, e, r, i = 3, p = f) {
         w(t, e, r, i, p);
       }
       function E(t, e, r, i) {
-        s("print()", "text()"), v(t, e, r, i);
+        s("print()", "text()"), g(t, e, r, i);
       }
       function M(t, e) {
         s("textmetrics()", "ctx().measureText()");
@@ -2103,9 +2103,11 @@
         s("resize()", null, "Avoid changing the canvas dimensions at runtime."), a.CANVAS.width = t, u("W", t), u("CX", t / 2), a.CANVAS.height = e, u("H", e), u("CY", e / 2), a.emit("resized", 1);
       }
       for (let t of ["W", "H", "T", "CX", "CY", "MX", "MY"]) a[t] != null && u(t, a[t]);
-      if (s("FPS", "", "but you can use our plugin to measure the fps: https://github.com/litecanvas/plugin-frame-rate-meter"), n("FPS", ""), l.fps && a.framerate(l.fps), l.background >= 0) {
-        let t = stat(5);
-        a.CANVAS.style.backgroundColor = t[~~l.background % t.length];
+      if (s("FPS", "", "but you can use our plugin to measure the fps: https://github.com/litecanvas/plugin-frame-rate-meter"), n("FPS", ""), l.fps && a.framerate(l.fps), l.background != null) {
+        let t = a.listen("before:draw", () => {
+          let e = stat(5);
+          a.canvas().style.background = e[~~l.background % e.length], t();
+        });
       }
       function O(t) {
         return s("path()", "`new Path2D`", "See https://developer.mozilla.org/en-US/docs/Web/API/Path2D"), new Path2D(t);
@@ -2130,9 +2132,9 @@
       function B(t) {
         s("clip(path)", "clip(callback)", "E.g: `clip((ctx) => ctx.rect(0, 0, 200, 200))`"), t instanceof Path2D ? a.ctx().clip(t) : W(t);
       }
-      return l.antialias && s('"antialias" option', '"pixelart" option'), { def: u, seed: h, print: E, clear: R, setfps: k, setvar: L, textstyle: b, textmetrics: M, text: v, cliprect: I, clipcirc: A, blendmode: P, transform: C, getcolor: T, mousepos: S, resize: N, path: O, fill: F, stroke: H, clip: B, colrect: _, colcirc: x };
+      return l.antialias && s('"antialias" option', '"pixelart" option'), { def: u, seed: h, print: E, clear: R, setfps: k, setvar: L, textstyle: b, textmetrics: M, text: g, cliprect: I, clipcirc: A, blendmode: P, transform: C, getcolor: T, mousepos: S, resize: N, path: O, fill: F, stroke: H, clip: B, colrect: _, colcirc: x };
     }
-    window.pluginMigrate = g;
+    window.pluginMigrate = v;
   })();
   (() => {
     function _() {
