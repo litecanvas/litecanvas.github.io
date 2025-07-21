@@ -27,7 +27,7 @@
     var assert = (condition, message = "Assertion failed") => {
       if (!condition) throw new Error(message);
     };
-    var version = "0.94.0";
+    var version = "0.94.1";
     function litecanvas(settings = {}) {
       const root = window, math = Math, TWO_PI = math.PI * 2, raf = requestAnimationFrame, _browserEventListeners = [], on = (elem, evt, callback) => {
         elem.addEventListener(evt, callback, false);
@@ -45,7 +45,7 @@
         animate: true
       };
       settings = Object.assign(defaults, settings);
-      let _initialized = false, _plugins = [], _canvas, _scale = 1, _ctx, _outline_fix = 0.5, _timeScale = 1, _lastFrameTime, _deltaTime = 1 / 60, _accumulated, _rafid, _fontFamily = "sans-serif", _fontSize = 20, _rngSeed = Date.now(), _colors = defaultPalette, _defaultSound = [0.5, 0, 1750, , , 0.3, 1, , , , 600, 0.1], _coreEvents = "init,update,draw,tap,untap,tapping,tapped,resized", _mathFunctions = "PI,sin,cos,atan2,hypot,tan,abs,ceil,floor,trunc,min,max,pow,sqrt,sign,exp", _eventListeners = {};
+      let _initialized = false, _plugins = [], _canvas, _scale = 1, _ctx, _outline_fix = 0.5, _timeScale = 1, _lastFrameTime, _fpsInterval = 1e3 / 60, _accumulated, _rafid, _fontFamily = "sans-serif", _fontSize = 20, _rngSeed = Date.now(), _colors = defaultPalette, _defaultSound = [0.5, 0, 1750, , , 0.3, 1, , , , 600, 0.1], _coreEvents = "init,update,draw,tap,untap,tapping,tapped,resized", _mathFunctions = "PI,sin,cos,atan2,hypot,tan,abs,ceil,floor,trunc,min,max,pow,sqrt,sign,exp", _eventListeners = {};
       const instance = {
         /** @type {number} */
         W: 0,
@@ -951,7 +951,7 @@
             isNumber(value) && value >= 1,
             "[litecanvas] framerate() 1st param must be a positive number"
           );
-          _deltaTime = 1 / ~~value;
+          _fpsInterval = 1e3 / ~~value;
         },
         /**
          * Returns information about that engine instance.
@@ -967,7 +967,7 @@
             // 1
             _initialized,
             // 2
-            _deltaTime,
+            _fpsInterval / 1e3,
             // 3
             _scale,
             // 4
@@ -1021,8 +1021,8 @@
          */
         resume() {
           if (_initialized && !_rafid) {
-            _accumulated = _deltaTime;
-            _lastFrameTime = performance.now();
+            _accumulated = _fpsInterval;
+            _lastFrameTime = Date.now();
             _rafid = raf(drawFrame);
           }
         },
@@ -1078,7 +1078,7 @@
                 // initial y
                 yi: y,
                 // timestamp
-                t: performance.now()
+                t: Date.now()
               };
               _taps.set(id, tap);
               return tap;
@@ -1098,7 +1098,7 @@
             /**
              * @param {{t: number}} tap
              */
-            (tap) => tap && performance.now() - tap.t <= 300
+            (tap) => tap && Date.now() - tap.t <= 300
           ), preventDefault = (
             /**
              * @param {Event} ev
@@ -1271,37 +1271,36 @@
             }
           );
         }
-        setInterval(() => {
-          if (_rafid) {
-            instance.pause();
-            instance.resume();
-          }
-        }, 5e3);
         _initialized = true;
         instance.emit("init", instance);
         instance.resume();
       }
-      function drawFrame(now) {
+      function drawFrame() {
         if (!settings.animate) {
           return instance.emit("draw", _ctx);
-        } else if (_rafid) {
-          _rafid = raf(drawFrame);
         }
+        let now = Date.now();
         let updated = 0;
-        let frameTime = (now - _lastFrameTime) / 1e3;
+        let frameTime = now - _lastFrameTime;
         _lastFrameTime = now;
-        if (frameTime < 0.1) {
-          _accumulated += frameTime;
-          while (_accumulated >= _deltaTime) {
-            updated++;
-            instance.emit("update", _deltaTime * _timeScale, updated);
-            instance.def("T", instance.T + _deltaTime * _timeScale);
-            _accumulated -= _deltaTime;
-          }
+        _accumulated += frameTime < 100 ? frameTime : _fpsInterval;
+        while (_accumulated >= _fpsInterval) {
+          updated++;
+          _accumulated -= _fpsInterval;
+          let dt = _fpsInterval / 1e3 * _timeScale;
+          instance.emit("update", dt, updated);
+          instance.def("T", instance.T + dt);
         }
         if (updated) {
           instance.emit("draw", _ctx);
+          if (updated > 1) {
+            _accumulated = 0;
+            DEV: console.warn(
+              "[litecanvas] the last frame updated " + updated + " times. This can drop the FPS if it keeps happening."
+            );
+          }
         }
+        _rafid = raf(drawFrame);
       }
       function setupCanvas() {
         if ("string" === typeof settings.canvas) {
