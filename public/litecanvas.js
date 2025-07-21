@@ -27,7 +27,7 @@
     var assert = (condition, message = "Assertion failed") => {
       if (!condition) throw new Error(message);
     };
-    var version = "0.93.1";
+    var version = "0.93.2";
     function litecanvas(settings = {}) {
       const root = window, math = Math, TWO_PI = math.PI * 2, raf = requestAnimationFrame, _browserEventListeners = [], on = (elem, evt, callback) => {
         elem.addEventListener(evt, callback, false);
@@ -1021,7 +1021,7 @@
          */
         resume() {
           if (_initialized && !_rafid) {
-            _accumulated = 0;
+            _accumulated = _deltaTime;
             _lastFrameTime = performance.now();
             _rafid = raf(drawFrame);
           }
@@ -1271,11 +1271,12 @@
             }
           );
         }
-        on(root, "focus", () => {
-          DEV: console.warn('[litecanvas] engine loop restarted on "focus" event');
-          instance.pause();
-          instance.resume();
-        });
+        setInterval(() => {
+          if (_rafid) {
+            instance.pause();
+            instance.resume();
+          }
+        }, 5e3);
         _initialized = true;
         instance.emit("init", instance);
         instance.resume();
