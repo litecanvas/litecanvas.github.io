@@ -2137,82 +2137,81 @@
     window.pluginMigrate = v;
   })();
   (() => {
-    function _() {
-      let i = 0, a = true, l = document.createElement("div"), s = [], c = () => (performance || Date).now();
-      l.style.cssText = "position:absolute;top:0;right:0;cursor:pointer;opacity:0.8;z-index:10000", l.addEventListener("click", function(e) {
-        e.preventDefault(), m(++i % l.children.length);
+    function A(s = {}) {
+      let n = 0, o = true, b = s.position, r = document.createElement("div"), i = [], p = () => (performance || Date).now();
+      ["right", "left"].includes(b) || (b = "right"), r.style.cssText = `position:absolute;top:0;${b}:0;cursor:pointer;opacity:0.8;z-index:10000`, r.addEventListener("click", function(a) {
+        a.preventDefault(), e(++n % r.children.length);
       }, false);
-      function o(e, r, x, t) {
-        let w = new T(e, r, x, l, t);
-        return s.push(w), w;
+      function f(a, t, x, g) {
+        let _ = new S(a, t, x, r, g);
+        return i.push(_), _;
       }
-      function m(e) {
-        for (let r = 0; r < l.children.length; r++) l.children[r].style.display = r === e ? "block" : "none";
-        i = e;
+      function e(a) {
+        for (let t = 0; t < r.children.length; t++) r.children[t].style.display = t === a ? "block" : "none";
+        n = a;
       }
-      function p() {
-        i++, i >= l.children.length && (i = 0), m(i);
+      function v() {
+        n++, n >= r.children.length && (n = 0), e(n);
       }
-      function n(e = "all") {
-        if (e === "all") for (let r = 0; r < s.length; r++) s[r].reset();
-        else s[e] && s[e].reset();
-        h = c(), y = 0;
+      function h(a = "all") {
+        if (a === "all") for (let t = 0; t < i.length; t++) i[t].reset();
+        else i[a] && i[a].reset();
+        u = p(), l = 0;
       }
-      function b(e = true) {
-        a = !!e, l.style.display = a ? "" : "none";
+      function d(a = true) {
+        o = !!a, r.style.display = o ? "" : "none";
       }
-      let v = c(), h = v, y = 0, d = o("FPS", "#0ff", "#002"), f = o("MS", "#0f0", "#020"), u;
-      return self.performance && self.performance.memory && (u = o("MB", "#f08", "#201")), m(0), { dom: l, addPanel: o, showPanel: m, nextPanel: p, resetPanel: n, display: b, get hidden() {
-        return !a;
+      let m = p(), u = m, l = 0, y = f("FPS", "#0ff", "#002"), w = f("MS", "#0f0", "#020"), c;
+      return self.performance && self.performance.memory && (c = f("MB", "#f08", "#201")), e(0), { dom: r, addPanel: f, showPanel: e, nextPanel: v, resetPanel: h, display: d, get hidden() {
+        return !o;
       }, begin: function() {
-        v = c();
+        m = p();
       }, end: function() {
-        y++;
-        let e = c();
-        if (f.update(e - v, 200), e >= h + 1e3 && (d.update(y * 1e3 / (e - h), 100), h = e, y = 0, u)) {
-          let r = performance.memory;
-          u.update(r.usedJSHeapSize / 1048576, r.jsHeapSizeLimit / 1048576);
+        l++;
+        let a = p();
+        if (w.update(a - m, 200), a >= u + 1e3 && (y.update(l * 1e3 / (a - u), 100), u = a, l = 0, c)) {
+          let t = performance.memory;
+          c.update(t.usedJSHeapSize / 1048576, t.jsHeapSizeLimit / 1048576);
         }
-        return e;
+        return a;
       }, update: function() {
-        v = this.end();
+        m = this.end();
       } };
     }
-    function T(i, a, l, s, c = {}) {
-      let o = Math.round, m = 1 / 0, p = 0, n = o(window.devicePixelRatio || 1), b = c.width || 80, v = 48, h = 3 * n, y = 2 * n, d = 3 * n, f = 15 * n, u = (b - 6) * n, e = 30 * n, r = document.createElement("canvas");
-      r.width = b * n, r.height = v * n, r.style.cssText = `width:${b}px;height:48px;`;
-      let x = s.children.length;
-      s.appendChild(r);
-      let t = r.getContext("2d");
-      t.font = `bold ${9 * n}px Helvetica,Arial,sans-serif`, t.textBaseline = "top";
-      function w() {
-        t.fillStyle = l, t.fillRect(0, 0, b * n, v * n), t.fillStyle = a, t.fillText(i, h, y), t.fillRect(d, f, u, e), t.fillStyle = l, t.globalAlpha = 0.9, t.fillRect(d, f, u, e);
+    function S(s, n, o, b, r = {}) {
+      let i = Math.round, p = 1 / 0, f = 0, e = i(window.devicePixelRatio || 1), v = r.width || 80, h = 48, d = 3 * e, m = 2 * e, u = 3 * e, l = 15 * e, y = (v - 6) * e, w = 30 * e, c = document.createElement("canvas");
+      c.width = v * e, c.height = h * e, c.style.cssText = `width:${v}px;height:48px;`;
+      let a = b.children.length;
+      b.appendChild(c);
+      let t = c.getContext("2d");
+      t.font = `bold ${9 * e}px Helvetica,Arial,sans-serif`, t.textBaseline = "top";
+      function x() {
+        t.fillStyle = o, t.fillRect(0, 0, v * e, h * e), t.fillStyle = n, t.fillText(s, d, m), t.fillRect(u, l, y, w), t.fillStyle = o, t.globalAlpha = 0.9, t.fillRect(u, l, y, w);
       }
-      return w(), { id: x, dom: r, reset: w, update: function(g, S) {
-        m = Math.min(m, g), p = Math.max(p, g), t.fillStyle = l, t.globalAlpha = 1, t.fillRect(0, 0, b * n, f), t.fillStyle = a;
-        let E = [o(g), i];
-        c.labelBefore && E.reverse(), t.fillText(E.join(" ") + " (" + o(m) + "-" + o(p) + ")", h, y), t.drawImage(r, d + n, f, u - n, e, d, f, u - n, e), t.fillRect(d + u - n, f, n, e), t.fillStyle = l, t.globalAlpha = 0.9, t.fillRect(d + u - n, f, n, o((1 - g / S) * e));
+      return x(), { id: a, dom: c, reset: x, update: function(g, _) {
+        p = Math.min(p, g), f = Math.max(f, g), t.fillStyle = o, t.globalAlpha = 1, t.fillRect(0, 0, v * e, l), t.fillStyle = n;
+        let T = [i(g), s];
+        r.labelBefore && T.reverse(), t.fillText(T.join(" ") + " (" + i(p) + "-" + i(f) + ")", d, m), t.drawImage(c, u + e, l, y - e, w, u, l, y - e, w), t.fillRect(u + y - e, l, e, w), t.fillStyle = o, t.globalAlpha = 0.9, t.fillRect(u + y - e, l, e, i((1 - g / _) * w));
       } };
     }
-    var k = { hotkeyShow: "F1", hotkeyNext: "F2", css: {}, hidden: false, id: "" };
-    function A(i, a = {}) {
-      a = Object.assign({}, k, a);
-      let l = i.stat(0), s = new _(), c = s.display, o = (m = true) => {
-        a.hidden = !m, c(m), s.resetPanel();
+    var z = { hotkeyShow: "F1", hotkeyNext: "F2", css: {}, hidden: false, id: "", position: "right" };
+    function E(s, n = {}) {
+      let { hotkeyNext: o, hotkeyShow: b, id: r, position: i, css: p } = Object.assign({}, z, n), f = s.stat(0), e = new A({ position: i }), v = e.display, h = (d = true) => {
+        n.hidden = !d, v(d), e.resetPanel();
       };
-      a.id && (s.dom.id = a.id);
-      for (let [m, p] of Object.entries(a.css || {})) s.dom.style[m] = p;
-      return i.canvas().parentElement.appendChild(s.dom), o(!a.hidden), l.keyboardEvents && i.listen("update", () => {
-        a.hotkeyShow && i.iskeypressed(a.hotkeyShow) && o(a.hidden), a.hotkeyNext && i.iskeypressed(a.hotkeyNext) && s.nextPanel();
-      }), i.listen("before:update", (m, p = 1) => {
-        a.hidden || p === 1 && s.begin();
-      }), i.listen("after:draw", () => {
-        a.hidden || s.end();
-      }), i.listen("quit", () => {
-        s.dom.remove();
-      }), s.display = o, { FPS_METER: s };
+      r && (e.dom.id = r);
+      for (let [d, m] of Object.entries(p || {})) e.dom.style[d] = m;
+      return s.canvas().parentElement.appendChild(e.dom), h(!n.hidden), f.keyboardEvents && s.listen("update", () => {
+        b && s.iskeypressed(b) && h(n.hidden), o && s.iskeypressed(o) && e.nextPanel();
+      }), s.listen("before:update", (d, m = 1) => {
+        n.hidden || m === 1 && e.begin();
+      }), s.listen("after:draw", () => {
+        n.hidden || e.end();
+      }), s.listen("quit", () => {
+        e.dom.remove();
+      }), e.display = h, { FPS_METER: e };
     }
-    window.pluginFrameRateMeter = A;
+    window.pluginFrameRateMeter = E;
   })();
   (() => {
     var S = [[24, 60, 60, 24, 24, , 24], [54, 54, , , , , ,], [54, 54, 127, 54, 127, 54, 54], [12, 62, 3, 30, 48, 31, 12], [, 99, 51, 24, 12, 102, 99], [28, 54, 28, 110, 59, 51, 110], [6, 6, 3, , , , ,], [24, 12, 6, 6, 6, 12, 24], [6, 12, 24, 24, 24, 12, 6], [, 102, 60, 255, 60, 102, ,], [, 12, 12, 63, 12, 12, ,], [, , , , , 12, 12, 6], [, , , 63, , , ,], [, , , , , 12, 12], [96, 48, 24, 12, 6, 3, 1], [62, 99, 115, 123, 111, 103, 62], [12, 14, 12, 12, 12, 12, 63], [30, 51, 48, 28, 6, 51, 63], [30, 51, 48, 28, 48, 51, 30], [56, 60, 54, 51, 127, 48, 120], [63, 3, 31, 48, 48, 51, 30], [28, 6, 3, 31, 51, 51, 30], [63, 51, 48, 24, 12, 12, 12], [30, 51, 51, 30, 51, 51, 30], [30, 51, 51, 62, 48, 24, 14], [, 12, 12, , , 12, 12], [, 12, 12, , , 12, 12, 6], [24, 12, 6, 3, 6, 12, 24], [, , 63, , , 63, ,], [6, 12, 24, 48, 24, 12, 6], [30, 51, 48, 24, 12, , 12], [62, 99, 123, 123, 123, 3, 30], [12, 30, 51, 51, 63, 51, 51], [63, 102, 102, 62, 102, 102, 63], [60, 102, 3, 3, 3, 102, 60], [31, 54, 102, 102, 102, 54, 31], [127, 70, 22, 30, 22, 70, 127], [127, 70, 22, 30, 22, 6, 15], [60, 102, 3, 3, 115, 102, 124], [51, 51, 51, 63, 51, 51, 51], [30, 12, 12, 12, 12, 12, 30], [120, 48, 48, 48, 51, 51, 30], [103, 102, 54, 30, 54, 102, 103], [15, 6, 6, 6, 70, 102, 127], [99, 119, 127, 127, 107, 99, 99], [99, 103, 111, 123, 115, 99, 99], [28, 54, 99, 99, 99, 54, 28], [63, 102, 102, 62, 6, 6, 15], [30, 51, 51, 51, 59, 30, 56], [63, 102, 102, 62, 54, 102, 103], [30, 51, 7, 14, 56, 51, 30], [63, 45, 12, 12, 12, 12, 30], [51, 51, 51, 51, 51, 51, 63], [51, 51, 51, 51, 51, 30, 12], [99, 99, 99, 107, 127, 119, 99], [99, 99, 54, 28, 28, 54, 99], [51, 51, 51, 30, 12, 12, 30], [127, 99, 49, 24, 76, 102, 127], [30, 6, 6, 6, 6, 6, 30], [3, 6, 12, 24, 48, 96, 64], [30, 24, 24, 24, 24, 24, 30], [8, 28, 54, 99, , , ,], [, , , , , , , 255], [12, 12, 24, , , , ,], [, , 30, 48, 62, 51, 110], [7, 6, 6, 62, 102, 102, 59], [, , 30, 51, 3, 51, 30], [56, 48, 48, 62, 51, 51, 110], [, , 30, 51, 63, 3, 30], [28, 54, 6, 15, 6, 6, 15], [, , 110, 51, 51, 62, 48, 31], [7, 6, 54, 110, 102, 102, 103], [12, , 14, 12, 12, 12, 30], [48, , 48, 48, 48, 51, 51, 30], [7, 6, 102, 54, 30, 54, 103], [14, 12, 12, 12, 12, 12, 30], [, , 51, 127, 127, 107, 99], [, , 31, 51, 51, 51, 51], [, , 30, 51, 51, 51, 30], [, , 59, 102, 102, 62, 6, 15], [, , 110, 51, 51, 62, 48, 120], [, , 59, 110, 102, 6, 15], [, , 62, 3, 30, 48, 31], [8, 12, 62, 12, 12, 44, 24], [, , 51, 51, 51, 51, 110], [, , 51, 51, 51, 30, 12], [, , 99, 107, 127, 127, 54], [, , 99, 54, 28, 54, 99], [, , 51, 51, 51, 62, 48, 31], [, , 63, 25, 12, 38, 63], [56, 12, 12, 7, 12, 12, 56], [24, 24, 24, , 24, 24, 24], [7, 12, 12, 56, 12, 12, 7], [110, 59, , , , , ,]], w = { id: "basic", chars: S, first: 33, w: 8 };
