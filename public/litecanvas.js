@@ -27,7 +27,7 @@
     var assert = (condition, message = "Assertion failed") => {
       if (!condition) throw new Error(message);
     };
-    var version = "0.93.2";
+    var version = "0.94.0";
     function litecanvas(settings = {}) {
       const root = window, math = Math, TWO_PI = math.PI * 2, raf = requestAnimationFrame, _browserEventListeners = [], on = (elem, evt, callback) => {
         elem.addEventListener(evt, callback, false);
@@ -1283,7 +1283,7 @@
       }
       function drawFrame(now) {
         if (!settings.animate) {
-          return instance.emit("draw");
+          return instance.emit("draw", _ctx);
         } else if (_rafid) {
           _rafid = raf(drawFrame);
         }
@@ -1300,7 +1300,7 @@
           }
         }
         if (updated) {
-          instance.emit("draw");
+          instance.emit("draw", _ctx);
         }
       }
       function setupCanvas() {
@@ -1362,7 +1362,6 @@
         }
         instance.textalign("start", "top");
         instance.emit("resized", _scale);
-        instance.cls(0);
         if (!settings.animate) {
           raf(drawFrame);
         }
