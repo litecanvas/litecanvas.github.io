@@ -151,8 +151,6 @@ hideEditor.addEventListener("click", (evt) => {
 });
 
 screenshotButton.addEventListener("click", () => {
-  var link = document.createElement("a");
-  link.download = "litecanvas-colors.png";
   const iframe = getIframe();
 
   if (!iframe) return;
@@ -160,7 +158,12 @@ screenshotButton.addEventListener("click", () => {
   const iframeDocument = iframe.contentDocument;
   if (iframeDocument) {
     const canvas = iframeDocument.querySelector("canvas");
+    const link = document.createElement("a");
+    const ts = ("" + Date.now()).slice(-6);
+
+    link.download = `screenshot-${ts}.png`;
     link.href = canvas.toDataURL();
+
     link.click();
   }
 });
