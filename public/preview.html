@@ -82,16 +82,19 @@
       addEventListener("unhandledrejection", handleError);
     </script>
 
-    <script src="/litecanvas.js"></script>
+    <script src="./litecanvas.js"></script>
 
     <script>
-      utils.global(false);
-
       window.printPage = window.print;
 
       ((_litecanvas) => {
         window.litecanvas = (settings = {}) => {
           const instance = _litecanvas(settings);
+
+          // expose the utils to global context
+          utils.global(false);
+
+          // load plugins
           instance.use(pluginMigrate);
           if (false !== settings.animate) {
             instance.use(pluginFrameRateMeter);
@@ -100,6 +103,7 @@
           instance.listen("before:init", () => {
             instance.use(pluginAssetLoader);
           });
+
           return instance;
         };
       })(window.litecanvas);

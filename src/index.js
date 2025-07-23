@@ -153,9 +153,8 @@ hideEditor.addEventListener("click", (evt) => {
 screenshotButton.addEventListener("click", () => {
   const iframe = getIframe();
 
-  if (!iframe) return;
-
   const iframeDocument = iframe.contentDocument;
+
   if (iframeDocument) {
     const canvas = iframeDocument.querySelector("canvas");
     const link = document.createElement("a");
@@ -170,7 +169,7 @@ screenshotButton.addEventListener("click", () => {
 
 function runCode() {
   const iframe = getIframe();
-  iframe.src = "preview.html"; // reload the iframe
+  iframe.src = "./preview.html"; // reload the iframe
   if (!iframe.onload) {
     iframe.onload = loadCode;
   }
@@ -178,8 +177,10 @@ function runCode() {
 
 function loadCode() {
   const code = window.codeEditor.state.doc.toString();
-  getIframe().contentDocument.querySelector("#code").innerHTML =
-    prepareCode(code);
+  const iframeDocument = getIframe().contentDocument;
+  if (iframeDocument) {
+    iframeDocument.querySelector("#code").innerHTML = prepareCode(code);
+  }
 }
 
 /**
@@ -358,9 +359,9 @@ window.isUpdateAvailable = new Promise(function (resolve) {
     url.searchParams.get("test_service_worker") === "on" ||
     ("serviceWorker" in navigator &&
       location.protocol === "https:" &&
-      location.hostname.indexOf("127.0.0") === -1 &&
-      location.hostname.indexOf("192.168.") === -1 &&
-      location.hostname.indexOf("172.") === -1)
+      !location.hostname.startsWith("127.0.0") &&
+      !location.hostname.startsWith("192.168.") &&
+      !location.hostname.startsWith("172."))
   ) {
     // register service worker file
     navigator.serviceWorker
@@ -398,5 +399,10 @@ window.isUpdateAvailable = new Promise(function (resolve) {
 
 window.isUpdateAvailable.then((isAvailable) => {
   if (!isAvailable) return;
-  alert("New Update available! Reload the webapp to see the latest changes.");
+  const result = confirm(
+    "New Update available! Reload the webapp to see the latest changes."
+  );
+  if (result) {
+    location.reload();
+  }
 });
