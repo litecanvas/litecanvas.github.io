@@ -499,8 +499,7 @@ clip(callback: (ctx: CanvasRenderingContext2D) => void)</code></pre>
       <pre><code class="language-typescript">// Plays ZzFX sound effects and returns the played sound array or `false`.
 // example: sfx([2,.05,598,.07,0,.19,0,1.32,9.9,-70,0,0,0,0,0,0,.3,.02,0,.04])
 // see: https://killedbyapixel.github.io/ZzFX/
-// note: if the first argument is omitted, a default sound is played (see DEFAULT_SFX)
-// example: sfx() or sfx(null)
+// note: if the first argument is omitted, a default "blip" sound is played
 sfx(ZzFXparams?: number[], pitchSlide = 0, volumeFactor = 1): number[] | boolean
 
 // Sets the ZzFX global volume factor.
@@ -523,17 +522,6 @@ iskeypressed(key: string): boolean</code></pre>
 
       <pre><code class="language-typescript">/** General Math */
 
-// Calculates a linear (interpolation) value over `t`.
-// example: lerp(0, 50, 0.5) returns 25
-// learn more: https://gamedev.net/tutorials/programming/general-and-gameplay-programming/a-brief-introduction-to-lerp-r4954/
-lerp(a: number, b: number, t: number): number
-
-// Convert degrees to radians
-deg2rad(n: number): number
-
-// Convert radians to degrees
-rad2deg(n: number): number
-
 // Returns the rounded value of an number to optional precision.
 // example: round(PI) returns 3
 // example: round(PI, 3) returns 3.142
@@ -544,6 +532,12 @@ round(value: number, precision = 0): number
 // example: clamp(150, 0, 100) return 100
 // example: clamp(-10, 0, 100) return 0
 clamp(value: number, min: number, max: number): number
+
+// Convert degrees to radians
+deg2rad(n: number): number
+
+// Convert radians to degrees
+rad2deg(n: number): number
 
 // Wraps a number between `min` (inclusive) and `max` (exclusive).
 // example: wrap(50,0,100) return 50
@@ -557,10 +551,6 @@ map(val, start1, stop1, start2, stop2, withinBounds = false ): number
 // Maps a number from one range to a value between 0 and 1.
 // example: norm(50, 0, 100) returns 0.5
 norm(value, min, max): number
-
-// Interpolate between 2 values using a periodic function (by default is Math.sin).
-// example: wave(-100, 100, T)
-wave(from: number, to: number, t: number, fn = Math.sin): number
 
 // Returns the sine of a number in radians.
 sin(angle: number): number
@@ -584,9 +574,6 @@ abs(n: number): number
 // Rounds up and returns the smallest integer greater than or
 // equal to a given number.
 ceil(n: number): number
-
-// Returns the value of a number rounded to the nearest integer.
-round(n: number): number
 
 // Rounds down and returns the largest integer less than or
 // equal to a given number.
@@ -621,6 +608,17 @@ sqrt(n: number): number
 // If the number is 0, it will returns 0.
 sign(n: number): number
 
+/** Animation Helpers */
+
+// Interpolate between 2 values based on `t` (usually a value between 0 and 1).
+// example: lerp(0, 50, 0.5) returns 25
+// learn more: https://gamedev.net/tutorials/programming/general-and-gameplay-programming/a-brief-introduction-to-lerp-r4954/
+lerp(a: number, b: number, t: number): number
+
+// Interpolate between 2 values using a periodic function (by default is Math.sin).
+// example: wave(-100, 100, T)
+wave(from: number, to: number, t: number, fn = Math.sin): number
+
 /** Random Number Generator (RNG) */
 
 // Generates a pseudo-random float between min (inclusive)
@@ -640,14 +638,7 @@ rseed(value: number): void</code></pre>
 
       <p>The following functions are most used internally, but also very useful when creating plugins.</p>
 
-      <pre><code class="language-typescript">// gets the canvas
-canvas(): HTMLCanvasElement
-
-// Loads a plugin.
-// see: https://github.com/litecanvas/game-engine/blob/main/samples/plugin-basics/plugin-basics.js
-use(callback): void
-
-// Registers a game event callback and
+      <pre><code class="language-typescript">// Registers a game event callback and
 // returns a function that unregister this callback.
 listen(event: string, callback: Function): Function
 
@@ -664,15 +655,14 @@ timescale(value: number): void
 // Sets the target FPS (frames per second)
 framerate(value: number): void
 
-// the following functions are most used by plugins...
-
-// Defines or updates an instance property or method
-def(name: string, value: any): void
-
 // Update or reset the palette color
 // example: pal(['#000', '#FFF']) is a 1-bit color palette
 // example: pal() resets the default color palette
 pal(colors: string[]): void
+
+// Loads a plugin.
+// see: https://github.com/litecanvas/game-engine/blob/main/samples/plugin-basics/plugin-basics.js
+use(callback): void
 
 // pauses the engine loop (update & draw)
 pause(): void
@@ -687,19 +677,25 @@ paused(): boolean
 // also emits the "quit" event
 quit(): void
 
-// use `stat() to get internal informations about an litecanvas' instance
-// stat(0) the settings passed to that instance
-// stat(1) returns true if the "init" event has already been emitted
-// stat(2) the current delta time (dt)
-// stat(3) the current canvas element scale (not the context 2D scale)
-// stat(4) the attached event callbacks
-// stat(5) the current color palette
-// stat(6) the default sound used by `sfx()`
-// stat(7) the current time scale
-// stat(8) the current volume used by ZzFX
-// stat(9) the current RNG state
-// stat(10) the current font size
-// stat(11) the current font family
+// gets the canvas
+canvas(): HTMLCanvasElement
+
+// Defines or updates an instance property or method
+def(name: string, value: any): void
+
+// use `stat(n)` to get internal informations about an litecanvas' instance
+// stat(0)  => settings passed to that instance
+// stat(1)  => `true` if the "init" event has already been emitted
+// stat(2)  => the current delta time (dt)
+// stat(3)  => the current canvas element scale (not the context 2D scale)
+// stat(4)  => the attached event callbacks
+// stat(5)  => the current color palette
+// stat(6)  => the default sound used by `sfx()`
+// stat(7)  => the current time scale
+// stat(8)  => the current volume used by ZzFX
+// stat(9)  => the current RNG state
+// stat(10) => the current font size
+// stat(11) => the current font family
 // any other values probably will return undefined
 stat(n: number): any</code></pre>
 
@@ -786,9 +782,11 @@ function draw() {
   if (LOADING) return; // wait the asset loader
 
   push()
+
   // These sprites are 16x16 (pretty small),
   // so let's zoom in 3x
   scale(3)
+
   // draw each sprite
   for (let y = 0, index = 0; y < 8; y++) {
     for (let x = 0; x < 8; x++, index++) {
@@ -796,6 +794,7 @@ function draw() {
       image(x * 16, y * 16, sprites[index])
     }
   }
+
   pop()
 }</code></pre>
 
