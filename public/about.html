@@ -47,6 +47,14 @@
         font-size: 90%;
         font-variant-ligatures: none;
       }
+      blockquote {
+        margin: 0;
+        padding: 0.5em;
+        border-left: 4px solid rgba(0,0,0,.5);
+        background-color: rgba(0,0,0,.1);;
+        opacity: 0.75;
+        line-height: 1.5;
+      }
       svg {
         width: 1em;
         height: 1em;
@@ -263,43 +271,46 @@ function draw(canvasContext2d) {
 
 function resized(newScale) {
   // called when the canvas is resized
-  // use W and H to get the new width and height of the canvas
+  // use `W` and `H` to get the new width and height of the canvas
+}
+
+function tapped(x, y, touchId) {
+  // called when a tap (click or touch) happens
+  // equivalent to "click" browser events
+  // ---
+  // Notes:
+  // - The "touchId" argument is used to handle multiple touches
+  // - Each touch has a unique touchId >= 1
+  // - The touchId of mouse clicks always will be 0 (zero)
 }
 
 function tap(x, y, touchId) {
-  // called when a tap (click/touch) starts
+  // called when a tap starts
   // equivalent to "mousedown" and "touchstart" browser events
-
-  // Notes:
-  // - "touchId" is used to handle multiple touches
-  // - each touch has a unique touchId >= 1
-  // - mouse's touchId always equal to 0 (zero)
 }
 
 function untap(x, y, touchId) {
-  // called when a tap end
+  // called when a tap ends
   // equivalent to "mouseup" and "touchend" browser events
 }
 
 function tapping(x, y, touchId) {
-  // called when a tap moves
-  // equivalent to "mousemove" and "touchmove" browser events
-}
-
-function tapped(x, y, touchId) {
-  // called when a tap stars and ends in a short time
-  // equivalent to "click" browser events (only for left mouse clicks)
+  // called when an active tap moves
 }
 </code></pre>
 
       <h2><a id="colors">Default Colors</a></h2>
 
+      <p>
+        Every time a function asks for a color, choose must choose one of these numbers.
+      </p>
+
       <img src="images/colors.png" alt="Default Color Palette" />
 
-      <p>Download palette: <a href="/misc/litecanvas-palette.gpl">GPL</a> <a href="/misc/litecanvas-palette.json" download>JSON</a></p>
+      <p>Download: <a href="/misc/litecanvas-palette.gpl">palette.gpl</a> or <a href="/misc/litecanvas-palette.json" download>palette.json</a></p>
 
       <p>
-        <em>Note: Every time a function asks for a color argument, choose one of these numbers.</em>
+        <blockquote><strong>Note:</strong> You can change the color palette using the <code>pal()</code> function (see below).</blockquote>
       </p>
 
       <h2><a id="settings">Game Configuration</a></h2>
@@ -720,8 +731,7 @@ stat(n: number): any</code></pre>
               https://github.com/litecanvas/plugin-frame-rate-meter
             </a>
           </strong>
-          <br>
-          <small>Tip: Call <strong><code>FPS_METER.display(false)</code></strong> in your function <code>init()</code> to disable it.</small>
+          <blockquote><small>Tip: Call <strong><code>FPS_METER.display(false)</code></strong> in your function <code>init()</code> to disable it.</small></blockquote>
         </li>
         <li>
           <strong>
@@ -730,7 +740,7 @@ stat(n: number): any</code></pre>
             </a>
           </strong>
           <br>
-          <small>Tip: Call <strong><code>textfont(PIXEL_FONT_BASIC)</code></strong> or <strong><code>textfont(PIXEL_FONT_MINI)</code></strong> to use pixel fonts.</small>
+          <blockquote><small>Tip: Call <strong><code>textfont(PIXEL_FONT_BASIC)</code></strong> or <strong><code>textfont(PIXEL_FONT_MINI)</code></strong> to use pixel fonts.</small></blockquote>
         </li>
         <li>
           <strong>
