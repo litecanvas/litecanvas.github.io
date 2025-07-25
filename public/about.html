@@ -348,7 +348,7 @@ settings.autoscale = true
 
 // If `true`, the pixel art images won't look blurry.
 // Also, disables canvas built-in antialias.
-settings.pixelart = false
+settings.pixelart = true
 
 // exposes all methods and properties (see below)
 // in the global scope
@@ -527,7 +527,10 @@ iskeydown(key: string): boolean
 // Checks if any or which key just got pressed in your keyboard.
 // example: iskeypressed('space') // returns true if space bar was pressed
 // example: iskeypressed() // returns true for any key
-iskeypressed(key: string): boolean</code></pre>
+iskeypressed(key: string): boolean
+
+// Returns the last key pressed in your keyboard.
+lastkey(): string</code></pre>
 
       <h2><a id="math">Functions for Math</a></h2>
 
@@ -775,9 +778,7 @@ stat(n: number): any</code></pre>
 
       <pre><code class="language-typescript" data-copy="size-bg pos-absolute">let sprites;
 
-litecanvas({
-  pixelart: true
-})
+litecanvas()
 
 function init() {
   // first, load the spritesheet image
