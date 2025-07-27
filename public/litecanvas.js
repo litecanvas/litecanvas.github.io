@@ -27,7 +27,7 @@
     var assert = (condition, message = "Assertion failed") => {
       if (!condition) throw new Error(message);
     };
-    var version = "0.95.0";
+    var version = "0.96.0";
     function litecanvas(settings = {}) {
       const root = window, math = Math, TWO_PI = math.PI * 2, raf = requestAnimationFrame, _browserEventListeners = [], on = (elem, evt, callback) => {
         elem.addEventListener(evt, callback, false);
@@ -122,7 +122,7 @@
         round: (n, precision = 0) => {
           DEV: assert(isNumber(n), "[litecanvas] round() 1st param must be a number");
           DEV: assert(
-            null == precision || isNumber(precision) && precision >= 0,
+            isNumber(precision) && precision >= 0,
             "[litecanvas] round() 2nd param must be a positive number or zero"
           );
           if (!precision) {
@@ -508,15 +508,15 @@
           instance.stroke(color);
         },
         /**
-         * Sets the thickness of lines
+         * Sets the thickness of the lines
          *
          * @param {number} value
          * @see https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/lineWidth
          */
         linewidth(value) {
           DEV: assert(
-            isNumber(value) && ~~value > 0,
-            "[litecanvas] linewidth() 1st param must be a positive number"
+            isNumber(value) && value >= 0,
+            "[litecanvas] linewidth() 1st param must be a positive number or zero"
           );
           _ctx.lineWidth = ~~value;
           _outline_fix = 0 === ~~value % 2 ? 0 : 0.5;
@@ -695,23 +695,27 @@
          *
          * @see https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/save
          */
-        push: () => _ctx.save(),
+        push() {
+          _ctx.save();
+        },
         /**
          * restores the drawing style settings and transformations
          *
          * @see https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/restore
          */
-        pop: () => _ctx.restore(),
+        pop() {
+          _ctx.restore();
+        },
         /**
          * Adds a translation to the transformation matrix.
          *
          * @param {number} x
          * @param {number} y
          */
-        translate: (x, y) => {
+        translate(x, y) {
           DEV: assert(isNumber(x), "[litecanvas] translate() 1st param must be a number");
           DEV: assert(isNumber(y), "[litecanvas] translate() 2nd param must be a number");
-          return _ctx.translate(~~x, ~~y);
+          _ctx.translate(~~x, ~~y);
         },
         /**
          * Adds a scaling transformation to the canvas units horizontally and/or vertically.
@@ -719,19 +723,19 @@
          * @param {number} x
          * @param {number} [y]
          */
-        scale: (x, y) => {
+        scale(x, y) {
           DEV: assert(isNumber(x), "[litecanvas] scale() 1st param must be a number");
           DEV: assert(null == y || isNumber(y), "[litecanvas] scale() 2nd param must be a number");
-          return _ctx.scale(x, y || x);
+          _ctx.scale(x, y || x);
         },
         /**
          * Adds a rotation to the transformation matrix.
          *
          * @param {number} radians
          */
-        rotate: (radians) => {
+        rotate(radians) {
           DEV: assert(isNumber(radians), "[litecanvas] rotate() 1st param must be a number");
-          return _ctx.rotate(radians);
+          _ctx.rotate(radians);
         },
         /**
          * Sets the alpha (opacity) value to apply when drawing new shapes and images
@@ -956,12 +960,15 @@
         /**
          * Returns information about that engine instance.
          *
-         * @param {number} n
+         * @param {number|string} index
          * @returns {any}
          */
-        stat(n) {
-          DEV: assert(isNumber(n) && n >= 0, "[litecanvas] stat() 1st param must be a number");
-          const list = [
+        stat(index) {
+          DEV: assert(
+            isNumber(index) || "string" === typeof index,
+            "[litecanvas] stat() 1st param must be a number or string"
+          );
+          const internals = [
             // 0
             settings,
             // 1
@@ -987,7 +994,7 @@
             //  11
             _fontFamily
           ];
-          const data = { index: n, value: list[n] };
+          const data = { index, value: internals[index] };
           instance.emit("stat", data);
           return data.value;
         },
