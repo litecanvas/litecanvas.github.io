@@ -229,6 +229,12 @@ export default function customCompletions(context) {
         detail: "(key?)",
       },
       {
+        label: "lastkey",
+        type: "function",
+        apply: "lastkey()",
+        info: "the last key pressed",
+      },
+      {
         label: "rseed",
         type: "function",
         apply: "rseed(",
