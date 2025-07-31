@@ -1,5 +1,5 @@
 export default () =>
-  `// Welcome to litecanvas playground!
+  `// Welcome to Litecanvas Playground!
 // Learn more tapping on the question mark (?) above.
 // Join our discord: https://discord.com/invite/r2c3rGsvH3
 
