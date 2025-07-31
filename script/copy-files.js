@@ -2,7 +2,7 @@ import { copyFile, unlink, readFile, appendFile } from "node:fs/promises";
 import esbuild from "esbuild";
 
 const root = process.env["PWD"];
-const engineFile = root + "/public/litecanvas.js";
+const engineFile = root + "/public/js/litecanvas.js";
 
 try {
   await unlink(engineFile);

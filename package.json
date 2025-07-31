@@ -5,8 +5,8 @@
   "main": "src/index.js",
   "type": "module",
   "scripts": {
-    "dev": "esbuild src/index.js --bundle --watch --outfile=public/app.js --servedir=public",
-    "build": "esbuild src/index.js --bundle --minify --outfile=public/app.js",
+    "dev": "esbuild src/index.js --bundle --watch --outfile=public/js/app.js --servedir=public",
+    "build": "esbuild src/index.js --bundle --minify --outfile=public/js/app.js",
     "prepare": "node ./script/copy-files.js && npm run build",
     "postinstall": "npm run prepare",
     "upgrade": "npm update && npm run prepare"
