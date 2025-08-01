@@ -5,8 +5,8 @@
       const zzfxX = new AudioContext();
       global.zzfxV = 1;
       return (i = 1, d = 0.05, z = 220, e = 0, P = 0, S = 0.1, I = 0, c = 1, T = 0, H = 0, V = 0, J = 0, h = 0, j = 0, K = 0, E = 0, r = 0, B = 1, X = 0, L = 0, D = 0) => {
-        let n = Math, t = 2 * n.PI, a = 44100, F = T *= 500 * t / a / a, O = z *= (1 - d + 2 * d * n.random(d = [])) * t / a, x = 0, _ = 0, f = 0, g = 1, $ = 0, l = 0, o = 0, s = D < 0 ? -1 : 1, u = t * s * D * 2 / a, G = n.cos(u), C = n.sin, Q = C(u) / 4, M = 1 + Q, m = -2 * G / M, y = (1 - Q) / M, R = (1 + s * G) / 2 / M, A = -(s + G) / M, v = R, U = 0, W = 0, Y = 0, Z = 0;
-        for (e = a * e + 9, X *= a, P *= a, S *= a, r *= a, H *= 500 * t / a ** 3, K *= t / a, V *= t / a, J *= a, h = a * h | 0, i *= 0.3 * global.zzfxV, s = e + X + P + S + r | 0; f < s; d[f++] = o * i) ++l % (100 * E | 0) || (o = I ? 1 < I ? 2 < I ? 3 < I ? C(x * x) : n.max(n.min(n.tan(x), 1), -1) : 1 - (2 * x / t % 2 + 2) % 2 : 1 - 4 * n.abs(n.round(x / t) - x / t) : C(x), o = (h ? 1 - L + L * C(t * f / h) : 1) * (o < 0 ? -1 : 1) * n.abs(o) ** c * (f < e ? f / e : f < e + X ? 1 - (f - e) / X * (1 - B) : f < e + X + P ? B : f < s - r ? (s - f - r) / S * B : 0), o = r ? o / 2 + (r > f ? 0 : (f < s - r ? 1 : (s - f) / r) * d[f - r | 0] / 2 / i) : o, D && (o = Z = v * U + A * (U = W) + R * (W = o) - y * Y - m * (Y = Z))), u = (z += T += H) * n.cos(K * _++), x += u + u * j * C(f ** 5), g && ++g > J && (z += V, O += V, g = 0), !h || ++$ % h || (z = O, T = F, g = g || 1);
+        let n = Math, t = 2 * n.PI, a = 44100, F = T *= 500 * t / a / a, O = z *= (1 - d + 2 * d * n.random(d = [])) * t / a, x2 = 0, _ = 0, f = 0, g = 1, $ = 0, l = 0, o = 0, s = D < 0 ? -1 : 1, u = t * s * D * 2 / a, G = n.cos(u), C = n.sin, Q = C(u) / 4, M = 1 + Q, m = -2 * G / M, y2 = (1 - Q) / M, R = (1 + s * G) / 2 / M, A = -(s + G) / M, v = R, U = 0, W = 0, Y = 0, Z = 0;
+        for (e = a * e + 9, X *= a, P *= a, S *= a, r *= a, H *= 500 * t / a ** 3, K *= t / a, V *= t / a, J *= a, h = a * h | 0, i *= 0.3 * global.zzfxV, s = e + X + P + S + r | 0; f < s; d[f++] = o * i) ++l % (100 * E | 0) || (o = I ? 1 < I ? 2 < I ? 3 < I ? C(x2 * x2) : n.max(n.min(n.tan(x2), 1), -1) : 1 - (2 * x2 / t % 2 + 2) % 2 : 1 - 4 * n.abs(n.round(x2 / t) - x2 / t) : C(x2), o = (h ? 1 - L + L * C(t * f / h) : 1) * (o < 0 ? -1 : 1) * n.abs(o) ** c * (f < e ? f / e : f < e + X ? 1 - (f - e) / X * (1 - B) : f < e + X + P ? B : f < s - r ? (s - f - r) / S * B : 0), o = r ? o / 2 + (r > f ? 0 : (f < s - r ? 1 : (s - f) / r) * d[f - r | 0] / 2 / i) : o, D && (o = Z = v * U + A * (U = W) + R * (W = o) - y2 * Y - m * (Y = Z))), u = (z += T += H) * n.cos(K * _++), x2 += u + u * j * C(f ** 5), g && ++g > J && (z += V, O += V, g = 0), !h || ++$ % h || (z = O, T = F, g = g || 1);
         i = zzfxX.createBuffer(1, s, a), i.getChannelData(0).set(d), z = zzfxX.createBufferSource(), z.buffer = i, z.connect(zzfxX.destination), z.start();
       };
     };
@@ -312,9 +312,9 @@
          *
          * @see https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/roundRect
          */
-        rect(x, y, width, height, color, radii) {
-          DEV: assert(isNumber(x), "[litecanvas] rect() 1st param must be a number");
-          DEV: assert(isNumber(y), "[litecanvas] rect() 2nd param must be a number");
+        rect(x2, y2, width, height, color, radii) {
+          DEV: assert(isNumber(x2), "[litecanvas] rect() 1st param must be a number");
+          DEV: assert(isNumber(y2), "[litecanvas] rect() 2nd param must be a number");
           DEV: assert(
             isNumber(width) && width > 0,
             "[litecanvas] rect() 3rd param must be a positive number"
@@ -333,8 +333,8 @@
           );
           beginPath(_ctx);
           _ctx[radii ? "roundRect" : "rect"](
-            ~~x - _outline_fix,
-            ~~y - _outline_fix,
+            ~~x2 - _outline_fix,
+            ~~y2 - _outline_fix,
             ~~width + _outline_fix * 2,
             ~~height + _outline_fix * 2,
             radii
@@ -351,9 +351,9 @@
          * @param {number} [color=0] the color index
          * @param {number|number[]} [radii] A number or list specifying the radii used to draw a rounded-borders rectangle
          */
-        rectfill(x, y, width, height, color, radii) {
-          DEV: assert(isNumber(x), "[litecanvas] rectfill() 1st param must be a number");
-          DEV: assert(isNumber(y), "[litecanvas] rectfill() 2nd param must be a number");
+        rectfill(x2, y2, width, height, color, radii) {
+          DEV: assert(isNumber(x2), "[litecanvas] rectfill() 1st param must be a number");
+          DEV: assert(isNumber(y2), "[litecanvas] rectfill() 2nd param must be a number");
           DEV: assert(
             isNumber(width) && width >= 0,
             "[litecanvas] rectfill() 3rd param must be a positive number or zero"
@@ -371,7 +371,7 @@
             "[litecanvas] rectfill() 6th param must be a number or array of at least 2 numbers"
           );
           beginPath(_ctx);
-          _ctx[radii ? "roundRect" : "rect"](~~x, ~~y, ~~width, ~~height, radii);
+          _ctx[radii ? "roundRect" : "rect"](~~x2, ~~y2, ~~width, ~~height, radii);
           instance.fill(color);
         },
         /**
@@ -382,9 +382,9 @@
          * @param {number} radius
          * @param {number} [color=0] the color index
          */
-        circ(x, y, radius, color) {
-          DEV: assert(isNumber(x), "[litecanvas] circ() 1st param must be a number");
-          DEV: assert(isNumber(y), "[litecanvas] circ() 2nd param must be a number");
+        circ(x2, y2, radius, color) {
+          DEV: assert(isNumber(x2), "[litecanvas] circ() 1st param must be a number");
+          DEV: assert(isNumber(y2), "[litecanvas] circ() 2nd param must be a number");
           DEV: assert(
             isNumber(radius) && radius >= 0,
             "[litecanvas] circ() 3rd param must be a positive number or zero"
@@ -394,7 +394,7 @@
             "[litecanvas] circ() 4th param must be a positive number or zero"
           );
           beginPath(_ctx);
-          _ctx.arc(~~x, ~~y, ~~radius, 0, TWO_PI);
+          _ctx.arc(~~x2, ~~y2, ~~radius, 0, TWO_PI);
           instance.stroke(color);
         },
         /**
@@ -405,9 +405,9 @@
          * @param {number} radius
          * @param {number} [color=0] the color index
          */
-        circfill(x, y, radius, color) {
-          DEV: assert(isNumber(x), "[litecanvas] circfill() 1st param must be a number");
-          DEV: assert(isNumber(y), "[litecanvas] circfill() 2nd param must be a number");
+        circfill(x2, y2, radius, color) {
+          DEV: assert(isNumber(x2), "[litecanvas] circfill() 1st param must be a number");
+          DEV: assert(isNumber(y2), "[litecanvas] circfill() 2nd param must be a number");
           DEV: assert(
             isNumber(radius) && radius >= 0,
             "[litecanvas] circfill() 3rd param must be a positive number or zero"
@@ -417,7 +417,7 @@
             "[litecanvas] circfill() 4th param must be a positive number or zero"
           );
           beginPath(_ctx);
-          _ctx.arc(~~x, ~~y, ~~radius, 0, TWO_PI);
+          _ctx.arc(~~x2, ~~y2, ~~radius, 0, TWO_PI);
           instance.fill(color);
         },
         /**
@@ -429,9 +429,9 @@
          * @param {number} radiusY
          * @param {number} [color=0] the color index
          */
-        oval(x, y, radiusX, radiusY, color) {
-          DEV: assert(isNumber(x), "[litecanvas] oval() 1st param must be a number");
-          DEV: assert(isNumber(y), "[litecanvas] oval() 2nd param must be a number");
+        oval(x2, y2, radiusX, radiusY, color) {
+          DEV: assert(isNumber(x2), "[litecanvas] oval() 1st param must be a number");
+          DEV: assert(isNumber(y2), "[litecanvas] oval() 2nd param must be a number");
           DEV: assert(
             isNumber(radiusX) && radiusX >= 0,
             "[litecanvas] oval() 3rd param must be a positive number or zero"
@@ -445,7 +445,7 @@
             "[litecanvas] oval() 5th param must be a positive number or zero"
           );
           beginPath(_ctx);
-          _ctx.ellipse(~~x, ~~y, ~~radiusX, ~~radiusY, 0, 0, TWO_PI);
+          _ctx.ellipse(~~x2, ~~y2, ~~radiusX, ~~radiusY, 0, 0, TWO_PI);
           instance.stroke(color);
         },
         /**
@@ -457,9 +457,9 @@
          * @param {number} radiusY
          * @param {number} [color=0] the color index
          */
-        ovalfill(x, y, radiusX, radiusY, color) {
-          DEV: assert(isNumber(x), "[litecanvas] ovalfill() 1st param must be a number");
-          DEV: assert(isNumber(y), "[litecanvas] ovalfill() 2nd param must be a number");
+        ovalfill(x2, y2, radiusX, radiusY, color) {
+          DEV: assert(isNumber(x2), "[litecanvas] ovalfill() 1st param must be a number");
+          DEV: assert(isNumber(y2), "[litecanvas] ovalfill() 2nd param must be a number");
           DEV: assert(
             isNumber(radiusX) && radiusX >= 0,
             "[litecanvas] ovalfill() 3rd param must be a positive number or zero"
@@ -473,7 +473,7 @@
             "[litecanvas] ovalfill() 5th param must be a positive number or zero"
           );
           beginPath(_ctx);
-          _ctx.ellipse(~~x, ~~y, ~~radiusX, ~~radiusY, 0, 0, TWO_PI);
+          _ctx.ellipse(~~x2, ~~y2, ~~radiusX, ~~radiusY, 0, 0, TWO_PI);
           instance.fill(color);
         },
         /**
@@ -548,9 +548,9 @@
          * @param {number} [color=3] the color index
          * @param {string} [fontStyle] can be "normal" (default), "italic" and/or "bold".
          */
-        text(x, y, message, color = 3, fontStyle = "normal") {
-          DEV: assert(isNumber(x), "[litecanvas] text() 1st param must be a number");
-          DEV: assert(isNumber(y), "[litecanvas] text() 2nd param must be a number");
+        text(x2, y2, message, color = 3, fontStyle = "normal") {
+          DEV: assert(isNumber(x2), "[litecanvas] text() 1st param must be a number");
+          DEV: assert(isNumber(y2), "[litecanvas] text() 2nd param must be a number");
           DEV: assert(
             null == color || isNumber(color) && color >= 0,
             "[litecanvas] text() 4th param must be a positive number or zero"
@@ -561,7 +561,7 @@
           );
           _ctx.font = `${fontStyle} ${_fontSize}px ${_fontFamily}`;
           _ctx.fillStyle = _colors[~~color % _colors.length];
-          _ctx.fillText(message, ~~x, ~~y);
+          _ctx.fillText(message, ~~x2, ~~y2);
         },
         /**
          * Set the font family
@@ -614,10 +614,10 @@
          * @param {number} y
          * @param {CanvasImageSource} source
          */
-        image(x, y, source) {
-          DEV: assert(isNumber(x), "[litecanvas] image() 1st param must be a number");
-          DEV: assert(isNumber(y), "[litecanvas] image() 2nd param must be a number");
-          _ctx.drawImage(source, ~~x, ~~y);
+        image(x2, y2, source) {
+          DEV: assert(isNumber(x2), "[litecanvas] image() 1st param must be a number");
+          DEV: assert(isNumber(y2), "[litecanvas] image() 2nd param must be a number");
+          _ctx.drawImage(source, ~~x2, ~~y2);
         },
         /**
          * Draw in an OffscreenCanvas and returns its image.
@@ -658,17 +658,17 @@
           _ctx = canvas.getContext("2d");
           _ctx.scale(scale, scale);
           if (Array.isArray(drawing)) {
-            let x = 0, y = 0;
+            let x2 = 0, y2 = 0;
             _ctx.imageSmoothingEnabled = false;
             for (const str of drawing) {
               for (const color of str) {
                 if (" " !== color && "." !== color) {
-                  instance.rectfill(x, y, 1, 1, parseInt(color, 16));
+                  instance.rectfill(x2, y2, 1, 1, parseInt(color, 16));
                 }
-                x++;
+                x2++;
               }
-              y++;
-              x = 0;
+              y2++;
+              x2 = 0;
             }
           } else {
             drawing(_ctx);
@@ -712,10 +712,10 @@
          * @param {number} x
          * @param {number} y
          */
-        translate(x, y) {
-          DEV: assert(isNumber(x), "[litecanvas] translate() 1st param must be a number");
-          DEV: assert(isNumber(y), "[litecanvas] translate() 2nd param must be a number");
-          _ctx.translate(~~x, ~~y);
+        translate(x2, y2) {
+          DEV: assert(isNumber(x2), "[litecanvas] translate() 1st param must be a number");
+          DEV: assert(isNumber(y2), "[litecanvas] translate() 2nd param must be a number");
+          _ctx.translate(~~x2, ~~y2);
         },
         /**
          * Adds a scaling transformation to the canvas units horizontally and/or vertically.
@@ -723,10 +723,10 @@
          * @param {number} x
          * @param {number} [y]
          */
-        scale(x, y) {
-          DEV: assert(isNumber(x), "[litecanvas] scale() 1st param must be a number");
-          DEV: assert(null == y || isNumber(y), "[litecanvas] scale() 2nd param must be a number");
-          _ctx.scale(x, y || x);
+        scale(x2, y2) {
+          DEV: assert(isNumber(x2), "[litecanvas] scale() 1st param must be a number");
+          DEV: assert(null == y2 || isNumber(y2), "[litecanvas] scale() 2nd param must be a number");
+          _ctx.scale(x2, y2 || x2);
         },
         /**
          * Adds a rotation to the transformation matrix.
@@ -1074,16 +1074,16 @@
              * @param {number} [x]
              * @param {number} [y]
              */
-            (id, x, y) => {
+            (id, x2, y2) => {
               const tap = {
                 // current x
-                x,
+                x: x2,
                 // current y
-                y,
+                y: y2,
                 // initial x
-                xi: x,
+                xi: x2,
                 // initial y
-                yi: y,
+                yi: y2,
                 // timestamp
                 t: Date.now()
               };
@@ -1096,10 +1096,10 @@
              * @param {number} x
              * @param {number} y
              */
-            (id, x, y) => {
+            (id, x2, y2) => {
               const tap = _taps.get(id) || _registerTap(id);
-              tap.x = x;
-              tap.y = y;
+              tap.x = x2;
+              tap.y = y2;
             }
           ), _checkTapped = (
             /**
@@ -1117,9 +1117,9 @@
             (ev) => {
               if (ev.button === 0) {
                 preventDefault(ev);
-                const [x, y] = _getXY(ev);
-                instance.emit("tap", x, y, 0);
-                _registerTap(0, x, y);
+                const [x2, y2] = _getXY(ev);
+                instance.emit("tap", x2, y2, 0);
+                _registerTap(0, x2, y2);
                 _pressingMouse = true;
               }
             }
@@ -1134,11 +1134,11 @@
               if (ev.button === 0) {
                 preventDefault(ev);
                 const tap = _taps.get(0);
-                const [x, y] = _getXY(ev);
+                const [x2, y2] = _getXY(ev);
                 if (_checkTapped(tap)) {
                   instance.emit("tapped", tap.xi, tap.yi, 0);
                 }
-                instance.emit("untap", x, y, 0);
+                instance.emit("untap", x2, y2, 0);
                 _taps.delete(0);
                 _pressingMouse = false;
               }
@@ -1152,12 +1152,12 @@
              */
             (ev) => {
               preventDefault(ev);
-              const [x, y] = _getXY(ev);
-              instance.def("MX", x);
-              instance.def("MY", y);
+              const [x2, y2] = _getXY(ev);
+              instance.def("MX", x2);
+              instance.def("MY", y2);
               if (!_pressingMouse) return;
-              instance.emit("tapping", x, y, 0);
-              _updateTap(0, x, y);
+              instance.emit("tapping", x2, y2, 0);
+              _updateTap(0, x2, y2);
             }
           );
           on(
@@ -1170,9 +1170,9 @@
               preventDefault(ev);
               const touches = ev.changedTouches;
               for (const touch of touches) {
-                const [x, y] = _getXY(touch);
-                instance.emit("tap", x, y, touch.identifier + 1);
-                _registerTap(touch.identifier + 1, x, y);
+                const [x2, y2] = _getXY(touch);
+                instance.emit("tap", x2, y2, touch.identifier + 1);
+                _registerTap(touch.identifier + 1, x2, y2);
               }
             }
           );
@@ -1186,9 +1186,9 @@
               preventDefault(ev);
               const touches = ev.changedTouches;
               for (const touch of touches) {
-                const [x, y] = _getXY(touch);
-                instance.emit("tapping", x, y, touch.identifier + 1);
-                _updateTap(touch.identifier + 1, x, y);
+                const [x2, y2] = _getXY(touch);
+                instance.emit("tapping", x2, y2, touch.identifier + 1);
+                _updateTap(touch.identifier + 1, x2, y2);
               }
             }
           );
@@ -1415,8 +1415,8 @@
       for (let t in globalThis.utils) t !== "global" && (e || globalThis[t] === void 0) && (globalThis[t] = globalThis.utils[t]);
     };
     var Z = {};
-    Pt(Z, { ANCHOR_BOT_LEFT: () => vt, ANCHOR_BOT_RIGHT: () => te, ANCHOR_CENTER: () => Jt, ANCHOR_TOP_LEFT: () => v, ANCHOR_TOP_RIGHT: () => Qt, Actor: () => O, BACK_IN: () => oe, BACK_IN_OUT: () => ae, BACK_OUT: () => he, BOUNCE_IN: () => pt, BOUNCE_IN_OUT: () => pe, BOUNCE_OUT: () => C, Camera: () => y, DOWN: () => $t, EASE_IN: () => se, EASE_IN_OUT: () => ie, EASE_OUT: () => re, ELASTIC_IN: () => ne, ELASTIC_IN_OUT: () => le, ELASTIC_OUT: () => ce, Grid: () => w, LEFT: () => Gt, LINEAR: () => lt, Noise: () => Y, ONE: () => qt, RIGHT: () => Kt, TypedGrid: () => T, UP: () => zt, Vector: () => I, ZERO: () => Q, advance: () => st, choose: () => yt, colcirc: () => X, colrect: () => W, diff: () => tt, dist: () => it, flipImage: () => ut, formatTime: () => wt, fract: () => et, head: () => It, intersection: () => M, last: () => Et, lerpAngle: () => nt, mag: () => ot, makeCircle: () => xt, makeRectangle: () => dt, mean: () => ht, median: () => at, mod: () => rt, percent: () => ct, range: () => mt, resolverect: () => H, scaleImage: () => ft, shuffle: () => gt, sum: () => P, tail: () => Mt, tintImage: () => _t, tween: () => ee, vec: () => h, vecAbs: () => Bt, vecAdd: () => N, vecAngle: () => St, vecAngleBetween: () => Ot, vecCeil: () => Yt, vecClamp: () => Ht, vecCross: () => Ft, vecDist: () => Lt, vecDist2: () => kt, vecDiv: () => L, vecDot: () => J, vecEq: () => S, vecFloor: () => Zt, vecHeading: () => G, vecIsZero: () => Dt, vecLerp: () => Ct, vecLimit: () => At, vecMag: () => K, vecMag2: () => $, vecMove: () => Xt, vecMult: () => b, vecNorm: () => k, vecRand: () => jt, vecReflect: () => Nt, vecRem: () => Wt, vecRotate: () => Tt, vecRound: () => Ut, vecSet: () => q, vecSetMag: () => z, vecSub: () => A, vecToArray: () => Vt });
-    var y = class {
+    Pt(Z, { ANCHOR_BOT_LEFT: () => vt, ANCHOR_BOT_RIGHT: () => te, ANCHOR_CENTER: () => Jt, ANCHOR_TOP_LEFT: () => v, ANCHOR_TOP_RIGHT: () => Qt, Actor: () => O, BACK_IN: () => oe, BACK_IN_OUT: () => ae, BACK_OUT: () => he, BOUNCE_IN: () => pt, BOUNCE_IN_OUT: () => pe, BOUNCE_OUT: () => C, Camera: () => y2, DOWN: () => $t, EASE_IN: () => se, EASE_IN_OUT: () => ie, EASE_OUT: () => re, ELASTIC_IN: () => ne, ELASTIC_IN_OUT: () => le, ELASTIC_OUT: () => ce, Grid: () => w, LEFT: () => Gt, LINEAR: () => lt, Noise: () => Y, ONE: () => qt, RIGHT: () => Kt, TypedGrid: () => T, UP: () => zt, Vector: () => I, ZERO: () => Q, advance: () => st, choose: () => yt, colcirc: () => X, colrect: () => W, diff: () => tt, dist: () => it, flipImage: () => ut, formatTime: () => wt, fract: () => et, head: () => It, intersection: () => M, last: () => Et, lerpAngle: () => nt, mag: () => ot, makeCircle: () => xt, makeRectangle: () => dt, mean: () => ht, median: () => at, mod: () => rt, percent: () => ct, range: () => mt, resolverect: () => H, scaleImage: () => ft, shuffle: () => gt, sum: () => P, tail: () => Mt, tintImage: () => _t, tween: () => ee, vec: () => h, vecAbs: () => Bt, vecAdd: () => N, vecAngle: () => St, vecAngleBetween: () => Ot, vecCeil: () => Yt, vecClamp: () => Ht, vecCross: () => Ft, vecDist: () => Lt, vecDist2: () => kt, vecDiv: () => L, vecDot: () => J, vecEq: () => S, vecFloor: () => Zt, vecHeading: () => G, vecIsZero: () => Dt, vecLerp: () => Ct, vecLimit: () => At, vecMag: () => K, vecMag2: () => $, vecMove: () => Xt, vecMult: () => b, vecNorm: () => k, vecRand: () => jt, vecReflect: () => Nt, vecRem: () => Wt, vecRotate: () => Tt, vecRound: () => Ut, vecSet: () => q, vecSetMag: () => z, vecSub: () => A, vecToArray: () => Vt });
+    var y2 = class {
       _engine = null;
       x = 0;
       y = 0;
@@ -1484,11 +1484,11 @@
       }
     };
     var M = (e, t, s, r, i, o, a, n) => {
-      let c = Math.max(e, i), x = Math.min(e + s, i + a) - c, p = Math.max(t, o), d = Math.min(t + r, o + n) - p;
-      return [c, p, x, d];
+      let c = Math.max(e, i), x2 = Math.min(e + s, i + a) - c, p = Math.max(t, o), d = Math.min(t + r, o + n) - p;
+      return [c, p, x2, d];
     };
     var H = (e, t, s, r, i, o, a, n) => {
-      let [c, x, p, d] = M(e, t, s, r, i, o, a, n), _ = "", g = e, l = t;
+      let [c, x2, p, d] = M(e, t, s, r, i, o, a, n), _ = "", g = e, l = t;
       return p < d ? e < i ? (_ = "right", g = i - s) : (_ = "left", g = i + a) : t < o ? (_ = "bottom", l = o - r) : (_ = "top", l = o + n), { direction: _, x: g, y: l };
     };
     var W = (e, t, s, r, i, o, a, n) => e < i + a && e + s > i && t < o + n && t + r > o;
@@ -1784,10 +1784,10 @@
       }
       noise(t, s = 0, r = 0) {
         t < 0 && (t = -t), s < 0 && (s = -s), r < 0 && (r = -r);
-        let i = Math.floor(t), o = Math.floor(s), a = Math.floor(r), n = t - i, c = s - o, x = r - a, p, d, _ = 0, g = 0.5, l, u, E;
+        let i = Math.floor(t), o = Math.floor(s), a = Math.floor(r), n = t - i, c = s - o, x2 = r - a, p, d, _ = 0, g = 0.5, l, u, E;
         for (let U = 0; U < this._po; U++) {
           let f = i + (o << 4) + (a << 8);
-          p = B(n), d = B(c), l = this._p[f & 4095], l += p * (this._p[f + 1 & 4095] - l), u = this._p[f + 16 & 4095], u += p * (this._p[f + 16 + 1 & 4095] - u), l += d * (u - l), f += 256, u = this._p[f & 4095], u += p * (this._p[f + 1 & 4095] - u), E = this._p[f + 16 & 4095], E += p * (this._p[f + 16 + 1 & 4095] - E), u += d * (E - u), l += B(x) * (u - l), _ += l * g, g *= this._pf, i <<= 1, n *= 2, o <<= 1, c *= 2, a <<= 1, x *= 2, n >= 1 && (i++, n--), c >= 1 && (o++, c--), x >= 1 && (a++, x--);
+          p = B(n), d = B(c), l = this._p[f & 4095], l += p * (this._p[f + 1 & 4095] - l), u = this._p[f + 16 & 4095], u += p * (this._p[f + 16 + 1 & 4095] - u), l += d * (u - l), f += 256, u = this._p[f & 4095], u += p * (this._p[f + 1 & 4095] - u), E = this._p[f + 16 & 4095], E += p * (this._p[f + 16 + 1 & 4095] - E), u += d * (E - u), l += B(x2) * (u - l), _ += l * g, g *= this._pf, i <<= 1, n *= 2, o <<= 1, c *= 2, a <<= 1, x2 *= 2, n >= 1 && (i++, n--), c >= 1 && (o++, c--), x2 >= 1 && (a++, x2--);
         }
         return _;
       }
@@ -1856,7 +1856,7 @@
       let i = "LOADING";
       t.def(i, ~~t[i] + ~~e);
     };
-    function y(t, e = {}) {
+    function y2(t, e = {}) {
       return e = Object.assign({}, h, e), l(t, 0), t.def("ASSETS", t.ASSETS || {}), t.ASSETS.font = {}, { loadFont: async (r, a, p) => {
         let { baseURL: m, ignoreErrors: f } = e, o = c(a);
         a = b(a, m);
@@ -1942,7 +1942,7 @@
         });
       } };
     }
-    function x(t, e = {}) {
+    function x2(t, e = {}) {
       return e = Object.assign({}, h, e), l(t, 0), t.def("ASSETS", t.ASSETS || {}), t.ASSETS.sound = {}, { loadSound: async (r, a) => {
         let { crossOrigin: p, ignoreErrors: m, allowSoundInterruptions: f, baseURL: o } = e, n = c(r);
         r = b(r, o);
@@ -1983,7 +1983,7 @@
       }) };
     }
     function v(t, e = {}) {
-      t.use(y, e), t.use(A, e), t.use(E, e), t.use(x, e), t.use(L, e), t.use(T);
+      t.use(y2, e), t.use(A, e), t.use(E, e), t.use(x2, e), t.use(L, e), t.use(T);
     }
     window.pluginAssetLoader = v;
   })();
@@ -1992,7 +1992,7 @@
       if (!a) throw new Error(c);
     };
     var _ = (a, c, m, l, s, h, f, b) => (o(isFinite(a), "colrect: 1st param must be a number"), o(isFinite(c), "colrect: 2nd param must be a number"), o(isFinite(m), "colrect: 3rd param must be a number"), o(isFinite(l), "colrect: 4th param must be a number"), o(isFinite(s), "colrect: 5th param must be a number"), o(isFinite(h), "colrect: 6th param must be a number"), o(isFinite(f), "colrect: 7th param must be a number"), o(isFinite(b), "colrect: 8th param must be a number"), a < s + f && a + m > s && c < h + b && c + l > h);
-    var x = (a, c, m, l, s, h) => (o(isFinite(a), "colcirc: 1st param must be a number"), o(isFinite(c), "colcirc: 2nd param must be a number"), o(isFinite(m), "colcirc: 3rd param must be a number"), o(isFinite(l), "colcirc: 4th param must be a number"), o(isFinite(s), "colcirc: 5th param must be a number"), o(isFinite(h), "colcirc: 6th param must be a number"), (l - a) * (l - a) + (s - c) * (s - c) <= (m + h) * (m + h));
+    var x2 = (a, c, m, l, s, h) => (o(isFinite(a), "colcirc: 1st param must be a number"), o(isFinite(c), "colcirc: 2nd param must be a number"), o(isFinite(m), "colcirc: 3rd param must be a number"), o(isFinite(l), "colcirc: 4th param must be a number"), o(isFinite(s), "colcirc: 5th param must be a number"), o(isFinite(h), "colcirc: 6th param must be a number"), (l - a) * (l - a) + (s - c) * (s - c) <= (m + h) * (m + h));
     var wt = 2 * Math.PI;
     var oe = Math.PI / 2;
     var Z = { warnings: true };
@@ -2094,11 +2094,11 @@
       function L(t, e) {
         s("setvar()", "def()"), u(t, e);
       }
-      a.listen("resized", y);
-      function y() {
+      a.listen("resized", y2);
+      function y2() {
         u("CX", a.W / 2), u("CY", a.H / 2);
       }
-      y(), u("CANVAS", a.canvas());
+      y2(), u("CANVAS", a.canvas());
       function N(t, e) {
         if (l.autoscale) throw "resize() don't works with autoscale enabled";
         s("resize()", null, "Avoid changing the canvas dimensions at runtime."), a.CANVAS.width = t, u("W", t), u("CX", t / 2), a.CANVAS.height = e, u("H", e), u("CY", e / 2), a.emit("resized", 1);
@@ -2133,7 +2133,7 @@
       function B(t) {
         s("clip(path)", "clip(callback)", "E.g: `clip((ctx) => ctx.rect(0, 0, 200, 200))`"), t instanceof Path2D ? a.ctx().clip(t) : W(t);
       }
-      return l.antialias && s('"antialias" option', '"pixelart" option'), { def: u, seed: h, print: E, clear: R, setfps: k, setvar: L, textstyle: b, textmetrics: M, text: g, cliprect: I, clipcirc: A, blendmode: P, transform: C, getcolor: T, mousepos: S, resize: N, path: O, fill: F, stroke: H, clip: B, colrect: _, colcirc: x };
+      return l.antialias && s('"antialias" option', '"pixelart" option'), { def: u, seed: h, print: E, clear: R, setfps: k, setvar: L, textstyle: b, textmetrics: M, text: g, cliprect: I, clipcirc: A, blendmode: P, transform: C, getcolor: T, mousepos: S, resize: N, path: O, fill: F, stroke: H, clip: B, colrect: _, colcirc: x2 };
     }
     window.pluginMigrate = v;
   })();
@@ -2143,8 +2143,8 @@
       ["right", "left"].includes(b) || (b = "right"), r.style.cssText = `position:absolute;top:0;${b}:0;cursor:pointer;opacity:0.8;z-index:10000`, r.addEventListener("click", function(a) {
         a.preventDefault(), e(++n % r.children.length);
       }, false);
-      function f(a, t, x, g) {
-        let _ = new S(a, t, x, r, g);
+      function f(a, t, x2, g) {
+        let _ = new S(a, t, x2, r, g);
         return i.push(_), _;
       }
       function e(a) {
@@ -2162,7 +2162,7 @@
       function d(a = true) {
         o = !!a, r.style.display = o ? "" : "none";
       }
-      let m = p(), u = m, l = 0, y = f("FPS", "#0ff", "#002"), w = f("MS", "#0f0", "#020"), c;
+      let m = p(), u = m, l = 0, y2 = f("FPS", "#0ff", "#002"), w = f("MS", "#0f0", "#020"), c;
       return self.performance && self.performance.memory && (c = f("MB", "#f08", "#201")), e(0), { dom: r, addPanel: f, showPanel: e, nextPanel: v, resetPanel: h, display: d, get hidden() {
         return !o;
       }, begin: function() {
@@ -2170,7 +2170,7 @@
       }, end: function() {
         l++;
         let a = p();
-        if (w.update(a - m, 200), a >= u + 1e3 && (y.update(l * 1e3 / (a - u), 100), u = a, l = 0, c)) {
+        if (w.update(a - m, 200), a >= u + 1e3 && (y2.update(l * 1e3 / (a - u), 100), u = a, l = 0, c)) {
           let t = performance.memory;
           c.update(t.usedJSHeapSize / 1048576, t.jsHeapSizeLimit / 1048576);
         }
@@ -2180,19 +2180,19 @@
       } };
     }
     function S(s, n, o, b, r = {}) {
-      let i = Math.round, p = 1 / 0, f = 0, e = i(window.devicePixelRatio || 1), v = r.width || 80, h = 48, d = 3 * e, m = 2 * e, u = 3 * e, l = 15 * e, y = (v - 6) * e, w = 30 * e, c = document.createElement("canvas");
+      let i = Math.round, p = 1 / 0, f = 0, e = i(window.devicePixelRatio || 1), v = r.width || 80, h = 48, d = 3 * e, m = 2 * e, u = 3 * e, l = 15 * e, y2 = (v - 6) * e, w = 30 * e, c = document.createElement("canvas");
       c.width = v * e, c.height = h * e, c.style.cssText = `width:${v}px;height:48px;`;
       let a = b.children.length;
       b.appendChild(c);
       let t = c.getContext("2d");
       t.font = `bold ${9 * e}px Helvetica,Arial,sans-serif`, t.textBaseline = "top";
-      function x() {
-        t.fillStyle = o, t.fillRect(0, 0, v * e, h * e), t.fillStyle = n, t.fillText(s, d, m), t.fillRect(u, l, y, w), t.fillStyle = o, t.globalAlpha = 0.9, t.fillRect(u, l, y, w);
+      function x2() {
+        t.fillStyle = o, t.fillRect(0, 0, v * e, h * e), t.fillStyle = n, t.fillText(s, d, m), t.fillRect(u, l, y2, w), t.fillStyle = o, t.globalAlpha = 0.9, t.fillRect(u, l, y2, w);
       }
-      return x(), { id: a, dom: c, reset: x, update: function(g, _) {
+      return x2(), { id: a, dom: c, reset: x2, update: function(g, _) {
         p = Math.min(p, g), f = Math.max(f, g), t.fillStyle = o, t.globalAlpha = 1, t.fillRect(0, 0, v * e, l), t.fillStyle = n;
         let T = [i(g), s];
-        r.labelBefore && T.reverse(), t.fillText(T.join(" ") + " (" + i(p) + "-" + i(f) + ")", d, m), t.drawImage(c, u + e, l, y - e, w, u, l, y - e, w), t.fillRect(u + y - e, l, e, w), t.fillStyle = o, t.globalAlpha = 0.9, t.fillRect(u + y - e, l, e, i((1 - g / _) * w));
+        r.labelBefore && T.reverse(), t.fillText(T.join(" ") + " (" + i(p) + "-" + i(f) + ")", d, m), t.drawImage(c, u + e, l, y2 - e, w, u, l, y2 - e, w), t.fillRect(u + y2 - e, l, e, w), t.fillStyle = o, t.globalAlpha = 0.9, t.fillRect(u + y2 - e, l, e, i((1 - g / _) * w));
       } };
     }
     var z = { hotkeyShow: "F1", hotkeyNext: "F2", css: {}, hidden: false, id: "", position: "right" };
@@ -2215,44 +2215,52 @@
     window.pluginFrameRateMeter = E;
   })();
   (() => {
-    var F = [[24, 60, 60, 24, 24, , 24], [54, 54, , , , , ,], [54, 54, 127, 54, 127, 54, 54], [12, 62, 3, 30, 48, 31, 12], [, 99, 51, 24, 12, 102, 99], [28, 54, 28, 110, 59, 51, 110], [6, 6, 3, , , , ,], [24, 12, 6, 6, 6, 12, 24], [6, 12, 24, 24, 24, 12, 6], [, 102, 60, 255, 60, 102, ,], [, 12, 12, 63, 12, 12, ,], [, , , , , 12, 12, 6], [, , , 63, , , ,], [, , , , , 12, 12], [96, 48, 24, 12, 6, 3, 1], [62, 99, 115, 123, 111, 103, 62], [12, 14, 12, 12, 12, 12, 63], [30, 51, 48, 28, 6, 51, 63], [30, 51, 48, 28, 48, 51, 30], [56, 60, 54, 51, 127, 48, 120], [63, 3, 31, 48, 48, 51, 30], [28, 6, 3, 31, 51, 51, 30], [63, 51, 48, 24, 12, 12, 12], [30, 51, 51, 30, 51, 51, 30], [30, 51, 51, 62, 48, 24, 14], [, 12, 12, , , 12, 12], [, 12, 12, , , 12, 12, 6], [24, 12, 6, 3, 6, 12, 24], [, , 63, , , 63, ,], [6, 12, 24, 48, 24, 12, 6], [30, 51, 48, 24, 12, , 12], [62, 99, 123, 123, 123, 3, 30], [12, 30, 51, 51, 63, 51, 51], [63, 102, 102, 62, 102, 102, 63], [60, 102, 3, 3, 3, 102, 60], [31, 54, 102, 102, 102, 54, 31], [127, 70, 22, 30, 22, 70, 127], [127, 70, 22, 30, 22, 6, 15], [60, 102, 3, 3, 115, 102, 124], [51, 51, 51, 63, 51, 51, 51], [30, 12, 12, 12, 12, 12, 30], [120, 48, 48, 48, 51, 51, 30], [103, 102, 54, 30, 54, 102, 103], [15, 6, 6, 6, 70, 102, 127], [99, 119, 127, 127, 107, 99, 99], [99, 103, 111, 123, 115, 99, 99], [28, 54, 99, 99, 99, 54, 28], [63, 102, 102, 62, 6, 6, 15], [30, 51, 51, 51, 59, 30, 56], [63, 102, 102, 62, 54, 102, 103], [30, 51, 7, 14, 56, 51, 30], [63, 45, 12, 12, 12, 12, 30], [51, 51, 51, 51, 51, 51, 63], [51, 51, 51, 51, 51, 30, 12], [99, 99, 99, 107, 127, 119, 99], [99, 99, 54, 28, 28, 54, 99], [51, 51, 51, 30, 12, 12, 30], [127, 99, 49, 24, 76, 102, 127], [30, 6, 6, 6, 6, 6, 30], [3, 6, 12, 24, 48, 96, 64], [30, 24, 24, 24, 24, 24, 30], [8, 28, 54, 99, , , ,], [, , , , , , , 255], [12, 12, 24, , , , ,], [, , 30, 48, 62, 51, 110], [7, 6, 6, 62, 102, 102, 59], [, , 30, 51, 3, 51, 30], [56, 48, 48, 62, 51, 51, 110], [, , 30, 51, 63, 3, 30], [28, 54, 6, 15, 6, 6, 15], [, , 110, 51, 51, 62, 48, 31], [7, 6, 54, 110, 102, 102, 103], [12, , 14, 12, 12, 12, 30], [48, , 48, 48, 48, 51, 51, 30], [7, 6, 102, 54, 30, 54, 103], [14, 12, 12, 12, 12, 12, 30], [, , 51, 127, 127, 107, 99], [, , 31, 51, 51, 51, 51], [, , 30, 51, 51, 51, 30], [, , 59, 102, 102, 62, 6, 15], [, , 110, 51, 51, 62, 48, 120], [, , 59, 110, 102, 6, 15], [, , 62, 3, 30, 48, 31], [8, 12, 62, 12, 12, 44, 24], [, , 51, 51, 51, 51, 110], [, , 51, 51, 51, 30, 12], [, , 99, 107, 127, 127, 54], [, , 99, 54, 28, 54, 99], [, , 51, 51, 51, 62, 48, 31], [, , 63, 25, 12, 38, 63], [56, 12, 12, 7, 12, 12, 56], [24, 24, 24, , 24, 24, 24], [7, 12, 12, 56, 12, 12, 7], [110, 59, , , , , ,]], g = { id: "basic", chars: F, first: 33, w: 8, h: 8 };
-    var I = [[2, 2, 2, , 2], [5, 5], [5, 7, 5, 7, 5], [6, 3, 6, 7, 2], [5, 4, 2, 1, 5], [6, 3, 6, 5, 6], [2, 2, , , ,], [2, 1, 1, 1, 2], [2, 4, 4, 4, 2], [5, 2, 5], [, 2, 7, 2], [, , , , 2, 1], [, , 7], [, , , , 1], [4, 4, 2, 1, 1], [7, 5, 5, 5, 7], [3, 2, 2, 2, 7], [7, 4, 7, 1, 7], [7, 4, 7, 4, 7], [5, 5, 7, 4, 4], [7, 1, 7, 4, 7], [7, 1, 7, 5, 7], [7, 4, 4, 4, 4], [7, 5, 7, 5, 7], [7, 5, 7, 4, 7], [, , 2, , 2], [, , 2, , 2, 1], [4, 2, 1, 2, 4], [, 7, , 7], [1, 2, 4, 2, 1], [7, 4, 6, , 2], [2, 5, 5, 1, 6], [2, 5, 7, 5, 5], [3, 5, 3, 5, 3], [6, 1, 1, 1, 6], [3, 5, 5, 5, 3], [7, 1, 3, 1, 7], [7, 1, 3, 1, 1], [6, 1, 5, 5, 6], [5, 5, 7, 5, 5], [7, 2, 2, 2, 7], [4, 4, 4, 5, 2], [5, 5, 3, 5, 5], [1, 1, 1, 1, 7], [5, 7, 7, 5, 5], [7, 5, 5, 5, 5], [2, 5, 5, 5, 2], [7, 5, 7, 1, 1], [6, 5, 5, 3, 6], [3, 5, 3, 5, 5], [6, 1, 7, 4, 3], [7, 2, 2, 2, 2], [5, 5, 5, 5, 7], [5, 5, 5, 2, 2], [5, 5, 7, 7, 5], [5, 5, 2, 5, 5], [5, 5, 2, 2, 2], [7, 4, 2, 1, 7], [6, 2, 2, 2, 6], [1, 1, 2, 4, 4], [3, 2, 2, 2, 3], [2, 5], [, , , , 7], [1, 2], [, 6, 5, 5, 6], [1, 3, 5, 5, 3], [, 6, 1, 1, 6], [4, 6, 5, 5, 6], [, 2, 5, 3, 6], [4, 2, 7, 2, 2], [, 2, 5, 6, 4, 2], [1, 1, 3, 5, 5], [, 2, , 2, 2], [, 2, , 2, 2, 1], [1, 5, 3, 5, 5], [2, 2, 2, 2, 4], [, 5, 7, 5, 5], [, 3, 5, 5, 5], [, 2, 5, 5, 2], [, 3, 5, 5, 3, 1], [, 6, 5, 5, 6, 4], [, 2, 5, 1, 1], [, 6, 1, 4, 3], [2, 7, 2, 2, 4], [, 5, 5, 5, 6], [, 5, 5, 2, 2], [, 5, 5, 7, 5], [, 5, 2, 2, 5], [, 5, 5, 6, 4, 2], [, 7, 4, 1, 7], [6, 2, 1, 2, 6], [2, 2, 2, 2, 2], [3, 2, 4, 2, 3], [, 3, 6]], y = { id: "mini", chars: I, first: 33, w: 4, h: 6 };
-    var N = plugin = (e, { cache: u = true } = {}) => {
-      let w = e.text, _ = e.textsize, k = e.textalign, z = e.textfont, A = g, E = y, l = u ? /* @__PURE__ */ new Map() : null, C = 300, s = 1, a = null, f = (t) => {
-        s = ~~Math.round(t);
-      }, T = () => console.warn("[litecanvas/plugin-pixel-font] textalign() has not yet been implemented for pixel fonts"), d = (t, c, r, n = 3) => {
-        let i = a.h || a.w;
-        for (let o = 0; o < i; o++) for (let x = 0; x < a.w; x++) (r[o] | 0) & 1 << x && e.rectfill(t + x * s, c + o * s, s, s, n);
-      }, S = (t, c, r, n = 3) => {
-        if (r += "", !s || !r.length) return;
-        let i = s * a.w, o = s * (a.h || a.w);
-        for (let x = 0; x < r.length; x++) {
-          let m = r[x], v = m.charCodeAt(), p = a.chars[v - a.first];
-          if (p) if (u) {
-            let b = `${a.id}:${m}:${~~n}:${i}`;
-            l.has(b) || l.set(b, e.paint(i, o, () => {
-              d(0, 0, p, ~~n);
+    var S = [[24, 60, 60, 24, 24, , 24], [54, 54, , , , , ,], [54, 54, 127, 54, 127, 54, 54], [12, 62, 3, 30, 48, 31, 12], [, 99, 51, 24, 12, 102, 99], [28, 54, 28, 110, 59, 51, 110], [6, 6, 3, , , , ,], [24, 12, 6, 6, 6, 12, 24], [6, 12, 24, 24, 24, 12, 6], [, 102, 60, 255, 60, 102, ,], [, 12, 12, 63, 12, 12, ,], [, , , , , 12, 12, 6], [, , , 63, , , ,], [, , , , , 12, 12], [96, 48, 24, 12, 6, 3, 1], [62, 99, 115, 123, 111, 103, 62], [12, 14, 12, 12, 12, 12, 63], [30, 51, 48, 28, 6, 51, 63], [30, 51, 48, 28, 48, 51, 30], [56, 60, 54, 51, 127, 48, 120], [63, 3, 31, 48, 48, 51, 30], [28, 6, 3, 31, 51, 51, 30], [63, 51, 48, 24, 12, 12, 12], [30, 51, 51, 30, 51, 51, 30], [30, 51, 51, 62, 48, 24, 14], [, 12, 12, , , 12, 12], [, 12, 12, , , 12, 12, 6], [24, 12, 6, 3, 6, 12, 24], [, , 63, , , 63, ,], [6, 12, 24, 48, 24, 12, 6], [30, 51, 48, 24, 12, , 12], [62, 99, 123, 123, 123, 3, 30], [12, 30, 51, 51, 63, 51, 51], [63, 102, 102, 62, 102, 102, 63], [60, 102, 3, 3, 3, 102, 60], [31, 54, 102, 102, 102, 54, 31], [127, 70, 22, 30, 22, 70, 127], [127, 70, 22, 30, 22, 6, 15], [60, 102, 3, 3, 115, 102, 124], [51, 51, 51, 63, 51, 51, 51], [30, 12, 12, 12, 12, 12, 30], [120, 48, 48, 48, 51, 51, 30], [103, 102, 54, 30, 54, 102, 103], [15, 6, 6, 6, 70, 102, 127], [99, 119, 127, 127, 107, 99, 99], [99, 103, 111, 123, 115, 99, 99], [28, 54, 99, 99, 99, 54, 28], [63, 102, 102, 62, 6, 6, 15], [30, 51, 51, 51, 59, 30, 56], [63, 102, 102, 62, 54, 102, 103], [30, 51, 7, 14, 56, 51, 30], [63, 45, 12, 12, 12, 12, 30], [51, 51, 51, 51, 51, 51, 63], [51, 51, 51, 51, 51, 30, 12], [99, 99, 99, 107, 127, 119, 99], [99, 99, 54, 28, 28, 54, 99], [51, 51, 51, 30, 12, 12, 30], [127, 99, 49, 24, 76, 102, 127], [30, 6, 6, 6, 6, 6, 30], [3, 6, 12, 24, 48, 96, 64], [30, 24, 24, 24, 24, 24, 30], [8, 28, 54, 99, , , ,], [, , , , , , , 255], [12, 12, 24, , , , ,], [, , 30, 48, 62, 51, 110], [7, 6, 6, 62, 102, 102, 59], [, , 30, 51, 3, 51, 30], [56, 48, 48, 62, 51, 51, 110], [, , 30, 51, 63, 3, 30], [28, 54, 6, 15, 6, 6, 15], [, , 110, 51, 51, 62, 48, 31], [7, 6, 54, 110, 102, 102, 103], [12, , 14, 12, 12, 12, 30], [48, , 48, 48, 48, 51, 51, 30], [7, 6, 102, 54, 30, 54, 103], [14, 12, 12, 12, 12, 12, 30], [, , 51, 127, 127, 107, 99], [, , 31, 51, 51, 51, 51], [, , 30, 51, 51, 51, 30], [, , 59, 102, 102, 62, 6, 15], [, , 110, 51, 51, 62, 48, 120], [, , 59, 110, 102, 6, 15], [, , 62, 3, 30, 48, 31], [8, 12, 62, 12, 12, 44, 24], [, , 51, 51, 51, 51, 110], [, , 51, 51, 51, 30, 12], [, , 99, 107, 127, 127, 54], [, , 99, 54, 28, 54, 99], [, , 51, 51, 51, 62, 48, 31], [, , 63, 25, 12, 38, 63], [56, 12, 12, 7, 12, 12, 56], [24, 24, 24, , 24, 24, 24], [7, 12, 12, 56, 12, 12, 7], [110, 59, , , , , ,]], F = (e, s, m = 3) => {
+      for (let t = 0; t < 8; t++) for (let o = 0; o < 8; o++) (s[t] | 0) & 1 << o && e.rectfill(o, t, 1, 1, m);
+    }, h = { id: "basic", chars: S, first: 33, w: 8, h: 8, render: F };
+    var L = [[34, 32, 32], [85, 0, 0], [87, 87, 80], [99, 103, 32], [84, 33, 80], [99, 101, 96], [34, 0, 0], [33, 17, 32], [36, 68, 32], [82, 80, 0], [2, 114, 0], [0, 0, 33], [0, 112, 0], [0, 0, 16], [68, 33, 16], [117, 85, 112], [50, 34, 112], [116, 113, 112], [116, 116, 112], [85, 116, 64], [113, 116, 112], [113, 117, 112], [116, 68, 64], [117, 117, 112], [117, 116, 112], [0, 32, 32], [0, 32, 33], [66, 18, 64], [7, 7, 0], [18, 66, 16], [116, 96, 32], [37, 81, 96], [37, 117, 80], [53, 53, 48], [97, 17, 96], [53, 85, 48], [113, 49, 112], [113, 49, 16], [97, 85, 96], [85, 117, 80], [114, 34, 112], [68, 69, 32], [85, 53, 80], [17, 17, 112], [87, 117, 80], [117, 85, 80], [37, 85, 32], [117, 113, 16], [101, 83, 96], [53, 53, 80], [97, 116, 48], [114, 34, 32], [85, 85, 112], [85, 82, 32], [85, 119, 80], [85, 37, 80], [85, 34, 32], [116, 33, 112], [98, 34, 96], [17, 36, 64], [50, 34, 48], [37, 0, 0], [0, 0, 112], [18, 0, 0], [6, 85, 96], [19, 85, 48], [6, 17, 96], [70, 85, 96], [2, 83, 96], [66, 114, 32], [2, 86, 66], [17, 53, 80], [2, 2, 32], [2, 2, 33], [21, 53, 80], [34, 34, 64], [5, 117, 80], [3, 85, 80], [2, 85, 32], [3, 85, 49], [6, 85, 100], [2, 81, 16], [6, 20, 48], [39, 34, 64], [5, 85, 96], [5, 82, 32], [5, 87, 80], [5, 34, 80], [5, 86, 66], [7, 65, 112], [98, 18, 96], [34, 34, 32], [50, 66, 48], [3, 96, 0]], O = (e, s, m = 3) => {
+      for (y = 0; y < 6; y++) for (x = 0; x < 4; x++) {
+        let t = ~~(y / 2);
+        (y % 2 ? s[t] & 15 : s[t] >> 4) & 1 << x && e.rectfill(x, y, 1, 1, m);
+      }
+    }, g = { id: "mini", chars: L, first: 33, w: 4, h: 6, render: O };
+    var A = plugin = (e, { cache: s = true } = {}) => {
+      let m = e.text, t = e.textsize, o = e.textalign, I = e.textfont, l = s ? /* @__PURE__ */ new Map() : null, E = 300, c = 1, r = null, N = (a) => {
+        c = ~~Math.round(a);
+      }, T = () => console.warn("[litecanvas/plugin-pixel-font] textalign() has not yet been implemented for pixel fonts"), w = (a, u, n, i = 3) => {
+        e.push(), e.translate(a, u), e.scale(c), r.render(e, n, i), e.pop();
+      }, C = (a, u, n, i = 3) => {
+        if (n += "", !c || !n.length) return;
+        let p = c * r.w, _ = c * (r.h || r.w);
+        for (let b = 0; b < n.length; b++) {
+          let f = n[b], k = f.charCodeAt(), d = r.chars[k - r.first];
+          if (d) if (s) {
+            let v = `${r.id}:${f}:${~~i}:${p}`;
+            l.has(v) || l.set(v, e.paint(p, _, () => {
+              w(0, 0, d, ~~i);
             }));
-            let h = l.get(b);
-            h._ = e.T + C, e.image(t, c, h);
-          } else d(t, c, p, n);
-          t += i;
+            let z = l.get(v);
+            z._ = e.T + E, e.image(a, u, z);
+          } else w(a, u, d, i);
+          a += p;
         }
       };
-      if (u) {
-        let c = setInterval(() => {
-          let r = performance.now();
-          for (let [n, i] of l) e.T > i._ && l.delete(n);
+      if (s) {
+        let u = setInterval(() => {
+          let n = performance.now();
+          for (let [i, p] of l) e.T > p._ && l.delete(i);
         }, 6e4);
         e.listen("quit", () => {
-          clearInterval(c), l.clear();
+          clearInterval(u), l.clear();
         });
       }
-      return { PIXEL_FONT_BASIC: A, PIXEL_FONT_MINI: E, textfont: (t) => {
-        typeof t == "object" ? (e.def("text", S), e.def("textsize", f), e.def("textalign", T), a = t, f(s || 1)) : (e.def("text", w), e.def("textsize", _), e.def("textalign", k), z(t));
+      return { textfont: (a) => {
+        typeof a == "object" ? (e.def("text", C), e.def("textsize", N), e.def("textalign", T), r = a, N(c || 1)) : (e.def("text", m), e.def("textsize", t), e.def("textalign", o), I(a));
       } };
     };
-    window.pluginPixelFont = N;
+    window.pluginPixelFont = A;
+    window.PIXEL_FONT_MINI = g;
+    window.PIXEL_FONT_BASIC = h;
   })();
 })();
 /*! @litecanvas/utils by Luiz Bills | MIT Licensed */
