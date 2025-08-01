@@ -157,13 +157,15 @@ screenshotButton.addEventListener("click", () => {
 
   if (iframeDocument) {
     const canvas = iframeDocument.querySelector("canvas");
-    const link = document.createElement("a");
-    const ts = ("" + Date.now()).slice(-6);
 
-    link.download = `screenshot-${ts}.png`;
-    link.href = canvas.toDataURL();
-
-    link.click();
+    canvas.toBlob((blob) => {
+      const link = document.createElement("a");
+      const timeStamp = ("" + Date.now()).slice(-6);
+      link.href = URL.createObjectURL(blob);
+      link.download = `screenshot-${timeStamp}.png`;
+      link.click();
+      console.log(URL.createObjectURL(blob));
+    });
   }
 });
 
