@@ -164,7 +164,6 @@ screenshotButton.addEventListener("click", () => {
       link.href = URL.createObjectURL(blob);
       link.download = `screenshot-${timeStamp}.png`;
       link.click();
-      console.log(URL.createObjectURL(blob));
     });
   }
 });
