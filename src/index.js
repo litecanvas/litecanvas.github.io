@@ -1,7 +1,7 @@
 import pako from "pako";
 import { EditorView } from "codemirror";
 import { EditorState } from "@codemirror/state";
-import { keymap, scrollPastEnd } from "@codemirror/view";
+import { keymap } from "@codemirror/view";
 import {
   javascript,
   javascriptLanguage,
@@ -348,6 +348,7 @@ if (isMobile) {
 
 if (!smallScreen) {
   show(hideEditor);
+  show(screenshotButton);
   if (autoplay) runCode();
 } else {
   show(playButton);
