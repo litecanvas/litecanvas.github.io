@@ -149,7 +149,7 @@ function update() {
 }
 ```
 
-> Note: you can call `iskeydown` or `iskeypressed` without an argument, to check for any key.
+> Note: you can call `iskeydown()` or `iskeypressed()` (without arguments) to check for any key.
 
 ### Functions for advanced drawings
 
