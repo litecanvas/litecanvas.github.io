@@ -71,6 +71,35 @@ function draw() {
 }
 ```
 
+### Functions to draw shapes
+
+You can use the following functions to draw shapes:
+
+- `rect(x, y, width, height, color)` draw a rectangle outline
+- `rectfill(x, y, width, height, color)` draw a color-filled rectangle
+- `circ(x, y, radius, color)` draw a circle outline
+- `circfill(x, y, radius, color)` draw a color-filled circle
+- `oval(x, y, rx, ry, color)` draw a ellipse outline
+- `ovalfill(x, y, rx, ry, color)` draw a color-filled ellipse
+
+```js
+litecanvas()
+
+function draw() {
+    cls(0)
+
+    // draw a color filled rectangle at x=0 and y=0
+    // with width=32 and height=32
+    // with white color
+    rectfill(0, 0, 32, 32, 3)
+
+    // draw a rectangle outline at x=64 and y=32
+    // with width=40 and height=30
+    // with red color
+    rect(64, 32, 40, 30, 4)
+}
+```
+
 ### Click and Touch
 
 ```js
@@ -144,6 +173,9 @@ rotate(radians)
 // Sets the alpha (opacity) value to apply when drawing new shapes and images
 // Use a value between 0 and 1
 alpha(value)
+
+// Returns the canvas rendering context 2d
+ctx()
 ```
 
 ### Variables declared by Litecanvas
@@ -159,5 +191,5 @@ Like `MX` and `MY`, Litecanvas also declares these other variables:
 
 ## Useful links
 
-- [Cheatsheet](https://litecanvas.js.org)
+- [Cheatsheet](https://litecanvas.js.org/about.html)
 - [Github](https://github.com/litecanvas/game-engine)
