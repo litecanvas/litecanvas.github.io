@@ -27,7 +27,7 @@
     var assert = (condition, message = "Assertion failed") => {
       if (!condition) throw new Error(message);
     };
-    var version = "0.98.0";
+    var version = "0.98.1";
     function litecanvas(settings = {}) {
       const root = window, math = Math, TWO_PI = math.PI * 2, raf = requestAnimationFrame, _browserEventListeners = [], on = (elem, evt, callback) => {
         elem.addEventListener(evt, callback, false);
@@ -43,7 +43,7 @@
         keyboardEvents: true
       };
       settings = Object.assign(defaults, settings);
-      let _initialized = false, _canvas, _scale = 1, _ctx, _outline_fix = 0.5, _timeScale = 1, _lastFrameTime, _fpsInterval = 1e3 / 60, _accumulated, _rafid, _fontFamily = "sans-serif", _fontSize = 20, _rngSeed = Date.now(), _currentPalette, _colors, _defaultSound = [0.5, 0, 1750, , , 0.3, 1, , , , 600, 0.1], _coreEvents = "init,update,draw,tap,untap,tapping,tapped,resized", _mathFunctions = "PI,sin,cos,atan2,hypot,tan,abs,ceil,floor,trunc,min,max,pow,sqrt,sign,exp", _eventListeners = {};
+      let _initialized = false, _canvas, _scale = 1, _ctx, _outline_fix = 0.5, _timeScale = 1, _lastFrameTime, _fpsInterval = 1e3 / 60, _accumulated, _rafid, _fontFamily = "sans-serif", _fontSize = 20, _rngSeed = Date.now(), _colorPalette = defaultPalette, _colorPaletteState = [], _defaultSound = [0.5, 0, 1750, , , 0.3, 1, , , , 600, 0.1], _coreEvents = "init,update,draw,tap,untap,tapping,tapped,resized", _mathFunctions = "PI,sin,cos,atan2,hypot,tan,abs,ceil,floor,trunc,min,max,pow,sqrt,sign,exp", _eventListeners = {};
       const instance = {
         /** @type {number} */
         W: 0,
@@ -558,7 +558,7 @@
             "[litecanvas] text() 5th param must be a string"
           );
           _ctx.font = `${fontStyle} ${_fontSize}px ${_fontFamily}`;
-          _ctx.fillStyle = _colors[~~color % _colors.length];
+          _ctx.fillStyle = getColor(color);
           _ctx.fillText(message, ~~x2, ~~y2);
         },
         /**
@@ -765,7 +765,7 @@
             null == color || isNumber(color) && color >= 0,
             "[litecanvas] fill() 1st param must be a positive number or zero"
           );
-          _ctx.fillStyle = _colors[~~color % _colors.length];
+          _ctx.fillStyle = getColor(color);
           _ctx.fill();
         },
         /**
@@ -778,7 +778,7 @@
             null == color || isNumber(color) && color >= 0,
             "[litecanvas] stroke() 1st param must be a positive number or zero"
           );
-          _ctx.strokeStyle = _colors[~~color % _colors.length];
+          _ctx.strokeStyle = getColor(color);
           _ctx.stroke();
         },
         /**
@@ -906,7 +906,7 @@
           }
         },
         /**
-         * Set or reset the color palette.
+         * Set new palette colors or restore the default palette.
          *
          * @param {string[]} [colors]
          */
@@ -915,13 +915,15 @@
             Array.isArray(colors) && colors.length > 0,
             "[litecanvas] pal() 1st param must be a array of strings"
           );
-          _colors = colors;
-          _currentPalette = [...colors];
+          _colorPalette = colors;
+          _colorPaletteState = [];
         },
         /**
-         * Swap two colors of the current palette.
+         * Replace the color "a" with color "b".
          *
          * If called without arguments, reset the current palette.
+         *
+         * Note: `palc()` don't affect drawings made with `image()`.
          *
          * @param {number?} a
          * @param {number?} b
@@ -936,10 +938,9 @@
             "[litecanvas] palc() 2nd param must be a positive number"
           );
           if (a == null) {
-            _colors = [..._currentPalette];
+            _colorPaletteState = [];
           } else {
-            ;
-            [_colors[a], _colors[b]] = [_colors[b], _colors[a]];
+            _colorPaletteState[a] = b;
           }
         },
         /**
@@ -1009,7 +1010,7 @@
             // 4
             _eventListeners,
             // 5
-            _colors,
+            _colorPalette,
             // 6
             _defaultSound,
             // 7
@@ -1403,6 +1404,10 @@
           instance.def(key, pluginData[key]);
         }
       }
+      function getColor(index) {
+        const i = _colorPaletteState[index] ?? index;
+        return _colorPalette[~~i % _colorPalette.length];
+      }
       if (settings.global) {
         if (root.ENGINE) {
           throw new Error("only one global litecanvas is allowed");
@@ -1413,7 +1418,6 @@
       DEV: console.info(`[litecanvas] version ${version} started`);
       DEV: console.debug(`[litecanvas] litecanvas() options =`, settings);
       setupCanvas();
-      instance.pal();
       if ("loading" === document.readyState) {
         on(root, "DOMContentLoaded", () => raf(init));
       } else {

@@ -201,7 +201,7 @@ export default function customCompletions(context) {
         type: "function",
         apply: "palc(",
         detail: "(a, b)",
-        info: "swap two colors of the current palette",
+        info: 'replace the color "a" with color "b"',
       },
       {
         label: "ctx",

@@ -684,8 +684,9 @@ framerate(value: number): void
 // example: pal() resets the default color palette
 pal(colors: string[]): void
 
-// Swaps two colors of the current palette
-// example: pal(0, 3) // now the color #0 is white and the color #3 is black
+// Replace the color "a" with the color "b"
+// example: pal(0, 3) // now the color black (#0) is white (#3)
+// note: reset the current palette if called without arguments
 palc(a: number, b: number): void
 
 // Loads a plugin.
