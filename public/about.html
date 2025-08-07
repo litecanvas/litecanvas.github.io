@@ -359,10 +359,6 @@ settings.height = settings.width || null
 // can pass a number to determine a maximum scale.
 settings.autoscale = true
 
-// If `true`, the pixel art images won't look blurry.
-// Also, disables canvas built-in antialias.
-settings.pixelart = true
-
 // exposes all methods and properties (see below)
 // in the global scope
 settings.global = true
@@ -466,12 +462,13 @@ textsize(size: number): void
  */
 
 // draw a image
-image(x, y, image: Image|HTMLCanvasElement): void
+image(x, y, image: Image|ImageBitmap): void
+
+// draw a sprite pixel by pixel from a string (the 5th argument)
+// see: https://github.com/litecanvas/game-engine/blob/main/samples/pixelart/pixelart.js#L50
+spr(x, y, width, heigth, pixels): void
 
 // create an OffscreenCanvas and draw on it to make an image
-// data can be a array of strings (to draw pixel art)
-// see: https://github.com/litecanvas/game-engine/blob/main/samples/pixelart/pixelart.js
-// or data can be a function with drawing operations
 // see: https://github.com/litecanvas/game-engine/blob/main/samples/paint/paint.js
 // the options are:
 //   * scale?: default is 1.
@@ -687,6 +684,10 @@ framerate(value: number): void
 // example: pal() resets the default color palette
 pal(colors: string[]): void
 
+// Swaps two colors of the current palette
+// example: pal(0, 3) // now the color #0 is white and the color #3 is black
+palc(a: number, b: number): void
+
 // Loads a plugin.
 // see: https://github.com/litecanvas/game-engine/blob/main/samples/plugin-basics/plugin-basics.js
 use(callback): void
@@ -859,9 +860,9 @@ function draw() {
       </ul>
     </main>
 
-    <footer>
+    <!-- <footer>
       <a class="visitors-counter" href="https://hits.seeyoufarm.com"><img src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Flitecanvas.js.org%2Fabout.html&count_bg=%2363C64D&title_bg=%236A7799&icon=&icon_color=%23E7E7E7&title=Visitors&edge_flat=false"/></a>
-    </footer>
+    </footer> -->
 
     <script src="prism/prism.js"></script>
     <script src="prism/prism-typescript.js"></script>

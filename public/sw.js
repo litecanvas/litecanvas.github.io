@@ -1,5 +1,5 @@
 const cacheName = "luizbills.litecanvas-editor-v1";
-const version = "2025.8.4.4";
+const version = "2025.8.7.0";
 
 const precacheResources = [
   "/",
@@ -54,3 +54,28 @@ self.addEventListener("message", (event) => {
     event.source.postMessage({ type, res: version });
   }
 });
+
+const renameThisVar = paint(
+  8,
+  8,
+  () =>
+    spr(
+      0,
+      0,
+      8,
+      8,
+      `
+  ........
+  .....3..
+  ...33...
+  ..333...
+  ..333...
+  ........
+  ........
+  ........
+`
+    ),
+  {
+    scale: 1,
+  }
+);

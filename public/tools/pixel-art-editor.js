@@ -263,20 +263,20 @@ exportButton.onclick = function () {
   let output = "";
   const _pixels = [];
 
-  output += `const renameThisVar = paint(${W}, ${H}, [\n`;
+  output += `const renameThisVar = paint(${W}, ${H}, () => spr(0, 0, ${W}, ${H},\n  \`\n`;
 
   for (let y = 0; y < H; y++) {
-    output += "  '";
+    output += "  ";
     for (let x = 0; x < W; x++) {
       let color = getPixel(x, y);
       if (-1 === ~~color) color = ".";
       output += color >= 0 ? (color % colors.length).toString(16) : color;
       _pixels.push(color === "." ? "#" : color);
     }
-    output += "',\n";
+    output += "\n";
   }
 
-  output += "], {\n  scale: 1\n})";
+  output += "  `\n), {\n  scale: 1\n})";
 
   const importCode = `Art Code: ${W}x${H}/${_pixels.join(" ")}`;
   output = `// ${importCode}\n` + output;

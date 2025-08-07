@@ -129,8 +129,15 @@ export default function customCompletions(context) {
         label: "paint",
         type: "function",
         apply: "paint(",
-        detail: "(width, height, callback|array, options)",
+        detail: "(width, height, callback, options)",
         info: "Creates an image in offscreencanvas",
+      },
+      {
+        label: "spr",
+        type: "function",
+        apply: "spr(",
+        detail: "(x, y, width, height, pixels)",
+        info: "Draw a sprite pixel by pixel",
       },
       {
         label: "translate",
@@ -185,8 +192,16 @@ export default function customCompletions(context) {
       {
         label: "pal",
         type: "function",
-        apply: "pal(colors?)",
+        apply: "pal(",
+        detail: "(colors?)",
         info: "set or reset the color palette",
+      },
+      {
+        label: "palc",
+        type: "function",
+        apply: "palc(",
+        detail: "(a, b)",
+        info: "swap two colors of the current palette",
       },
       {
         label: "ctx",

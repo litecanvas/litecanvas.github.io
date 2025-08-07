@@ -66,7 +66,6 @@ const playButton = $("#play");
 const screenshotButton = $("#screenshot");
 const stopButton = $("#stop");
 const shareButton = $("#share");
-const copyButton = $("#copy");
 const hideEditor = $("#hide-editor");
 
 const smallScreen = innerWidth < 1024;
@@ -115,23 +114,6 @@ shareButton.addEventListener("click", (evt) => {
     () => {
       alert("Your shareable url was copied to clipboard!");
     },
-    (err) => {
-      alert("Error: Unable to generate your shareable url!");
-      console.error("Error on copying text to clipboard:", err);
-    }
-  );
-});
-
-copyButton.addEventListener("click", (evt) => {
-  if (!navigator.clipboard) {
-    return alert(
-      "Your browser not support this feature. Consider installing Firefox or Chrome."
-    );
-  }
-  const code = window.codeEditor.state.doc.toString();
-
-  navigator.clipboard.writeText(code).then(
-    () => {},
     (err) => {
       alert("Error: Unable to generate your shareable url!");
       console.error("Error on copying text to clipboard:", err);

@@ -96,9 +96,7 @@
 
           // load plugins
           instance.use(pluginMigrate);
-          if (false !== settings.animate) {
-            instance.use(pluginFrameRateMeter);
-          }
+          instance.use(pluginFrameRateMeter);
           instance.use(pluginPixelFont);
           instance.listen("before:init", () => {
             instance.use(pluginAssetLoader);
