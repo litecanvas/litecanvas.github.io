@@ -27,7 +27,7 @@
     var assert = (condition, message = "Assertion failed") => {
       if (!condition) throw new Error(message);
     };
-    var version = "0.98.3";
+    var version = "0.98.4";
     function litecanvas(settings = {}) {
       const root = window, math = Math, TWO_PI = math.PI * 2, raf = requestAnimationFrame, _browserEventListeners = [], on = (elem, evt, callback) => {
         elem.addEventListener(evt, callback, false);
@@ -276,8 +276,8 @@
          */
         rseed(value) {
           DEV: assert(
-            null == value || isNumber(value) && value >= 0,
-            "[litecanvas] rseed() 1st param must be a positive number or zero"
+            isNumber(value) && value >= 0,
+            "[litecanvas] rseed() 1st param must be a positive integer or zero"
           );
           _rngSeed = ~~value;
         },
