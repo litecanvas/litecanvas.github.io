@@ -27,7 +27,7 @@
     var assert = (condition, message = "Assertion failed") => {
       if (!condition) throw new Error(message);
     };
-    var version = "0.98.1";
+    var version = "0.98.3";
     function litecanvas(settings = {}) {
       const root = window, math = Math, TWO_PI = math.PI * 2, raf = requestAnimationFrame, _browserEventListeners = [], on = (elem, evt, callback) => {
         elem.addEventListener(evt, callback, false);
@@ -635,9 +635,9 @@
           const chars = pixels.replace(/\s/g, "");
           for (let gridx = 0; gridx < width; gridx++) {
             for (let gridy = 0; gridy < height; gridy++) {
-              const char = chars[height * gridy + gridx] || ".";
+              const char = chars[width * gridy + gridx] || ".";
               if (char !== ".") {
-                instance.rectfill(x2 + gridx, y2 + gridy, 1, 1, parseInt(char, 16) || 0);
+                instance.rectfill(x2 + gridx, y2 + gridy, 1, 1, parseInt(char, 36) || 0);
               }
             }
           }
