@@ -27,7 +27,7 @@
     var assert = (condition, message = "Assertion failed") => {
       if (!condition) throw new Error(message);
     };
-    var version = "0.98.4";
+    var version = "0.99.0";
     function litecanvas(settings = {}) {
       const root = window, math = Math, TWO_PI = math.PI * 2, raf = requestAnimationFrame, _browserEventListeners = [], on = (elem, evt, callback) => {
         elem.addEventListener(evt, callback, false);
@@ -43,7 +43,7 @@
         keyboardEvents: true
       };
       settings = Object.assign(defaults, settings);
-      let _initialized = false, _canvas, _scale = 1, _ctx, _outline_fix = 0.5, _timeScale = 1, _lastFrameTime, _fpsInterval = 1e3 / 60, _accumulated, _rafid, _fontFamily = "sans-serif", _fontSize = 20, _rngSeed = Date.now(), _colorPalette = defaultPalette, _colorPaletteState = [], _defaultSound = [0.5, 0, 1750, , , 0.3, 1, , , , 600, 0.1], _coreEvents = "init,update,draw,tap,untap,tapping,tapped,resized", _mathFunctions = "PI,sin,cos,atan2,hypot,tan,abs,ceil,floor,trunc,min,max,pow,sqrt,sign,exp", _eventListeners = {};
+      let _initialized = false, _paused = true, _canvas, _scale = 1, _ctx, _outline_fix = 0.5, _timeScale = 1, _lastFrameTime, _fpsInterval = 1e3 / 60, _accumulated, _rafid, _fontFamily = "sans-serif", _fontSize = 20, _rngSeed = Date.now(), _colorPalette = defaultPalette, _colorPaletteState = [], _defaultSound = [0.5, 0, 1750, , , 0.3, 1, , , , 600, 0.1], _coreEvents = "init,update,draw,tap,untap,tapping,tapped,resized", _mathFunctions = "PI,sin,cos,atan2,hypot,tan,abs,ceil,floor,trunc,min,max,pow,sqrt,sign,exp", _eventListeners = {};
       const instance = {
         /** @type {number} */
         W: 0,
@@ -988,7 +988,7 @@
           _fpsInterval = 1e3 / ~~value;
         },
         /**
-         * Returns information about that engine instance.
+         * Returns information about the engine instance.
          *
          * @param {number|string} index
          * @returns {any}
@@ -1021,43 +1021,32 @@
             _rngSeed,
             // 10
             _fontSize,
-            //  11
-            _fontFamily
+            // 11
+            _fontFamily,
+            // 12
+            _colorPaletteState
           ];
           const data = { index, value: internals[index] };
           instance.emit("stat", data);
           return data.value;
         },
         /**
-         * Stops the litecanvas instance and remove all event listeners.
-         */
-        quit() {
-          instance.pause();
-          instance.emit("quit");
-          _eventListeners = {};
-          for (const removeListener of _browserEventListeners) {
-            removeListener();
-          }
-          if (settings.global) {
-            for (const key in instance) {
-              delete root[key];
-            }
-            delete root.ENGINE;
-          }
-          _initialized = false;
-        },
-        /**
          * Pauses the engine loop (update & draw).
          */
         pause() {
+          _paused = true;
           cancelAnimationFrame(_rafid);
-          _rafid = 0;
         },
         /**
          * Resumes (if paused) the engine loop.
          */
         resume() {
-          if (_initialized && !_rafid) {
+          DEV: assert(
+            _initialized,
+            '[litecanvas] resume() cannot be called before the "init" event and neither after the quit() function'
+          );
+          if (_initialized && _paused) {
+            _paused = false;
             _accumulated = _fpsInterval;
             _lastFrameTime = Date.now();
             _rafid = raf(drawFrame);
@@ -1069,7 +1058,26 @@
          * @returns {boolean}
          */
         paused() {
-          return !_rafid;
+          return _paused;
+        },
+        /**
+         * Shutdown the litecanvas instance and remove all event listeners.
+         */
+        quit() {
+          instance.emit("quit");
+          instance.pause();
+          _initialized = false;
+          _eventListeners = {};
+          for (const removeListener of _browserEventListeners) {
+            removeListener();
+          }
+          if (settings.global) {
+            for (const key in instance) {
+              delete root[key];
+            }
+            delete root.ENGINE;
+          }
+          DEV: console.warn("[litecanvas] quit() terminated a Litecanvas instance.");
         }
       };
       for (const k of _mathFunctions.split(",")) {
@@ -1421,7 +1429,7 @@
       if ("loading" === document.readyState) {
         on(root, "DOMContentLoaded", () => raf(init));
       } else {
-        raf(init);
+        _rafid = raf(init);
       }
       return instance;
     }
@@ -2245,55 +2253,54 @@
     window.pluginFrameRateMeter = E;
   })();
   (() => {
-    var C = [[24, 60, 60, 24, 24, , 24], [54, 54, , , , , ,], [54, 54, 127, 54, 127, 54, 54], [12, 62, 3, 30, 48, 31, 12], [, 99, 51, 24, 12, 102, 99], [28, 54, 28, 110, 59, 51, 110], [6, 6, 3, , , , ,], [24, 12, 6, 6, 6, 12, 24], [6, 12, 24, 24, 24, 12, 6], [, 102, 60, 255, 60, 102, ,], [, 12, 12, 63, 12, 12, ,], [, , , , , 12, 12, 6], [, , , 63, , , ,], [, , , , , 12, 12], [96, 48, 24, 12, 6, 3, 1], [62, 99, 115, 123, 111, 103, 62], [12, 14, 12, 12, 12, 12, 63], [30, 51, 48, 28, 6, 51, 63], [30, 51, 48, 28, 48, 51, 30], [56, 60, 54, 51, 127, 48, 120], [63, 3, 31, 48, 48, 51, 30], [28, 6, 3, 31, 51, 51, 30], [63, 51, 48, 24, 12, 12, 12], [30, 51, 51, 30, 51, 51, 30], [30, 51, 51, 62, 48, 24, 14], [, 12, 12, , , 12, 12], [, 12, 12, , , 12, 12, 6], [24, 12, 6, 3, 6, 12, 24], [, , 63, , , 63, ,], [6, 12, 24, 48, 24, 12, 6], [30, 51, 48, 24, 12, , 12], [62, 99, 123, 123, 123, 3, 30], [12, 30, 51, 51, 63, 51, 51], [63, 102, 102, 62, 102, 102, 63], [60, 102, 3, 3, 3, 102, 60], [31, 54, 102, 102, 102, 54, 31], [127, 70, 22, 30, 22, 70, 127], [127, 70, 22, 30, 22, 6, 15], [60, 102, 3, 3, 115, 102, 124], [51, 51, 51, 63, 51, 51, 51], [30, 12, 12, 12, 12, 12, 30], [120, 48, 48, 48, 51, 51, 30], [103, 102, 54, 30, 54, 102, 103], [15, 6, 6, 6, 70, 102, 127], [99, 119, 127, 127, 107, 99, 99], [99, 103, 111, 123, 115, 99, 99], [28, 54, 99, 99, 99, 54, 28], [63, 102, 102, 62, 6, 6, 15], [30, 51, 51, 51, 59, 30, 56], [63, 102, 102, 62, 54, 102, 103], [30, 51, 7, 14, 56, 51, 30], [63, 45, 12, 12, 12, 12, 30], [51, 51, 51, 51, 51, 51, 63], [51, 51, 51, 51, 51, 30, 12], [99, 99, 99, 107, 127, 119, 99], [99, 99, 54, 28, 28, 54, 99], [51, 51, 51, 30, 12, 12, 30], [127, 99, 49, 24, 76, 102, 127], [30, 6, 6, 6, 6, 6, 30], [3, 6, 12, 24, 48, 96, 64], [30, 24, 24, 24, 24, 24, 30], [8, 28, 54, 99, , , ,], [, , , , , , , 255], [12, 12, 24, , , , ,], [, , 30, 48, 62, 51, 110], [7, 6, 6, 62, 102, 102, 59], [, , 30, 51, 3, 51, 30], [56, 48, 48, 62, 51, 51, 110], [, , 30, 51, 63, 3, 30], [28, 54, 6, 15, 6, 6, 15], [, , 110, 51, 51, 62, 48, 31], [7, 6, 54, 110, 102, 102, 103], [12, , 14, 12, 12, 12, 30], [48, , 48, 48, 48, 51, 51, 30], [7, 6, 102, 54, 30, 54, 103], [14, 12, 12, 12, 12, 12, 30], [, , 51, 127, 127, 107, 99], [, , 31, 51, 51, 51, 51], [, , 30, 51, 51, 51, 30], [, , 59, 102, 102, 62, 6, 15], [, , 110, 51, 51, 62, 48, 120], [, , 59, 110, 102, 6, 15], [, , 62, 3, 30, 48, 31], [8, 12, 62, 12, 12, 44, 24], [, , 51, 51, 51, 51, 110], [, , 51, 51, 51, 30, 12], [, , 99, 107, 127, 127, 54], [, , 99, 54, 28, 54, 99], [, , 51, 51, 51, 62, 48, 31], [, , 63, 25, 12, 38, 63], [56, 12, 12, 7, 12, 12, 56], [24, 24, 24, , 24, 24, 24], [7, 12, 12, 56, 12, 12, 7], [110, 59, , , , , ,]], F = (e, s, p = 3) => {
-      for (let t = 0; t < 8; t++) for (let c = 0; c < 8; c++) (s[t] | 0) & 1 << c && e.rectfill(c, t, 1, 1, p);
-    }, h = { id: "basic", chars: C, first: 33, w: 8, h: 8, render: F };
-    var S = [[34, 32, 32], [85, 0, 0], [87, 87, 80], [99, 103, 32], [84, 33, 80], [99, 101, 96], [34, 0, 0], [33, 17, 32], [36, 68, 32], [82, 80, 0], [2, 114, 0], [0, 0, 33], [0, 112, 0], [0, 0, 16], [68, 33, 16], [117, 85, 112], [50, 34, 112], [116, 113, 112], [116, 116, 112], [85, 116, 64], [113, 116, 112], [113, 117, 112], [116, 68, 64], [117, 117, 112], [117, 116, 112], [0, 32, 32], [0, 32, 33], [66, 18, 64], [7, 7, 0], [18, 66, 16], [116, 96, 32], [37, 81, 96], [37, 117, 80], [53, 53, 48], [97, 17, 96], [53, 85, 48], [113, 49, 112], [113, 49, 16], [97, 85, 96], [85, 117, 80], [114, 34, 112], [68, 69, 32], [85, 53, 80], [17, 17, 112], [87, 117, 80], [117, 85, 80], [37, 85, 32], [117, 113, 16], [101, 83, 96], [53, 53, 80], [97, 116, 48], [114, 34, 32], [85, 85, 112], [85, 82, 32], [85, 119, 80], [85, 37, 80], [85, 34, 32], [116, 33, 112], [98, 34, 96], [17, 36, 64], [50, 34, 48], [37, 0, 0], [0, 0, 112], [18, 0, 0], [6, 85, 96], [19, 85, 48], [6, 17, 96], [70, 85, 96], [2, 83, 96], [66, 114, 32], [2, 86, 66], [17, 53, 80], [2, 2, 32], [2, 2, 33], [21, 53, 80], [34, 34, 64], [5, 117, 80], [3, 85, 80], [2, 85, 32], [3, 85, 49], [6, 85, 100], [2, 81, 16], [6, 20, 48], [39, 34, 64], [5, 85, 96], [5, 82, 32], [5, 87, 80], [5, 34, 80], [5, 86, 66], [7, 65, 112], [98, 18, 96], [34, 34, 32], [50, 66, 48], [3, 96, 0]], P = (e, s, p = 3) => {
+    var C = [[24, 60, 60, 24, 24, , 24], [54, 54, , , , , ,], [54, 54, 127, 54, 127, 54, 54], [12, 62, 3, 30, 48, 31, 12], [, 99, 51, 24, 12, 102, 99], [28, 54, 28, 110, 59, 51, 110], [6, 6, 3, , , , ,], [24, 12, 6, 6, 6, 12, 24], [6, 12, 24, 24, 24, 12, 6], [, 102, 60, 255, 60, 102, ,], [, 12, 12, 63, 12, 12, ,], [, , , , , 12, 12, 6], [, , , 63, , , ,], [, , , , , 12, 12], [96, 48, 24, 12, 6, 3, 1], [62, 99, 115, 123, 111, 103, 62], [12, 14, 12, 12, 12, 12, 63], [30, 51, 48, 28, 6, 51, 63], [30, 51, 48, 28, 48, 51, 30], [56, 60, 54, 51, 127, 48, 120], [63, 3, 31, 48, 48, 51, 30], [28, 6, 3, 31, 51, 51, 30], [63, 51, 48, 24, 12, 12, 12], [30, 51, 51, 30, 51, 51, 30], [30, 51, 51, 62, 48, 24, 14], [, 12, 12, , , 12, 12], [, 12, 12, , , 12, 12, 6], [24, 12, 6, 3, 6, 12, 24], [, , 63, , , 63, ,], [6, 12, 24, 48, 24, 12, 6], [30, 51, 48, 24, 12, , 12], [62, 99, 123, 123, 123, 3, 30], [12, 30, 51, 51, 63, 51, 51], [63, 102, 102, 62, 102, 102, 63], [60, 102, 3, 3, 3, 102, 60], [31, 54, 102, 102, 102, 54, 31], [127, 70, 22, 30, 22, 70, 127], [127, 70, 22, 30, 22, 6, 15], [60, 102, 3, 3, 115, 102, 124], [51, 51, 51, 63, 51, 51, 51], [30, 12, 12, 12, 12, 12, 30], [120, 48, 48, 48, 51, 51, 30], [103, 102, 54, 30, 54, 102, 103], [15, 6, 6, 6, 70, 102, 127], [99, 119, 127, 127, 107, 99, 99], [99, 103, 111, 123, 115, 99, 99], [28, 54, 99, 99, 99, 54, 28], [63, 102, 102, 62, 6, 6, 15], [30, 51, 51, 51, 59, 30, 56], [63, 102, 102, 62, 54, 102, 103], [30, 51, 7, 14, 56, 51, 30], [63, 45, 12, 12, 12, 12, 30], [51, 51, 51, 51, 51, 51, 63], [51, 51, 51, 51, 51, 30, 12], [99, 99, 99, 107, 127, 119, 99], [99, 99, 54, 28, 28, 54, 99], [51, 51, 51, 30, 12, 12, 30], [127, 99, 49, 24, 76, 102, 127], [30, 6, 6, 6, 6, 6, 30], [3, 6, 12, 24, 48, 96, 64], [30, 24, 24, 24, 24, 24, 30], [8, 28, 54, 99, , , ,], [, , , , , , , 255], [12, 12, 24, , , , ,], [, , 30, 48, 62, 51, 110], [7, 6, 6, 62, 102, 102, 59], [, , 30, 51, 3, 51, 30], [56, 48, 48, 62, 51, 51, 110], [, , 30, 51, 63, 3, 30], [28, 54, 6, 15, 6, 6, 15], [, , 110, 51, 51, 62, 48, 31], [7, 6, 54, 110, 102, 102, 103], [12, , 14, 12, 12, 12, 30], [48, , 48, 48, 48, 51, 51, 30], [7, 6, 102, 54, 30, 54, 103], [14, 12, 12, 12, 12, 12, 30], [, , 51, 127, 127, 107, 99], [, , 31, 51, 51, 51, 51], [, , 30, 51, 51, 51, 30], [, , 59, 102, 102, 62, 6, 15], [, , 110, 51, 51, 62, 48, 120], [, , 59, 110, 102, 6, 15], [, , 62, 3, 30, 48, 31], [8, 12, 62, 12, 12, 44, 24], [, , 51, 51, 51, 51, 110], [, , 51, 51, 51, 30, 12], [, , 99, 107, 127, 127, 54], [, , 99, 54, 28, 54, 99], [, , 51, 51, 51, 62, 48, 31], [, , 63, 25, 12, 38, 63], [56, 12, 12, 7, 12, 12, 56], [24, 24, 24, , 24, 24, 24], [7, 12, 12, 56, 12, 12, 7], [110, 59, , , , , ,]], F = (e, s, m = 3) => {
+      for (let t = 0; t < 8; t++) for (let l = 0; l < 8; l++) (s[t] | 0) & 1 << l && e.rectfill(l, t, 1, 1, m);
+    }, v = { id: "basic", chars: C, first: 33, w: 8, h: 8, render: F };
+    var S = [[34, 32, 32], [85, 0, 0], [87, 87, 80], [99, 103, 32], [84, 33, 80], [99, 101, 96], [34, 0, 0], [33, 17, 32], [36, 68, 32], [82, 80, 0], [2, 114, 0], [0, 0, 33], [0, 112, 0], [0, 0, 16], [68, 33, 16], [117, 85, 112], [50, 34, 112], [116, 113, 112], [116, 116, 112], [85, 116, 64], [113, 116, 112], [113, 117, 112], [116, 68, 64], [117, 117, 112], [117, 116, 112], [0, 32, 32], [0, 32, 33], [66, 18, 64], [7, 7, 0], [18, 66, 16], [116, 96, 32], [37, 81, 96], [37, 117, 80], [53, 53, 48], [97, 17, 96], [53, 85, 48], [113, 49, 112], [113, 49, 16], [97, 85, 96], [85, 117, 80], [114, 34, 112], [68, 69, 32], [85, 53, 80], [17, 17, 112], [87, 117, 80], [117, 85, 80], [37, 85, 32], [117, 113, 16], [101, 83, 96], [53, 53, 80], [97, 116, 48], [114, 34, 32], [85, 85, 112], [85, 82, 32], [85, 119, 80], [85, 37, 80], [85, 34, 32], [116, 33, 112], [98, 34, 96], [17, 36, 64], [50, 34, 48], [37, 0, 0], [0, 0, 112], [18, 0, 0], [6, 85, 96], [19, 85, 48], [6, 17, 96], [70, 85, 96], [2, 83, 96], [66, 114, 32], [2, 86, 66], [17, 53, 80], [2, 2, 32], [2, 2, 33], [21, 53, 80], [34, 34, 64], [5, 117, 80], [3, 85, 80], [2, 85, 32], [3, 85, 49], [6, 85, 100], [2, 81, 16], [6, 20, 48], [39, 34, 64], [5, 85, 96], [5, 82, 32], [5, 87, 80], [5, 34, 80], [5, 86, 66], [7, 65, 112], [98, 18, 96], [34, 34, 32], [50, 66, 48], [3, 96, 0]], P = (e, s, m = 3) => {
       for (y = 0; y < 6; y++) for (x = 0; x < 4; x++) {
         let t = ~~(y / 2);
-        (y % 2 ? s[t] & 15 : s[t] >> 4) & 1 << x && e.rectfill(x, y, 1, 1, p);
+        (y % 2 ? s[t] & 15 : s[t] >> 4) & 1 << x && e.rectfill(x, y, 1, 1, m);
       }
-    }, g = { id: "mini", chars: S, first: 33, w: 4, h: 6, render: P };
-    var k = plugin = (e, { cache: s = true } = {}) => {
-      let p = e.text, t = e.textsize, c = e.textalign, z = e.textfont, i = s ? /* @__PURE__ */ new Map() : null, u = 1, r = null, N = (a) => {
-        u = ~~Math.round(a);
-      }, I = () => console.warn("[litecanvas/plugin-pixel-font] textalign() has not yet been implemented for pixel fonts"), w = (a, m, n, l = 3) => {
-        e.push(), e.translate(a, m), e.scale(u), r.render(e, n, l), e.pop();
-      }, A = (a, m, n, l = 3) => {
-        if (n += "", !u || !n.length) return;
-        let o = u * r.w, b = u * (r.h || r.w);
-        for (let f = 0; f < n.length; f++) {
-          let _ = n[f], E = _.charCodeAt(), d = r.chars[E - r.first];
-          if (d) if (s) {
-            let v = `${r.id}:${_}:${~~l}:${o}`;
-            i.has(v) || i.set(v, e.paint(o, b, () => {
-              w(0, 0, d, ~~l);
+    }, h = { id: "mini", chars: S, first: 33, w: 4, h: 6, render: P };
+    var _ = plugin = (e, { cache: s = true } = {}) => {
+      let m = e.text, t = e.textsize, l = e.textalign, k = e.textfont, o = s ? /* @__PURE__ */ new Map() : null, c = 1, r = null, g = (a) => {
+        c = ~~Math.round(a);
+      }, z = () => console.warn("[litecanvas/plugin-pixel-font] textalign() has not yet been implemented for pixel fonts"), N = (a, u, n, i = 3) => {
+        e.push(), e.translate(a, u), e.scale(c), r.render(e, n, i), e.pop();
+      }, I = (a, u, n, i = 3) => {
+        if (e.stat(12) == null) throw "renderPixelText requires Litecanvas v0.99 or later";
+        if (n += "", !c || !n.length) return;
+        let b = c * r.w, A = c * (r.h || r.w);
+        for (let p = 0; p < n.length; p++) {
+          let w = n[p], E = w.charCodeAt(), f = r.chars[E - r.first];
+          if (f) if (s) {
+            let d = [r.id, w, ~~i, b, e.stat(12).join(",")].join(":");
+            o.has(d) || o.set(d, e.paint(b, A, () => {
+              N(0, 0, f, ~~i);
             }));
-            let T = i.get(v);
-            e.image(a, m, T);
-          } else w(a, m, d, l);
-          a += o;
+            let T = o.get(d);
+            e.image(a, u, T);
+          } else N(a, u, f, i);
+          a += b;
         }
       };
       if (s) {
-        let m = setInterval(() => {
-          i.clear();
+        let u = setInterval(() => {
+          o.clear();
         }, 6e4);
         e.listen("quit", () => {
-          clearInterval(m), i.clear();
+          clearInterval(u), o.clear();
         });
-        let n = e.palc;
-        e.def("palc", (o, b) => (i.clear(), n(o, b)));
-        let l = e.pal;
-        e.def("pal", (o) => (i.clear(), l(o)));
+        let n = e.pal;
+        e.def("pal", (i) => (o.clear(), n(i)));
       }
       return { textfont: (a) => {
-        typeof a == "object" ? (e.def("text", A), e.def("textsize", N), e.def("textalign", I), r = a, N(u || 1)) : (e.def("text", p), e.def("textsize", t), e.def("textalign", c), z(a));
+        typeof a == "object" ? (e.def("text", I), e.def("textsize", g), e.def("textalign", z), r = a, g(c || 1)) : (e.def("text", m), e.def("textsize", t), e.def("textalign", l), k(a));
       } };
     };
-    window.pluginPixelFont = k;
-    window.PIXEL_FONT_MINI = g;
-    window.PIXEL_FONT_BASIC = h;
+    window.pluginPixelFont = _;
+    window.PIXEL_FONT_MINI = h;
+    window.PIXEL_FONT_BASIC = v;
   })();
 })();
 /*! @litecanvas/utils by Luiz Bills | MIT Licensed */
