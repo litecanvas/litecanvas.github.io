@@ -1,5 +1,5 @@
 const cacheName = "luizbills.litecanvas-editor-v1";
-const version = "2025.8.12.1";
+const version = "2025.9.15.0";
 
 const precacheResources = [
   "/",
@@ -31,7 +31,7 @@ const precacheResources = [
 
 self.addEventListener("install", (event) => {
   event.waitUntil(
-    caches.open(cacheName).then((cache) => cache.addAll(precacheResources)),
+    caches.open(cacheName).then((cache) => cache.addAll(precacheResources))
   );
 });
 
@@ -44,7 +44,7 @@ self.addEventListener("fetch", (event) => {
           return cachedResponse;
         }
         return fetch(event.request);
-      }),
+      })
   );
 });
 
