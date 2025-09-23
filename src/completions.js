@@ -521,7 +521,7 @@ export default function customCompletions(context) {
         label: "load",
         type: "function",
         apply: "load(",
-        detail: "(callback: (resolve,reject)=>void)",
+        detail: "(callback: (resolve, reject)=>void)",
         info: "Create a custom loader",
       },
       {
@@ -533,6 +533,18 @@ export default function customCompletions(context) {
         label: "ASSETS",
         type: "variable",
         info: "list of all loaded assets",
+      },
+      {
+        label: "PIXEL_FONT_BASIC",
+        type: "variable",
+      },
+      {
+        label: "PIXEL_FONT_MINI",
+        type: "variable",
+      },
+      {
+        label: "PIXEL_FONT_MONOGRAM",
+        type: "variable",
       },
     ],
   };
