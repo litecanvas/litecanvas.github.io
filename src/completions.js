@@ -120,6 +120,12 @@ export default function customCompletions(context) {
         detail: "(align, baseline)",
       },
       {
+        label: "textgap",
+        type: "function",
+        apply: "textgap(",
+        detail: "(value)",
+      },
+      {
         label: "image",
         type: "function",
         apply: "image(",

@@ -442,7 +442,7 @@ linedash(value: number[], ofsset?: number): void
  * TEXT DRAWING-RELATED FUNCTIONS
  */
 
-// Draw a text
+// Draw a text. Use "\n" to break lines.
 // style can be "normal", "italic" and/or "bold"
 text(x, y, text, color? = 3, style? = 'normal'): void
 
@@ -457,6 +457,10 @@ textfont(fontName: string): void
 
 // Sets the font size (default: 18)
 textsize(size: number): void
+
+// Sets the distance of the text lines based on current text size.
+// Default = 1.2
+textgap(value: number): void
 
 /**
  * IMAGE DRAWING-RELATED FUNCTIONS
