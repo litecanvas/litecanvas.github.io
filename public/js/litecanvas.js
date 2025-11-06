@@ -27,7 +27,7 @@
     var assert = (condition, message = "Assertion failed") => {
       if (!condition) throw new Error(message);
     };
-    var version = "0.100.0";
+    var version = "0.100.1";
     function litecanvas(settings = {}) {
       const root = window, math = Math, TWO_PI = math.PI * 2, raf = requestAnimationFrame, _browserEventListeners = [], on = (elem, evt, callback) => {
         elem.addEventListener(evt, callback, false);
@@ -625,10 +625,10 @@
          * @param {number} y
          * @param {CanvasImageSource} source
          */
-        image(x, y, source) {
+        image(x, y, source2) {
           DEV: assert(isNumber(x), "[litecanvas] image() 1st param must be a number");
           DEV: assert(isNumber(y), "[litecanvas] image() 2nd param must be a number");
-          _ctx.drawImage(source, ~~x, ~~y);
+          _ctx.drawImage(source2, ~~x, ~~y);
         },
         /**
          * Draw a sprite pxiel by pixel represented by a string. Each pixel must be a base 36 number (0-9 or a-z) or a dot.
@@ -1099,13 +1099,6 @@
         instance[k] = math[k];
       }
       function init() {
-        const source = settings.loop ? settings.loop : root;
-        for (const event of _coreEvents.split(",")) {
-          DEV: if (root === source && source[event]) {
-            console.info(`[litecanvas] using window.${event}()`);
-          }
-          if (source[event]) instance.listen(event, source[event]);
-        }
         if (settings.autoscale) {
           on(root, "resize", resizeCanvas);
         }
@@ -1441,6 +1434,13 @@
       DEV: console.info(`[litecanvas] version ${version} started`);
       DEV: console.debug(`[litecanvas] litecanvas() options =`, settings);
       setupCanvas();
+      const source = settings.loop ? settings.loop : root;
+      for (const event of _coreEvents.split(",")) {
+        DEV: if (root === source && source[event]) {
+          console.info(`[litecanvas] using window.${event}()`);
+        }
+        if (source[event]) instance.listen(event, source[event]);
+      }
       if ("loading" === document.readyState) {
         on(root, "DOMContentLoaded", () => raf(init));
       } else {
