@@ -76,6 +76,12 @@ export default function customCompletions(context) {
         detail: "(x, y, rx, ry, color=0)",
       },
       {
+        label: "shape",
+        type: "function",
+        apply: "shape([",
+        detail: "(points: array)",
+      },
+      {
         label: "line",
         type: "function",
         apply: "line(",
@@ -142,7 +148,7 @@ export default function customCompletions(context) {
         label: "spr",
         type: "function",
         apply: "spr(",
-        detail: "(x, y, width, height, pixels)",
+        detail: "(x, y, pixels)",
         info: "Draw a sprite pixel by pixel",
       },
       {
@@ -199,7 +205,7 @@ export default function customCompletions(context) {
         label: "pal",
         type: "function",
         apply: "pal(",
-        detail: "(colors?)",
+        detail: "(colors?, textColor?)",
         info: "set or reset the color palette",
       },
       {

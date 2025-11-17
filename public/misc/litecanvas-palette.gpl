@@ -1,16 +1,8 @@
 GIMP Palette
-#Palette Name: Litecanvas
-#Description: The default palette used in the Litecanvas HTML5 game engine.
-#Colors: 12
-17	17	17	111111
-106	119	153	6a7799
-174	194	194	aec2c2
-255	241	232	FFF1E8
-232	59	59	e83b3b
-250	188	32	fabc20
-21	95	217	155fd9
-60	188	252	3cbcfc
-50	115	69	327345
-99	198	77	63c64d
-108	44	31	6c2c1f
-172	124	0	ac7c00
+Name: Litecanvas
+#Description: The default palette used in <a href="https://litecanvas.js.org/">Litecanvas</a>.
+#
+33  30  32  211e20
+85  85  104 555568
+160 160 139 a0a08b
+233 239 236 e9efec

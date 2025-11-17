@@ -10,24 +10,11 @@
         i = zzfxX.createBuffer(1, s, a), i.getChannelData(0).set(d), z = zzfxX.createBufferSource(), z.buffer = i, z.connect(zzfxX.destination), z.start();
       };
     };
-    var defaultPalette = [
-      "#111",
-      "#6a7799",
-      "#aec2c2",
-      "#FFF1E8",
-      "#e83b3b",
-      "#fabc20",
-      "#155fd9",
-      "#3cbcfc",
-      "#327345",
-      "#63c64d",
-      "#6c2c1f",
-      "#ac7c00"
-    ];
+    var defaultPalette = ["#211e20", "#555568", "#a0a08b", "#e9efec"];
     var assert = (condition, message = "Assertion failed") => {
       if (!condition) throw new Error(message);
     };
-    var version = "0.100.1";
+    var version = "0.102.0";
     function litecanvas(settings = {}) {
       const root = window, math = Math, TWO_PI = math.PI * 2, raf = requestAnimationFrame, _browserEventListeners = [], on = (elem, evt, callback) => {
         elem.addEventListener(evt, callback, false);
@@ -43,7 +30,7 @@
         keyboardEvents: true
       };
       settings = Object.assign(defaults, settings);
-      let _initialized = false, _paused = true, _canvas, _scale = 1, _ctx, _outline_fix = 0.5, _timeScale = 1, _lastFrameTime, _fpsInterval = 1e3 / 60, _accumulated, _rafid, _fontFamily = "sans-serif", _fontSize = 20, _fontLineHeight = 1.2, _rngSeed = Date.now(), _colorPalette = defaultPalette, _colorPaletteState = [], _defaultSound = [0.5, 0, 1750, , , 0.3, 1, , , , 600, 0.1], _coreEvents = "init,update,draw,tap,untap,tapping,tapped,resized", _mathFunctions = "PI,sin,cos,atan2,hypot,tan,abs,ceil,floor,trunc,min,max,pow,sqrt,sign,exp", _eventListeners = {};
+      let _initialized = false, _paused = true, _canvas, _scale = 1, _ctx, _outline_fix = 0.5, _timeScale = 1, _lastFrameTime, _fpsInterval = 1e3 / 60, _accumulated, _rafid, _defaultTextColor = 3, _fontFamily = "sans-serif", _fontSize = 20, _fontLineHeight = 1.2, _rngSeed = Date.now(), _colorPalette = defaultPalette, _colorPaletteState = [], _defaultSound = [0.5, 0, 1750, , , 0.3, 1, , , , 600, 0.1], _coreEvents = "init,update,draw,tap,untap,tapping,tapped,resized", _mathFunctions = "PI,sin,cos,atan2,hypot,tan,abs,ceil,floor,trunc,min,max,pow,sqrt,sign,exp", _eventListeners = {};
       const instance = {
         /** @type {number} */
         W: 0,
@@ -475,6 +462,31 @@
           instance.fill(color);
         },
         /**
+         * Make a custom shape in the canvas context.
+         * Then, just use `fill` or `stroke` to draw the shape.
+         *
+         * @param {number[]} points an array of Xs and Ys coordinates
+         */
+        shape(points) {
+          DEV: assert(
+            Array.isArray(points),
+            "[litecanvas] shape() 1st param must be an array of numbers"
+          );
+          DEV: assert(
+            points.length >= 6,
+            "[litecanvas] shape() 1st param must be an array with at least 6 numbers (3 points)"
+          );
+          beginPath(_ctx);
+          for (let i = 0; i < points.length; i++) {
+            if (0 === i) {
+              _ctx.moveTo(~~points[i][0], ~~points[i][1]);
+            } else {
+              _ctx.lineTo(~~points[i][0], ~~points[i][1]);
+            }
+          }
+          _ctx.lineTo(~~points[0][0], ~~points[0][1]);
+        },
+        /**
          * Draw a line
          *
          * @param {number} x1
@@ -543,10 +555,10 @@
          * @param {number} x
          * @param {number} y
          * @param {string} message the text message
-         * @param {number} [color=3] the color index
+         * @param {number} [color] the color index
          * @param {string} [fontStyle] can be "normal" (default), "italic" and/or "bold".
          */
-        text(x, y, message, color = 3, fontStyle = "normal") {
+        text(x, y, message, color = _defaultTextColor, fontStyle = "normal") {
           DEV: assert(isNumber(x), "[litecanvas] text() 1st param must be a number");
           DEV: assert(isNumber(y), "[litecanvas] text() 2nd param must be a number");
           DEV: assert(
@@ -631,26 +643,23 @@
           _ctx.drawImage(source2, ~~x, ~~y);
         },
         /**
-         * Draw a sprite pxiel by pixel represented by a string. Each pixel must be a base 36 number (0-9 or a-z) or a dot.
+         * Draw a sprite pixel by pixel represented by a string. Each pixel must be a base 36 number (0-9 or a-z) or a dot.
          *
          * @param {number} x
          * @param {number} y
-         * @param {number} width
-         * @param {number} height
          * @param {string} pixels
          */
-        spr(x, y, width, height, pixels) {
+        spr(x, y, pixels) {
           DEV: assert(isNumber(x), "[litecanvas] spr() 1st param must be a number");
           DEV: assert(isNumber(y), "[litecanvas] spr() 2nd param must be a number");
-          DEV: assert(isNumber(width), "[litecanvas] spr() 3rd param must be a number");
-          DEV: assert(isNumber(height), "[litecanvas] spr() 4th param must be a number");
-          DEV: assert("string" === typeof pixels, "[litecanvas] spr() 5th param must be a string");
-          const chars = pixels.replace(/\s/g, "");
-          for (let gridx = 0; gridx < width; gridx++) {
-            for (let gridy = 0; gridy < height; gridy++) {
-              const char = chars[width * gridy + gridx] || ".";
-              if (char !== ".") {
-                instance.rectfill(x + gridx, y + gridy, 1, 1, parseInt(char, 36) || 0);
+          DEV: assert("string" === typeof pixels, "[litecanvas] spr() 3rd param must be a string");
+          const rows = pixels.trim().split("\n");
+          for (let row = 0; row < rows.length; row++) {
+            const chars = rows[row].trim();
+            for (let col = 0; col < chars.length; col++) {
+              const char = chars[col];
+              if (char !== "." && char !== " ") {
+                instance.rectfill(x + col, y + row, 1, 1, parseInt(char, 36) || 0);
               }
             }
           }
@@ -921,15 +930,21 @@
         /**
          * Set new palette colors or restore the default palette.
          *
-         * @param {string[]} [colors]
+         * @param {string[]} [colors] an array of colors
+         * @param {number} [textColor] the default text color this palette
          */
-        pal(colors = defaultPalette) {
+        pal(colors, textColor = 3) {
           DEV: assert(
             Array.isArray(colors) && colors.length > 0,
-            "[litecanvas] pal() 1st param must be a array of strings"
+            "[litecanvas] pal() 1st param must be a array of color strings"
           );
-          _colorPalette = colors;
+          DEV: assert(
+            isNumber(textColor) && textColor >= 0,
+            "[litecanvas] pal() 2nd param must be a positive number or zero"
+          );
+          _colorPalette = colors || defaultPalette;
           _colorPaletteState = [];
+          _defaultTextColor = textColor;
         },
         /**
          * Replace the color "a" with color "b".
@@ -1448,7 +1463,7 @@
       }
       return instance;
     }
-    globalThis.litecanvas = litecanvas;
+    window.litecanvas = litecanvas;
   })();
   (() => {
     var At = Object.defineProperty;
@@ -2041,160 +2056,158 @@
     window.pluginAssetLoader = v;
   })();
   (() => {
-    var o = (a, l = "Assertion failed") => {
-      if (!a) throw new Error(l);
-    };
-    var _ = (a, l, m, c, s, p, f, b) => (o(isFinite(a), "colrect: 1st param must be a number"), o(isFinite(l), "colrect: 2nd param must be a number"), o(isFinite(m), "colrect: 3rd param must be a number"), o(isFinite(c), "colrect: 4th param must be a number"), o(isFinite(s), "colrect: 5th param must be a number"), o(isFinite(p), "colrect: 6th param must be a number"), o(isFinite(f), "colrect: 7th param must be a number"), o(isFinite(b), "colrect: 8th param must be a number"), a < s + f && a + m > s && l < p + b && l + c > p);
-    var x = (a, l, m, c, s, p) => (o(isFinite(a), "colcirc: 1st param must be a number"), o(isFinite(l), "colcirc: 2nd param must be a number"), o(isFinite(m), "colcirc: 3rd param must be a number"), o(isFinite(c), "colcirc: 4th param must be a number"), o(isFinite(s), "colcirc: 5th param must be a number"), o(isFinite(p), "colcirc: 6th param must be a number"), (c - a) * (c - a) + (s - l) * (s - l) <= (m + p) * (m + p));
-    var Mt = 2 * Math.PI;
-    var pe = Math.PI / 2;
-    var V = { warnings: true };
-    function v(a, l = {}) {
-      if (l = Object.assign({}, V, l), a.stat(1)) throw 'Plugin Migrate should be loaded before the "init" event';
-      let c = a.stat(0);
-      function s(t, e, r = "") {
-        l.warnings && console.warn(`[litecanvas/migrate] ${t} is removed. ` + (e ? `Use ${e} instead. ` : "") + r);
+    var x = (s, c, h, m, n, r, b, f) => s < n + b && s + h > n && c < r + f && c + m > r;
+    var _ = (s, c, h, m, n, r) => (m - s) * (m - s) + (n - c) * (n - c) <= (h + r) * (h + r);
+    var At = 2 * Math.PI;
+    var ge = Math.PI / 2;
+    var j = { warnings: true };
+    function v(s, c = {}) {
+      c = Object.assign({}, j, c);
+      let h = s.stat(1), m = { def: u, seed: b, print: N, clear: T, setfps: S, setvar: R, textstyle: w, textmetrics: E, cliprect: M, clipcirc: I, blendmode: A, transform: k, getcolor: y, mousepos: P, resize: C, path: L, fill: Y, stroke: F, clip: X, paint: W, colrect: x, colcirc: _ };
+      if (h) throw 'Plugin Migrate should be loaded before the "init" event';
+      let n = s.stat(0);
+      function r(t, e, a = "") {
+        c.warnings && console.warn(`[litecanvas/migrate] ${t} is removed. ` + (e ? `Use ${e} instead. ` : "") + a);
       }
-      function p(t) {
-        return s("seed()", "rseed()"), t && a.rseed(t), a.stat(9);
+      function b(t) {
+        return r("seed()", "rseed()"), t && s.rseed(t), s.stat(9);
       }
       let f = "";
-      function b(t) {
-        s("textstyle()", "the 5th param of text()"), f = t;
+      function w(t) {
+        r("textstyle()", "the 5th param of text()"), f = t;
       }
-      let w = a.text;
-      function g(t, e, r, n = 3, u = f) {
-        w(t, e, r, n, u);
+      function N(t, e, a, i) {
+        r("print()", "text()"), s.text(t, e, a, i);
       }
-      function E(t, e, r, n) {
-        s("print()", "text()"), g(t, e, r, n);
+      function E(t, e) {
+        r("textmetrics()", "ctx().measureText()");
+        let a = s.ctx(), i = s.stat(10), l = s.stat(11);
+        a.font = `${f || ""} ${~~(e || i)}px ${l}`;
+        let p = a.measureText(t);
+        return p.height = p.actualBoundingBoxAscent + p.actualBoundingBoxDescent, p;
       }
-      function M(t, e) {
-        s("textmetrics()", "ctx().measureText()");
-        let r = a.ctx(), n = a.stat(10), u = a.stat(11);
-        r.font = `${f || ""} ${~~(e || n)}px ${u}`;
-        let d = r.measureText(t);
-        return d.height = d.actualBoundingBoxAscent + d.actualBoundingBoxDescent, d;
+      function M(t, e, a, i) {
+        r("cliprect()", "clip()");
+        let l = s.ctx();
+        l.beginPath(), l.rect(t, e, a, i), l.clip();
       }
-      function I(t, e, r, n) {
-        s("cliprect()", "clip()");
-        let u = a.ctx();
-        u.beginPath(), u.rect(t, e, r, n), u.clip();
+      function I(t, e, a) {
+        r("clipcirc()", "clip()");
+        let i = s.ctx();
+        i.beginPath(), i.arc(t, e, a, 0, s.TWO_PI), i.clip();
       }
-      function T(t, e, r) {
-        s("clipcirc()", "clip()");
-        let n = a.ctx();
-        n.beginPath(), n.arc(t, e, r, 0, a.TWO_PI), n.clip();
-      }
-      function A(t) {
-        s("getcolor()", "stat(5)");
+      function y(t) {
+        r("getcolor()", "stat(5)");
         let e = stat(5);
         return e[~~t % e.length];
       }
-      function P(t) {
-        s("blendmode()", "ctx().globalCompositeOperation");
-        let e = a.ctx();
+      function A(t) {
+        r("blendmode()", "ctx().globalCompositeOperation");
+        let e = s.ctx();
         e.globalCompositeOperation = t;
       }
-      function R(t) {
-        s("clear()", "cls()"), a.cls(t);
+      function T(t) {
+        r("clear()", "cls()"), s.cls(t);
       }
-      function S(t, e, r, n, u, d, U = true) {
-        return s("transform()", "ctx().setTransform() or ctx().transform()"), a.ctx()[U ? "setTransform" : "transform"](t, e, r, n, u, d);
+      function k(t, e, a, i, l, p, B = true) {
+        return r("transform()", "ctx().setTransform() or ctx().transform()"), s.ctx()[B ? "setTransform" : "transform"](t, e, a, i, l, p);
       }
-      function k() {
-        return s("mousepos()", "MX and MY"), [MX, MY];
+      function P() {
+        return r("mousepos()", "MX and MY"), [MX, MY];
       }
-      function C(t) {
-        s("setfps()", "framerate()"), a.framerate(t);
+      function S(t) {
+        r("setfps()", "framerate()"), s.framerate(t);
       }
-      let i = a.def;
-      function h(t, e) {
+      let o = s.def;
+      function u(t, e) {
         switch (t) {
           case "W":
           case "WIDTH":
-            i("W", e), i("WIDTH", e);
+            o("W", e), o("WIDTH", e);
             break;
           case "H":
           case "HEIGHT":
-            i("H", e), i("HEIGHT", e);
+            o("H", e), o("HEIGHT", e);
             break;
           case "T":
           case "ELAPSED":
-            i("T", e), i("ELAPSED", e);
+            o("T", e), o("ELAPSED", e);
             break;
           case "CX":
           case "CENTERX":
-            i("CX", e), i("CENTERX", e);
+            o("CX", e), o("CENTERX", e);
             break;
           case "CY":
           case "CENTERY":
-            i("CY", e), i("CENTERY", e);
+            o("CY", e), o("CENTERY", e);
             break;
           case "MX":
           case "MOUSEX":
-            i("MX", e), i("MOUSEX", e);
+            o("MX", e), o("MOUSEX", e);
             break;
           case "MY":
           case "MOUSEY":
-            i("MY", e), i("MOUSEY", e);
+            o("MY", e), o("MOUSEY", e);
             break;
           default:
-            i(t, e);
+            o(t, e);
             break;
         }
       }
-      function L(t, e) {
-        s("setvar()", "def()"), h(t, e);
+      function R(t, e) {
+        r("setvar()", "def()"), u(t, e);
       }
-      a.listen("resized", y);
-      function y() {
-        h("CX", a.W / 2), h("CY", a.H / 2);
+      s.listen("resized", g);
+      function g() {
+        u("CX", s.W / 2), u("CY", s.H / 2);
       }
-      y(), h("CANVAS", a.canvas());
-      function N(t, e) {
-        if (c.autoscale) throw "resize() don't works with autoscale enabled";
-        s("resize()", null, "Avoid changing the canvas dimensions at runtime."), a.CANVAS.width = t, h("W", t), h("CX", t / 2), a.CANVAS.height = e, h("H", e), h("CY", e / 2), a.emit("resized", 1);
+      g(), u("CANVAS", s.canvas());
+      function C(t, e) {
+        if (n.autoscale) throw "resize() don't works with autoscale enabled";
+        r("resize()", null, "Avoid changing the canvas dimensions at runtime."), s.CANVAS.width = t, u("W", t), s.CANVAS.height = e, u("H", e), s.emit("resized", 1);
       }
-      for (let t of ["W", "H", "T", "CX", "CY", "MX", "MY"]) a[t] != null && h(t, a[t]);
-      if (s("FPS", "", "but you can use our plugin to measure the fps: https://github.com/litecanvas/plugin-frame-rate-meter"), i("FPS", ""), c.fps && a.framerate(c.fps), c.background != null) {
-        let t = a.listen("before:draw", () => {
-          let e = stat(5);
-          a.canvas().style.background = e[~~c.background % e.length], t();
+      for (let t of ["W", "H", "T", "CX", "CY", "MX", "MY"]) s[t] != null && u(t, s[t]);
+      if (r("FPS", "", "but you can use our plugin to measure the fps: https://github.com/litecanvas/plugin-frame-rate-meter"), o("FPS", ""), n.fps && s.framerate(n.fps), n.background != null) {
+        r('"background" option', "You must update your canvas CSS");
+        let t = s.listen("before:draw", () => {
+          s.canvas().style.background = y(~~n.background), t();
         });
       }
-      function O(t) {
-        return s("path()", "`new Path2D`", "See https://developer.mozilla.org/en-US/docs/Web/API/Path2D"), new Path2D(t);
+      function L(t) {
+        return r("path()", "`new Path2D()`", "See https://developer.mozilla.org/en-US/docs/Web/API/Path2D"), new Path2D(t);
       }
-      let F = a.fill;
-      function z(t, e) {
+      let z = s.fill;
+      function Y(t, e) {
         if (e instanceof Path2D) {
-          s("fill(color, path)");
-          let r = a.stat(5), n = a.ctx();
-          n.fillStyle = r[~~t % r.length], a.ctx().fill(e);
-        } else F(t);
+          r("fill(color, path)");
+          let a = s.stat(5), i = s.ctx();
+          i.fillStyle = a[~~t % a.length], s.ctx().fill(e);
+        } else z(t);
       }
-      let Y = a.stroke;
-      function D(t, e) {
+      let O = s.stroke;
+      function F(t, e) {
         if (e instanceof Path2D) {
-          s("stroke(color, path)");
-          let r = a.stat(5), n = a.ctx();
-          n.strokeStyle = r[~~t % r.length], a.ctx().stroke(e);
-        } else Y(t);
+          r("stroke(color, path)");
+          let a = s.stat(5), i = s.ctx();
+          i.strokeStyle = a[~~t % a.length], s.ctx().stroke(e);
+        } else O(t);
       }
-      let H = a.clip;
-      function W(t) {
-        s("clip(path)", "clip(callback)", "E.g: `clip((ctx) => ctx.rect(0, 0, 200, 200))`"), t instanceof Path2D ? a.ctx().clip(t) : H(t);
+      let D = s.clip;
+      function X(t) {
+        r("clip(path)", "clip(callback)", "E.g: `clip((ctx) => ctx.rect(0, 0, 200, 200))`"), t instanceof Path2D ? s.ctx().clip(t) : D(t);
       }
-      c.antialias && s('"antialias" option', '"pixelart" option'), c.pixelart === false && s('"pixelart" option'), c.animate === false && s('"animate" option', "pause() in the of your draw()");
-      let B = a.paint;
-      function X(t, e, r, n) {
-        let u = r;
-        return a.spr && Array.isArray(r) && (u = () => {
-          a.spr(0, 0, t, e, r.join("").replace(/ /g, "."));
-        }), B(t, e, u, n);
+      n.antialias && r('"antialias" option', '"pixelart" option'), n.pixelart === false && r('"pixelart" option'), n.animate === false && r('"animate" option', "pause() in the of your draw()");
+      let H = s.paint;
+      function W(t, e, a, i) {
+        let l = a;
+        return s.spr && Array.isArray(a) && (l = () => {
+          s.spr(0, 0, a.join("").replace(/ /g, "."));
+        }), H(t, e, l, i);
       }
-      return { def: h, seed: p, print: E, clear: R, setfps: C, setvar: L, textstyle: b, textmetrics: M, text: g, cliprect: I, clipcirc: T, blendmode: P, transform: S, getcolor: A, mousepos: k, resize: N, path: O, fill: z, stroke: D, clip: W, paint: X, colrect: _, colcirc: x };
+      let d = s.spr;
+      return d && d.length === 3 && (m.spr = function(t, e, a, i, l) {
+        Number.isFinite(a) && a > 0 ? (r("spr() width and height", "spr(x, y, pixels)"), d(t, e, l)) : d(t, e, a);
+      }), m;
     }
     window.pluginMigrate = v;
   })();

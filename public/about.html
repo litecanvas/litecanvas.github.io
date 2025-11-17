@@ -10,7 +10,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300..700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="prism/prism.css" />
-    <link rel="icon" href="icons/favicon.ico" />
+    <link rel="icon" type="image/png" href="icons/icon-64.png" />
     <script defer src="https://umami.luizbills.com/script.js" data-website-id="3143e924-b3a6-42ce-b374-3f527dc894e2"></script>
     <style>
       html {
@@ -319,7 +319,7 @@ function tapping(x, y, touchId) {
         Every time a function asks for a color, choose must choose one of these numbers.
       </p>
 
-      <img src="images/colors.png" alt="Default Color Palette" />
+      <img src="images/colors.png" alt="Default Color Palette" style="border: 2px solid white;"/>
 
       <p>Download: <a href="/misc/litecanvas-palette.gpl">palette.gpl</a> or <a href="/misc/litecanvas-palette.json" download>palette.json</a></p>
 
@@ -429,6 +429,10 @@ ovalfill(x, y, rx, ry, color = 0): void
 // draw a outline ellipse
 oval(x, y, rx, ry, color = 0): void
 
+// make a shape in the canvas context. To draw the shape you must call `fill()` or `stroke()` right after.
+// example: shape([4,0,8,8,0,8]); fill(3); // draw a triangle
+shape(points: number[]): void
+
 // draw a line from one point (x1, y1) to another (x2, y2)
 line(x1, y1, x2, y2, color = 0): void
 
@@ -469,9 +473,9 @@ textgap(value: number): void
 // draw a image
 image(x, y, image: Image|ImageBitmap): void
 
-// draw a sprite pixel by pixel from a string (the 5th argument)
+// draw a sprite pixel by pixel from a string (the 3rd argument)
 // see: https://github.com/litecanvas/game-engine/blob/main/samples/pixelart/pixelart.js#L50
-spr(x, y, width, heigth, pixels): void
+spr(x, y, pixels): void
 
 // create an OffscreenCanvas and draw on it to make an image
 // see: https://github.com/litecanvas/game-engine/blob/main/samples/paint/paint.js
@@ -687,7 +691,7 @@ framerate(value: number): void
 // Update or reset the palette color
 // example: pal(['#000', '#FFF']) is a 1-bit color palette
 // example: pal() resets the default color palette
-pal(colors: string[]): void
+pal(colors: string[], textColor: number = 3): void
 
 // Replace the color "a" with the color "b"
 // example: pal(0, 3) // now the color black (#0) is white (#3)

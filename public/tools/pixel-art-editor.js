@@ -1,22 +1,7 @@
 const ctx = art.getContext("2d");
 const $ = (selector) => document.querySelector(selector);
 // color palette
-const colors = [
-  "#111",
-  "#6a7799",
-  "#aec2c2",
-  "#FFF1E8",
-
-  "#e83b3b",
-  "#fabc20",
-  "#155fd9",
-  "#3cbcfc",
-
-  "#327345",
-  "#63c64d",
-  "#6c2c1f",
-  "#ac7c00",
-];
+const colors = ["#211e20", "#555568", "#a0a08b", "#e9efec"];
 // local storage wrapper
 const storage = {
   prefix: "litepixel_",
@@ -248,7 +233,7 @@ window.onkeypress = (evt) => {
 clearButton.onclick = () => {
   if (
     confirm(
-      "Are you sure you want to erase the canvas? This action cannot be undone."
+      "Are you sure you want to erase the canvas? This action cannot be undone.",
     )
   ) {
     pixels.length = 0;
@@ -263,7 +248,7 @@ exportButton.onclick = function () {
   let output = "";
   const _pixels = [];
 
-  output += `const renameThisVar = paint(${W}, ${H}, () => spr(0, 0, ${W}, ${H},\n  \`\n`;
+  output += `const renameThisVar = paint(${W}, ${H}, () => spr(0, 0,\n  \`\n`;
 
   for (let y = 0; y < H; y++) {
     output += "  ";
@@ -318,7 +303,7 @@ importButton.onclick = (ev) => {
     "importing... size:",
     _size.join("x"),
     "colors:",
-    _pixels.join(" ")
+    _pixels.join(" "),
   );
 
   // reset the canvas
@@ -356,7 +341,7 @@ downloadButton.onclick = (ev) => {
 copy.onclick = () => {
   if (!navigator.clipboard) {
     return alert(
-      "Your browser not support this feature. Consider installing Firefox or Chrome."
+      "Your browser not support this feature. Consider installing Firefox or Chrome.",
     );
   }
   if (!exported.value) return;
@@ -374,7 +359,7 @@ copy.onclick = () => {
     (err) => {
       alert("Error: Unable to generate your shareable url!");
       console.error("Error on copying text to clipboard:", err);
-    }
+    },
   );
 
   setTimeout(() => {

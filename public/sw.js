@@ -1,5 +1,5 @@
 const cacheName = "luizbills.litecanvas-editor-v1";
-const version = "2025.11.6.0";
+const version = "2025.11.17.0";
 
 const precacheResources = [
   "/",
@@ -15,7 +15,7 @@ const precacheResources = [
   "/prism/prism.js",
   "/prism/prism-typescript.js",
   "/prism/prism-autolinker.js",
-  "/icons/favicon.ico",
+  "/icons/icon-64.png",
   "/icons/icon-128.png",
   "/icons/icon-256.png",
   "/icons/icon-512.png",
@@ -27,6 +27,8 @@ const precacheResources = [
   "/manifest.json",
   "/tools/pixel-art-editor.html",
   "/tools/pixel-art-editor.js",
+  "/misc/litecanvas-palette.gpl",
+  "/misc/litecanvas-palette.json",
 ];
 
 self.addEventListener("install", (event) => {
