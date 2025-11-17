@@ -28,7 +28,8 @@ export default function customCompletions(context) {
       {
         label: "litecanvas",
         type: "function",
-        apply: "litecanvas({})",
+        apply:
+          "litecanvas({})\n\nfunction init() {\n  \n}\n\nfunction update(dt) {\n  \n}\n\nfunction draw() {\n  \n}",
         detail: "(settings?: object)",
         info: "initialize a litecanvas instance",
       },
