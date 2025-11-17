@@ -1,14 +1,14 @@
 export default () =>
   `// Welcome to Litecanvas Playground!
 // Learn more tapping on the question mark (?) above.
-// Join our discord: https://discord.com/invite/r2c3rGsvH3
+// Join our discord server: https://discord.com/invite/r2c3rGsvH3
 
 // Start the engine
 litecanvas({
   loop: { init, update, draw, tapped },
 })
 
-let bg, color, radius, posx, posy
+let bg, color, posx, posy, radius
 
 // this function runs once at the beginning
 function init() {
