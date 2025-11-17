@@ -6,7 +6,6 @@ export default () =>
 // Start the engine
 litecanvas({
   loop: { init, update, draw, tapped },
-  pixelart: true
 })
 
 let bg, color, radius, posx, posy
