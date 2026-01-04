@@ -14,7 +14,7 @@
     var assert = (condition, message = "Assertion failed") => {
       if (!condition) throw new Error(message);
     };
-    var version = "0.102.1";
+    var version = "0.102.2";
     function litecanvas(settings = {}) {
       const root = window, math = Math, TWO_PI = math.PI * 2, raf = requestAnimationFrame, _browserEventListeners = [], on = (elem, evt, callback) => {
         elem.addEventListener(evt, callback, false);
@@ -935,7 +935,7 @@
          */
         pal(colors, textColor = 3) {
           DEV: assert(
-            Array.isArray(colors) && colors.length > 0,
+            null == colors || Array.isArray(colors) && colors.length > 0,
             "[litecanvas] pal() 1st param must be a array of color strings"
           );
           DEV: assert(
