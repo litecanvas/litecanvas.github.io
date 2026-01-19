@@ -1909,121 +1909,90 @@
     globalThis.utils = Object.assign(globalThis.utils || {}, H);
   })();
   (() => {
-    function c(t) {
-      return t.split("\\").pop().split("/").pop().split(".")[0];
+    function f(e) {
+      return e.split("\\").pop().split("/").pop().split(".")[0];
     }
-    function b(t, e) {
-      return e && !I(t) && (t = e + t), t;
+    function b(e, t) {
+      return t && !x(e) && (e = t + e), e;
     }
-    function I(t) {
+    function x(e) {
       try {
-        return !!new URL(t).protocol;
+        return !!new URL(e).protocol;
       } catch {
       }
       return false;
     }
-    var h = { crossOrigin: "anonymous", baseURL: null, allowSoundInterruptions: true, ignoreErrors: false }, l = (t, e) => {
-      let i = "LOADING";
-      t.def(i, ~~t[i] + ~~e);
+    var v = { crossOrigin: "anonymous", baseURL: null, allowSoundInterruptions: true, ignoreErrors: false }, o = (e, t) => {
+      let m = "LOADING";
+      e.def(m, ~~e[m] + ~~t);
     };
-    function y(t, e = {}) {
-      return e = Object.assign({}, h, e), l(t, 0), t.def("ASSETS", t.ASSETS || {}), t.ASSETS.font = {}, { loadFont: async (r, a, p) => {
-        let { baseURL: m, ignoreErrors: f } = e, o = c(a);
-        a = b(a, m);
-        let n = new FontFace(r, `url(${a})`), u = { asset: n, type: "font", fontName: r, src: a, id: o };
-        t.emit("filter-asset", n, u), document.fonts.add(n), l(t, 1);
-        let s = n.load();
-        return s.then((d) => {
-          t.ASSETS.font[o] = d, p && p(d), t.emit("asset-load", u), l(t, -1);
+    function h(e, t = {}) {
+      return t = Object.assign({}, v, t), o(e, 0), e.def("ASSETS", e.ASSETS || {}), e.ASSETS.font = {}, { loadFont: async (a, r, u) => {
+        let { baseURL: p, ignoreErrors: c } = t, l = f(r);
+        r = b(r, p);
+        let s = new FontFace(a, `url(${r})`), n = { asset: s, type: "font", fontName: a, src: r, id: l };
+        e.emit("filter-asset", s, n), document.fonts.add(s), o(e, 1);
+        let i = s.load();
+        return i.then((d) => {
+          e.ASSETS.font[l] = d, u && u(d), e.emit("asset-load", n), o(e, -1);
         }).catch((d) => {
-          if (console.error(d), !f) throw new Error("Failed to load font from " + a);
-          p && p(), t.emit("asset-error", u);
-        }), s;
+          if (console.error(d), !c) throw new Error("Failed to load font from " + r);
+          u && u(), e.emit("asset-error", n);
+        }), i;
       } };
     }
-    function A(t, e = {}) {
-      return e = Object.assign({}, h, e), l(t, 0), t.def("ASSETS", t.ASSETS || {}), t.ASSETS.image = {}, { loadImage: async (r, a) => {
-        let { baseURL: p, ignoreErrors: m, crossOrigin: f } = e, o = t.stat(5), n = { splitFrames: F, convertColors: j(o) }, u = c(r);
-        r = b(r, p);
-        let s = new Image(), d = { asset: s, type: "image", src: r, id: u };
-        return new Promise((w) => {
-          l(t, 1), s.crossOrigin = f, s.onerror = (g) => {
-            console.error(g);
-            let S = "Failed to load image from " + r;
-            if (!m) throw new Error(S);
-            a && a(), t.emit("asset-error", d);
-          }, s.onload = () => {
-            t.ASSETS.image[u] = s, a && a(s, n), t.emit("asset-load", d), l(t, -1), w(s);
-          }, t.emit("filter-asset", s, d), s.src = r;
-        });
-      } };
-    }
-    function F(t, e, i, r = 0, a = 0) {
-      let p = [], m = Math.floor((t.width + a) / (e + a)), f = Math.floor((t.height + a) / (i + a));
-      for (let o = 0; o < f; o++) for (let n = 0; n < m; n++) {
-        let u = new OffscreenCanvas(e, i);
-        u.getContext("2d").drawImage(t, r + n * e + n * a, r + o * i + o * a, e, i, 0, 0, e, i), p.push(u);
-      }
-      return p;
-    }
-    function j(t) {
-      return (e, i = false) => {
-        let r = new OffscreenCanvas(e.width, e.height), a = r.getContext("2d");
-        a.drawImage(e, 0, 0);
-        let p = a.getImageData(0, 0, e.width, e.height), m = p.data, f = /* @__PURE__ */ new Map();
-        for (let o = 0, n = m.length; o < n; o += 4) {
-          let u = m[o], s = m[o + 1], d = m[o + 2], w = [u, s, d], g = w.join(","), S = f.get(g);
-          S || (S = P(w, t), f.set(g, S));
-          let _ = S.startsWith("#") ? O(S) : D(S);
-          m[o] = _[0], m[o + 1] = _[1], m[o + 2] = _[2], m[o + 3] = i ? m[o + 3] : 255;
-        }
-        return a.putImageData(p, 0, 0), r;
-      };
-    }
-    function O(t) {
-      let e = 0, i = 0, r = 0;
-      return t.length === 4 ? (e = "0x" + t[1] + t[1], i = "0x" + t[2] + t[2], r = "0x" + t[3] + t[3]) : t.length === 7 && (e = "0x" + t[1] + t[2], i = "0x" + t[3] + t[4], r = "0x" + t[5] + t[6]), [~~e, ~~i, ~~r];
-    }
-    function D(t) {
-      let e = t.indexOf(",") > -1 ? "," : " ";
-      t = t.substr(4).split(")")[0].split(e);
-      let i = (+t[0]).toString(16), r = (+t[1]).toString(16), a = (+t[2]).toString(16);
-      return i.length === 1 && (i = "0" + i), r.length === 1 && (r = "0" + r), a.length === 1 && (a = "0" + a), [i | 0, r | 0, a | 0];
-    }
-    function P(t, e) {
-      let i = 1 / 0, r = null, [a, p, m] = t;
-      return e.forEach((f) => {
-        let [o, n, u] = f.startsWith("#") ? O(f) : D(f), s = Math.sqrt((a - o) ** 2 + (p - n) ** 2 + (m - u) ** 2);
-        s < i && (i = s, r = f);
-      }), r;
-    }
-    function E(t, e = {}) {
-      return e = Object.assign({}, h, e), l(t, 0), t.def("ASSETS", t.ASSETS || {}), t.ASSETS.script = {}, { loadScript: async (r, a) => {
-        let { baseURL: p, ignoreErrors: m, crossOrigin: f } = e, o = c(r);
-        r = b(r, p);
-        let n = document.createElement("script"), u = { asset: n, type: "script", src: r, id: o };
-        return new Promise((s) => {
-          l(t, 1), n.crossOrigin = f, n.onerror = (d) => {
-            if (console.error(d), !m) throw new Error("Failed to load " + r);
-            a && a(), t.emit("asset-error", u);
-          }, n.onload = () => {
-            t.ASSETS.script[o] = n, a && a(n), t.emit("asset-load", u), l(t, -1), s(n);
-          }, t.emit("filter-asset", n, u), n.src = r, document.head.appendChild(n);
-        });
-      } };
-    }
-    function x(t, e = {}) {
-      return e = Object.assign({}, h, e), l(t, 0), t.def("ASSETS", t.ASSETS || {}), t.ASSETS.sound = {}, { loadSound: async (r, a) => {
-        let { crossOrigin: p, ignoreErrors: m, allowSoundInterruptions: f, baseURL: o } = e, n = c(r);
-        r = b(r, o);
-        let u = new Audio(), s = { asset: u, type: "sound", src: r, id: n };
+    function S(e, t = {}) {
+      return t = Object.assign({}, v, t), o(e, 0), e.def("ASSETS", e.ASSETS || {}), e.ASSETS.image = {}, { loadImage: async (a, r) => {
+        let { baseURL: u, ignoreErrors: p, crossOrigin: c } = t, l = { splitFrames: _ }, s = f(a);
+        a = b(a, u);
+        let n = new Image(), i = { asset: n, type: "image", src: a, id: s };
         return new Promise((d) => {
-          l(t, 1), u.crossOrigin = p, u.onerror = (w) => {
-            if (console.error(w), !m) throw new Error("Failed to load " + r);
-            a && a(null), t.emit("asset-error", s);
-          }, u[f ? "oncanplay" : "oncanplaythrough"] = () => {
-            t.ASSETS.sound[n] = u, a && a(u), t.emit("asset-load", s), l(t, -1), d(u);
-          }, t.emit("filter-asset", u, s), u.src = r;
+          o(e, 1), n.crossOrigin = c, n.onerror = (T) => {
+            console.error(T);
+            let L = "Failed to load image from " + a;
+            if (!p) throw new Error(L);
+            r && r(), e.emit("asset-error", i);
+          }, n.onload = () => {
+            e.ASSETS.image[s] = n, r && r(n, l), e.emit("asset-load", i), o(e, -1), d(n);
+          }, e.emit("filter-asset", n, i), n.src = a;
+        });
+      } };
+    }
+    function _(e, t, m, a = 0, r = 0) {
+      let u = [], p = Math.floor((e.width + r) / (t + r)), c = Math.floor((e.height + r) / (m + r));
+      for (let l = 0; l < c; l++) for (let s = 0; s < p; s++) {
+        let n = new OffscreenCanvas(t, m);
+        n.getContext("2d").drawImage(e, a + s * t + s * r, a + l * m + l * r, t, m, 0, 0, t, m), u.push(n);
+      }
+      return u;
+    }
+    function w(e, t = {}) {
+      return t = Object.assign({}, v, t), o(e, 0), e.def("ASSETS", e.ASSETS || {}), e.ASSETS.script = {}, { loadScript: async (a, r) => {
+        let { baseURL: u, ignoreErrors: p, crossOrigin: c } = t, l = f(a);
+        a = b(a, u);
+        let s = document.createElement("script"), n = { asset: s, type: "script", src: a, id: l };
+        return new Promise((i) => {
+          o(e, 1), s.crossOrigin = c, s.onerror = (d) => {
+            if (console.error(d), !p) throw new Error("Failed to load " + a);
+            r && r(), e.emit("asset-error", n);
+          }, s.onload = () => {
+            e.ASSETS.script[l] = s, r && r(s), e.emit("asset-load", n), o(e, -1), i(s);
+          }, e.emit("filter-asset", s, n), s.src = a, document.head.appendChild(s);
+        });
+      } };
+    }
+    function y(e, t = {}) {
+      return t = Object.assign({}, v, t), o(e, 0), e.def("ASSETS", e.ASSETS || {}), e.ASSETS.sound = {}, { loadSound: async (a, r) => {
+        let { crossOrigin: u, ignoreErrors: p, allowSoundInterruptions: c, baseURL: l } = t, s = f(a);
+        a = b(a, l);
+        let n = new Audio(), i = { asset: n, type: "sound", src: a, id: s };
+        return new Promise((d) => {
+          o(e, 1), n.crossOrigin = u, n.onerror = (T) => {
+            if (console.error(T), !p) throw new Error("Failed to load " + a);
+            r && r(null), e.emit("asset-error", i);
+          }, n[c ? "oncanplay" : "oncanplaythrough"] = () => {
+            e.ASSETS.sound[s] = n, r && r(n), e.emit("asset-load", i), o(e, -1), d(n);
+          }, e.emit("filter-asset", n, i), n.src = a;
         });
       } };
     }
@@ -2032,30 +2001,30 @@
     }, restart() {
       this.pause(), this.currentTime = 0, this.play();
     } });
-    function L(t, e = {}) {
-      return e = Object.assign({}, h, e), l(t, 0), t.def("ASSETS", t.ASSETS || {}), t.ASSETS.json = {}, { loadJSON: async (r, a, p) => {
-        let { baseURL: m, ignoreErrors: f } = e, o = c(r);
-        r = b(r, m);
-        let n = { type: "json", src: r, id: o };
-        t.emit("filter-asset", null, n), l(t, 1), t.ASSETS.json = {};
-        let u = fetch(r, p);
-        return u.then((s) => s.json()).then((s) => {
-          ASSETS.json[o] = s, n.json = s, a && a(s), t.emit("asset-load", n), l(t, -1);
-        }).catch((s) => {
-          if (console.error(s), !f) throw new Error("Failed to load JSON from " + r);
-          a && a(), t.emit("asset-error", n);
-        }), u;
+    function g(e, t = {}) {
+      return t = Object.assign({}, v, t), o(e, 0), e.def("ASSETS", e.ASSETS || {}), e.ASSETS.json = {}, { loadJSON: async (a, r, u) => {
+        let { baseURL: p, ignoreErrors: c } = t, l = f(a);
+        a = b(a, p);
+        let s = { type: "json", src: a, id: l };
+        e.emit("filter-asset", null, s), o(e, 1), e.ASSETS.json = {};
+        let n = fetch(a, u);
+        return n.then((i) => i.json()).then((i) => {
+          ASSETS.json[l] = i, s.json = i, r && r(i), e.emit("asset-load", s), o(e, -1);
+        }).catch((i) => {
+          if (console.error(i), !c) throw new Error("Failed to load JSON from " + a);
+          r && r(), e.emit("asset-error", s);
+        }), n;
       } };
     }
-    function T(t) {
-      return l(t, 0), t.def("ASSETS", t.ASSETS || {}), { load: (i) => new Promise((r, a) => {
-        l(t, 1), i((m) => (l(t, -1), r(m)), a);
+    function E(e) {
+      return o(e, 0), e.def("ASSETS", e.ASSETS || {}), { load: (m) => new Promise((a, r) => {
+        o(e, 1), m((p) => (o(e, -1), a(p)), r);
       }) };
     }
-    function v(t, e = {}) {
-      t.use(y, e), t.use(A, e), t.use(E, e), t.use(x, e), t.use(L, e), t.use(T);
+    function A(e, t = {}) {
+      e.use(h, t), e.use(S, t), e.use(w, t), e.use(y, t), e.use(g, t), e.use(E);
     }
-    window.pluginAssetLoader = v;
+    window.pluginAssetLoader = A;
   })();
   (() => {
     var x = (s, c, h, m, n, r, b, f) => s < n + b && s + h > n && c < r + f && c + m > r;
