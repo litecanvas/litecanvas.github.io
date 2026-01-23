@@ -2034,7 +2034,7 @@
     var j = { warnings: true };
     function v(s, c = {}) {
       c = Object.assign({}, j, c);
-      let h = s.stat(1), m = { def: u, seed: b, print: N, clear: T, setfps: S, setvar: R, textstyle: w, textmetrics: E, cliprect: M, clipcirc: I, blendmode: A, transform: k, getcolor: y, mousepos: P, resize: C, path: L, fill: Y, stroke: F, clip: X, paint: W, colrect: x, colcirc: _ };
+      let h = s.stat(1), m = { def: u, seed: b, print: N, clear: I, setfps: S, setvar: R, textstyle: w, textmetrics: E, cliprect: M, clipcirc: T, blendmode: A, transform: k, getcolor: y, mousepos: P, resize: C, path: L, fill: Y, stroke: F, clip: X, paint: W, colrect: x, colcirc: _ };
       if (h) throw 'Plugin Migrate should be loaded before the "init" event';
       let n = s.stat(0);
       function r(t, e, a = "") {
@@ -2062,7 +2062,7 @@
         let l = s.ctx();
         l.beginPath(), l.rect(t, e, a, i), l.clip();
       }
-      function I(t, e, a) {
+      function T(t, e, a) {
         r("clipcirc()", "clip()");
         let i = s.ctx();
         i.beginPath(), i.arc(t, e, a, 0, s.TWO_PI), i.clip();
@@ -2077,7 +2077,7 @@
         let e = s.ctx();
         e.globalCompositeOperation = t;
       }
-      function T(t) {
+      function I(t) {
         r("clear()", "cls()"), s.cls(t);
       }
       function k(t, e, a, i, l, p, B = true) {
@@ -2172,7 +2172,8 @@
       function W(t, e, a, i) {
         let l = a;
         return s.spr && Array.isArray(a) && (l = () => {
-          s.spr(0, 0, a.join("").replace(/ /g, "."));
+          s.spr(0, 0, a.join(`
+`));
         }), H(t, e, l, i);
       }
       let d = s.spr;
