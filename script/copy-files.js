@@ -12,35 +12,35 @@ await copyFile(root + "/node_modules/litecanvas/dist/dist.dev.js", engineFile);
 
 const utils = await readFile(
   root + "/node_modules/@litecanvas/utils/dist/all.min.js",
-  { encoding: "utf8" }
+  { encoding: "utf8" },
 );
 
 await appendFile(engineFile, "\n\n" + utils);
 
 const pluginAssetLoader = await readFile(
   root + "/node_modules/@litecanvas/plugin-asset-loader/dist/dist.min.js",
-  { encoding: "utf8" }
+  { encoding: "utf8" },
 );
 
 await appendFile(engineFile, "\n" + pluginAssetLoader);
 
 const pluginMigrate = await readFile(
   root + "/node_modules/@litecanvas/plugin-migrate/dist/dist.js",
-  { encoding: "utf8" }
+  { encoding: "utf8" },
 );
 
 await appendFile(engineFile, "\n" + pluginMigrate);
 
 const pluginFrameRateMeter = await readFile(
   root + "/node_modules/@litecanvas/plugin-frame-rate-meter/dist/dist.js",
-  { encoding: "utf8" }
+  { encoding: "utf8" },
 );
 
 await appendFile(engineFile, "\n" + pluginFrameRateMeter);
 
 const pluginPixelFont = await readFile(
   root + "/node_modules/@litecanvas/plugin-pixel-font/dist/dist.js",
-  { encoding: "utf8" }
+  { encoding: "utf8" },
 );
 
 await appendFile(engineFile, "\n" + pluginPixelFont);
@@ -53,3 +53,11 @@ await esbuild.build({
   legalComments: "eof",
   allowOverwrite: true,
 });
+
+const erudaFile = root + "/public/js/eruda.js";
+
+try {
+  await unlink(erudaFile);
+} catch (e) {}
+
+await copyFile(root + "/node_modules/eruda/eruda.js", erudaFile);

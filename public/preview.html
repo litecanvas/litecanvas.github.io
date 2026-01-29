@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
   <head>
     <meta charset="UTF-8" />
@@ -49,7 +49,9 @@
       canvas {
         display: block;
         background-image: repeating-conic-gradient(#fefefe 0% 25%, #ddd 0% 50%);
-        background-position: 0 0, 0px 0px;
+        background-position:
+          0 0,
+          0px 0px;
         background-size: 64px 64px;
       }
     </style>
@@ -82,11 +84,25 @@
       addEventListener("unhandledrejection", handleError);
     </script>
 
+    <script src="./js/eruda.js"></script>
     <script src="./js/litecanvas.js"></script>
 
     <script>
       window.printPage = window.print;
 
+      // init eruda console
+      eruda.init({
+        tool: ["console", "elements", "network", "info"],
+        defaults: {
+          displaySize: 40,
+          transparency: 0.9,
+          theme: "Dark",
+        },
+      });
+      eruda.get("console").config.set("maxLogNum", "250");
+      eruda.get("console").config.set("displayIfErr", true);
+
+      // init litecanvas
       ((_litecanvas) => {
         window.litecanvas = (settings = {}) => {
           const instance = _litecanvas(settings);

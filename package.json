@@ -29,6 +29,7 @@
     "@litecanvas/plugin-pixel-font": "latest",
     "@litecanvas/utils": "latest",
     "codemirror": "^6.0.2",
+    "eruda": "^3.4.3",
     "eslint-linter-browserify": "9.30.0",
     "litecanvas": "latest",
     "pako": "^2.1.0"
