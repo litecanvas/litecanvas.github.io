@@ -14,7 +14,7 @@
     var assert = (condition, message = "Assertion failed") => {
       if (!condition) throw new Error(message);
     };
-    var version = "0.102.2";
+    var version = "0.102.3";
     function litecanvas(settings = {}) {
       const root = window, math = Math, TWO_PI = math.PI * 2, raf = requestAnimationFrame, _browserEventListeners = [], on = (elem, evt, callback) => {
         elem.addEventListener(evt, callback, false);
@@ -30,7 +30,7 @@
         keyboardEvents: true
       };
       settings = Object.assign(defaults, settings);
-      let _initialized = false, _paused = true, _canvas, _scale = 1, _ctx, _outline_fix = 0.5, _timeScale = 1, _lastFrameTime, _fpsInterval = 1e3 / 60, _accumulated, _rafid, _defaultTextColor = 3, _fontFamily = "sans-serif", _fontSize = 20, _fontLineHeight = 1.2, _rngSeed = Date.now(), _colorPalette = defaultPalette, _colorPaletteState = [], _defaultSound = [0.5, 0, 1750, , , 0.3, 1, , , , 600, 0.1], _coreEvents = "init,update,draw,tap,untap,tapping,tapped,resized", _mathFunctions = "PI,sin,cos,atan2,hypot,tan,abs,ceil,floor,trunc,min,max,pow,sqrt,sign,exp", _eventListeners = {};
+      let _initialized = false, _paused = true, _canvas, _canvasScale = 1, _ctx, _outline_fix = 0.5, _timeScale = 1, _lastFrameTime, _fpsInterval = 1e3 / 60, _accumulated, _rafid, _defaultTextColor = 3, _fontFamily = "sans-serif", _fontSize = 20, _fontLineHeight = 1.2, _rngSeed = Date.now(), _colorPalette = defaultPalette, _colorPaletteState = [], _defaultSound = [0.5, 0, 1750, , , 0.3, 1, , , , 600, 0.1], _coreEvents = "init,update,draw,tap,untap,tapping,tapped,resized", _mathFunctions = "PI,sin,cos,atan2,hypot,tan,abs,ceil,floor,trunc,min,max,pow,sqrt,sign,exp", _eventListeners = {};
       const instance = {
         /** @type {number} */
         W: 0,
@@ -73,7 +73,7 @@
           DEV: assert(isNumber(start), "[litecanvas] lerp() 1st param must be a number");
           DEV: assert(isNumber(end), "[litecanvas] lerp() 2nd param must be a number");
           DEV: assert(isNumber(t), "[litecanvas] lerp() 3rd param must be a number");
-          return t * (end - start) + start;
+          return start + t * (end - start);
         },
         /**
          * Convert degrees to radians
@@ -249,7 +249,7 @@
           DEV: assert(isNumber(min), "[litecanvas] randi() 1st param must be a number");
           DEV: assert(isNumber(max), "[litecanvas] randi() 2nd param must be a number");
           DEV: assert(
-            max > min,
+            min <= max,
             "[litecanvas] randi() the 1st param must be less than the 2nd param"
           );
           return math.floor(instance.rand(min, max + 1));
@@ -904,7 +904,7 @@
           eventName = lowerCase(eventName);
           _eventListeners[eventName] = _eventListeners[eventName] || /* @__PURE__ */ new Set();
           _eventListeners[eventName].add(callback);
-          return () => _eventListeners && _eventListeners[eventName].delete(callback);
+          return () => _eventListeners[eventName]?.delete(callback);
         },
         /**
          * Call all listeners attached to a game event
@@ -1034,7 +1034,7 @@
             // 2
             _fpsInterval / 1e3,
             // 3
-            _scale,
+            _canvasScale,
             // 4
             _eventListeners,
             // 5
@@ -1123,8 +1123,8 @@
              * @param {MouseEvent | Touch} ev
              */
             ((ev) => [
-              (ev.pageX - _canvas.offsetLeft) / _scale,
-              (ev.pageY - _canvas.offsetTop) / _scale
+              (ev.pageX - _canvas.offsetLeft) / _canvasScale,
+              (ev.pageY - _canvas.offsetTop) / _canvasScale
             ])
           ), _taps = /* @__PURE__ */ new Map(), _registerTap = (
             /**
@@ -1335,8 +1335,8 @@
           );
         }
         _initialized = true;
-        instance.emit("init", instance);
         instance.resume();
+        instance.emit("init", instance);
       }
       function drawFrame() {
         _rafid = raf(drawFrame);
@@ -1410,14 +1410,14 @@
             _canvas.style.display = "block";
             _canvas.style.margin = "auto";
           }
-          _scale = math.min(innerWidth / width, innerHeight / height);
-          _scale = maxScale > 1 && _scale > maxScale ? maxScale : _scale;
-          _canvas.style.width = width * _scale + "px";
-          _canvas.style.height = height * _scale + "px";
+          _canvasScale = math.min(innerWidth / width, innerHeight / height);
+          _canvasScale = maxScale > 1 && _canvasScale > maxScale ? maxScale : _canvasScale;
+          _canvas.style.width = width * _canvasScale + "px";
+          _canvas.style.height = height * _canvasScale + "px";
         }
         _ctx.imageSmoothingEnabled = false;
         instance.textalign("start", "top");
-        instance.emit("resized", _scale);
+        instance.emit("resized", _canvasScale);
       }
       function triggerEvent(eventName, arg1, arg2, arg3, arg4) {
         if (!_eventListeners[eventName]) return;
