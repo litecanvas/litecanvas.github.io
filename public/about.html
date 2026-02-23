@@ -585,6 +585,9 @@ map(val, start1, stop1, start2, stop2, withinBounds = false ): number
 // example: norm(50, 0, 100) returns 0.5
 norm(value, min, max): number
 
+// Returns the distance between a point (x1, y1) to another (x2, y2).
+dist(x1: number, y1: number, x2: number, y2: number): number
+
 // Returns the sine of a number in radians.
 sin(angle: number): number
 
@@ -647,10 +650,6 @@ sign(n: number): number
 // example: lerp(0, 50, 0.5) returns 25
 // learn more: https://gamedev.net/tutorials/programming/general-and-gameplay-programming/a-brief-introduction-to-lerp-r4954/
 lerp(a: number, b: number, t: number): number
-
-// Interpolate between 2 values using a periodic function (by default is Math.sin).
-// example: wave(-100, 100, T)
-wave(from: number, to: number, t: number, fn = Math.sin): number
 
 /** Random Number Generator (RNG) */
 

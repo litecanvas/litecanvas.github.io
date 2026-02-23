@@ -327,10 +327,10 @@ export default function customCompletions(context) {
         detail: "(radians)",
       },
       {
-        label: "wave",
+        label: "dist",
         type: "function",
-        apply: "wave(",
-        detail: "(from, to, t, fn)",
+        apply: "dist(",
+        detail: "(x1,y1,x2,y2)",
       },
       {
         label: "sin",
