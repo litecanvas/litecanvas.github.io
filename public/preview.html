@@ -104,11 +104,11 @@
 
       // init litecanvas
       ((_litecanvas) => {
+        // expose the utils to global context
+        utils.global(false);
+
         window.litecanvas = (settings = {}) => {
           const instance = _litecanvas(settings);
-
-          // expose the utils to global context
-          utils.global(false);
 
           // load plugins
           instance.use(pluginMigrate);
