@@ -14,7 +14,7 @@
     var assert = (condition, message = "Assertion failed") => {
       if (!condition) throw new Error(message);
     };
-    var version = "0.103.0";
+    var version = "0.103.3";
     function litecanvas(settings = {}) {
       const root = window, math = Math, TWO_PI = math.PI * 2, raf = requestAnimationFrame, _browserEventListeners = [], on = (elem, evt, callback) => {
         elem.addEventListener(evt, callback, false);
@@ -2036,70 +2036,67 @@
     window.pluginAssetLoader = A;
   })();
   (() => {
-    var x = (s, c, h, m, n, r, b, f) => s < n + b && s + h > n && c < r + f && c + m > r;
-    var _ = (s, c, h, m, n, r) => (m - s) * (m - s) + (n - c) * (n - c) <= (h + r) * (h + r);
-    var At = 2 * Math.PI;
-    var ge = Math.PI / 2;
-    var j = { warnings: true };
-    function v(s, c = {}) {
-      c = Object.assign({}, j, c);
-      let h = s.stat(1), m = { def: u, seed: b, print: N, clear: I, setfps: S, setvar: R, textstyle: w, textmetrics: E, cliprect: M, clipcirc: T, blendmode: A, transform: k, getcolor: y, mousepos: P, resize: C, path: L, fill: Y, stroke: F, clip: X, paint: W, colrect: x, colcirc: _ };
-      if (h) throw 'Plugin Migrate should be loaded before the "init" event';
-      let n = s.stat(0);
-      function r(t, e, a = "") {
-        c.warnings && console.warn(`[litecanvas/migrate] ${t} is removed. ` + (e ? `Use ${e} instead. ` : "") + a);
+    var v = (s, c, p, u, n, h, d, x) => s < n + d && s + p > n && c < h + x && c + u > h;
+    var y = (s, c, p, u, n, h) => (u - s) * (u - s) + (n - c) * (n - c) <= (p + h) * (p + h);
+    var Ct = 2 * Math.PI;
+    var g = (s, c, p, u = Math.sin) => s + (u(p) + 1) / 2 * (c - s);
+    var He = Math.PI / 2;
+    var G = { warnings: true };
+    function w(s, c = {}) {
+      if (s.stat(1)) throw 'Plugin Migrate should be loaded before the "init" event';
+      c = Object.assign({}, G, c);
+      let u = { def: m, seed: h, print: M, clear: P, setfps: C, setvar: L, textstyle: x, textmetrics: T, cliprect: A, clipcirc: I, blendmode: k, transform: S, getcolor: N, mousepos: R, resize: z, path: F, fill: O, stroke: X, clip: H, paint: U, colrect: (...t) => (_("colrect()"), v(...t)), colcirc: (...t) => (_("colrect()"), y(...t)), wave: (...t) => (_("wave()"), g(...t)) }, n = s.stat(0);
+      function h(t) {
+        return a("seed()", "rseed()"), t && s.rseed(t), s.stat(9);
       }
-      function b(t) {
-        return r("seed()", "rseed()"), t && s.rseed(t), s.stat(9);
+      let d = "";
+      function x(t) {
+        a("textstyle()", "the 5th param of text()"), d = t;
       }
-      let f = "";
-      function w(t) {
-        r("textstyle()", "the 5th param of text()"), f = t;
+      function M(t, e, r, i) {
+        a("print()", "text()"), s.text(t, e, r, i);
       }
-      function N(t, e, a, i) {
-        r("print()", "text()"), s.text(t, e, a, i);
+      function T(t, e) {
+        a("textmetrics()", "ctx().measureText()");
+        let r = s.ctx(), i = s.stat(10), l = s.stat(11);
+        r.font = `${d || ""} ${~~(e || i)}px ${l}`;
+        let f = r.measureText(t);
+        return f.height = f.actualBoundingBoxAscent + f.actualBoundingBoxDescent, f;
       }
-      function E(t, e) {
-        r("textmetrics()", "ctx().measureText()");
-        let a = s.ctx(), i = s.stat(10), l = s.stat(11);
-        a.font = `${f || ""} ${~~(e || i)}px ${l}`;
-        let p = a.measureText(t);
-        return p.height = p.actualBoundingBoxAscent + p.actualBoundingBoxDescent, p;
-      }
-      function M(t, e, a, i) {
-        r("cliprect()", "clip()");
+      function A(t, e, r, i) {
+        a("cliprect()", "clip()");
         let l = s.ctx();
-        l.beginPath(), l.rect(t, e, a, i), l.clip();
+        l.beginPath(), l.rect(t, e, r, i), l.clip();
       }
-      function T(t, e, a) {
-        r("clipcirc()", "clip()");
+      function I(t, e, r) {
+        a("clipcirc()", "clip()");
         let i = s.ctx();
-        i.beginPath(), i.arc(t, e, a, 0, s.TWO_PI), i.clip();
+        i.beginPath(), i.arc(t, e, r, 0, s.TWO_PI), i.clip();
       }
-      function y(t) {
-        r("getcolor()", "stat(5)");
+      function N(t) {
+        a("getcolor()", "stat(5)");
         let e = stat(5);
         return e[~~t % e.length];
       }
-      function A(t) {
-        r("blendmode()", "ctx().globalCompositeOperation");
+      function k(t) {
+        a("blendmode()", "ctx().globalCompositeOperation");
         let e = s.ctx();
         e.globalCompositeOperation = t;
       }
-      function I(t) {
-        r("clear()", "cls()"), s.cls(t);
+      function P(t) {
+        a("clear()", "cls()"), s.cls(t);
       }
-      function k(t, e, a, i, l, p, B = true) {
-        return r("transform()", "ctx().setTransform() or ctx().transform()"), s.ctx()[B ? "setTransform" : "transform"](t, e, a, i, l, p);
+      function S(t, e, r, i, l, f, Z = true) {
+        return a("transform()", "ctx().setTransform() or ctx().transform()"), s.ctx()[Z ? "setTransform" : "transform"](t, e, r, i, l, f);
       }
-      function P() {
-        return r("mousepos()", "MX and MY"), [MX, MY];
+      function R() {
+        return a("mousepos()", "MX and MY"), [MX, MY];
       }
-      function S(t) {
-        r("setfps()", "framerate()"), s.framerate(t);
+      function C(t) {
+        a("setfps()", "framerate()"), s.framerate(t);
       }
       let o = s.def;
-      function u(t, e) {
+      function m(t, e) {
         switch (t) {
           case "W":
           case "WIDTH":
@@ -2134,63 +2131,70 @@
             break;
         }
       }
-      function R(t, e) {
-        r("setvar()", "def()"), u(t, e);
+      function L(t, e) {
+        a("setvar()", "def()"), m(t, e);
       }
-      s.listen("resized", g);
-      function g() {
-        u("CX", s.W / 2), u("CY", s.H / 2);
+      s.listen("resized", E);
+      function E() {
+        m("CX", s.W / 2), m("CY", s.H / 2);
       }
-      g(), u("CANVAS", s.canvas());
-      function C(t, e) {
+      E(), m("CANVAS", s.canvas());
+      function z(t, e) {
         if (n.autoscale) throw "resize() don't works with autoscale enabled";
-        r("resize()", null, "Avoid changing the canvas dimensions at runtime."), s.CANVAS.width = t, u("W", t), s.CANVAS.height = e, u("H", e), s.emit("resized", 1);
+        a("resize()", null, "Avoid changing the canvas dimensions at runtime."), s.CANVAS.width = t, m("W", t), s.CANVAS.height = e, m("H", e), s.emit("resized", 1);
       }
-      for (let t of ["W", "H", "T", "CX", "CY", "MX", "MY"]) s[t] != null && u(t, s[t]);
-      if (r("FPS", "", "but you can use our plugin to measure the fps: https://github.com/litecanvas/plugin-frame-rate-meter"), o("FPS", ""), n.fps && s.framerate(n.fps), n.background != null) {
-        r('"background" option', "You must update your canvas CSS");
+      for (let t of ["W", "H", "T", "CX", "CY", "MX", "MY"]) s[t] != null && m(t, s[t]);
+      if (a("FPS", "", "but you can use our plugin to measure the fps: https://github.com/litecanvas/plugin-frame-rate-meter"), o("FPS", ""), n.fps && s.framerate(n.fps), n.background != null) {
+        a('"background" option', "You must update your canvas CSS");
         let t = s.listen("before:draw", () => {
-          s.canvas().style.background = y(~~n.background), t();
+          s.canvas().style.background = N(~~n.background), t();
         });
       }
-      function L(t) {
-        return r("path()", "`new Path2D()`", "See https://developer.mozilla.org/en-US/docs/Web/API/Path2D"), new Path2D(t);
+      function F(t) {
+        return a("path()", "`new Path2D()`", "See https://developer.mozilla.org/en-US/docs/Web/API/Path2D"), new Path2D(t);
       }
-      let z = s.fill;
-      function Y(t, e) {
+      let Y = s.fill;
+      function O(t, e) {
         if (e instanceof Path2D) {
-          r("fill(color, path)");
-          let a = s.stat(5), i = s.ctx();
-          i.fillStyle = a[~~t % a.length], s.ctx().fill(e);
-        } else z(t);
+          a("fill(color, path)");
+          let r = s.stat(5), i = s.ctx();
+          i.fillStyle = r[~~t % r.length], s.ctx().fill(e);
+        } else Y(t);
       }
-      let O = s.stroke;
-      function F(t, e) {
+      let D = s.stroke;
+      function X(t, e) {
         if (e instanceof Path2D) {
-          r("stroke(color, path)");
-          let a = s.stat(5), i = s.ctx();
-          i.strokeStyle = a[~~t % a.length], s.ctx().stroke(e);
-        } else O(t);
+          a("stroke(color, path)");
+          let r = s.stat(5), i = s.ctx();
+          i.strokeStyle = r[~~t % r.length], s.ctx().stroke(e);
+        } else D(t);
       }
-      let D = s.clip;
-      function X(t) {
-        r("clip(path)", "clip(callback)", "E.g: `clip((ctx) => ctx.rect(0, 0, 200, 200))`"), t instanceof Path2D ? s.ctx().clip(t) : D(t);
+      let B = s.clip;
+      function H(t) {
+        a("clip(path)", "clip(callback)", "E.g: `clip((ctx) => ctx.rect(0, 0, 200, 200))`"), t instanceof Path2D ? s.ctx().clip(t) : B(t);
       }
-      n.antialias && r('"antialias" option', '"pixelart" option'), n.pixelart === false && r('"pixelart" option'), n.animate === false && r('"animate" option', "pause() in the of your draw()");
-      let H = s.paint;
-      function W(t, e, a, i) {
-        let l = a;
-        return s.spr && Array.isArray(a) && (l = () => {
-          s.spr(0, 0, a.join(`
+      n.antialias && a('"antialias" option', '"pixelart" option'), n.pixelart === false && a('"pixelart" option'), n.animate === false && a('"animate" option', "pause() in the of your draw()");
+      let W = s.paint;
+      function U(t, e, r, i) {
+        let l = r;
+        return s.spr && Array.isArray(r) && (l = () => {
+          s.spr(0, 0, r.join(`
 `));
-        }), H(t, e, l, i);
+        }), W(t, e, l, i);
       }
-      let d = s.spr;
-      return d && d.length === 3 && (m.spr = function(t, e, a, i, l) {
-        Number.isFinite(a) && a > 0 ? (r("spr() width and height", "spr(x, y, pixels)"), d(t, e, l)) : d(t, e, a);
-      }), m;
+      let b = s.spr;
+      b && b.length === 3 && (u.spr = function(t, e, r, i, l) {
+        Number.isFinite(r) && r > 0 ? (a("spr() width and height", "spr(x, y, pixels)"), b(t, e, l)) : b(t, e, r);
+      });
+      function a(t, e, r = "") {
+        c.warnings && console.warn(`[litecanvas/migrate] ${t} is removed. ` + (e ? `Use ${e} instead. ` : "") + r);
+      }
+      function _(t, e = "function") {
+        a(t, `This ${e} was moved to @litecanvas/utils package.`);
+      }
+      return u;
     }
-    window.pluginMigrate = v;
+    window.pluginMigrate = w;
   })();
   (() => {
     function A(s = {}) {
