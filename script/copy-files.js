@@ -45,6 +45,13 @@ const pluginPixelFont = await readFile(
 
 await appendFile(engineFile, "\n" + pluginPixelFont);
 
+const pluginJoystick = await readFile(
+  root + "/node_modules/@litecanvas/plugin-joystick/dist/dist.js",
+  { encoding: "utf8" },
+);
+
+await appendFile(engineFile, "\n" + pluginJoystick);
+
 await esbuild.build({
   entryPoints: [engineFile],
   outfile: engineFile,

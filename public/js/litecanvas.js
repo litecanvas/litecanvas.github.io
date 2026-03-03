@@ -2345,9 +2345,76 @@
     window.PIXEL_FONT_BASIC = g;
     window.PIXEL_FONT_MONOGRAM = y;
   })();
+  (() => {
+    var b = (s, i, m, v, h, n, p) => {
+      let l = h - Math.max(s, Math.min(h, s + m)), c = n - Math.max(i, Math.min(n, i + v));
+      return l * l + c * c <= p * p;
+    };
+    var vt = 2 * Math.PI, x = class {
+      constructor(i = 0, m = i) {
+        this.x = parseFloat(i) || 0, this.y = parseFloat(m) || 0;
+      }
+      toString() {
+        return `Vector (${this.x}, ${this.y})`;
+      }
+    }, A = (s) => s instanceof x, _ = (s = 0, i = s) => (A(s) && (i = s.y, s = s.x), new x(s, i)), g = (s, i, m = i) => (A(i) ? g(s, i.x, i.y) : (s.x = i, s.y = m), s);
+    var Ae = Math.PI / 2;
+    var C = { enabled: true, color: 1, size: 64, position: [0.5, 0.5], fixed: false, opacityActive: 1, opacityInactive: 0, zone: null, lock: null, render: null };
+    function w(s, i = {}) {
+      if (!s.stat(1)) throw 'Plugin Joystick should be loaded after or inside of the "init" event';
+      let v = { "before:tap": T, "before:untap": P, "before:tapping": N, "after:draw": z }, h = [], n = [], p = true, l = _(0, 0), c, f = false, r = null, t = { on: false, active: false, vector: _(0, 0), angle: 0, force: 0, tapSize: 16, stickSize: 0.5, style: null, draw(e, a, o, u) {
+        u.linewidth(t.style.border), u.circ(e.x, e.y, o.size, o.color), u.circfill(a.x, a.y, o.size * t.stickSize, o.color);
+      }, checkTap(e, a) {
+        return b(n[0], n[1], n[2], n[3], e, a, t.tapSize);
+      }, set zone(e) {
+        let a = !Array.isArray(e) || e.length === 0, [o, u, y, d] = a ? M() : e;
+        n = [~~o, ~~u, ~~y, ~~d], p = a;
+      }, get zone() {
+        return n;
+      }, enable() {
+        if (!f) {
+          for (let [e, a] of Object.entries(v)) h.push(s.listen(e, a));
+          f = true;
+        }
+      }, disable() {
+        if (f) {
+          for (let e of h) e();
+          h.length = 0, f = t.active = t.on = false, c = null;
+        }
+      }, reset(e) {
+        e && (r = Object.assign({}, r ?? C, e)), (!this.style || e) && (this.style = { color: r.color, size: r.size, opacityActive: r.opacityActive, opacityInactive: r.opacityInactive, border: 2 }), (!n || e) && (t.zone = r.zone);
+        let a = this.style.size + this.style.border, o = n[2] - 2 * a, u = n[3] - 2 * a;
+        l.x = n[0] + a + r.position[0] * o, l.y = n[1] + a + r.position[1] * u, e && (r.enabled ? t.enable() : t.disable()), c = null, this.active = this.on = false;
+      } };
+      function T(e, a, o) {
+        c === null && t.checkTap(e, a) && (c = o, t.active = t.on = true, r.fixed || (l.x = e, l.y = a), t.vector.x = e, t.vector.y = a, t.force = t.angle = 0, N(e, a, o));
+      }
+      function P(e, a, o) {
+        c === o && t.reset();
+      }
+      function N(e, a, o) {
+        if (o !== c) return;
+        let u = t.style, y = t.vector, d = e - l.x, E = a - l.y, I = Math.hypot(d, E), k = Math.min(I, u.size);
+        t.angle = Math.atan2(r.lock === "x" ? 0 : E, r.lock === "y" ? 0 : d), t.force = Math.abs(I / u.size), g(y, l.x + Math.cos(t.angle) * (r.lock === "y" ? 0 : k), l.y + Math.sin(t.angle) * (r.lock === "x" ? 0 : k)), s.emit("joystick-update");
+      }
+      function z() {
+        let e = t.style[t.on ? "opacityActive" : "opacityInactive"];
+        e > 0 && (s.push(), s.alpha(e), (r.render ? r.render : t.draw)(l, t.on ? t.vector : l, t.style, s), s.pop());
+      }
+      s.listen("resized", () => {
+        p && (n = M());
+      });
+      function M() {
+        return [0, 0, s.W, s.H];
+      }
+      return t.reset(i), { joystick: t, JOYSTICK: t };
+    }
+    window.pluginJoystick = w;
+  })();
 })();
 /*! @litecanvas/utils by Luiz Bills | MIT Licensed */
 /*! Asset Loader plugin for litecanvas by Luiz Bills | MIT Licensed */
 /*! Migrate for litecanvas by Luiz Bills | MIT Licensed */
 /*! pluginFrameRateMeter for litecanvas by Luiz Bills | MIT Licensed */
 /*! Plugin Pixel Font for litecanvas by Luiz Bills | MIT Licensed */
+/*! Joystick plugin for litecanvas v0.4.2 by Luiz Bills | MIT Licensed */

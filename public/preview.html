@@ -116,6 +116,8 @@
           instance.use(pluginPixelFont);
           instance.listen("before:init", () => {
             instance.use(pluginAssetLoader);
+            instance.use(pluginJoystick);
+            joystick.disable();
           });
 
           return instance;
