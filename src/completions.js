@@ -547,6 +547,8 @@ export default function customCompletions(context) {
         type: "variable",
         info: "list of all loaded assets",
       },
+
+      // pixel font plugin
       {
         label: "PIXEL_FONT_BASIC",
         type: "variable",
@@ -557,6 +559,12 @@ export default function customCompletions(context) {
       },
       {
         label: "PIXEL_FONT_MONOGRAM",
+        type: "variable",
+      },
+
+      // joystick plugin
+      {
+        label: "joystick",
         type: "variable",
       },
     ],
