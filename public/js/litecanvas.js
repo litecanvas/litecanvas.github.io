@@ -2364,8 +2364,6 @@
       if (!s.stat(1)) throw 'Plugin Joystick should be loaded after or inside of the "init" event';
       let y = { "before:tap": P, "before:untap": z, "before:tapping": M, "after:draw": R }, p = [], n = [], f = true, l = v(0, 0), c, d = false, a = null, t = { on: false, active: false, vector: v(0, 0), angle: 0, force: 0, forceMax: 2, tapSize: 16, stickSize: 0.5, style: null, draw(e, r, o, u) {
         u.linewidth(t.style.border), u.circ(e.x, e.y, o.size, o.color), u.circfill(r.x, r.y, o.size * t.stickSize, o.color);
-      }, get() {
-        return [this.angle, this.force, this.vector];
       }, checkTap(e, r) {
         return x(n[0], n[1], n[2], n[3], e, r, t.tapSize);
       }, set zone(e) {
