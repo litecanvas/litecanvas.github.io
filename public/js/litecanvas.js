@@ -15,7 +15,7 @@
     var assert = (condition, message = "Assertion failed") => {
       if (!condition) throw new Error("[litecanvas] " + message);
     };
-    var version = "0.103.5";
+    var version = "0.103.6";
     function litecanvas(settings = {}) {
       const root = window, math = Math, perf = performance, TWO_PI = math.PI * 2, loggerPrefix = "[Litecanvas] ", raf = requestAnimationFrame, _browserEventListeners = [], on = (elem, evt, callback) => {
         elem.addEventListener(evt, callback, false);
@@ -482,7 +482,11 @@
           _ctx.fillStyle = getColor(color);
           const messages = ("" + message).split("\n");
           for (let i = 0; i < messages.length; i++) {
-            _ctx.fillText(messages[i], ~~x, ~~y + _fontSize * _fontLineHeight * i);
+            _ctx.fillText(
+              messages[i],
+              ~~x,
+              ~~y + _fontSize * _fontLineHeight * i
+            );
           }
         },
         textgap(value) {
@@ -551,7 +555,13 @@
             for (let col = 0; col < chars.length; col++) {
               const char = chars[col];
               if (char !== "." && char !== " ") {
-                instance.rectfill(x + col, y + row, 1, 1, parseInt(char, 36) || 0);
+                instance.rectfill(
+                  x + col,
+                  y + row,
+                  1,
+                  1,
+                  parseInt(char, 36) || 0
+                );
               }
             }
           }
@@ -1113,7 +1123,8 @@
       return instance;
     }
     window.litecanvas = litecanvas;
-  })()(() => {
+  })();
+  (() => {
     var St = Object.defineProperty;
     var kt = (t, e) => {
       for (var s in e) St(t, s, { get: e[s], enumerable: true });
