@@ -1335,7 +1335,7 @@
       return s * s + r * r;
     }, it = (e) => Math.atan2(e.y, e.x), Dt = (e) => it(e), C = (e, t) => e.x * t.x + e.y * t.y, jt = (e, t) => {
       let s = T(e), r = T(t);
-      return r - s ? Math.acos(p(C(e, t) / (s * r), 0, 1)) : 0;
+      return r - s ? Math.acos(p(C(e, t) / (s * r), -1, 1)) : 0;
     }, qt = (e, t) => e.x * t.y - e.y * t.x, zt = (e, t, s) => (e.x += (t.x - e.x) * s || 0, e.y += (t.y - e.y) * s || 0, e), Kt = (e) => (e.x = Math.abs(e.x), e.y = Math.abs(e.y), e), $t = (e) => (e.x = Math.ceil(e.x), e.y = Math.ceil(e.y), e), Gt = (e) => (e.x = Math.floor(e.x), e.y = Math.floor(e.y), e), Jt = (e) => (e.x = Math.round(e.x), e.y = Math.round(e.y), e), Qt = (e, t, s) => S(e, p(e.x, t, s), p(e.y, t, s)), te = (e, t) => (e.x %= t, e.y %= t, e), ee = (e, t, s = 1) => {
       let r = t.x - e.x, i = t.y - e.y, a = Math.hypot(r, i);
       if (s = Math.abs(s), a <= s || a === 0) e.x = t.x, e.y = t.y;
