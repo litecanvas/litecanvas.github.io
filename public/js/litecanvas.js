@@ -2091,4 +2091,4 @@
 /*! Migrate for litecanvas by Luiz Bills | MIT Licensed */
 /*! pluginFrameRateMeter for litecanvas by Luiz Bills | MIT Licensed */
 /*! Plugin Pixel Font for litecanvas by Luiz Bills | MIT Licensed */
-/*! Joystick plugin for litecanvas v0.4.2 by Luiz Bills | MIT Licensed */
+/*! Joystick plugin for Litecanvas by Luiz Bills | MIT Licensed */
