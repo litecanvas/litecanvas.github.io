@@ -15,7 +15,7 @@
     var assert = (condition, message = "Assertion failed") => {
       if (!condition) throw new Error("[litecanvas] " + message);
     };
-    var version = "0.103.6";
+    var version = "0.103.7";
     function litecanvas(settings = {}) {
       const root = window, math = Math, perf = performance, TWO_PI = math.PI * 2, loggerPrefix = "[Litecanvas] ", raf = requestAnimationFrame, _browserEventListeners = [], on = (elem, evt, callback) => {
         elem.addEventListener(evt, callback, false);
@@ -94,7 +94,7 @@
             loggerPrefix + "clamp() 3rd param must be a number"
           );
           DEV: assert(
-            max > min,
+            max >= min,
             loggerPrefix + "clamp() the 2nd param must be less than the 3rd param"
           );
           if (value < min) return min;
@@ -196,7 +196,7 @@
             loggerPrefix + "rand() 2nd param must be a number"
           );
           DEV: assert(
-            max > min,
+            max >= min,
             loggerPrefix + "rand() the 1st param must be less than the 2nd param"
           );
           const a = 1664525;
@@ -215,7 +215,7 @@
             loggerPrefix + "randi() 2nd param must be a number"
           );
           DEV: assert(
-            min <= max,
+            max >= min,
             loggerPrefix + "randi() the 1st param must be less than the 2nd param"
           );
           return ~~instance.rand(min, max + 1);
@@ -2016,70 +2016,74 @@
     window.PIXEL_FONT_MONOGRAM = y;
   })();
   (() => {
-    var x = (s, i, h, y, p, n, f) => {
-      let l = p - Math.max(s, Math.min(p, s + h)), c = n - Math.max(i, Math.min(n, i + y));
-      return l * l + c * c <= f * f;
+    var _ = (r, n, c, N, p, i, b) => {
+      let l = p - Math.max(r, Math.min(p, r + c)), m = i - Math.max(n, Math.min(i, n + N));
+      return l * l + m * m <= b * b;
     };
-    var yt = 2 * Math.PI, _ = class {
-      constructor(i = 0, h = i) {
-        this.x = parseFloat(i) || 0, this.y = parseFloat(h) || 0;
+    var f = (r, n, c) => r < n ? n : r > c ? c : r;
+    var Me = 2 * Math.PI, A = parseFloat, y = class {
+      constructor(n = 0, c = n) {
+        this.x = A(n) || 0, this.y = A(c) || 0;
       }
       toString() {
         return `Vector (${this.x}, ${this.y})`;
       }
-    }, T = (s) => s instanceof _, v = (s = 0, i = s) => (T(s) && (i = s.y, s = s.x), new _(s, i)), w = (s, i, h = i) => (T(i) ? w(s, i.x, i.y) : (s.x = i, s.y = h), s);
-    var Te = Math.PI / 2;
-    var m = Math, F = { enabled: true, color: 1, size: 64, position: [0.5, 0.5], fixed: false, opacityActive: 1, opacityInactive: 0, zone: null, lock: null, render: null };
-    function N(s, i = {}) {
-      if (!s.stat(1)) throw 'Plugin Joystick should be loaded after or inside of the "init" event';
-      let y = { "before:tap": P, "before:untap": z, "before:tapping": M, "after:draw": R }, p = [], n = [], f = true, l = v(0, 0), c, d = false, a = null, t = { on: false, active: false, vector: v(0, 0), angle: 0, force: 0, forceMax: 2, tapSize: 16, stickSize: 0.5, style: null, draw(e, r, o, u) {
-        u.linewidth(t.style.border), u.circ(e.x, e.y, o.size, o.color), u.circfill(r.x, r.y, o.size * t.stickSize, o.color);
-      }, checkTap(e, r) {
-        return x(n[0], n[1], n[2], n[3], e, r, t.tapSize);
-      }, set zone(e) {
-        let r = !Array.isArray(e) || e.length === 0, [o, u, g, b] = r ? E() : e;
-        n = [~~o, ~~u, ~~g, ~~b], f = r;
+    };
+    var R = (r) => r instanceof y, P = (r = 0, n = r) => (R(r) && (n = r.y, r = r.x), new y(r, n));
+    var nr = Math.PI / 2;
+    var h = Math, O = { enabled: true, color: 1, size: 64, position: [0.5, 0.5], fixed: false, opacityActive: 1, opacityInactive: 0, zone: null, lock: null, render: null };
+    function v(r, n = {}) {
+      if (!r.stat(1)) throw 'Plugin Joystick should be loaded after or inside of the "init" event';
+      let N = { "before:tap": k, "before:untap": T, "before:tapping": w, "after:draw": F }, p = [], i = [], b = true, l = P(0, 0), m, g = false, a = null, e = { on: false, active: false, vector: P(0, 0), angle: 0, force: 0, forceMax: 2, forceMin: 0, tapSize: 16, stickSize: 0.5, style: null, draw(t, s, o, u) {
+        u.linewidth(e.style.border), u.circ(t.x, t.y, o.size, o.color), u.circfill(s.x, s.y, o.size * e.stickSize, o.color);
+      }, checkTap(t, s) {
+        return _(i[0], i[1], i[2], i[3], t, s, e.tapSize);
+      }, set zone(t) {
+        let s = !Array.isArray(t) || t.length === 0, [o, u, x, d] = s ? M() : t;
+        i = [~~o, ~~u, ~~x, ~~d], b = s;
       }, get zone() {
-        return n;
+        return i;
       }, enable() {
-        if (!d) {
-          for (let [e, r] of Object.entries(y)) p.push(s.listen(e, r));
-          d = true;
+        if (!g) {
+          for (let [t, s] of Object.entries(N)) p.push(r.listen(t, s));
+          g = true;
         }
       }, disable() {
-        if (d) {
-          for (let e of p) e();
-          p.length = 0, d = t.active = t.on = false, c = null;
+        if (g) {
+          for (let t of p) t();
+          p.length = 0, g = e.active = e.on = false, m = null;
         }
-      }, reset(e) {
-        e && (a = Object.assign({}, a ?? F, e)), (!this.style || e) && (this.style = { color: a.color, size: a.size, opacityActive: a.opacityActive, opacityInactive: a.opacityInactive, border: 2 }), (!n || e) && (t.zone = a.zone);
-        let r = this.style.size + this.style.border, o = n[2] - 2 * r, u = n[3] - 2 * r;
-        l.x = n[0] + r + a.position[0] * o, l.y = n[1] + r + a.position[1] * u, e && (a.enabled ? t.enable() : t.disable()), c = null, this.active = this.on = false, t.force = t.angle = 0;
+      }, reset(t) {
+        t && (a = Object.assign({}, a ?? O, t)), (!this.style || t) && (this.style = { color: a.color, size: a.size, opacityActive: a.opacityActive, opacityInactive: a.opacityInactive, border: 2 }), (!i || t) && (e.zone = a.zone);
+        let s = this.style.size + this.style.border, o = i[2] - 2 * s, u = i[3] - 2 * s;
+        l.x = i[0] + s + a.position[0] * o, l.y = i[1] + s + a.position[1] * u, t && (a.enabled ? e.enable() : e.disable()), m = null, this.active = this.on = false, e.force = e.angle = 0;
       } };
-      function P(e, r, o) {
-        c === null && t.checkTap(e, r) && (c = o, t.active = t.on = true, a.fixed || (l.x = e, l.y = r), t.vector.x = e, t.vector.y = r, M(e, r, o));
+      function k(t, s, o) {
+        m === null && e.checkTap(t, s) && (m = o, e.active = e.on = true, a.fixed || (l.x = t, l.y = s), e.vector.x = t, e.vector.y = s, w(t, s, o));
       }
-      function z(e, r, o) {
-        c === o && t.reset();
+      function T(t, s, o) {
+        m === o && e.reset();
       }
-      function M(e, r, o) {
-        if (o !== c) return;
-        let u = t.style, g = t.vector, b = a.lock === "y" ? 0 : e - l.x, I = a.lock === "x" ? 0 : r - l.y, k = m.hypot(b, I), A = m.min(k, u.size);
-        t.angle = m.atan2(I, b), t.force = m.min(m.abs(k / u.size), t.forceMax), w(g, l.x + m.cos(t.angle) * (a.lock === "y" ? 0 : A), l.y + m.sin(t.angle) * (a.lock === "x" ? 0 : A)), s.emit("joystick-update");
+      function w(t, s, o) {
+        if (o !== m) return;
+        let u = a.lock === "y" ? 0 : t - l.x, x = a.lock === "x" ? 0 : s - l.y, d = h.hypot(u, x);
+        if (d === 0) return;
+        let E = e.style.size, I = h.min(d, E);
+        e.vector.x = l.x + h.cos(e.angle) * (a.lock === "y" ? 0 : I), e.vector.y = l.y + h.sin(e.angle) * (a.lock === "x" ? 0 : I), e.angle = h.atan2(x, u), e.force = f(h.abs(d / E), e.forceMin, e.forceMax), r.emit("joystick-update");
       }
-      function R() {
-        let e = t.style[t.on ? "opacityActive" : "opacityInactive"];
-        e > 0 && (s.push(), s.alpha(e), (a.render ? a.render : t.draw)(l, t.on ? t.vector : l, t.style, s), s.pop());
+      function F() {
+        let t = e.style[e.on ? "opacityActive" : "opacityInactive"];
+        t > 0 && (r.push(), r.alpha(t), (a.render ? a.render : e.draw)(l, e.on ? e.vector : l, e.style, r), r.pop());
       }
-      s.listen("resized", () => {
-        f && (n = E());
+      r.listen("resized", () => {
+        b && (i = M());
       });
-      function E() {
-        return [0, 0, s.W, s.H];
+      function M() {
+        return [0, 0, r.W, r.H];
       }
-      return t.reset(i), { joystick: t, JOYSTICK: t };
+      return e.reset(n), { joystick: e, JOYSTICK: e };
     }
-    window.pluginJoystick = N;
+    window.pluginJoystick = v;
   })();
 })();
 /*! @litecanvas/utils by Luiz Bills | MIT Licensed */
