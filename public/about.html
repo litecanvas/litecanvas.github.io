@@ -670,11 +670,13 @@ rseed(value: number): void</code></pre>
 
       <p>The following functions are most used internally, but also very useful when creating plugins.</p>
 
-      <pre><code class="language-typescript">// Registers a game event callback and
-// returns a function that unregister this callback.
-listen(event: string, callback: Function): Function
+      <pre><code class="language-typescript">// Registers an event listener callback
+listen(event: string, callback: Function): void
 
-// Triggers a game event and call its registered callbacks.
+// Removes an event listener callback
+unlisten(event: string, callback: Function): void
+
+// Triggers an event and call its registered callbacks.
 emit(event: string, arg1?, arg2?, arg3?, arg4?): void
 
 // Sets the scale of the game's delta time (dt).

@@ -461,6 +461,12 @@ export default function customCompletions(context) {
         detail: "(event, callback)",
       },
       {
+        label: "unlisten",
+        type: "function",
+        apply: "unlisten(",
+        detail: "(event, callback)",
+      },
+      {
         label: "emit",
         type: "function",
         apply: "emit(",
