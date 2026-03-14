@@ -15,7 +15,7 @@
     var assert = (condition, message = "Assertion failed") => {
       if (!condition) throw new Error("[litecanvas] " + message);
     };
-    var version = "0.200.0";
+    var version = "0.201.0";
     function litecanvas(settings = {}) {
       const root = window, math = Math, perf = performance, TWO_PI = math.PI * 2, loggerPrefix = "[Litecanvas] ", raf = requestAnimationFrame, _browserEventListeners = [], on = (elem, evt, callback) => {
         elem.addEventListener(evt, callback, false);
@@ -33,7 +33,7 @@
         keyboardEvents: true
       };
       settings = Object.assign(defaults, settings);
-      let _initialized = false, _paused = true, _canvas, _canvasScale = 1, _ctx, _outline_fix = 0.5, _timeScale = 1, _lastFrameTime, _fpsInterval = 1e3 / 60, _accumulated, _rafid, _defaultTextColor = 3, _fontFamily = "sans-serif", _fontSize = 20, _fontLineHeight = 1.2, _rngSeed = Date.now(), _colorPalette = defaultPalette, _colorPaletteState = [], _defaultSound = [0.5, 0, 1750, , , 0.3, 1, , , , 600, 0.1], _coreEvents = "init,update,draw,tap,untap,tapping,tapped,resized", _mathFunctions = "PI,sin,cos,atan2,hypot,tan,abs,ceil,floor,trunc,min,max,pow,sqrt,sign,exp", _eventListeners = {};
+      let _initialized = false, _paused = true, _canvas, _canvasScale = 1, _ctx, _outline_fix = 0.5, _timeScale = 1, _lastFrameTime, _fpsInterval = 1e3 / 60, _accumulated, _rafid, _defaultTextColor = 3, _fontFamily = "sans-serif", _fontSize = 20, _fontLineHeight = 1.2, _rngSeed = Date.now(), _colorPalette = defaultPalette, _colorPaletteState = [], _defaultSound = [0.5, 0, 1750, , , 0.3, 1, , , , 600, 0.1], _mathFunctions = "PI,sin,cos,atan2,hypot,tan,abs,ceil,floor,trunc,min,max,pow,sqrt,sign,exp", _eventListeners = {};
       const instance = {
         W: 0,
         H: 0,
@@ -525,7 +525,7 @@
           if (align) _ctx.textAlign = align;
           if (baseline) _ctx.textBaseline = baseline;
         },
-        image(x, y, source2) {
+        image(x, y, source) {
           DEV: assert(
             isNumber(x),
             loggerPrefix + "image() 1st param must be a number"
@@ -534,7 +534,7 @@
             isNumber(y),
             loggerPrefix + "image() 2nd param must be a number"
           );
-          _ctx.drawImage(source2, ~~x, ~~y);
+          _ctx.drawImage(source, ~~x, ~~y);
         },
         spr(x, y, pixels) {
           DEV: assert(
@@ -748,6 +748,9 @@
           if (_initialized) {
             eventName = lowerCase(eventName);
             triggerEvent("before:" + eventName, arg1, arg2, arg3, arg4);
+            if (!settings.loop && "function" === typeof root[eventName]) {
+              root[eventName](arg1, arg2, arg3, arg4);
+            }
             triggerEvent(eventName, arg1, arg2, arg3, arg4);
             triggerEvent("after:" + eventName, arg1, arg2, arg3, arg4);
           }
@@ -1046,8 +1049,8 @@
         }
         _canvas = _canvas || document.createElement("canvas");
         DEV: assert(
-          "CANVAS" === _canvas.tagName,
-          loggerPrefix + 'litecanvas() option "canvas" should be a canvas element or string (CSS selector)'
+          _canvas instanceof HTMLElement && "CANVAS" === _canvas.tagName,
+          loggerPrefix + 'litecanvas() option "canvas" should be a canvas element or string (CSS selector of a canvas)'
         );
         _ctx = _canvas.getContext("2d");
         on(_canvas, "click", () => focus());
@@ -1092,9 +1095,10 @@
         instance.emit("resized", _canvasScale);
       }
       function triggerEvent(eventName, arg1, arg2, arg3, arg4) {
-        if (!_eventListeners[eventName]) return;
-        for (const callback of _eventListeners[eventName]) {
-          callback(arg1, arg2, arg3, arg4);
+        if (_eventListeners[eventName]) {
+          for (const callback of _eventListeners[eventName]) {
+            callback(arg1, arg2, arg3, arg4);
+          }
         }
       }
       function loadPlugin(callback, config) {
@@ -1121,12 +1125,11 @@
       DEV: console.info(loggerPrefix + `version ${version} started`);
       DEV: console.debug(loggerPrefix + `litecanvas() options =`, settings);
       setupCanvas();
-      const source = settings.loop ? settings.loop : root;
-      for (const event of _coreEvents.split(",")) {
-        DEV: if (root === source && source[event]) {
-          console.info(loggerPrefix + `using window.${event}()`);
+      if (settings.loop) {
+        for (const eventName in settings.loop) {
+          if (settings.loop[eventName])
+            instance.listen(eventName, settings.loop[eventName]);
         }
-        if (source[event]) instance.listen(event, source[event]);
       }
       if ("loading" === document.readyState) {
         on(root, "DOMContentLoaded", () => raf(init));

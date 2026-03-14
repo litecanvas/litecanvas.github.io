@@ -332,8 +332,7 @@ function tapping(x, y, touchId) {
       <pre><code class="language-typescript">// Initialize the game
 litecanvas(settings = {});
 
-// the core game loop callbacks
-// if the loop option is null, the engine will uses
+// when that "loop" option is null (default), the engine uses
 // global functions with the same name as the events:
 // window.init(), window.update(), window.draw(), etc
 settings.loop = {
@@ -714,12 +713,14 @@ paused(): boolean
 
 // shutdown the engine
 // also emits the "quit" event
+// when litecanvas is global (default), quit() also undefine global proterties related to litecanvas.
 quit(): void
 
 // gets the canvas
 canvas(): HTMLCanvasElement
 
 // Defines or updates an instance property or method
+// when litecanvas is global (default), def() also set/update window properties.
 def(name: string, value: any): void
 
 // use `stat(n)` to get internal informations about an litecanvas' instance
