@@ -15,7 +15,7 @@
     var assert = (condition, message = "Assertion failed") => {
       if (!condition) throw new Error("[litecanvas] " + message);
     };
-    var version = "0.201.0";
+    var version = "0.202.0";
     function litecanvas(settings = {}) {
       const root = window, math = Math, perf = performance, TWO_PI = math.PI * 2, loggerPrefix = "[Litecanvas] ", raf = requestAnimationFrame, _browserEventListeners = [], on = (elem, evt, callback) => {
         elem.addEventListener(evt, callback, false);
@@ -814,8 +814,8 @@
         },
         stat(index) {
           DEV: assert(
-            isNumber(index) || "string" === typeof index,
-            loggerPrefix + "stat() 1st param must be a number or string"
+            isNumber(index),
+            loggerPrefix + "stat() 1st param must be a number"
           );
           const internals = [
             settings,
@@ -833,9 +833,11 @@
             _colorPaletteState,
             _fontLineHeight
           ];
-          const data = { index, value: internals[index] };
-          instance.emit("stat", data);
-          return data.value;
+          DEV: assert(
+            index >= 0 && index < internals.length,
+            loggerPrefix + "stat() 1st param must be a number between 0 and " + (internals.length - 1)
+          );
+          return internals[index];
         },
         pause() {
           _paused = true;
