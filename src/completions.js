@@ -445,7 +445,7 @@ export default function customCompletions(context) {
         label: "use",
         type: "function",
         apply: "use(",
-        detail: "(pluginFunction)",
+        detail: "(pluginFunction, config?)",
         info: "Loads a plugin to extend the litecanvas engine",
       },
       {
@@ -470,7 +470,7 @@ export default function customCompletions(context) {
         label: "emit",
         type: "function",
         apply: "emit(",
-        detail: "(event, a1, a2, a3, a4)",
+        detail: "(event, arg1, arg2, arg3, arg4): arg1",
       },
       {
         label: "framerate",

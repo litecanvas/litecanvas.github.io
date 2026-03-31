@@ -15,7 +15,7 @@
     var assert = (condition, message = "Assertion failed") => {
       if (!condition) throw new Error("[litecanvas] " + message);
     };
-    var version = "0.202.0";
+    var version = "0.203.0";
     function litecanvas(settings = {}) {
       const root = window, math = Math, perf = performance, TWO_PI = math.PI * 2, loggerPrefix = "[Litecanvas] ", raf = requestAnimationFrame, _browserEventListeners = [], on = (elem, evt, callback) => {
         elem.addEventListener(evt, callback, false);
@@ -58,11 +58,11 @@
           return start + t * (end - start);
         },
         deg2rad: (degs) => {
-          DEV: assert(isNumber(degs), "deg2rad: 1st param must be a number");
+          DEV: assert(isNumber(degs), "deg2rad() 1st param must be a number");
           return math.PI / 180 * degs;
         },
         rad2deg: (rads) => {
-          DEV: assert(isNumber(rads), "rad2deg: 1st param must be a number");
+          DEV: assert(isNumber(rads), "rad2deg() 1st param must be a number");
           return 180 / math.PI * rads;
         },
         round: (n, precision = 0) => {
@@ -490,6 +490,10 @@
           }
         },
         textgap(value) {
+          DEV: assert(
+            isNumber(value),
+            loggerPrefix + "textgap() 1st param must be a number"
+          );
           _fontLineHeight = value;
         },
         textfont(family) {
@@ -580,8 +584,8 @@
             loggerPrefix + "paint() 3rd param must be a function"
           );
           DEV: assert(
-            options && null == options.scale || isNumber(options.scale),
-            loggerPrefix + "paint() 4th param (options.scale) must be a number"
+            options && null == options.scale || isNumber(options.scale) && options.scale > 0,
+            loggerPrefix + "paint() 4th param (options.scale) must be a positive number"
           );
           DEV: assert(
             options && null == options.canvas || options.canvas instanceof OffscreenCanvas,
@@ -597,6 +601,10 @@
           return canvas.transferToImageBitmap();
         },
         ctx(context) {
+          DEV: assert(
+            null == context || context instanceof CanvasRenderingContext2D || context instanceof OffscreenCanvasRenderingContext2D,
+            loggerPrefix + "ctx() 1st param must be an [Offscreen]CanvasRenderingContext2D"
+          );
           if (context) {
             _ctx = context;
           }
@@ -619,16 +627,16 @@
           );
           _ctx.translate(~~x, ~~y);
         },
-        scale(x, y) {
+        scale(x, y = x) {
           DEV: assert(
             isNumber(x),
             loggerPrefix + "scale() 1st param must be a number"
           );
           DEV: assert(
-            null == y || isNumber(y),
+            isNumber(y),
             loggerPrefix + "scale() 2nd param must be a number"
           );
-          _ctx.scale(x, y || x);
+          _ctx.scale(x, y);
         },
         rotate(radians) {
           DEV: assert(
@@ -663,7 +671,7 @@
         clip(callback) {
           DEV: assert(
             "function" === typeof callback,
-            loggerPrefix + "clip() 1st param must be a function"
+            loggerPrefix + "clip() 1st param must be a function (ctx) => void"
           );
           beginPath(_ctx);
           callback(_ctx);
@@ -705,7 +713,7 @@
         use(callback, config = {}) {
           DEV: assert(
             "function" === typeof callback,
-            loggerPrefix + "use() 1st param must be a function"
+            loggerPrefix + "use() 1st param must be a function (instance, config) => any"
           );
           DEV: assert(
             "object" === typeof config,
@@ -754,6 +762,7 @@
             triggerEvent(eventName, arg1, arg2, arg3, arg4);
             triggerEvent("after:" + eventName, arg1, arg2, arg3, arg4);
           }
+          return arg1;
         },
         pal(colors, textColor = 3) {
           DEV: assert(
@@ -859,7 +868,7 @@
           return _paused;
         },
         quit() {
-          instance.emit("quit");
+          instance.emit("shutdown");
           instance.pause();
           _initialized = false;
           _eventListeners = {};
@@ -1133,11 +1142,7 @@
             instance.listen(eventName, settings.loop[eventName]);
         }
       }
-      if ("loading" === document.readyState) {
-        on(root, "DOMContentLoaded", () => raf(init));
-      } else {
-        _rafid = raf(init);
-      }
+      _rafid = raf(init);
       return instance;
     }
     window.litecanvas = litecanvas;
@@ -1738,14 +1743,14 @@
   (() => {
     var _ = (r, u, p, m, n, f, b, x) => r < n + b && r + p > n && u < f + x && u + m > f;
     var y = (r, u, p, m, n, f) => (m - r) * (m - r) + (n - u) * (n - u) <= (p + f) * (p + f);
-    var Bt = 2 * Math.PI;
+    var Wt = 2 * Math.PI;
     var N = (r, u, p, m = Math.sin) => r + (m(p) + 1) / 2 * (u - r);
     var vr = Math.PI / 2;
-    var tt = { warnings: true };
-    function v(r, u = {}) {
+    var et = { warnings: true };
+    function w(r, u = {}) {
       if (r.stat(1)) throw 'Plugin Migrate should be loaded before the "init" event';
-      u = Object.assign({}, tt, u);
-      let m = { def: c, seed: f, print: T, clear: R, setfps: z, setvar: Y, textstyle: x, textmetrics: I, cliprect: k, clipcirc: F, blendmode: S, transform: C, getcolor: w, mousepos: L, resize: O, path: H, fill: B, stroke: D, clip: V, paint: $, colrect: (...t) => (g("colrect()"), _(...t)), colcirc: (...t) => (g("colrect()"), y(...t)), wave: (...t) => (g("wave()"), N(...t)) }, n = r.stat(0);
+      u = Object.assign({}, et, u);
+      let m = { def: c, seed: f, print: T, clear: R, setfps: O, setvar: Y, textstyle: x, textmetrics: k, cliprect: F, clipcirc: S, blendmode: C, transform: L, getcolor: v, mousepos: z, resize: H, path: X, fill: W, stroke: U, clip: Z, paint: q, colrect: (...t) => (g("colrect()"), _(...t)), colcirc: (...t) => (g("colrect()"), y(...t)), wave: (...t) => (g("wave()"), N(...t)) }, n = r.stat(0);
       function f(t) {
         return a("seed()", "rseed()"), t && r.rseed(t), r.stat(9);
       }
@@ -1756,29 +1761,29 @@
       function T(t, e, s, i) {
         a("print()", "text()"), r.text(t, e, s, i);
       }
-      function I(t, e) {
+      function k(t, e) {
         a("textmetrics()", "ctx().measureText()");
         let s = r.ctx(), i = r.stat(10), l = r.stat(11);
         s.font = `${b || ""} ${~~(e || i)}px ${l}`;
         let h = s.measureText(t);
         return h.height = h.actualBoundingBoxAscent + h.actualBoundingBoxDescent, h;
       }
-      function k(t, e, s, i) {
+      function F(t, e, s, i) {
         a("cliprect()", "clip()");
         let l = r.ctx();
         l.beginPath(), l.rect(t, e, s, i), l.clip();
       }
-      function F(t, e, s) {
+      function S(t, e, s) {
         a("clipcirc()", "clip()");
         let i = r.ctx();
         i.beginPath(), i.arc(t, e, s, 0, r.TWO_PI), i.clip();
       }
-      function w(t) {
+      function v(t) {
         a("getcolor()", "stat(5)");
         let e = stat(5);
         return e[~~t % e.length];
       }
-      function S(t) {
+      function C(t) {
         a("blendmode()", "ctx().globalCompositeOperation");
         let e = r.ctx();
         e.globalCompositeOperation = t;
@@ -1786,13 +1791,13 @@
       function R(t) {
         a("clear()", "cls()"), r.cls(t);
       }
-      function C(t, e, s, i, l, h, j = true) {
+      function L(t, e, s, i, l, h, j = true) {
         return a("transform()", "ctx().setTransform() or ctx().transform()"), r.ctx()[j ? "setTransform" : "transform"](t, e, s, i, l, h);
       }
-      function L() {
+      function z() {
         return a("mousepos()", "MX and MY"), [MX, MY];
       }
-      function z(t) {
+      function O(t) {
         a("setfps()", "framerate()"), r.framerate(t);
       }
       let o = r.def;
@@ -1839,146 +1844,146 @@
         c("CX", r.W / 2), c("CY", r.H / 2);
       }
       E(), c("CANVAS", r.canvas());
-      function O(t, e) {
+      function H(t, e) {
         if (n.autoscale) throw "resize() don't works with autoscale enabled";
         a("resize()", null, "Avoid changing the canvas dimensions at runtime."), r.CANVAS.width = t, c("W", t), r.CANVAS.height = e, c("H", e), r.emit("resized", 1);
       }
       for (let t of ["W", "H", "T", "CX", "CY", "MX", "MY"]) r[t] != null && c(t, r[t]);
       a("FPS", "", "but you can use our plugin to measure the fps: https://github.com/litecanvas/plugin-frame-rate-meter"), o("FPS", ""), n.fps && r.framerate(n.fps), n.background != null && (a('"background" option', "You must update your canvas CSS"), r.listen("after:init", () => {
-        r.canvas().style.background = w(~~n.background);
+        r.canvas().style.background = v(~~n.background);
       }));
-      function H(t) {
+      function X(t) {
         return a("path()", "`new Path2D()`", "See https://developer.mozilla.org/en-US/docs/Web/API/Path2D"), new Path2D(t);
       }
-      let X = r.fill;
-      function B(t, e) {
+      let B = r.fill;
+      function W(t, e) {
         if (e instanceof Path2D) {
           a("fill(color, path)");
           let s = r.stat(5), i = r.ctx();
           i.fillStyle = s[~~t % s.length], r.ctx().fill(e);
-        } else X(t);
+        } else B(t);
       }
-      let W = r.stroke;
-      function D(t, e) {
+      let D = r.stroke;
+      function U(t, e) {
         if (e instanceof Path2D) {
           a("stroke(color, path)");
           let s = r.stat(5), i = r.ctx();
           i.strokeStyle = s[~~t % s.length], r.ctx().stroke(e);
-        } else W(t);
+        } else D(t);
       }
-      let U = r.clip;
-      function V(t) {
-        a("clip(path)", "clip(callback)", "E.g: `clip((ctx) => ctx.rect(0, 0, 200, 200))`"), t instanceof Path2D ? r.ctx().clip(t) : U(t);
+      let V = r.clip;
+      function Z(t) {
+        a("clip(path)", "clip(callback)", "E.g: `clip((ctx) => ctx.rect(0, 0, 200, 200))`"), t instanceof Path2D ? r.ctx().clip(t) : V(t);
       }
       n.antialias && a('"antialias" option', '"pixelart" option'), n.pixelart === false && a('"pixelart" option'), n.animate === false && a('"animate" option', "pause() in the of your draw()");
-      let Z = r.paint;
-      function $(t, e, s, i) {
+      let $ = r.paint;
+      function q(t, e, s, i) {
         let l = s;
         return r.spr && Array.isArray(s) && (l = () => {
           r.spr(0, 0, s.join(`
 `));
-        }), Z(t, e, l, i);
+        }), $(t, e, l, i);
       }
       let d = r.spr;
       d && d.length === 3 && (m.spr = function(t, e, s, i, l) {
         Number.isFinite(s) && s > 0 ? (a("spr() width and height", "spr(x, y, pixels)"), d(t, e, l)) : d(t, e, s);
       });
-      let M = r.unlisten;
-      if (M) {
-        let t = r.listen;
-        m.listen = (e, s) => (t(e, s), () => {
-          A("listen() not returns a function anymore. Please use unlisten(event, callback) instead"), M(e, s);
-        });
-      }
-      function A(t) {
+      let M = r.listen, A = r.unlisten;
+      m.listen = (t, e) => {
+        let s;
+        return A && (t === "quit" && (a('since v0.203, "quit" event', '"shutdown" event'), M("shutdown", e)), s = () => {
+          I("listen() not returns a function anymore. Please use unlisten(event, callback) instead"), A(t, e);
+        }), M(t, e), s;
+      };
+      function I(t) {
         u.warnings && console.warn(`[litecanvas/migrate] ${t}.`);
       }
       function a(t, e, s = "") {
-        A(`${t} is removed. ` + (e ? `Please use ${e} instead. ` : "") + s);
+        I(`${t} is removed. ` + (e ? `Please use ${e} instead. ` : "") + s);
       }
       function g(t, e = "function") {
         a(t, `This ${e} was moved to @litecanvas/utils package.`);
       }
       return m;
     }
-    window.pluginMigrate = v;
+    window.pluginMigrate = w;
   })();
   (() => {
-    function A(s = {}) {
-      let n = 0, o = true, b = s.position, r = document.createElement("div"), i = [], p = () => (performance || Date).now();
+    function T(s = {}) {
+      let n = 0, m = true, b = s.position, r = document.createElement("div"), i = [], f = () => (performance || Date).now();
       ["right", "left"].includes(b) || (b = "right"), r.style.cssText = `position:absolute;top:0;${b}:0;cursor:pointer;opacity:0.8;z-index:10000`, r.addEventListener("click", function(a) {
         a.preventDefault(), e(++n % r.children.length);
       }, false);
-      function f(a, t, x, g) {
-        let _ = new S(a, t, x, r, g);
-        return i.push(_), _;
+      function c(a, t, _, w) {
+        let x = new E(a, t, _, r, w);
+        return i.push(x), x;
       }
       function e(a) {
         for (let t = 0; t < r.children.length; t++) r.children[t].style.display = t === a ? "block" : "none";
         n = a;
       }
-      function v() {
+      function h() {
         n++, n >= r.children.length && (n = 0), e(n);
       }
-      function h(a = "all") {
+      function y(a = "all") {
         if (a === "all") for (let t = 0; t < i.length; t++) i[t].reset();
         else i[a] && i[a].reset();
-        u = p(), l = 0;
+        l = f(), o = 0;
       }
       function d(a = true) {
-        o = !!a, r.style.display = o ? "" : "none";
+        m = !!a, r.style.display = m ? "" : "none";
       }
-      let m = p(), u = m, l = 0, y = f("FPS", "#0ff", "#002"), w = f("MS", "#0f0", "#020"), c;
-      return self.performance && self.performance.memory && (c = f("MB", "#f08", "#201")), e(0), { dom: r, addPanel: f, showPanel: e, nextPanel: v, resetPanel: h, display: d, get hidden() {
-        return !o;
+      let u = f(), l = u, o = 0, g = c("FPS", "#0ff", "#002"), v = c("MS", "#0f0", "#020"), p;
+      return self.performance && self.performance.memory && (p = c("MB", "#f08", "#201")), e(0), { dom: r, addPanel: c, showPanel: e, nextPanel: h, resetPanel: y, display: d, get hidden() {
+        return !m;
       }, begin: function() {
-        m = p();
+        u = f();
       }, end: function() {
-        l++;
-        let a = p();
-        if (w.update(a - m, 200), a >= u + 1e3 && (y.update(l * 1e3 / (a - u), 100), u = a, l = 0, c)) {
+        o++;
+        let a = f();
+        if (v.update(a - u, 200), a >= l + 1e3 && (g.update(o * 1e3 / (a - l), 100), l = a, o = 0, p)) {
           let t = performance.memory;
-          c.update(t.usedJSHeapSize / 1048576, t.jsHeapSizeLimit / 1048576);
+          p.update(t.usedJSHeapSize / 1048576, t.jsHeapSizeLimit / 1048576);
         }
         return a;
       }, update: function() {
-        m = this.end();
+        u = this.end();
       } };
     }
-    function S(s, n, o, b, r = {}) {
-      let i = Math.round, p = 1 / 0, f = 0, e = i(window.devicePixelRatio || 1), v = r.width || 80, h = 48, d = 3 * e, m = 2 * e, u = 3 * e, l = 15 * e, y = (v - 6) * e, w = 30 * e, c = document.createElement("canvas");
-      c.width = v * e, c.height = h * e, c.style.cssText = `width:${v}px;height:48px;`;
+    function E(s, n, m, b, r = {}) {
+      let i = Math.round, f = 1 / 0, c = 0, e = i(window.devicePixelRatio || 1), h = r.width || 80, y = 48, d = 3 * e, u = 2 * e, l = 3 * e, o = 15 * e, g = (h - 6) * e, v = 30 * e, p = document.createElement("canvas");
+      p.width = h * e, p.height = y * e, p.style.cssText = `width:${h}px;height:48px;`;
       let a = b.children.length;
-      b.appendChild(c);
-      let t = c.getContext("2d");
+      b.appendChild(p);
+      let t = p.getContext("2d");
       t.font = `bold ${9 * e}px Helvetica,Arial,sans-serif`, t.textBaseline = "top";
-      function x() {
-        t.fillStyle = o, t.fillRect(0, 0, v * e, h * e), t.fillStyle = n, t.fillText(s, d, m), t.fillRect(u, l, y, w), t.fillStyle = o, t.globalAlpha = 0.9, t.fillRect(u, l, y, w);
+      function _() {
+        t.fillStyle = m, t.fillRect(0, 0, h * e, y * e), t.fillStyle = n, t.fillText(s, d, u), t.fillRect(l, o, g, v), t.fillStyle = m, t.globalAlpha = 0.9, t.fillRect(l, o, g, v);
       }
-      return x(), { id: a, dom: c, reset: x, update: function(g, _) {
-        p = Math.min(p, g), f = Math.max(f, g), t.fillStyle = o, t.globalAlpha = 1, t.fillRect(0, 0, v * e, l), t.fillStyle = n;
-        let T = [i(g), s];
-        r.labelBefore && T.reverse(), t.fillText(T.join(" ") + " (" + i(p) + "-" + i(f) + ")", d, m), t.drawImage(c, u + e, l, y - e, w, u, l, y - e, w), t.fillRect(u + y - e, l, e, w), t.fillStyle = o, t.globalAlpha = 0.9, t.fillRect(u + y - e, l, e, i((1 - g / _) * w));
+      return _(), { id: a, dom: p, reset: _, update: function(w, x) {
+        f = Math.min(f, w), c = Math.max(c, w), t.fillStyle = m, t.globalAlpha = 1, t.fillRect(0, 0, h * e, o), t.fillStyle = n;
+        let S = [i(w), s];
+        r.labelBefore && S.reverse(), t.fillText(S.join(" ") + " (" + i(f) + "-" + i(c) + ")", d, u), t.drawImage(p, l + e, o, g - e, v, l, o, g - e, v), t.fillRect(l + g - e, o, e, v), t.fillStyle = m, t.globalAlpha = 0.9, t.fillRect(l + g - e, o, e, i((1 - w / x) * v));
       } };
     }
-    var z = { hotkeyShow: "F1", hotkeyNext: "F2", css: {}, hidden: false, id: "", position: "right" };
-    function E(s, n = {}) {
-      let { hotkeyNext: o, hotkeyShow: b, id: r, position: i, css: p } = Object.assign({}, z, n), f = s.stat(0), e = new A({ position: i }), v = e.display, h = (d = true) => {
-        n.hidden = !d, v(d), e.resetPanel();
+    var C = { hotkeyShow: "F1", hotkeyNext: "F2", css: {}, hidden: false, id: "", position: "right" };
+    function A(s, n = {}) {
+      let { hotkeyNext: m, hotkeyShow: b, id: r, position: i, css: f } = Object.assign({}, C, n), c = s.stat(0), e = new T({ position: i }), h = e.display, y = (d = true) => {
+        n.hidden = !d, h(d), e.resetPanel();
       };
       r && (e.dom.id = r);
-      for (let [d, m] of Object.entries(p || {})) e.dom.style[d] = m;
-      return s.canvas().parentElement.appendChild(e.dom), h(!n.hidden), f.keyboardEvents && s.listen("update", () => {
-        b && s.iskeypressed(b) && h(n.hidden), o && s.iskeypressed(o) && e.nextPanel();
-      }), s.listen("before:update", (d, m = 1) => {
-        n.hidden || m === 1 && e.begin();
+      for (let [d, u] of Object.entries(f || {})) e.dom.style[d] = u;
+      return s.canvas().parentElement.appendChild(e.dom), y(!n.hidden), c.keyboardEvents && s.listen("update", () => {
+        b && s.iskeypressed(b) && y(n.hidden), m && s.iskeypressed(m) && e.nextPanel();
+      }), s.listen("before:update", (d, u = 1) => {
+        n.hidden || u === 1 && e.begin();
       }), s.listen("after:draw", () => {
         n.hidden || e.end();
-      }), s.listen("quit", () => {
+      }), s.listen("shutdown", () => {
         e.dom.remove();
-      }), e.display = h, { FPS_METER: e };
+      }), e.display = y, { FPS_METER: e };
     }
-    window.pluginFrameRateMeter = E;
+    window.pluginFrameRateMeter = A;
   })();
   (() => {
     var S = [[24, 60, 60, 24, 24, , 24], [54, 54, , , , , ,], [54, 54, 127, 54, 127, 54, 54], [12, 62, 3, 30, 48, 31, 12], [, 99, 51, 24, 12, 102, 99], [28, 54, 28, 110, 59, 51, 110], [6, 6, 3, , , , ,], [24, 12, 6, 6, 6, 12, 24], [6, 12, 24, 24, 24, 12, 6], [, 102, 60, 255, 60, 102, ,], [, 12, 12, 63, 12, 12, ,], [, , , , , 12, 12, 6], [, , , 63, , , ,], [, , , , , 12, 12], [96, 48, 24, 12, 6, 3, 1], [62, 99, 115, 123, 111, 103, 62], [12, 14, 12, 12, 12, 12, 63], [30, 51, 48, 28, 6, 51, 63], [30, 51, 48, 28, 48, 51, 30], [56, 60, 54, 51, 127, 48, 120], [63, 3, 31, 48, 48, 51, 30], [28, 6, 3, 31, 51, 51, 30], [63, 51, 48, 24, 12, 12, 12], [30, 51, 51, 30, 51, 51, 30], [30, 51, 51, 62, 48, 24, 14], [, 12, 12, , , 12, 12], [, 12, 12, , , 12, 12, 6], [24, 12, 6, 3, 6, 12, 24], [, , 63, , , 63, ,], [6, 12, 24, 48, 24, 12, 6], [30, 51, 48, 24, 12, , 12], [62, 99, 123, 123, 123, 3, 30], [12, 30, 51, 51, 63, 51, 51], [63, 102, 102, 62, 102, 102, 63], [60, 102, 3, 3, 3, 102, 60], [31, 54, 102, 102, 102, 54, 31], [127, 70, 22, 30, 22, 70, 127], [127, 70, 22, 30, 22, 6, 15], [60, 102, 3, 3, 115, 102, 124], [51, 51, 51, 63, 51, 51, 51], [30, 12, 12, 12, 12, 12, 30], [120, 48, 48, 48, 51, 51, 30], [103, 102, 54, 30, 54, 102, 103], [15, 6, 6, 6, 70, 102, 127], [99, 119, 127, 127, 107, 99, 99], [99, 103, 111, 123, 115, 99, 99], [28, 54, 99, 99, 99, 54, 28], [63, 102, 102, 62, 6, 6, 15], [30, 51, 51, 51, 59, 30, 56], [63, 102, 102, 62, 54, 102, 103], [30, 51, 7, 14, 56, 51, 30], [63, 45, 12, 12, 12, 12, 30], [51, 51, 51, 51, 51, 51, 63], [51, 51, 51, 51, 51, 30, 12], [99, 99, 99, 107, 127, 119, 99], [99, 99, 54, 28, 28, 54, 99], [51, 51, 51, 30, 12, 12, 30], [127, 99, 49, 24, 76, 102, 127], [30, 6, 6, 6, 6, 6, 30], [3, 6, 12, 24, 48, 96, 64], [30, 24, 24, 24, 24, 24, 30], [8, 28, 54, 99, , , ,], [, , , , , , , 255], [12, 12, 24, , , , ,], [, , 30, 48, 62, 51, 110], [7, 6, 6, 62, 102, 102, 59], [, , 30, 51, 3, 51, 30], [56, 48, 48, 62, 51, 51, 110], [, , 30, 51, 63, 3, 30], [28, 54, 6, 15, 6, 6, 15], [, , 110, 51, 51, 62, 48, 31], [7, 6, 54, 110, 102, 102, 103], [12, , 14, 12, 12, 12, 30], [48, , 48, 48, 48, 51, 51, 30], [7, 6, 102, 54, 30, 54, 103], [14, 12, 12, 12, 12, 12, 30], [, , 51, 127, 127, 107, 99], [, , 31, 51, 51, 51, 51], [, , 30, 51, 51, 51, 30], [, , 59, 102, 102, 62, 6, 15], [, , 110, 51, 51, 62, 48, 120], [, , 59, 110, 102, 6, 15], [, , 62, 3, 30, 48, 31], [8, 12, 62, 12, 12, 44, 24], [, , 51, 51, 51, 51, 110], [, , 51, 51, 51, 30, 12], [, , 99, 107, 127, 127, 54], [, , 99, 54, 28, 54, 99], [, , 51, 51, 51, 62, 48, 31], [, , 63, 25, 12, 38, 63], [56, 12, 12, 7, 12, 12, 56], [24, 24, 24, , 24, 24, 24], [7, 12, 12, 56, 12, 12, 7], [110, 59, , , , , ,]], O = (e, r, o = 3) => {

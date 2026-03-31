@@ -711,9 +711,9 @@ resume(): void
 // returns `true` if the engine loop is paused
 paused(): boolean
 
-// shutdown the engine
-// also emits the "quit" event
-// when litecanvas is global (default), quit() also undefine global proterties related to litecanvas.
+// shutdown the engine and emits the "shutdown" event
+// note: when litecanvas option "global" is enabled (default), quit() also
+// undefines all window proterties related to litecanvas.
 quit(): void
 
 // gets the canvas
