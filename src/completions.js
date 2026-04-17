@@ -502,9 +502,9 @@ export default function customCompletions(context) {
         apply: "resume()",
       },
       {
-        label: "paused",
+        label: "ispaused",
         type: "function",
-        apply: "paused()",
+        apply: "ispaused()",
       },
 
       // asset loader plugin
