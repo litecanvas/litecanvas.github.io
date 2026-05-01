@@ -15,7 +15,7 @@
     var assert = (condition, message = "Assertion failed") => {
       if (!condition) throw new Error("[litecanvas] " + message);
     };
-    var version = "0.205.0";
+    var version = "0.206.0";
     function litecanvas(settings = {}) {
       const root = window, math = Math, perf = performance, TWO_PI = math.PI * 2, loggerPrefix = "[Litecanvas] ", raf = requestAnimationFrame, _browserEventListeners = [], on = (elem, evt, callback) => {
         elem.addEventListener(evt, callback, false);
@@ -33,7 +33,7 @@
         keyboardEvents: true
       };
       settings = Object.assign(defaults, settings);
-      let _initialized = false, _paused = true, _canvas, _canvasScale = 1, _ctx, _outline_fix = 0.5, _timeScale = 1, _lastFrameTime, _fpsInterval = 1e3 / 60, _accumulated, _rafid, _defaultTextColor = 3, _fontFamily = "sans-serif", _fontSize = 20, _fontLineHeight = 1.2, _rngSeed = Date.now(), _colorPalette = defaultPalette, _colorPaletteState = [], _defaultSound = [0.5, 0, 1750, , , 0.3, 1, , , , 600, 0.1], _mathFunctions = "PI,sin,cos,atan2,hypot,tan,abs,ceil,floor,trunc,min,max,pow,sqrt,sign,exp", _eventListeners = {};
+      let _initialized = false, _paused, _canvas, _canvasScale = 1, _ctx, _outline_fix = 0.5, _timeScale = 1, _lastFrameTime, _fpsInterval = 1e3 / 60, _accumulated, _rafid = 0, _defaultTextColor = 3, _fontFamily = "sans-serif", _fontSize = 20, _fontLineHeight = 1.2, _rngSeed = Date.now(), _colorPalette = defaultPalette, _colorPaletteState = [], _defaultSound = [0.5, 0, 1750, , , 0.3, 1, , , , 600, 0.1], _eventListeners = {};
       const instance = {
         W: 0,
         H: 0,
@@ -852,7 +852,7 @@
         pause() {
           if (!_paused) {
             _paused = true;
-            cancelAnimationFrame(_rafid);
+            _rafid = ~~cancelAnimationFrame(_rafid);
             instance.emit("paused");
           }
         },
@@ -862,10 +862,8 @@
             loggerPrefix + 'resume() cannot be called before the "init" event and neither after the quit() function'
           );
           if (_initialized && _paused) {
+            startGameLoop();
             _paused = false;
-            _accumulated = _fpsInterval;
-            _lastFrameTime = perf.now();
-            _rafid = raf(drawFrame);
             instance.emit("resumed");
           }
         },
@@ -891,8 +889,16 @@
           );
         }
       };
-      for (const k of _mathFunctions.split(",")) {
+      const mathProps = "PI,sin,cos,atan2,hypot,tan,abs,ceil,floor,trunc,min,max,pow,sqrt,sign,exp";
+      for (const k of mathProps.split(",")) {
         instance[k] = math[k];
+      }
+      function startGameLoop() {
+        if (!_rafid) {
+          _accumulated = 0;
+          _lastFrameTime = perf.now();
+          _rafid = raf(drawFrame);
+        }
       }
       function init() {
         if (settings.autoscale) {
@@ -1026,8 +1032,10 @@
           instance.def("lastkey", () => _lastKey);
         }
         _initialized = true;
-        instance.resume();
         instance.emit("init", instance);
+        if (!_paused) {
+          startGameLoop();
+        }
       }
       function drawFrame() {
         _rafid = raf(drawFrame);
@@ -1047,15 +1055,13 @@
           instance.emit("draw", _ctx);
           if (updated > 1) {
             _accumulated = 0;
-            DEV: console.warn(
-              loggerPrefix + "the last frame updated " + updated + " times. This can drop the FPS if it keeps happening."
-            );
           }
         }
       }
       function setupCanvas() {
+        const d = document;
         if ("string" === typeof settings.canvas) {
-          _canvas = document.querySelector(settings.canvas);
+          _canvas = d.querySelector(settings.canvas);
           DEV: assert(
             null != _canvas,
             loggerPrefix + 'litecanvas() option "canvas" is an invalid CSS selector'
@@ -1063,7 +1069,7 @@
         } else {
           _canvas = settings.canvas;
         }
-        _canvas = _canvas || document.createElement("canvas");
+        _canvas = _canvas || d.createElement("canvas");
         DEV: assert(
           _canvas instanceof HTMLElement && "CANVAS" === _canvas.tagName,
           loggerPrefix + 'litecanvas() option "canvas" should be a canvas element or string (CSS selector of a canvas)'
@@ -1072,7 +1078,7 @@
         on(_canvas, "click", () => focus());
         resizeCanvas();
         if (!_canvas.parentNode) {
-          document.body.appendChild(_canvas);
+          d.body.appendChild(_canvas);
         }
         _canvas.style.imageRendering = "pixelated";
         _canvas.oncontextmenu = () => false;
@@ -1147,7 +1153,7 @@
             instance.listen(eventName, settings.loop[eventName]);
         }
       }
-      _rafid = raf(init);
+      raf(init);
       return instance;
     }
     window.litecanvas = litecanvas;
