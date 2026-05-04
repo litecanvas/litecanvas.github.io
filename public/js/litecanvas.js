@@ -15,7 +15,7 @@
     var assert = (condition, message = "Assertion failed") => {
       if (!condition) throw new Error("[litecanvas] " + message);
     };
-    var version = "0.206.0";
+    var version = "0.206.1";
     function litecanvas(settings = {}) {
       const root = window, math = Math, perf = performance, TWO_PI = math.PI * 2, loggerPrefix = "[Litecanvas] ", raf = requestAnimationFrame, _browserEventListeners = [], on = (elem, evt, callback) => {
         elem.addEventListener(evt, callback, false);
@@ -33,7 +33,7 @@
         keyboardEvents: true
       };
       settings = Object.assign(defaults, settings);
-      let _initialized = false, _paused, _canvas, _canvasScale = 1, _ctx, _outline_fix = 0.5, _timeScale = 1, _lastFrameTime, _fpsInterval = 1e3 / 60, _accumulated, _rafid = 0, _defaultTextColor = 3, _fontFamily = "sans-serif", _fontSize = 20, _fontLineHeight = 1.2, _rngSeed = Date.now(), _colorPalette = defaultPalette, _colorPaletteState = [], _defaultSound = [0.5, 0, 1750, , , 0.3, 1, , , , 600, 0.1], _eventListeners = {};
+      let _loop = settings.loop, _initialized = false, _paused, _canvas, _canvasScale = 1, _ctx, _outline_fix = 0.5, _timeScale = 1, _lastFrameTime, _fpsInterval = 1e3 / 60, _accumulated, _rafid = 0, _defaultTextColor = 3, _fontFamily = "sans-serif", _fontSize = 20, _fontLineHeight = 1.2, _rngSeed = Date.now(), _colorPalette = defaultPalette, _colorPaletteState = [], _defaultSound = [0.5, 0, 1750, , , 0.3, 1, , , , 600, 0.1], _eventListeners = {};
       const instance = {
         W: 0,
         H: 0,
@@ -677,26 +677,26 @@
           callback(_ctx);
           _ctx.clip();
         },
-        sfx(zzfxParams, pitchSlide = 0, volumeFactor = 1) {
+        sfx(zzfxParams, pitchSlide, volumeFactor) {
           DEV: assert(
             null == zzfxParams || Array.isArray(zzfxParams),
             loggerPrefix + "sfx() 1st param must be an array"
           );
           DEV: assert(
-            isNumber(pitchSlide),
+            null == pitchSlide || isNumber(pitchSlide),
             loggerPrefix + "sfx() 2nd param must be a number"
           );
           DEV: assert(
-            isNumber(volumeFactor),
+            null == volumeFactor || isNumber(volumeFactor),
             loggerPrefix + "sfx() 3rd param must be a number"
           );
           if (!root.zzfxV || navigator.userActivation && !navigator.userActivation.hasBeenActive) {
             return false;
           }
-          zzfxParams = zzfxParams || _defaultSound;
-          if (pitchSlide !== 0 || volumeFactor !== 1) {
+          zzfxParams ||= _defaultSound;
+          if (pitchSlide || volumeFactor) {
             zzfxParams = zzfxParams.slice();
-            zzfxParams[0] = volumeFactor * (zzfxParams[0] || 1);
+            zzfxParams[0] = (volumeFactor || 1) * (zzfxParams[0] || 1);
             zzfxParams[10] = ~~zzfxParams[10] + pitchSlide;
           }
           zzfx.apply(0, zzfxParams);
@@ -756,7 +756,7 @@
           if (_initialized) {
             eventName = lowerCase(eventName);
             triggerEvent("before:" + eventName, arg1, arg2, arg3, arg4);
-            if (!settings.loop && root[eventName] !== instance[eventName] && "function" === typeof root[eventName]) {
+            if (!_loop && root[eventName] !== instance[eventName] && "function" === typeof root[eventName]) {
               root[eventName](arg1, arg2, arg3, arg4);
             }
             triggerEvent(eventName, arg1, arg2, arg3, arg4);
@@ -1147,10 +1147,9 @@
       DEV: console.info(loggerPrefix + `version ${version} started`);
       DEV: console.debug(loggerPrefix + `litecanvas() options =`, settings);
       setupCanvas();
-      if (settings.loop) {
-        for (const eventName in settings.loop) {
-          if (settings.loop[eventName])
-            instance.listen(eventName, settings.loop[eventName]);
+      if (_loop) {
+        for (const eventName in _loop) {
+          if (_loop[eventName]) instance.listen(eventName, _loop[eventName]);
         }
       }
       raf(init);
