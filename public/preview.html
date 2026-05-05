@@ -120,11 +120,21 @@
             joystick.disable();
           });
 
+          window.__litecanvas__ = true;
+
           return instance;
         };
       })(window.litecanvas);
     </script>
 
     <script id="code"></script>
+
+    <script>
+      setTimeout(() => {
+        if (!window.__litecanvas__) {
+          throw new Error("You must call the litecanvas() function");
+        }
+      }, 50);
+    </script>
   </body>
 </html>
