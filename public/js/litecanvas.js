@@ -15,7 +15,7 @@
     var assert = (condition, message = "Assertion failed") => {
       if (!condition) throw new Error("[litecanvas] " + message);
     };
-    var version = "0.206.1";
+    var version = "0.206.2";
     function litecanvas(settings = {}) {
       const root = window, math = Math, perf = performance, TWO_PI = math.PI * 2, loggerPrefix = "[Litecanvas] ", raf = requestAnimationFrame, _browserEventListeners = [], on = (elem, evt, callback) => {
         elem.addEventListener(evt, callback, false);
@@ -302,48 +302,6 @@
           _ctx[radii ? "roundRect" : "rect"](~~x, ~~y, ~~width, ~~height, radii);
           instance.fill(color);
         },
-        circ(x, y, radius, color) {
-          DEV: assert(
-            isNumber(x),
-            loggerPrefix + "circ() 1st param must be a number"
-          );
-          DEV: assert(
-            isNumber(y),
-            loggerPrefix + "circ() 2nd param must be a number"
-          );
-          DEV: assert(
-            isNumber(radius) && radius >= 0,
-            loggerPrefix + "circ() 3rd param must be a positive number or zero"
-          );
-          DEV: assert(
-            null == color || isNumber(color) && color >= 0,
-            loggerPrefix + "circ() 4th param must be a positive number or zero"
-          );
-          beginPath(_ctx);
-          _ctx.arc(~~x, ~~y, ~~radius, 0, TWO_PI);
-          instance.stroke(color);
-        },
-        circfill(x, y, radius, color) {
-          DEV: assert(
-            isNumber(x),
-            loggerPrefix + "circfill() 1st param must be a number"
-          );
-          DEV: assert(
-            isNumber(y),
-            loggerPrefix + "circfill() 2nd param must be a number"
-          );
-          DEV: assert(
-            isNumber(radius) && radius >= 0,
-            loggerPrefix + "circfill() 3rd param must be a positive number or zero"
-          );
-          DEV: assert(
-            null == color || isNumber(color) && color >= 0,
-            loggerPrefix + "circfill() 4th param must be a positive number or zero"
-          );
-          beginPath(_ctx);
-          _ctx.arc(~~x, ~~y, ~~radius, 0, TWO_PI);
-          instance.fill(color);
-        },
         oval(x, y, radiusX, radiusY, color) {
           DEV: assert(
             isNumber(x),
@@ -393,6 +351,44 @@
           beginPath(_ctx);
           _ctx.ellipse(~~x, ~~y, ~~radiusX, ~~radiusY, 0, 0, TWO_PI);
           instance.fill(color);
+        },
+        circ(x, y, radius, color) {
+          DEV: assert(
+            isNumber(x),
+            loggerPrefix + "circ() 1st param must be a number"
+          );
+          DEV: assert(
+            isNumber(y),
+            loggerPrefix + "circ() 2nd param must be a number"
+          );
+          DEV: assert(
+            isNumber(radius) && radius >= 0,
+            loggerPrefix + "circ() 3rd param must be a positive number or zero"
+          );
+          DEV: assert(
+            null == color || isNumber(color) && color >= 0,
+            loggerPrefix + "circ() 4th param must be a positive number or zero"
+          );
+          instance.oval(x, y, radius, radius, color);
+        },
+        circfill(x, y, radius, color) {
+          DEV: assert(
+            isNumber(x),
+            loggerPrefix + "circfill() 1st param must be a number"
+          );
+          DEV: assert(
+            isNumber(y),
+            loggerPrefix + "circfill() 2nd param must be a number"
+          );
+          DEV: assert(
+            isNumber(radius) && radius >= 0,
+            loggerPrefix + "circfill() 3rd param must be a positive number or zero"
+          );
+          DEV: assert(
+            null == color || isNumber(color) && color >= 0,
+            loggerPrefix + "circfill() 4th param must be a positive number or zero"
+          );
+          instance.ovalfill(x, y, radius, radius, color);
         },
         shape(points) {
           DEV: assert(
