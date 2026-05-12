@@ -28,8 +28,7 @@ export default function customCompletions(context) {
       {
         label: "litecanvas",
         type: "function",
-        apply:
-          "litecanvas({})\n\nfunction init() {\n  \n}\n\nfunction update(dt) {\n  \n}\n\nfunction draw() {\n  \n}",
+        apply: `litecanvas({})\n\nfunction init() {\n\n}\n\nfunction tapped(tx, ty) {\n\n}\n\nfunction update(dt) {\n\n}\n\nfunction draw() {\n  cls(0)\n  text(0, 0, 'Hello world')\n}`,
         detail: "(settings?: object)",
         info: "initialize a litecanvas instance",
       },
