@@ -15,7 +15,7 @@
     var assert = (condition, message = "Assertion failed") => {
       if (!condition) throw new Error("[litecanvas] " + message);
     };
-    var version = "0.207.0";
+    var version = "0.207.1";
     function litecanvas(settings = {}) {
       const root = window, math = Math, perf = performance, TWO_PI = math.PI * 2, loggerPrefix = "[Litecanvas] ", raf = requestAnimationFrame, isNumber = Number.isFinite, _browserEventListeners = [], on = (elem, evt, callback) => {
         elem.addEventListener(evt, callback, false);
@@ -690,10 +690,11 @@
             return false;
           }
           zzfxParams ||= _defaultSound;
-          if (pitchSlide || volumeFactor) {
+          if (pitchSlide || volumeFactor >= 0) {
             zzfxParams = zzfxParams.slice();
-            zzfxParams[0] = (volumeFactor || 1) * (zzfxParams[0] || 1);
+            zzfxParams[0] = volumeFactor * (zzfxParams[0] || 1);
             zzfxParams[10] = ~~zzfxParams[10] + pitchSlide;
+            console.log(zzfxParams);
           }
           zzfx.apply(0, zzfxParams);
           return zzfxParams;
