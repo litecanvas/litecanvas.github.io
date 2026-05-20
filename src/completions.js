@@ -191,7 +191,7 @@ export default function customCompletions(context) {
         label: "push",
         type: "function",
         apply: "push()",
-        detail: "",
+        detail: "(x?, y?, rot?, sx?, sy?)",
         info: "save the rendering context",
       },
       {
@@ -360,6 +360,13 @@ export default function customCompletions(context) {
         type: "function",
         apply: "ceil(",
         detail: "(value)",
+      },
+      {
+        label: "mod",
+        type: "function",
+        apply: "mod(",
+        detail: "(a, b)",
+        info: "Modulus",
       },
       {
         label: "round",

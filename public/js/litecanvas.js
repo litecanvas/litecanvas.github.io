@@ -15,7 +15,7 @@
     var assert = (condition, message = "Assertion failed") => {
       if (!condition) throw new Error("[Litecanvas] " + message);
     };
-    var version = "0.207.2";
+    var version = "0.208.0";
     function litecanvas(settings = {}) {
       const root = window, math = Math, perf = performance, TWO_PI = math.PI * 2, raf = requestAnimationFrame, isNumber = Number.isFinite, _browserEventListeners = [], on = (elem, evt, callback) => {
         elem.addEventListener(evt, callback, false);
@@ -34,7 +34,7 @@
       };
       DEV: assert(
         null == settings || "object" === typeof settings,
-        "litecanvas() 1st parameter must be a object or null"
+        "litecanvas() 1st parameter must be a object"
       );
       settings = Object.assign(defaults, settings);
       let _loop = settings.loop, _initialized = false, _paused, _canvas, _canvasScale = 1, _ctx, _outline_fix = 0.5, _timeScale = 1, _lastFrameTime, _fpsInterval = 1e3 / 60, _accumulated, _rafid = 0, _defaultTextColor = 3, _fontFamily = "sans-serif", _fontSize = 20, _fontLineHeight = 1.2, _rngSeed = Date.now(), _colorPalette = defaultPalette, _colorPaletteState = [], _defaultSound = [0.5, 0, 1750, , , 0.3, 1, , , , 600, 0.1], _eventListeners = {};
@@ -60,11 +60,19 @@
           DEV: assert(isNumber(rads), "rad2deg() 1st parameter must be a number");
           return 180 / math.PI * rads;
         },
+        mod(a, b) {
+          DEV: assert(isNumber(a), "mod() 1st parameter must be a number");
+          DEV: assert(
+            isNumber(b) && b >= 0,
+            "mod() 2nd parameter must be a non-negative number"
+          );
+          return (a % b + b) % b || 0;
+        },
         round: (n, precision = 0) => {
           DEV: assert(isNumber(n), "round() 1st parameter must be a number");
           DEV: assert(
             isNumber(precision) && precision >= 0,
-            "round() 2nd parameter must be a positive number or zero"
+            "round() 2nd parameter must be a non-negative number"
           );
           if (!precision) {
             return math.round(n);
@@ -149,14 +157,14 @@
         rseed(value) {
           DEV: assert(
             isNumber(value) && value >= 0,
-            "rseed() 1st parameter must be a positive integer or zero"
+            "rseed() 1st parameter must be a non-negative integer"
           );
           _rngSeed = ~~value;
         },
         cls(color) {
           DEV: assert(
             null == color || isNumber(color) && color >= 0,
-            "cls() 1st parameter must be a positive number or zero or undefined"
+            "cls() 1st parameter must be a non-negative number"
           );
           if (null == color) {
             _ctx.clearRect(0, 0, instance.W, instance.H);
@@ -173,11 +181,11 @@
           );
           DEV: assert(
             isNumber(height) && height >= 0,
-            "rect() 4th parameter must be a positive number or zero"
+            "rect() 4th parameter must be a non-negative number"
           );
           DEV: assert(
             null == color || isNumber(color) && color >= 0,
-            "rect() 5th parameter must be a positive number or zero"
+            "rect() 5th parameter must be a non-negative number"
           );
           DEV: assert(
             null == radii || isNumber(radii) || Array.isArray(radii) && radii.length >= 1,
@@ -198,15 +206,15 @@
           DEV: assert(isNumber(y), "rectfill() 2nd parameter must be a number");
           DEV: assert(
             isNumber(width) && width >= 0,
-            "rectfill() 3rd parameter must be a positive number or zero"
+            "rectfill() 3rd parameter must be a non-negative number"
           );
           DEV: assert(
             isNumber(height) && height >= 0,
-            "rectfill() 4th parameter must be a positive number or zero"
+            "rectfill() 4th parameter must be a non-negative number"
           );
           DEV: assert(
             null == color || isNumber(color) && color >= 0,
-            "rectfill() 5th parameter must be a positive number or zero"
+            "rectfill() 5th parameter must be a non-negative number"
           );
           DEV: assert(
             null == radii || isNumber(radii) || Array.isArray(radii) && radii.length >= 1,
@@ -221,15 +229,15 @@
           DEV: assert(isNumber(y), "oval() 2nd parameter must be a number");
           DEV: assert(
             isNumber(radiusX) && radiusX >= 0,
-            "oval() 3rd parameter must be a positive number or zero"
+            "oval() 3rd parameter must be a non-negative number"
           );
           DEV: assert(
             isNumber(radiusY) && radiusY >= 0,
-            "oval() 4th parameter must be a positive number or zero"
+            "oval() 4th parameter must be a non-negative number"
           );
           DEV: assert(
             null == color || isNumber(color) && color >= 0,
-            "oval() 5th parameter must be a positive number or zero"
+            "oval() 5th parameter must be a non-negative number"
           );
           beginPath(_ctx);
           _ctx.ellipse(~~x, ~~y, ~~radiusX, ~~radiusY, 0, 0, TWO_PI);
@@ -240,15 +248,15 @@
           DEV: assert(isNumber(y), "ovalfill() 2nd parameter must be a number");
           DEV: assert(
             isNumber(radiusX) && radiusX >= 0,
-            "ovalfill() 3rd parameter must be a positive number or zero"
+            "ovalfill() 3rd parameter must be a non-negative number"
           );
           DEV: assert(
             isNumber(radiusY) && radiusY >= 0,
-            "ovalfill() 4th parameter must be a positive number or zero"
+            "ovalfill() 4th parameter must be a non-negative number"
           );
           DEV: assert(
             null == color || isNumber(color) && color >= 0,
-            "ovalfill() 5th parameter must be a positive number or zero"
+            "ovalfill() 5th parameter must be a non-negative number"
           );
           beginPath(_ctx);
           _ctx.ellipse(~~x, ~~y, ~~radiusX, ~~radiusY, 0, 0, TWO_PI);
@@ -259,11 +267,11 @@
           DEV: assert(isNumber(y), "circ() 2nd parameter must be a number");
           DEV: assert(
             isNumber(radius) && radius >= 0,
-            "circ() 3rd parameter must be a positive number or zero"
+            "circ() 3rd parameter must be a non-negative number"
           );
           DEV: assert(
             null == color || isNumber(color) && color >= 0,
-            "circ() 4th parameter must be a positive number or zero"
+            "circ() 4th parameter must be a non-negative number"
           );
           instance.oval(x, y, radius, radius, color);
         },
@@ -272,11 +280,11 @@
           DEV: assert(isNumber(y), "circfill() 2nd parameter must be a number");
           DEV: assert(
             isNumber(radius) && radius >= 0,
-            "circfill() 3rd parameter must be a positive number or zero"
+            "circfill() 3rd parameter must be a non-negative number"
           );
           DEV: assert(
             null == color || isNumber(color) && color >= 0,
-            "circfill() 4th parameter must be a positive number or zero"
+            "circfill() 4th parameter must be a non-negative number"
           );
           instance.ovalfill(x, y, radius, radius, color);
         },
@@ -291,10 +299,10 @@
           );
           beginPath(_ctx);
           for (let i = 0; i < points.length; i += 2) {
-            if (0 === i) {
-              _ctx.moveTo(~~points[i], ~~points[i + 1]);
-            } else {
+            if (i) {
               _ctx.lineTo(~~points[i], ~~points[i + 1]);
+            } else {
+              _ctx.moveTo(~~points[i], ~~points[i + 1]);
             }
           }
           _ctx.lineTo(~~points[0], ~~points[1]);
@@ -304,19 +312,19 @@
           DEV: assert(isNumber(y1), "line() 2nd parameter must be a number");
           DEV: assert(
             isNumber(x2),
-            "line() 3rd parameter must be a positive number or zero"
+            "line() 3rd parameter must be a non-negative number"
           );
           DEV: assert(
             isNumber(y2),
-            "line() 4th parameter must be a positive number or zero"
+            "line() 4th parameter must be a non-negative number"
           );
           DEV: assert(
             null == color || isNumber(color) && color >= 0,
-            "line() 5th parameter must be a positive number or zero"
+            "line() 5th parameter must be a non-negative number"
           );
           beginPath(_ctx);
-          let xfix = _outline_fix !== 0 && ~~x1 === ~~x2 ? 0.5 : 0;
-          let yfix = _outline_fix !== 0 && ~~y1 === ~~y2 ? 0.5 : 0;
+          let xfix = _outline_fix && ~~x1 === ~~x2 ? 0.5 : 0;
+          let yfix = _outline_fix && ~~y1 === ~~y2 ? 0.5 : 0;
           _ctx.moveTo(~~x1 + xfix, ~~y1 + yfix);
           _ctx.lineTo(~~x2 + xfix, ~~y2 + yfix);
           instance.stroke(color);
@@ -324,10 +332,10 @@
         linewidth(value) {
           DEV: assert(
             isNumber(value) && value >= 0,
-            "linewidth() 1st parameter must be a positive number or zero"
+            "linewidth() 1st parameter must be a non-negative integer"
           );
           _ctx.lineWidth = ~~value;
-          _outline_fix = 0 === ~~value % 2 ? 0 : 0.5;
+          _outline_fix = ~~value % 2 ? 0.5 : 0;
         },
         linedash(segments, offset = 0) {
           DEV: assert(
@@ -346,7 +354,7 @@
           DEV: assert(isNumber(y), "text() 2nd parameter must be a number");
           DEV: assert(
             null == color || isNumber(color) && color >= 0,
-            "text() 4th parameter must be a positive number or zero"
+            "text() 4th parameter must be a non-negative number"
           );
           DEV: assert(
             "string" === typeof fontStyle,
@@ -472,8 +480,25 @@
           }
           return _ctx;
         },
-        push() {
+        push(translateX = 0, translateY = translateX, rotation = 0, scaleX = 1, scaleY = scaleX) {
+          DEV: assert(
+            isNumber(translateX),
+            "push() 1st parameter must be a number"
+          );
+          DEV: assert(
+            isNumber(translateY),
+            "push() 2nd parameter must be a number"
+          );
+          DEV: assert(
+            isNumber(rotation),
+            "push() 3rd parameter must be a number"
+          );
+          DEV: assert(isNumber(scaleX), "push() 4th parameter must be a number");
+          DEV: assert(isNumber(scaleY), "push() 5th parameter must be a number");
           _ctx.save();
+          instance.translate(translateX, translateY);
+          instance.rotate(rotation);
+          instance.scale(scaleX, scaleY);
         },
         pop() {
           _ctx.restore();
@@ -502,7 +527,7 @@
         fill(color) {
           DEV: assert(
             null == color || isNumber(color) && color >= 0,
-            "fill() 1st parameter must be a positive number or zero"
+            "fill() 1st parameter must be a non-negative number"
           );
           _ctx.fillStyle = getColor(color);
           _ctx.fill();
@@ -510,7 +535,7 @@
         stroke(color) {
           DEV: assert(
             null == color || isNumber(color) && color >= 0,
-            "stroke() 1st parameter must be a positive number or zero"
+            "stroke() 1st parameter must be a non-negative number"
           );
           _ctx.strokeStyle = getColor(color);
           _ctx.stroke();
@@ -552,7 +577,7 @@
         volume(value) {
           DEV: assert(
             isNumber(value) && value >= 0,
-            "volume() 1st parameter must be a positive number or zero"
+            "volume() 1st parameter must be a non-negative number"
           );
           root.zzfxV = value;
         },
@@ -618,7 +643,7 @@
           );
           DEV: assert(
             isNumber(textColor) && textColor >= 0,
-            "pal() 2nd parameter must be a positive number or zero"
+            "pal() 2nd parameter must be a non-negative number"
           );
           _colorPalette = colors || defaultPalette;
           _colorPaletteState = [];
@@ -634,7 +659,7 @@
             isNumber(a) ? isNumber(b) && b >= 0 : null == b,
             "palc() 2nd parameter must be a positive number"
           );
-          if (a == null) {
+          if (null == a) {
             _colorPaletteState = [];
           } else {
             _colorPaletteState[a] = b;
@@ -658,7 +683,7 @@
         timescale(value) {
           DEV: assert(
             isNumber(value) && value >= 0,
-            "timescale() 1st parameter must be a positive number or zero"
+            "timescale() 1st parameter must be a non-negative number"
           );
           _timeScale = value;
         },
@@ -763,7 +788,7 @@
           }, _checkTapped = (tap) => tap && perf.now() - tap.t <= 300;
           let _pressingMouse = false;
           on(_canvas, "mousedown", (ev) => {
-            if (ev.button === 0) {
+            if (!ev.button) {
               preventDefault(ev);
               const [x, y] = _getXY(ev);
               instance.emit("tap", x, y, 0);
@@ -772,7 +797,7 @@
             }
           });
           on(_canvas, "mouseup", (ev) => {
-            if (ev.button === 0) {
+            if (!ev.button) {
               preventDefault(ev);
               const tap = _taps.get(0);
               const [x, y] = _getXY(ev);
@@ -1000,16 +1025,16 @@
     window.litecanvas = litecanvas;
   })();
   (() => {
-    var Vt = Object.defineProperty;
-    var Ht = (t, e) => {
-      for (var s in e) Vt(t, s, { get: e[s], enumerable: true });
+    var Wt = Object.defineProperty;
+    var Xt = (t, e) => {
+      for (var s in e) Wt(t, s, { get: e[s], enumerable: true });
     };
     window.utils = window.utils || {};
     window.utils.global = (t = true) => {
       for (let e in window.utils) e !== "global" && (t || globalThis[e] === void 0) && (globalThis[e] = window.utils[e]);
     };
     var X = {};
-    Ht(X, { ANCHOR_BOT_LEFT: () => de, ANCHOR_BOT_RIGHT: () => _e, ANCHOR_CENTER: () => fe, ANCHOR_TOP_LEFT: () => ot, ANCHOR_TOP_RIGHT: () => xe, Actor: () => Z, BACK_IN: () => we, BACK_IN_OUT: () => Ie, BACK_OUT: () => Me, BOUNCE_IN: () => Nt, BOUNCE_IN_OUT: () => Re, BOUNCE_OUT: () => V, Camera: () => g, DOWN: () => me, EASE_IN: () => ye, EASE_IN_OUT: () => Ne, EASE_OUT: () => ge, ELASTIC_IN: () => Ee, ELASTIC_IN_OUT: () => Fe, ELASTIC_OUT: () => Pe, Grid: () => E, LEFT: () => pe, LINEAR: () => gt, Noise: () => W, ONE: () => he, RIGHT: () => ce, TypedGrid: () => L, UP: () => le, Vector: () => Xt, ZERO: () => at, advance: () => ut, almost: () => bt, assert: () => q, choose: () => At, clamp: () => p, colcirc: () => K, colrect: () => z, colrectcirc: () => I, dd: () => Ut, diff: () => R, dist: () => lt, flipImage: () => wt, formatTime: () => Ot, fract: () => nt, head: () => vt, includes: () => kt, intersection: () => M, is: () => A, last: () => Tt, length: () => St, lerpAngle: () => ft, lower: () => Zt, lpad: () => Ct, mag: () => ct, makeCircle: () => Et, makeRectangle: () => Pt, mean: () => mt, median: () => pt, mod: () => ht, move: () => _t, percent: () => xt, range: () => Ft, resolverect: () => j, rpad: () => Bt, scaleImage: () => Mt, shuffle: () => Rt, smoothstep: () => yt, sum: () => v, tail: () => Lt, tintImage: () => It, tween: () => be, upper: () => Yt, vec: () => u, vecAbs: () => Qt, vecAdd: () => tt, vecAngle: () => Kt, vecAngleBetween: () => $t, vecCeil: () => te, vecClamp: () => re, vecCross: () => Gt, vecDist: () => rt, vecDist2: () => zt, vecDiv: () => O, vecDot: () => C, vecEq: () => Y, vecFloor: () => ee, vecHeading: () => it, vecIsZero: () => oe, vecLerp: () => Jt, vecLimit: () => qt, vecMag: () => P, vecMag2: () => st, vecMove: () => ae, vecMult: () => F, vecNorm: () => B, vecRand: () => ue, vecReflect: () => jt, vecRem: () => ie, vecRotate: () => Dt, vecRound: () => se, vecSet: () => S, vecSetMag: () => et, vecSub: () => k, vecToArray: () => ne, wave: () => dt });
+    Xt(X, { ANCHOR_BOT_LEFT: () => _e, ANCHOR_BOT_RIGHT: () => ye, ANCHOR_CENTER: () => de, ANCHOR_TOP_LEFT: () => ot, ANCHOR_TOP_RIGHT: () => be, Actor: () => Z, BACK_IN: () => Ie, BACK_IN_OUT: () => Fe, BACK_OUT: () => Ee, BOUNCE_IN: () => wt, BOUNCE_IN_OUT: () => Ae, BOUNCE_OUT: () => V, Camera: () => g, DOWN: () => fe, EASE_IN: () => Ne, EASE_IN_OUT: () => Me, EASE_OUT: () => we, ELASTIC_IN: () => Pe, ELASTIC_IN_OUT: () => ve, ELASTIC_OUT: () => Re, Grid: () => E, LEFT: () => xe, LINEAR: () => Nt, Noise: () => W, ONE: () => ce, RIGHT: () => pe, TypedGrid: () => L, UP: () => me, Vector: () => jt, ZERO: () => at, advance: () => ut, almost: () => _t, assert: () => q, choose: () => At, clamp: () => p, colcirc: () => K, colrect: () => z, colrectcirc: () => I, copysign: () => gt, dd: () => Ht, diff: () => R, dist: () => lt, flipImage: () => Mt, formatTime: () => Bt, fract: () => nt, head: () => Tt, includes: () => Ot, intersection: () => M, is: () => v, last: () => Lt, length: () => kt, lerpAngle: () => ft, lower: () => Ut, lpad: () => Yt, mag: () => ct, makeCircle: () => Ft, makeRectangle: () => Pt, mean: () => mt, median: () => pt, mod: () => ht, move: () => bt, percent: () => xt, range: () => Rt, resolverect: () => j, rpad: () => Ct, scaleImage: () => It, score: () => Vt, shuffle: () => vt, smoothstep: () => yt, sum: () => A, tail: () => St, tintImage: () => Et, tween: () => ge, upper: () => Zt, vec: () => u, vecAbs: () => ee, vecAdd: () => tt, vecAngle: () => Gt, vecAngleBetween: () => Jt, vecCeil: () => se, vecClamp: () => ae, vecCross: () => Qt, vecDist: () => rt, vecDist2: () => $t, vecDiv: () => O, vecDot: () => C, vecEq: () => Y, vecFloor: () => re, vecHeading: () => it, vecIsZero: () => ue, vecLerp: () => te, vecLimit: () => Kt, vecMag: () => F, vecMag2: () => st, vecMove: () => ne, vecMult: () => P, vecNorm: () => B, vecRand: () => le, vecReflect: () => zt, vecRem: () => oe, vecRotate: () => qt, vecRound: () => ie, vecSet: () => S, vecSetMag: () => et, vecSub: () => k, vecToArray: () => he, wave: () => dt });
     var g = class {
       _engine = null;
       x = 0;
@@ -1078,12 +1103,12 @@
       }
     };
     var M = (t, e, s, r, i, a, o, n) => {
-      let h = Math.max(t, i), d = Math.min(t + s, i + o) - h, c = Math.max(e, a), _ = Math.min(e + r, a + n) - c;
-      return [h, c, d, _];
+      let h = Math.max(t, i), d = Math.min(t + s, i + o) - h, c = Math.max(e, a), b = Math.min(e + r, a + n) - c;
+      return [h, c, d, b];
     };
     var j = (t, e, s, r, i, a, o, n) => {
-      let [h, d, c, _] = M(t, e, s, r, i, a, o, n), x = "", y = t, l = e;
-      return c < _ ? t < i ? (x = "right", y = i - s) : (x = "left", y = i + o) : e < a ? (x = "bottom", l = a - r) : (x = "top", l = a + n), { dir: x, x: y, y: l };
+      let [h, d, c, b] = M(t, e, s, r, i, a, o, n), x = "", y = t, l = e;
+      return c < b ? t < i ? (x = "right", y = i - s) : (x = "left", y = i + o) : e < a ? (x = "bottom", l = a - r) : (x = "top", l = a + n), { dir: x, x: y, y: l };
     };
     var q = (t, e = "Assertion failed") => {
       if (!t) throw new Error(e);
@@ -1189,29 +1214,29 @@
       return t < e ? e : t > s ? s : t;
     }
     var p = (t, e, s) => t < e ? e : t > s ? s : t;
-    var J = Math.cos, Q = Math.sin, Wt = 2 * Math.PI, G = parseFloat, N = class {
+    var J = Math.cos, Q = Math.sin, Dt = 2 * Math.PI, G = parseFloat, N = class {
       constructor(e = 0, s = e) {
         this.x = G(e) || 0, this.y = G(s) || 0;
       }
       toString() {
         return `Vector (${this.x}, ${this.y})`;
       }
-    }, Xt = N, b = (t) => t instanceof N, u = (t = 0, e = t) => (b(t) && (e = t.y, t = t.x), new N(t, e)), S = (t, e, s = e) => (b(e) ? S(t, e.x, e.y) : (t.x = e, t.y = s), t), tt = (t, e, s = e) => b(e) ? tt(t, e.x, e.y) : (t.x += e, t.y += s, t), k = (t, e, s = e) => b(e) ? k(t, e.x, e.y) : (t.x -= e, t.y -= s, t), F = (t, e, s = e) => b(e) ? F(t, e.x, e.y) : (t.x *= e, t.y *= s, t), O = (t, e, s = e) => b(e) ? O(t, e.x, e.y) : (t.x /= e || 1, t.y /= s || 1, t), Dt = (t, e) => {
+    }, jt = N, _ = (t) => t instanceof N, u = (t = 0, e = t) => (_(t) && (e = t.y, t = t.x), new N(t, e)), S = (t, e, s = e) => (_(e) ? S(t, e.x, e.y) : (t.x = e, t.y = s), t), tt = (t, e, s = e) => _(e) ? tt(t, e.x, e.y) : (t.x += e, t.y += s, t), k = (t, e, s = e) => _(e) ? k(t, e.x, e.y) : (t.x -= e, t.y -= s, t), P = (t, e, s = e) => _(e) ? P(t, e.x, e.y) : (t.x *= e, t.y *= s, t), O = (t, e, s = e) => _(e) ? O(t, e.x, e.y) : (t.x /= e || 1, t.y /= s || 1, t), qt = (t, e) => {
       let s = J(e), r = Q(e);
       return t.x = s * t.x - r * t.y, t.y = r * t.x + s * t.y, t;
-    }, jt = (t, e) => {
+    }, zt = (t, e) => {
       let s = B(u(e));
-      return k(t, F(s, 2 * C(t, s)));
-    }, et = (t, e) => F(B(t), e), P = (t) => Math.hypot(t.x, t.y), st = (t) => t.x * t.x + t.y * t.y, B = (t) => {
-      let e = P(t);
+      return k(t, P(s, 2 * C(t, s)));
+    }, et = (t, e) => P(B(t), e), F = (t) => Math.hypot(t.x, t.y), st = (t) => t.x * t.x + t.y * t.y, B = (t) => {
+      let e = F(t);
       return e > 0 && O(t, e), t;
-    }, qt = (t, e = 1) => (st(t) > e * e && et(t, e), t), rt = (t, e) => Math.hypot(e.x - t.x, e.y - t.y), zt = (t, e) => {
+    }, Kt = (t, e = 1) => (st(t) > e * e && et(t, e), t), rt = (t, e) => Math.hypot(e.x - t.x, e.y - t.y), $t = (t, e) => {
       let s = t.x - e.x, r = t.y - e.y;
       return s * s + r * r;
-    }, it = (t) => Math.atan2(t.y, t.x), Kt = (t) => it(t), C = (t, e) => t.x * e.x + t.y * e.y, $t = (t, e) => {
-      let s = P(t), r = P(e);
+    }, it = (t) => Math.atan2(t.y, t.x), Gt = (t) => it(t), C = (t, e) => t.x * e.x + t.y * e.y, Jt = (t, e) => {
+      let s = F(t), r = F(e);
       return r - s ? Math.acos(p(C(t, e) / (s * r), -1, 1)) : 0;
-    }, Gt = (t, e) => t.x * e.y - t.y * e.x, Jt = (t, e, s) => (t.x += (e.x - t.x) * s || 0, t.y += (e.y - t.y) * s || 0, t), Qt = (t) => (t.x = Math.abs(t.x), t.y = Math.abs(t.y), t), te = (t) => (t.x = Math.ceil(t.x), t.y = Math.ceil(t.y), t), ee = (t) => (t.x = Math.floor(t.x), t.y = Math.floor(t.y), t), se = (t) => (t.x = Math.round(t.x), t.y = Math.round(t.y), t), re = (t, e, s) => S(t, p(t.x, e, s), p(t.y, e, s)), ie = (t, e) => (t.x %= e, t.y %= e, t), ae = (t, e, s = 1) => {
+    }, Qt = (t, e) => t.x * e.y - t.y * e.x, te = (t, e, s) => (t.x += (e.x - t.x) * s || 0, t.y += (e.y - t.y) * s || 0, t), ee = (t) => (t.x = Math.abs(t.x), t.y = Math.abs(t.y), t), se = (t) => (t.x = Math.ceil(t.x), t.y = Math.ceil(t.y), t), re = (t) => (t.x = Math.floor(t.x), t.y = Math.floor(t.y), t), ie = (t) => (t.x = Math.round(t.x), t.y = Math.round(t.y), t), ae = (t, e, s) => S(t, p(t.x, e, s), p(t.y, e, s)), oe = (t, e) => (t.x %= e, t.y %= e, t), ne = (t, e, s = 1) => {
       let r = e.x - t.x, i = e.y - t.y, a = Math.hypot(r, i);
       if (s = Math.abs(s), a <= s || a === 0) t.x = e.x, t.y = e.y;
       else {
@@ -1219,11 +1244,11 @@
         t.x = t.x + r * o, t.y = t.y + i * o;
       }
       return t;
-    }, Y = (t, e, s = e, r = 1e-5) => b(e) ? Y(t, e.x, e.y, r) : rt(t, e, s) <= r, oe = (t) => Y(t, at), ne = (t) => [t.x, t.y], ue = (t = 1, e = t, s = window.rand || Math.random) => {
-      let r = s() * Wt, i = s() * (e - t) + t;
+    }, Y = (t, e, s = e, r = 1e-5) => _(e) ? Y(t, e.x, e.y, r) : rt(t, e, s) <= r, ue = (t) => Y(t, at), he = (t) => [t.x, t.y], le = (t = 1, e = t, s = window.rand || Math.random) => {
+      let r = s() * Dt, i = s() * (e - t) + t;
       return u(J(r) * i, Q(r) * i);
-    }, at = u(0, 0), he = u(1, 1), le = u(0, -1), ce = u(1, 0), me = u(0, 1), pe = u(-1, 0);
-    var fe = u(0.5, 0.5), ot = u(0, 0), xe = u(1, 0), de = u(0, 1), _e = u(1, 1), Z = class {
+    }, at = u(0, 0), ce = u(1, 1), me = u(0, -1), pe = u(1, 0), fe = u(0, 1), xe = u(-1, 0);
+    var de = u(0.5, 0.5), ot = u(0, 0), be = u(1, 0), _e = u(0, 1), ye = u(1, 1), Z = class {
       sprite;
       pos;
       _o;
@@ -1292,7 +1317,7 @@
     };
     var R = (t, e) => Math.abs(e - t);
     var nt = (t) => t % 1;
-    var A = (t, e) => {
+    var v = (t, e) => {
       switch (e) {
         case "function":
           return t instanceof e;
@@ -1311,15 +1336,15 @@
     var ut = (t, e, s, r = 1) => {
       s && (e.x += s.x * r, e.y += s.y * r), t.x += e.x * r, t.y += e.y * r;
     };
-    var ht = (t, e) => e ? (e + t % e) % e : 0;
+    var ht = (t, e) => (t % e + e) % e || 0;
     var lt = (t, e, s, r) => Math.hypot(s - t, r - e) || 0;
     var ct = (t, e) => Math.hypot(t, e);
-    var v = (t) => {
+    var A = (t) => {
       let e = 0;
       for (let s = 0; s < t.length; s++) e += t[s];
       return e;
     };
-    var mt = (t) => v(t) / t.length;
+    var mt = (t) => A(t) / t.length;
     var pt = (t) => {
       let e = t.sort((r, i) => r - i), s = Math.floor(e.length / 2);
       return e.length % 2 === 0 ? (e[s - 1] + e[s]) / 2 : e[s];
@@ -1330,30 +1355,31 @@
     };
     var xt = (t, e, s) => p((t - e) / (s - e), 0, 1);
     var dt = (t, e, s, r = Math.sin) => t + (r(s) + 1) / 2 * (e - t);
-    var _t = (t, e, s) => Math.abs(e - t) <= s ? e : t + Math.sign(e - t) * s;
-    var bt = (t, e, s = 1e-5) => R(t, e) <= s;
+    var bt = (t, e, s) => Math.abs(e - t) <= s ? e : t + Math.sign(e - t) * s;
+    var _t = (t, e, s = 1e-5) => R(t, e) <= s;
     var yt = (t, e, s) => {
       let r = p((s - t) / (e - t), 0, 1);
       return r * r * (3 - 2 * r);
     };
-    var T = Math.PI / 2, be = (t, e, s, r = 1, i = gt) => new U(t, e, s, r, i), gt = (t) => t, ye = (t) => t * t, ge = (t) => -t * (t - 2), Ne = (t) => t < 0.5 ? 2 * t * t : -2 * t * t + 4 * t - 1, we = (t) => t * t * t - t * Math.sin(t * Math.PI), Me = (t) => {
+    var gt = (t, e) => Math.sign(e) * Math.abs(t);
+    var T = Math.PI / 2, ge = (t, e, s, r = 1, i = Nt) => new U(t, e, s, r, i), Nt = (t) => t, Ne = (t) => t * t, we = (t) => -t * (t - 2), Me = (t) => t < 0.5 ? 2 * t * t : -2 * t * t + 4 * t - 1, Ie = (t) => t * t * t - t * Math.sin(t * Math.PI), Ee = (t) => {
       let e = 1 - t;
       return 1 - (e * e * e - e * Math.sin(e * Math.PI));
-    }, Ie = (t) => {
+    }, Fe = (t) => {
       if (t < 0.5) {
         let s = 2 * t;
         return 0.5 * (s * s * s - s * Math.sin(s * Math.PI));
       }
       let e = 1 - (2 * t - 1);
       return 0.5 * (1 - (e * e * e - e * Math.sin(t * Math.PI))) + 0.5;
-    }, Ee = (t) => Math.sin(13 * T * t) * Math.pow(2, 10 * (t - 1)), Pe = (t) => Math.sin(-13 * T * (t + 1)) * Math.pow(2, -10 * t) + 1, Fe = (t) => {
+    }, Pe = (t) => Math.sin(13 * T * t) * Math.pow(2, 10 * (t - 1)), Re = (t) => Math.sin(-13 * T * (t + 1)) * Math.pow(2, -10 * t) + 1, ve = (t) => {
       if (t < 0.5) {
         let r = Math.sin(13 * T * (2 * t)), i = Math.pow(2, 10 * (2 * t - 1));
         return 0.5 * r * i;
       }
       let e = Math.sin(-13 * T * (2 * t - 1 + 1)), s = Math.pow(2, -10 * (2 * t - 1));
       return 0.5 * (e * s + 2);
-    }, Nt = (t) => 1 - V(1 - t), V = (t) => t < 4 / 11 ? 121 * t * t / 16 : t < 8 / 11 ? 363 / 40 * t * t - 99 / 10 * t + 17 / 5 : t < 9 / 10 ? 4356 / 361 * t * t - 35442 / 1805 * t + 16061 / 1805 : 54 / 5 * t * t - 513 / 25 * t + 268 / 25, Re = (t) => t < 0.5 ? 0.5 * Nt(t * 2) : 0.5 * V(t * 2 - 1) + 0.5, U = class {
+    }, wt = (t) => 1 - V(1 - t), V = (t) => t < 4 / 11 ? 121 * t * t / 16 : t < 8 / 11 ? 363 / 40 * t * t - 99 / 10 * t + 17 / 5 : t < 9 / 10 ? 4356 / 361 * t * t - 35442 / 1805 * t + 16061 / 1805 : 54 / 5 * t * t - 513 / 25 * t + 268 / 25, Ae = (t) => t < 0.5 ? 0.5 * wt(t * 2) : 0.5 * V(t * 2 - 1) + 0.5, U = class {
       running = false;
       _o;
       _p;
@@ -1426,10 +1452,10 @@
       }
       noise(e, s = 0, r = 0) {
         e < 0 && (e = -e), s < 0 && (s = -s), r < 0 && (r = -r);
-        let i = Math.floor(e), a = Math.floor(s), o = Math.floor(r), n = e - i, h = s - a, d = r - o, c, _, x = 0, y = 0.5, l, m, w;
+        let i = Math.floor(e), a = Math.floor(s), o = Math.floor(r), n = e - i, h = s - a, d = r - o, c, b, x = 0, y = 0.5, l, m, w;
         for (let D = 0; D < this._po; D++) {
           let f = i + (a << 4) + (o << 8);
-          c = H(n), _ = H(h), l = this._p[f & 4095], l += c * (this._p[f + 1 & 4095] - l), m = this._p[f + 16 & 4095], m += c * (this._p[f + 16 + 1 & 4095] - m), l += _ * (m - l), f += 256, m = this._p[f & 4095], m += c * (this._p[f + 1 & 4095] - m), w = this._p[f + 16 & 4095], w += c * (this._p[f + 16 + 1 & 4095] - w), m += _ * (w - m), l += H(d) * (m - l), x += l * y, y *= this._pf, i <<= 1, n *= 2, a <<= 1, h *= 2, o <<= 1, d *= 2, n >= 1 && (i++, n--), h >= 1 && (a++, h--), d >= 1 && (o++, d--);
+          c = H(n), b = H(h), l = this._p[f & 4095], l += c * (this._p[f + 1 & 4095] - l), m = this._p[f + 16 & 4095], m += c * (this._p[f + 16 + 1 & 4095] - m), l += b * (m - l), f += 256, m = this._p[f & 4095], m += c * (this._p[f + 1 & 4095] - m), w = this._p[f + 16 & 4095], w += c * (this._p[f + 16 + 1 & 4095] - w), m += b * (w - m), l += H(d) * (m - l), x += l * y, y *= this._pf, i <<= 1, n *= 2, a <<= 1, h *= 2, o <<= 1, d *= 2, n >= 1 && (i++, n--), h >= 1 && (a++, h--), d >= 1 && (o++, d--);
         }
         return x;
       }
@@ -1442,16 +1468,16 @@
         for (let r = 0; r < 4096; r++) this._p[r] = s();
       }
     };
-    var wt = (t, e = true, s = false, r = globalThis) => r.paint(t.width, t.height, (i) => {
+    var Mt = (t, e = true, s = false, r = globalThis) => r.paint(t.width, t.height, (i) => {
       r.push(), r.scale(e ? -1 : 1, s ? -1 : 1), r.image(e ? -t.width : 0, s ? -t.height : 0, t), r.pop();
     });
-    var Mt = (t, e, s = true, r = globalThis) => r.paint(t.width * e, t.height * e, (i) => {
+    var It = (t, e, s = true, r = globalThis) => r.paint(t.width * e, t.height * e, (i) => {
       r.push(), i.imageSmoothingEnabled = !s, r.scale(e), r.image(0, 0, t), r.pop();
     });
-    var It = (t, e, s = 1, r = globalThis) => r.paint(t.width, t.height, (i) => {
+    var Et = (t, e, s = 1, r = globalThis) => r.paint(t.width, t.height, (i) => {
       r.push(), r.alpha(s), r.rectfill(0, 0, t.width, t.height, e), i.globalCompositeOperation = "destination-atop", r.alpha(1), r.image(0, 0, t), r.pop();
     });
-    var Et = (t, e, { borderWidth: s = 0, borderColor: r = 0, engine: i = globalThis } = {}) => {
+    var Ft = (t, e, { borderWidth: s = 0, borderColor: r = 0, engine: i = globalThis } = {}) => {
       let a = t * 2 + s;
       return i.paint(a, a, () => {
         i.circfill(a / 2, a / 2, t, e), s > 0 && (i.linewidth(s), i.stroke(r));
@@ -1464,8 +1490,8 @@
         h && a.cls(i), a.rectfill(h ? r : 0, h ? r : 0, t, e, s);
       });
     };
-    var Ft = (t, e = 0, s = 1) => [...Array(t | 0).keys()].map((r) => e + s * r);
-    var Rt = (t, e = window.rand || Math.random) => {
+    var Rt = (t, e = 0, s = 1) => [...Array(t | 0).keys()].map((r) => e + s * r);
+    var vt = (t, e = window.rand || Math.random) => {
       t = [...t];
       for (let s = t.length - 1; s > 0; s--) {
         let r = Math.floor(e() * (s + 1)), i = t[s];
@@ -1474,18 +1500,19 @@
       return t;
     };
     var At = (t, e = window.rand || Math.random) => t[Math.floor(e() * t.length)];
-    var vt = (t) => t[0];
-    var Tt = (t) => t[t.length - 1];
-    var Lt = (t) => t.slice(1);
-    var St = (t) => ~~t?.length;
-    var kt = (t, e, s = 0) => t?.includes(e, s);
-    var Ot = (t) => ~~(t / 60) + ":" + (t % 60 < 10 ? "0" : "") + ~~(t % 60);
-    var Bt = (t, e, s = "0") => (t + "").padEnd(e, s);
-    var Ct = (t, e, s = "0") => (t + "").padStart(e, s);
-    var Yt = (t) => (t + "").toUpperCase();
-    var Zt = (t) => (t + "").toLowerCase();
-    var Ut = (t, e, s = globalThis) => {
-      s.pal(["blue", "#fff"]), s.cls(0), s.ctx().resetTransform(), s.textfont("monospace"), s.textsize(16), s.textalign("start", "top"), s.text(16, 16, `${e ?? "dd() output"}: ` + (A(t, "object") ? JSON.stringify(t, null, 4) : t)), s.quit();
+    var Tt = (t) => t[0];
+    var Lt = (t) => t[t.length - 1];
+    var St = (t) => t.slice(1);
+    var kt = (t) => ~~t?.length;
+    var Ot = (t, e, s = 0) => t?.includes(e, s);
+    var Bt = (t) => ~~(t / 60) + ":" + (t % 60 < 10 ? "0" : "") + ~~(t % 60);
+    var Ct = (t, e, s = "0") => (t + "").padEnd(e, s);
+    var Yt = (t, e, s = "0") => (t + "").padStart(e, s);
+    var Zt = (t) => (t + "").toUpperCase();
+    var Ut = (t) => (t + "").toLowerCase();
+    var Vt = (t, e = 6) => (t + "").padStart(e, "0");
+    var Ht = (t, e, s = globalThis) => {
+      s.pal(["blue", "#fff"]), s.cls(0), s.ctx().resetTransform(), s.textfont("monospace"), s.textsize(16), s.textalign("start", "top"), s.text(16, 16, `${e ?? "dd() output"}: ` + (v(t, "object") ? JSON.stringify(t, null, 4) : t)), s.quit();
     };
     window.utils = Object.assign(window.utils || {}, X);
   })();

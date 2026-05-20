@@ -491,7 +491,8 @@ paint(width, height, data: string[]|function, options?): ImageBitmap
 ctx(context?: CanvasRenderingContext2D): CanvasRenderingContext2D
 
 // save the canvas state
-push(): void
+// optionally, transforms (translate/rotate/scale) the canvas.
+push(translateX?, translateY?, rotation?, scaleX?, scaleY?): void
 
 // restore the canvas state to the last saved state
 pop(): void
@@ -538,13 +539,13 @@ volume(value: number): void</code></pre>
       <h2><a id="keyboard">Functions for Keyboard</a></h2>
 
       <pre><code class="language-typescript">// Checks if any or which key is currently pressed in your keyboard.
-// example: iskeydown('space') // returns true if space bar is down
+// example: iskeydown('space') returns true if space bar is down
 // example: iskeydown() // returns true for any key
 iskeydown(key: string): boolean
 
 // Checks if any or which key just got pressed in your keyboard.
-// example: iskeypressed('space') // returns true if space bar was pressed
-// example: iskeypressed() // returns true for any key
+// example: iskeypressed('space') returns true if space bar was pressed
+// example: iskeypressed() returns true for any key
 iskeypressed(key: string): boolean
 
 // Returns the last key pressed in your keyboard.
@@ -554,15 +555,20 @@ lastkey(): string</code></pre>
 
       <pre><code class="language-typescript">/** General Math */
 
+// Modules (Euclidean division).
+// note: if `b == 0` returns `0` rather than `NaN`.
+// example: mod(-1, 5) returns 4
+mod(a: number, b: number): number
+
 // Returns the rounded value of an number to optional precision.
 // example: round(PI) returns 3
 // example: round(PI, 3) returns 3.142
 round(value: number, precision = 0): number
 
 // Constrains a number between `min` and `max`.
-// example: clamp(50, 0, 100) return 50
-// example: clamp(150, 0, 100) return 100
-// example: clamp(-10, 0, 100) return 0
+// example: clamp(50, 0, 100) returns 50
+// example: clamp(150, 0, 100) returns 100
+// example: clamp(-10, 0, 100) returns 0
 clamp(value: number, min: number, max: number): number
 
 // Convert degrees to radians
@@ -572,8 +578,8 @@ deg2rad(n: number): number
 rad2deg(n: number): number
 
 // Wraps a number between `min` (inclusive) and `max` (exclusive).
-// example: wrap(50,0,100) return 50
-// example: wrap(125, 0, 100) return 25
+// example: wrap(50,0,100) returns 50
+// example: wrap(125, 0, 100) returns 25
 wrap(value, min, max): number
 
 // Re-maps a number from one range to another.
