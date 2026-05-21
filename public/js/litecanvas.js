@@ -15,7 +15,7 @@
     var assert = (condition, message = "Assertion failed") => {
       if (!condition) throw new Error("[Litecanvas] " + message);
     };
-    var version = "0.208.0";
+    var version = "0.209.0";
     function litecanvas(settings = {}) {
       const root = window, math = Math, perf = performance, TWO_PI = math.PI * 2, raf = requestAnimationFrame, isNumber = Number.isFinite, _browserEventListeners = [], on = (elem, evt, callback) => {
         elem.addEventListener(evt, callback, false);
@@ -423,18 +423,16 @@
             "string" === typeof pixels,
             "spr() 3rd parameter must be a string"
           );
-          const rows = pixels.trim().split("\n");
-          for (let row = 0; row < rows.length; row++) {
-            const chars = rows[row].trim();
-            for (let col = 0; col < chars.length; col++) {
-              const char = chars[col];
-              if (char !== "." && char !== " ") {
+          const rows = pixels.replace(/[^\w.\n]/g, "").split("\n").filter((s) => s);
+          for (let i = 0; i < rows.length; i++) {
+            for (let j = 0; j < rows[i].length; j++) {
+              if (rows[i][j] !== ".") {
                 instance.rectfill(
-                  x + col,
-                  y + row,
+                  x + j,
+                  y + i,
                   1,
                   1,
-                  parseInt(char, 36) || 0
+                  parseInt(rows[i][j], 36) || 0
                 );
               }
             }
