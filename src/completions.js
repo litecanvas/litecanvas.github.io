@@ -22,8 +22,7 @@ export default function customCompletions(context) {
         type: "variable",
       },
       { label: "PI", type: "constant" },
-      { label: "TWO_PI", type: "constant" },
-      { label: "HALF_PI", type: "constant" },
+      { label: "TAU", type: "constant" },
       // global functions
       {
         label: "litecanvas",

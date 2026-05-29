@@ -15,9 +15,9 @@
     var assert = (condition, message = "Assertion failed") => {
       if (!condition) throw new Error("[Litecanvas] " + message);
     };
-    var version = "0.209.0";
+    var version = "0.300.0";
     function litecanvas(settings = {}) {
-      const root = window, math = Math, perf = performance, TWO_PI = math.PI * 2, raf = requestAnimationFrame, isNumber = Number.isFinite, _browserEventListeners = [], on = (elem, evt, callback) => {
+      const root = window, math = Math, perf = performance, TAU = math.PI * 2, raf = requestAnimationFrame, isNumber = Number.isFinite, _browserEventListeners = [], on = (elem, evt, callback) => {
         elem.addEventListener(evt, callback, false);
         _browserEventListeners.push(
           () => elem.removeEventListener(evt, callback, false)
@@ -44,8 +44,7 @@
         T: 0,
         MX: -1,
         MY: -1,
-        TWO_PI,
-        HALF_PI: TWO_PI / 4,
+        TAU,
         lerp: (start, end, t) => {
           DEV: assert(isNumber(start), "lerp() 1st parameter must be a number");
           DEV: assert(isNumber(end), "lerp() 2nd parameter must be a number");
@@ -240,7 +239,7 @@
             "oval() 5th parameter must be a non-negative number"
           );
           beginPath(_ctx);
-          _ctx.ellipse(~~x, ~~y, ~~radiusX, ~~radiusY, 0, 0, TWO_PI);
+          _ctx.ellipse(~~x, ~~y, ~~radiusX, ~~radiusY, 0, 0, TAU);
           instance.stroke(color);
         },
         ovalfill(x, y, radiusX, radiusY, color) {
@@ -259,7 +258,7 @@
             "ovalfill() 5th parameter must be a non-negative number"
           );
           beginPath(_ctx);
-          _ctx.ellipse(~~x, ~~y, ~~radiusX, ~~radiusY, 0, 0, TWO_PI);
+          _ctx.ellipse(~~x, ~~y, ~~radiusX, ~~radiusY, 0, 0, TAU);
           instance.fill(color);
         },
         circ(x, y, radius, color) {
@@ -716,6 +715,9 @@
           );
           return internals[index];
         },
+        ispaused() {
+          return _paused;
+        },
         pause() {
           if (!_paused) {
             _paused = true;
@@ -733,9 +735,6 @@
             _paused = false;
             instance.emit("resumed");
           }
-        },
-        ispaused() {
-          return _paused;
         },
         quit() {
           instance.emit("quit");
@@ -768,6 +767,7 @@
         }
       }
       function init() {
+        resizeCanvas();
         if (settings.autoscale) {
           on(root, "resize", resizeCanvas);
         }
@@ -941,12 +941,11 @@
         );
         _ctx = _canvas.getContext("2d");
         on(_canvas, "click", () => focus());
-        resizeCanvas();
         if (!_canvas.parentNode) {
           d.body.appendChild(_canvas);
         }
-        _canvas.style.imageRendering = "pixelated";
         _canvas.oncontextmenu = () => false;
+        resizeCanvas();
       }
       function resizeCanvas() {
         DEV: assert(
@@ -961,11 +960,16 @@
           null == settings.height || settings.width > 0 && settings.height > 0,
           'litecanvas() option "width" is required when the option "height" is defined'
         );
+        DEV: assert(
+          "boolean" === typeof settings.autoscale || isNumber(settings.autoscale) && settings.autoscale > 1,
+          'litecanvas() option "autoscale" must be boolean or a number > 1'
+        );
         const width = settings.width > 0 ? settings.width : innerWidth, height = settings.width > 0 ? settings.height || settings.width : innerHeight;
         instance.def("W", width);
         instance.def("H", height);
         _canvas.width = width;
         _canvas.height = height;
+        _canvas.style = "image-rendering:pixelated";
         if (settings.autoscale) {
           let maxScale = +settings.autoscale;
           if (!_canvas.style.display) {
@@ -1315,10 +1319,10 @@
     };
     var R = (t, e) => Math.abs(e - t);
     var nt = (t) => t % 1;
-    var v = (t, e) => {
+    var v = (t, e, s) => {
       switch (e) {
         case "function":
-          return t instanceof e;
+          return typeof t == "function";
         case "array":
           return Array.isArray(t);
         case "int":
