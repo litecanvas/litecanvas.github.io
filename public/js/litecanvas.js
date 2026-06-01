@@ -15,7 +15,7 @@
     var assert = (condition, message = "Assertion failed") => {
       if (!condition) throw new Error("[Litecanvas] " + message);
     };
-    var version = "0.300.0";
+    var version = "0.301.0";
     function litecanvas(settings = {}) {
       const root = window, math = Math, perf = performance, TAU = math.PI * 2, raf = requestAnimationFrame, isNumber = Number.isFinite, _browserEventListeners = [], on = (elem, evt, callback) => {
         elem.addEventListener(evt, callback, false);
@@ -34,10 +34,10 @@
       };
       DEV: assert(
         null == settings || "object" === typeof settings,
-        "litecanvas() 1st parameter must be a object"
+        "litecanvas() 1st argument must be a object"
       );
       settings = Object.assign(defaults, settings);
-      let _loop = settings.loop, _initialized = false, _paused, _canvas, _canvasScale = 1, _ctx, _outline_fix = 0.5, _timeScale = 1, _lastFrameTime, _fpsInterval = 1e3 / 60, _accumulated, _rafid = 0, _defaultTextColor = 3, _fontFamily = "sans-serif", _fontSize = 20, _fontLineHeight = 1.2, _rngSeed = Date.now(), _colorPalette = defaultPalette, _colorPaletteState = [], _defaultSound = [0.5, 0, 1750, , , 0.3, 1, , , , 600, 0.1], _eventListeners = {};
+      let _loop = settings.loop, _initialized, _paused, _canvas, _canvasScale = 1, _ctx, _outline_fix = 0.5, _timeScale = 1, _lastFrameTime, _fpsInterval = 1e3 / 60, _accumulated, _rafid = 0, _defaultTextColor = 3, _fontFamily = "sans-serif", _fontSize = 20, _fontLineHeight = 1.2, _rngSeed = Date.now(), _colorPalette = defaultPalette, _colorPaletteState = [], _defaultSound = [0.5, 0, 1750, , , 0.3, 1, , , , 600, 0.1], _eventListeners = {};
       const instance = {
         W: 0,
         H: 0,
@@ -46,32 +46,32 @@
         MY: -1,
         TAU,
         lerp: (start, end, t) => {
-          DEV: assert(isNumber(start), "lerp() 1st parameter must be a number");
-          DEV: assert(isNumber(end), "lerp() 2nd parameter must be a number");
-          DEV: assert(isNumber(t), "lerp() 3rd parameter must be a number");
+          DEV: assert(isNumber(start), "lerp() 1st argument must be a number");
+          DEV: assert(isNumber(end), "lerp() 2nd argument must be a number");
+          DEV: assert(isNumber(t), "lerp() 3rd argument must be a number");
           return start + t * (end - start);
         },
         deg2rad: (degs) => {
-          DEV: assert(isNumber(degs), "deg2rad() 1st parameter must be a number");
+          DEV: assert(isNumber(degs), "deg2rad() 1st argument must be a number");
           return math.PI / 180 * degs;
         },
         rad2deg: (rads) => {
-          DEV: assert(isNumber(rads), "rad2deg() 1st parameter must be a number");
+          DEV: assert(isNumber(rads), "rad2deg() 1st argument must be a number");
           return 180 / math.PI * rads;
         },
         mod(a, b) {
-          DEV: assert(isNumber(a), "mod() 1st parameter must be a number");
+          DEV: assert(isNumber(a), "mod() 1st argument must be a number");
           DEV: assert(
             isNumber(b) && b >= 0,
-            "mod() 2nd parameter must be a non-negative number"
+            "mod() 2nd argument must be a non-negative number"
           );
           return (a % b + b) % b || 0;
         },
         round: (n, precision = 0) => {
-          DEV: assert(isNumber(n), "round() 1st parameter must be a number");
+          DEV: assert(isNumber(n), "round() 1st argument must be a number");
           DEV: assert(
             isNumber(precision) && precision >= 0,
-            "round() 2nd parameter must be a non-negative number"
+            "round() 2nd argument must be a non-negative number"
           );
           if (!precision) {
             return math.round(n);
@@ -80,63 +80,63 @@
           return math.round(n * multiplier) / multiplier;
         },
         clamp: (value, min, max) => {
-          DEV: assert(isNumber(value), "clamp() 1st parameter must be a number");
-          DEV: assert(isNumber(min), "clamp() 2nd parameter must be a number");
-          DEV: assert(isNumber(max), "clamp() 3rd parameter must be a number");
+          DEV: assert(isNumber(value), "clamp() 1st argument must be a number");
+          DEV: assert(isNumber(min), "clamp() 2nd argument must be a number");
+          DEV: assert(isNumber(max), "clamp() 3rd argument must be a number");
           DEV: assert(
             max >= min,
-            "clamp() the 2nd parameter must be less than the 3rd parameter"
+            "clamp() the 2nd argument must be less than the 3rd argument"
           );
           if (value < min) return min;
           if (value > max) return max;
           return value;
         },
         dist: (x1, y1, x2, y2) => {
-          DEV: assert(isNumber(x1), "dist() 1st parameter must be a number");
-          DEV: assert(isNumber(y1), "dist() 2nd parameter must be a number");
-          DEV: assert(isNumber(x2), "dist() 3rd parameter must be a number");
-          DEV: assert(isNumber(y2), "dist() 4th parameter must be a number");
+          DEV: assert(isNumber(x1), "dist() 1st argument must be a number");
+          DEV: assert(isNumber(y1), "dist() 2nd argument must be a number");
+          DEV: assert(isNumber(x2), "dist() 3rd argument must be a number");
+          DEV: assert(isNumber(y2), "dist() 4th argument must be a number");
           return math.hypot(x2 - x1, y2 - y1);
         },
         wrap: (value, min, max) => {
-          DEV: assert(isNumber(value), "wrap() 1st parameter must be a number");
-          DEV: assert(isNumber(min), "wrap() 2nd parameter must be a number");
-          DEV: assert(isNumber(max), "wrap() 3rd parameter must be a number");
+          DEV: assert(isNumber(value), "wrap() 1st argument must be a number");
+          DEV: assert(isNumber(min), "wrap() 2nd argument must be a number");
+          DEV: assert(isNumber(max), "wrap() 3rd argument must be a number");
           DEV: assert(
             max > min,
-            "wrap() the 2nd parameter must be less than the 3rd parameter"
+            "wrap() the 2nd argument must be less than the 3rd argument"
           );
           return value - (max - min) * math.floor((value - min) / (max - min));
         },
         map(value, start1, stop1, start2, stop2, withinBounds) {
-          DEV: assert(isNumber(value), "map() 1st parameter must be a number");
-          DEV: assert(isNumber(start1), "map() 2nd parameter must be a number");
-          DEV: assert(isNumber(stop1), "map() 3rd parameter must be a number");
-          DEV: assert(isNumber(start2), "map() 4th parameter must be a number");
-          DEV: assert(isNumber(stop2), "map() 5th parameter must be a number");
+          DEV: assert(isNumber(value), "map() 1st argument must be a number");
+          DEV: assert(isNumber(start1), "map() 2nd argument must be a number");
+          DEV: assert(isNumber(stop1), "map() 3rd argument must be a number");
+          DEV: assert(isNumber(start2), "map() 4th argument must be a number");
+          DEV: assert(isNumber(stop2), "map() 5th argument must be a number");
           DEV: assert(
             stop1 !== start1,
-            "map() the 2nd parameter must be different than the 3rd parameter"
+            "map() the 2nd argument must be different than the 3rd argument"
           );
           const result = (value - start1) / (stop1 - start1) * (stop2 - start2) + start2;
           return withinBounds ? instance.clamp(result, start2, stop2) : result;
         },
         norm: (value, start, stop) => {
-          DEV: assert(isNumber(value), "norm() 1st parameter must be a number");
-          DEV: assert(isNumber(start), "norm() 2nd parameter must be a number");
-          DEV: assert(isNumber(stop), "norm() 3rd parameter must be a number");
+          DEV: assert(isNumber(value), "norm() 1st argument must be a number");
+          DEV: assert(isNumber(start), "norm() 2nd argument must be a number");
+          DEV: assert(isNumber(stop), "norm() 3rd argument must be a number");
           DEV: assert(
             start !== stop,
-            "norm() the 2nd parameter must be different than the 3rd parameter"
+            "norm() the 2nd argument must be different than the 3rd argument"
           );
           return instance.map(value, start, stop, 0, 1);
         },
         rand: (min = 0, max = 1) => {
-          DEV: assert(isNumber(min), "rand() 1st parameter must be a number");
-          DEV: assert(isNumber(max), "rand() 2nd parameter must be a number");
+          DEV: assert(isNumber(min), "rand() 1st argument must be a number");
+          DEV: assert(isNumber(max), "rand() 2nd argument must be a number");
           DEV: assert(
             max >= min,
-            "rand() the 1st parameter must be less than the 2nd parameter"
+            "rand() the 1st argument must be less than the 2nd argument"
           );
           const a = 1664525;
           const c = 1013904223;
@@ -145,25 +145,25 @@
           return _rngSeed / m * (max - min) + min;
         },
         randi: (min = 0, max = 1) => {
-          DEV: assert(isNumber(min), "randi() 1st parameter must be a number");
-          DEV: assert(isNumber(max), "randi() 2nd parameter must be a number");
+          DEV: assert(isNumber(min), "randi() 1st argument must be a number");
+          DEV: assert(isNumber(max), "randi() 2nd argument must be a number");
           DEV: assert(
             max >= min,
-            "randi() the 1st parameter must be less than the 2nd parameter"
+            "randi() the 1st argument must be less than the 2nd argument"
           );
           return ~~instance.rand(min, max + 1);
         },
         rseed(value) {
           DEV: assert(
             isNumber(value) && value >= 0,
-            "rseed() 1st parameter must be a non-negative integer"
+            "rseed() 1st argument must be a non-negative integer"
           );
           _rngSeed = ~~value;
         },
         cls(color) {
           DEV: assert(
             null == color || isNumber(color) && color >= 0,
-            "cls() 1st parameter must be a non-negative number"
+            "cls() 1st argument must be a non-negative number"
           );
           if (null == color) {
             _ctx.clearRect(0, 0, instance.W, instance.H);
@@ -172,23 +172,23 @@
           }
         },
         rect(x, y, width, height, color, radii) {
-          DEV: assert(isNumber(x), "rect() 1st parameter must be a number");
-          DEV: assert(isNumber(y), "rect() 2nd parameter must be a number");
+          DEV: assert(isNumber(x), "rect() 1st argument must be a number");
+          DEV: assert(isNumber(y), "rect() 2nd argument must be a number");
           DEV: assert(
             isNumber(width) && width > 0,
-            "rect() 3rd parameter must be a positive number"
+            "rect() 3rd argument must be a positive number"
           );
           DEV: assert(
             isNumber(height) && height >= 0,
-            "rect() 4th parameter must be a non-negative number"
+            "rect() 4th argument must be a non-negative number"
           );
           DEV: assert(
             null == color || isNumber(color) && color >= 0,
-            "rect() 5th parameter must be a non-negative number"
+            "rect() 5th argument must be a non-negative number"
           );
           DEV: assert(
             null == radii || isNumber(radii) || Array.isArray(radii) && radii.length >= 1,
-            "rect() 6th parameter must be a number or array of numbers"
+            "rect() 6th argument must be a number or array of numbers"
           );
           beginPath(_ctx);
           _ctx[radii ? "roundRect" : "rect"](
@@ -201,100 +201,100 @@
           instance.stroke(color);
         },
         rectfill(x, y, width, height, color, radii) {
-          DEV: assert(isNumber(x), "rectfill() 1st parameter must be a number");
-          DEV: assert(isNumber(y), "rectfill() 2nd parameter must be a number");
+          DEV: assert(isNumber(x), "rectfill() 1st argument must be a number");
+          DEV: assert(isNumber(y), "rectfill() 2nd argument must be a number");
           DEV: assert(
             isNumber(width) && width >= 0,
-            "rectfill() 3rd parameter must be a non-negative number"
+            "rectfill() 3rd argument must be a non-negative number"
           );
           DEV: assert(
             isNumber(height) && height >= 0,
-            "rectfill() 4th parameter must be a non-negative number"
+            "rectfill() 4th argument must be a non-negative number"
           );
           DEV: assert(
             null == color || isNumber(color) && color >= 0,
-            "rectfill() 5th parameter must be a non-negative number"
+            "rectfill() 5th argument must be a non-negative number"
           );
           DEV: assert(
             null == radii || isNumber(radii) || Array.isArray(radii) && radii.length >= 1,
-            "rectfill() 6th parameter must be a number or array of at least 2 numbers"
+            "rectfill() 6th argument must be a number or array of at least 2 numbers"
           );
           beginPath(_ctx);
           _ctx[radii ? "roundRect" : "rect"](~~x, ~~y, ~~width, ~~height, radii);
           instance.fill(color);
         },
         oval(x, y, radiusX, radiusY, color) {
-          DEV: assert(isNumber(x), "oval() 1st parameter must be a number");
-          DEV: assert(isNumber(y), "oval() 2nd parameter must be a number");
+          DEV: assert(isNumber(x), "oval() 1st argument must be a number");
+          DEV: assert(isNumber(y), "oval() 2nd argument must be a number");
           DEV: assert(
             isNumber(radiusX) && radiusX >= 0,
-            "oval() 3rd parameter must be a non-negative number"
+            "oval() 3rd argument must be a non-negative number"
           );
           DEV: assert(
             isNumber(radiusY) && radiusY >= 0,
-            "oval() 4th parameter must be a non-negative number"
+            "oval() 4th argument must be a non-negative number"
           );
           DEV: assert(
             null == color || isNumber(color) && color >= 0,
-            "oval() 5th parameter must be a non-negative number"
+            "oval() 5th argument must be a non-negative number"
           );
           beginPath(_ctx);
           _ctx.ellipse(~~x, ~~y, ~~radiusX, ~~radiusY, 0, 0, TAU);
           instance.stroke(color);
         },
         ovalfill(x, y, radiusX, radiusY, color) {
-          DEV: assert(isNumber(x), "ovalfill() 1st parameter must be a number");
-          DEV: assert(isNumber(y), "ovalfill() 2nd parameter must be a number");
+          DEV: assert(isNumber(x), "ovalfill() 1st argument must be a number");
+          DEV: assert(isNumber(y), "ovalfill() 2nd argument must be a number");
           DEV: assert(
             isNumber(radiusX) && radiusX >= 0,
-            "ovalfill() 3rd parameter must be a non-negative number"
+            "ovalfill() 3rd argument must be a non-negative number"
           );
           DEV: assert(
             isNumber(radiusY) && radiusY >= 0,
-            "ovalfill() 4th parameter must be a non-negative number"
+            "ovalfill() 4th argument must be a non-negative number"
           );
           DEV: assert(
             null == color || isNumber(color) && color >= 0,
-            "ovalfill() 5th parameter must be a non-negative number"
+            "ovalfill() 5th argument must be a non-negative number"
           );
           beginPath(_ctx);
           _ctx.ellipse(~~x, ~~y, ~~radiusX, ~~radiusY, 0, 0, TAU);
           instance.fill(color);
         },
         circ(x, y, radius, color) {
-          DEV: assert(isNumber(x), "circ() 1st parameter must be a number");
-          DEV: assert(isNumber(y), "circ() 2nd parameter must be a number");
+          DEV: assert(isNumber(x), "circ() 1st argument must be a number");
+          DEV: assert(isNumber(y), "circ() 2nd argument must be a number");
           DEV: assert(
             isNumber(radius) && radius >= 0,
-            "circ() 3rd parameter must be a non-negative number"
+            "circ() 3rd argument must be a non-negative number"
           );
           DEV: assert(
             null == color || isNumber(color) && color >= 0,
-            "circ() 4th parameter must be a non-negative number"
+            "circ() 4th argument must be a non-negative number"
           );
           instance.oval(x, y, radius, radius, color);
         },
         circfill(x, y, radius, color) {
-          DEV: assert(isNumber(x), "circfill() 1st parameter must be a number");
-          DEV: assert(isNumber(y), "circfill() 2nd parameter must be a number");
+          DEV: assert(isNumber(x), "circfill() 1st argument must be a number");
+          DEV: assert(isNumber(y), "circfill() 2nd argument must be a number");
           DEV: assert(
             isNumber(radius) && radius >= 0,
-            "circfill() 3rd parameter must be a non-negative number"
+            "circfill() 3rd argument must be a non-negative number"
           );
           DEV: assert(
             null == color || isNumber(color) && color >= 0,
-            "circfill() 4th parameter must be a non-negative number"
+            "circfill() 4th argument must be a non-negative number"
           );
           instance.ovalfill(x, y, radius, radius, color);
         },
         shape(points) {
           DEV: assert(
             Array.isArray(points),
-            "shape() 1st parameter must be an array of numbers"
+            "shape() 1st argument must be an array of numbers"
           );
           DEV: assert(
             points.length >= 6,
-            "shape() 1st parameter must be an array with at least 6 numbers (3 points)"
+            "shape() 1st argument must be an array with at least 6 numbers (3 points)"
           );
           beginPath(_ctx);
           for (let i = 0; i < points.length; i += 2) {
@@ -307,19 +307,19 @@
           _ctx.lineTo(~~points[0], ~~points[1]);
         },
         line(x1, y1, x2, y2, color) {
-          DEV: assert(isNumber(x1), "line() 1st parameter must be a number");
-          DEV: assert(isNumber(y1), "line() 2nd parameter must be a number");
+          DEV: assert(isNumber(x1), "line() 1st argument must be a number");
+          DEV: assert(isNumber(y1), "line() 2nd argument must be a number");
           DEV: assert(
             isNumber(x2),
-            "line() 3rd parameter must be a non-negative number"
+            "line() 3rd argument must be a non-negative number"
           );
           DEV: assert(
             isNumber(y2),
-            "line() 4th parameter must be a non-negative number"
+            "line() 4th argument must be a non-negative number"
           );
           DEV: assert(
             null == color || isNumber(color) && color >= 0,
-            "line() 5th parameter must be a non-negative number"
+            "line() 5th argument must be a non-negative number"
           );
           beginPath(_ctx);
           let xfix = _outline_fix && ~~x1 === ~~x2 ? 0.5 : 0;
@@ -331,7 +331,7 @@
         linewidth(value) {
           DEV: assert(
             isNumber(value) && value >= 0,
-            "linewidth() 1st parameter must be a non-negative integer"
+            "linewidth() 1st argument must be a non-negative integer"
           );
           _ctx.lineWidth = ~~value;
           _outline_fix = ~~value % 2 ? 0.5 : 0;
@@ -339,25 +339,25 @@
         linedash(segments, offset = 0) {
           DEV: assert(
             Array.isArray(segments) && segments.length > 0,
-            "linedash() 1st parameter must be an array of numbers"
+            "linedash() 1st argument must be an array of numbers"
           );
           DEV: assert(
             isNumber(offset),
-            "linedash() 2nd parameter must be a number"
+            "linedash() 2nd argument must be a number"
           );
           _ctx.setLineDash(segments);
           _ctx.lineDashOffset = offset;
         },
         text(x, y, message, color = _defaultTextColor, fontStyle = "normal") {
-          DEV: assert(isNumber(x), "text() 1st parameter must be a number");
-          DEV: assert(isNumber(y), "text() 2nd parameter must be a number");
+          DEV: assert(isNumber(x), "text() 1st argument must be a number");
+          DEV: assert(isNumber(y), "text() 2nd argument must be a number");
           DEV: assert(
             null == color || isNumber(color) && color >= 0,
-            "text() 4th parameter must be a non-negative number"
+            "text() 4th argument must be a non-negative number"
           );
           DEV: assert(
             "string" === typeof fontStyle,
-            "text() 5th parameter must be a string"
+            "text() 5th argument must be a string"
           );
           _ctx.font = `${fontStyle} ${_fontSize}px ${_fontFamily}`;
           _ctx.fillStyle = getColor(color);
@@ -371,30 +371,24 @@
           }
         },
         textgap(value) {
-          DEV: assert(
-            isNumber(value),
-            "textgap() 1st parameter must be a number"
-          );
+          DEV: assert(isNumber(value), "textgap() 1st argument must be a number");
           _fontLineHeight = value;
         },
         textfont(family) {
           DEV: assert(
             "string" === typeof family,
-            "textfont() 1st parameter must be a string"
+            "textfont() 1st argument must be a string"
           );
           _fontFamily = family;
         },
         textsize(size) {
-          DEV: assert(
-            isNumber(size),
-            "textsize() 1st parameter must be a number"
-          );
+          DEV: assert(isNumber(size), "textsize() 1st argument must be a number");
           _fontSize = size;
         },
         textalign(align, baseline) {
           DEV: assert(
             null == align || ["left", "right", "center", "start", "end"].includes(align),
-            "textalign() 1st parameter must be null or one of the following strings: center, left, right, start or end."
+            "textalign() 1st argument must be null or one of the following strings: center, left, right, start or end."
           );
           DEV: assert(
             null == baseline || [
@@ -405,22 +399,22 @@
               "alphabetic",
               "ideographic"
             ].includes(baseline),
-            "textalign() 2nd parameter must be null or one of the following strings: middle, top, bottom, hanging, alphabetic or ideographic."
+            "textalign() 2nd argument must be null or one of the following strings: middle, top, bottom, hanging, alphabetic or ideographic."
           );
           if (align) _ctx.textAlign = align;
           if (baseline) _ctx.textBaseline = baseline;
         },
         image(x, y, source) {
-          DEV: assert(isNumber(x), "image() 1st parameter must be a number");
-          DEV: assert(isNumber(y), "image() 2nd parameter must be a number");
+          DEV: assert(isNumber(x), "image() 1st argument must be a number");
+          DEV: assert(isNumber(y), "image() 2nd argument must be a number");
           _ctx.drawImage(source, ~~x, ~~y);
         },
         spr(x, y, pixels) {
-          DEV: assert(isNumber(x), "spr() 1st parameter must be a number");
-          DEV: assert(isNumber(y), "spr() 2nd parameter must be a number");
+          DEV: assert(isNumber(x), "spr() 1st argument must be a number");
+          DEV: assert(isNumber(y), "spr() 2nd argument must be a number");
           DEV: assert(
             "string" === typeof pixels,
-            "spr() 3rd parameter must be a string"
+            "spr() 3rd argument must be a string"
           );
           const rows = pixels.replace(/[^\w.\n]/g, "").split("\n").filter((s) => s);
           for (let i = 0; i < rows.length; i++) {
@@ -440,23 +434,23 @@
         paint(width, height, callback, options = {}) {
           DEV: assert(
             isNumber(width) && width >= 1,
-            "paint() 1st parameter must be a positive number"
+            "paint() 1st argument must be a number >= 1"
           );
           DEV: assert(
             isNumber(height) && height >= 1,
-            "paint() 2nd parameter must be a positive number"
+            "paint() 2nd argument must be a number >= 1"
           );
           DEV: assert(
             "function" === typeof callback,
-            "paint() 3rd parameter must be a function"
+            "paint() 3rd argument must be a function"
           );
           DEV: assert(
             options && null == options.scale || isNumber(options.scale) && options.scale > 0,
-            "paint() 4th parameter (options.scale) must be a positive number"
+            "paint() 4th argument (options.scale) must be a positive number"
           );
           DEV: assert(
             options && null == options.canvas || options.canvas instanceof OffscreenCanvas,
-            "paint() 4th parameter (options.canvas) must be an OffscreenCanvas"
+            "paint() 4th argument (options.canvas) must be an OffscreenCanvas"
           );
           const canvas = options.canvas || new OffscreenCanvas(1, 1), scale = options.scale || 1, currentContext = _ctx;
           canvas.width = width * scale;
@@ -470,7 +464,7 @@
         ctx(context) {
           DEV: assert(
             null == context || context instanceof CanvasRenderingContext2D || context instanceof OffscreenCanvasRenderingContext2D,
-            "ctx() 1st parameter must be an [Offscreen]CanvasRenderingContext2D"
+            "ctx() 1st argument must be an [Offscreen]CanvasRenderingContext2D"
           );
           if (context) {
             _ctx = context;
@@ -480,18 +474,15 @@
         push(translateX = 0, translateY = translateX, rotation = 0, scaleX = 1, scaleY = scaleX) {
           DEV: assert(
             isNumber(translateX),
-            "push() 1st parameter must be a number"
+            "push() 1st argument must be a number"
           );
           DEV: assert(
             isNumber(translateY),
-            "push() 2nd parameter must be a number"
+            "push() 2nd argument must be a number"
           );
-          DEV: assert(
-            isNumber(rotation),
-            "push() 3rd parameter must be a number"
-          );
-          DEV: assert(isNumber(scaleX), "push() 4th parameter must be a number");
-          DEV: assert(isNumber(scaleY), "push() 5th parameter must be a number");
+          DEV: assert(isNumber(rotation), "push() 3rd argument must be a number");
+          DEV: assert(isNumber(scaleX), "push() 4th argument must be a number");
+          DEV: assert(isNumber(scaleY), "push() 5th argument must be a number");
           _ctx.save();
           instance.translate(translateX, translateY);
           instance.rotate(rotation);
@@ -501,30 +492,30 @@
           _ctx.restore();
         },
         translate(x, y) {
-          DEV: assert(isNumber(x), "translate() 1st parameter must be a number");
-          DEV: assert(isNumber(y), "translate() 2nd parameter must be a number");
+          DEV: assert(isNumber(x), "translate() 1st argument must be a number");
+          DEV: assert(isNumber(y), "translate() 2nd argument must be a number");
           _ctx.translate(~~x, ~~y);
         },
         scale(x, y = x) {
-          DEV: assert(isNumber(x), "scale() 1st parameter must be a number");
-          DEV: assert(isNumber(y), "scale() 2nd parameter must be a number");
+          DEV: assert(isNumber(x), "scale() 1st argument must be a number");
+          DEV: assert(isNumber(y), "scale() 2nd argument must be a number");
           _ctx.scale(x, y);
         },
         rotate(radians) {
           DEV: assert(
             isNumber(radians),
-            "rotate() 1st parameter must be a number"
+            "rotate() 1st argument must be a number"
           );
           _ctx.rotate(radians);
         },
         alpha(value) {
-          DEV: assert(isNumber(value), "alpha() 1st parameter must be a number");
+          DEV: assert(isNumber(value), "alpha() 1st argument must be a number");
           _ctx.globalAlpha = instance.clamp(value, 0, 1);
         },
         fill(color) {
           DEV: assert(
             null == color || isNumber(color) && color >= 0,
-            "fill() 1st parameter must be a non-negative number"
+            "fill() 1st argument must be a non-negative number"
           );
           _ctx.fillStyle = getColor(color);
           _ctx.fill();
@@ -532,7 +523,7 @@
         stroke(color) {
           DEV: assert(
             null == color || isNumber(color) && color >= 0,
-            "stroke() 1st parameter must be a non-negative number"
+            "stroke() 1st argument must be a non-negative number"
           );
           _ctx.strokeStyle = getColor(color);
           _ctx.stroke();
@@ -540,7 +531,7 @@
         clip(callback) {
           DEV: assert(
             "function" === typeof callback,
-            "clip() 1st parameter must be a function (ctx) => void"
+            "clip() 1st argument must be a function (ctx) => void"
           );
           beginPath(_ctx);
           callback(_ctx);
@@ -549,15 +540,15 @@
         sfx(zzfxParams, pitchSlide, volumeFactor) {
           DEV: assert(
             null == zzfxParams || Array.isArray(zzfxParams),
-            "sfx() 1st parameter must be an array"
+            "sfx() 1st argument must be an array"
           );
           DEV: assert(
             null == pitchSlide || isNumber(pitchSlide),
-            "sfx() 2nd parameter must be a number"
+            "sfx() 2nd argument must be a number"
           );
           DEV: assert(
             null == volumeFactor || isNumber(volumeFactor),
-            "sfx() 3rd parameter must be a number"
+            "sfx() 3rd argument must be a number"
           );
           if (!root.zzfxV || navigator.userActivation && !navigator.userActivation.hasBeenActive) {
             return false;
@@ -574,7 +565,7 @@
         volume(value) {
           DEV: assert(
             isNumber(value) && value >= 0,
-            "volume() 1st parameter must be a non-negative number"
+            "volume() 1st argument must be a non-negative number"
           );
           root.zzfxV = value;
         },
@@ -582,22 +573,39 @@
         use(callback, config = {}) {
           DEV: assert(
             "function" === typeof callback,
-            "use() 1st parameter must be a function (instance, config) => any"
+            "use() 1st argument must be a function (instance, config) => any"
           );
           DEV: assert(
             "object" === typeof config,
-            "use() 2nd parameter must be an object"
+            "use() 2nd argument must be an object"
           );
           loadPlugin(callback, config);
+        },
+        resize(width, height = width, autoscale) {
+          DEV: assert(
+            isNumber(width) && width >= 1,
+            "resize() 1st argument must be a number >= 1"
+          );
+          DEV: assert(
+            isNumber(height) && height >= 1,
+            "resize() 2nd argument must be a number >= 1"
+          );
+          DEV: assert(
+            null == autoscale || "boolean" === typeof autoscale || isNumber(autoscale) && autoscale > 1,
+            "resize() 3rd argument must be a boolean or a number > 1"
+          );
+          settings.height = height;
+          settings.autoscale = null == autoscale ? settings.autoscale : autoscale;
+          resizeCanvas();
         },
         listen: (eventName, callback) => {
           DEV: assert(
             "string" === typeof eventName,
-            "listen() 1st parameter must be a string"
+            "listen() 1st argument must be a string"
           );
           DEV: assert(
             "function" === typeof callback,
-            "listen() 2nd parameter must be a function"
+            "listen() 2nd argument must be a function"
           );
           eventName = lowerCase(eventName);
           _eventListeners[eventName] = _eventListeners[eventName] || /* @__PURE__ */ new Set();
@@ -606,11 +614,11 @@
         unlisten: (eventName, callback) => {
           DEV: assert(
             "string" === typeof eventName,
-            "unlisten() 1st parameter must be a string"
+            "unlisten() 1st argument must be a string"
           );
           DEV: assert(
             "function" === typeof callback,
-            "unlisten() 2nd parameter must be a function"
+            "unlisten() 2nd argument must be a function"
           );
           eventName = lowerCase(eventName);
           if (_eventListeners[eventName]) {
@@ -620,7 +628,7 @@
         emit(eventName, arg1, arg2, arg3, arg4) {
           DEV: assert(
             "string" === typeof eventName,
-            "emit() 1st parameter must be a string"
+            "emit() 1st argument must be a string"
           );
           if (_initialized) {
             eventName = lowerCase(eventName);
@@ -636,11 +644,11 @@
         pal(colors, textColor = 3) {
           DEV: assert(
             null == colors || Array.isArray(colors) && colors.length > 0,
-            "pal() 1st parameter must be null or an array of colors"
+            "pal() 1st argument must be null or an array of colors"
           );
           DEV: assert(
             isNumber(textColor) && textColor >= 0,
-            "pal() 2nd parameter must be a non-negative number"
+            "pal() 2nd argument must be a non-negative number"
           );
           _colorPalette = colors || defaultPalette;
           _colorPaletteState = [];
@@ -650,11 +658,11 @@
         palc(a, b) {
           DEV: assert(
             null == a || isNumber(a) && a >= 0,
-            "palc() 1st parameter must be a positive number"
+            "palc() 1st argument must be a positive number"
           );
           DEV: assert(
             isNumber(a) ? isNumber(b) && b >= 0 : null == b,
-            "palc() 2nd parameter must be a positive number"
+            "palc() 2nd argument must be a positive number"
           );
           if (null == a) {
             _colorPaletteState = [];
@@ -665,7 +673,7 @@
         def(key, value) {
           DEV: assert(
             "string" === typeof key,
-            "def() 1st parameter must be a string"
+            "def() 1st argument must be a string"
           );
           DEV: if (null == value) {
             console.warn(
@@ -680,19 +688,19 @@
         timescale(value) {
           DEV: assert(
             isNumber(value) && value >= 0,
-            "timescale() 1st parameter must be a non-negative number"
+            "timescale() 1st argument must be a non-negative number"
           );
           _timeScale = value;
         },
         framerate(value) {
           DEV: assert(
             isNumber(value) && value >= 1,
-            "framerate() 1st parameter must be a positive number"
+            "framerate() 1st argument must be a number >= 1"
           );
           _fpsInterval = 1e3 / ~~value;
         },
         stat(index) {
-          DEV: assert(isNumber(index), "stat() 1st parameter must be a number");
+          DEV: assert(isNumber(index), "stat() 1st argument must be a number");
           const internals = [
             settings,
             _initialized,
@@ -711,7 +719,7 @@
           ];
           DEV: assert(
             index >= 0 && index < internals.length,
-            "stat() 1st parameter must be a number between 0 and " + (internals.length - 1)
+            "stat() 1st argument must be a number between 0 and " + (internals.length - 1)
           );
           return internals[index];
         },
@@ -767,7 +775,6 @@
         }
       }
       function init() {
-        resizeCanvas();
         if (settings.autoscale) {
           on(root, "resize", resizeCanvas);
         }
@@ -864,7 +871,7 @@
           const _keysPress = /* @__PURE__ */ new Set();
           const keyCheck = (keySet, key = "") => {
             key = lowerCase(key);
-            return !key ? keySet.size > 0 : keySet.has("space" === key ? " " : key);
+            return key ? keySet.has("space" === key ? " " : key) : keySet.size > 0;
           };
           let _lastKey = "";
           on(root, "keydown", (event) => {
@@ -883,14 +890,14 @@
           instance.def("iskeydown", (key) => {
             DEV: assert(
               null == key || "string" === typeof key,
-              "iskeydown() 1st parameter must be a string or undefined"
+              "iskeydown() 1st argument must be a string"
             );
             return keyCheck(_keysDown, key);
           });
           instance.def("iskeypressed", (key) => {
             DEV: assert(
               null == key || "string" === typeof key,
-              "iskeypressed() 1st parameter must be a string or undefined"
+              "iskeypressed() 1st argument must be a string"
             );
             return keyCheck(_keysPress, key);
           });
@@ -945,7 +952,6 @@
           d.body.appendChild(_canvas);
         }
         _canvas.oncontextmenu = () => false;
-        resizeCanvas();
       }
       function resizeCanvas() {
         DEV: assert(
@@ -1016,6 +1022,7 @@
       DEV: console.info(`[litecanvas] version ${version} started`);
       DEV: console.debug(`[litecanvas] litecanvas() options =`, settings);
       setupCanvas();
+      resizeCanvas();
       if (_loop) {
         for (const eventName in _loop) {
           if (_loop[eventName]) instance.listen(eventName, _loop[eventName]);
@@ -1637,167 +1644,165 @@
     window.pluginAssetLoader = A;
   })();
   (() => {
-    var _ = (r, u, p, m, n, f, b, x) => r < n + b && r + p > n && u < f + x && u + m > f;
-    var y = (r, u, p, m, n, f) => (m - r) * (m - r) + (n - u) * (n - u) <= (p + f) * (p + f);
-    var Dt = 2 * Math.PI;
-    var N = (r, u, p, m = Math.sin) => r + (m(p) + 1) / 2 * (u - r);
-    var Er = Math.PI / 2;
-    var rt = { warnings: true };
-    function w(r, u = {}) {
-      if (r.stat(1)) throw 'Plugin Migrate should be loaded before the "init" event';
-      u = Object.assign({}, rt, u);
-      let m = { def: c, seed: f, print: T, clear: R, setfps: O, setvar: Y, textstyle: x, textmetrics: k, cliprect: F, clipcirc: S, blendmode: C, transform: L, getcolor: v, mousepos: z, resize: H, path: X, fill: W, stroke: U, clip: Z, paint: j, colrect: (...t) => (g("colrect()"), _(...t)), colcirc: (...t) => (g("colrect()"), y(...t)), wave: (...t) => (g("wave()"), N(...t)) }, n = r.stat(0);
-      function f(t) {
-        return s("seed()", "rseed()"), t && r.rseed(t), r.stat(9);
+    var _ = (e, l, c, m, o, h, b, g) => e < o + b && e + c > o && l < h + g && l + m > h;
+    var y = (e, l, c, m, o, h) => (m - e) * (m - e) + (o - l) * (o - l) <= (c + h) * (c + h);
+    var Wt = 2 * Math.PI;
+    var v = (e, l, c, m = Math.sin) => e + (m(c) + 1) / 2 * (l - e);
+    var Ts = Math.PI / 2;
+    var et = { warnings: true };
+    function w(e, l = {}) {
+      if (e.stat(1)) throw 'Plugin Migrate should be loaded before the "init" event';
+      l = Object.assign({}, et, l);
+      let m = { def: p, seed: h, print: T, clear: C, setfps: O, setvar: X, textstyle: g, textmetrics: k, cliprect: F, clipcirc: S, blendmode: R, transform: L, getcolor: E, mousepos: Y, path: H, fill: D, stroke: z, clip: Z, paint: $, colrect: (...t) => (x("colrect()"), _(...t)), colcirc: (...t) => (x("colrect()"), y(...t)), wave: (...t) => (x("wave()"), v(...t)) };
+      e.TWO_PI = e.PI * 2, e.HALF_PI = e.PI / 2;
+      let o = e.stat(0);
+      function h(t) {
+        return a("seed()", "rseed()"), t && e.rseed(t), e.stat(9);
       }
       let b = "";
-      function x(t) {
-        s("textstyle()", "the 5th param of text()"), b = t;
+      function g(t) {
+        a("textstyle()", "the 5th param of text()"), b = t;
       }
-      function T(t, e, a, i) {
-        s("print()", "text()"), r.text(t, e, a, i);
+      function T(t, s, r, n) {
+        a("print()", "text()"), e.text(t, s, r, n);
       }
-      function k(t, e) {
-        s("textmetrics()", "ctx().measureText()");
-        let a = r.ctx(), i = r.stat(10), l = r.stat(11);
-        a.font = `${b || ""} ${~~(e || i)}px ${l}`;
-        let h = a.measureText(t);
-        return h.height = h.actualBoundingBoxAscent + h.actualBoundingBoxDescent, h;
+      function k(t, s) {
+        a("textmetrics()", "ctx().measureText()");
+        let r = e.ctx(), n = e.stat(10), u = e.stat(11);
+        r.font = `${b || ""} ${~~(s || n)}px ${u}`;
+        let f = r.measureText(t);
+        return f.height = f.actualBoundingBoxAscent + f.actualBoundingBoxDescent, f;
       }
-      function F(t, e, a, i) {
-        s("cliprect()", "clip()");
-        let l = r.ctx();
-        l.beginPath(), l.rect(t, e, a, i), l.clip();
+      function F(t, s, r, n) {
+        a("cliprect()", "clip()");
+        let u = e.ctx();
+        u.beginPath(), u.rect(t, s, r, n), u.clip();
       }
-      function S(t, e, a) {
-        s("clipcirc()", "clip()");
-        let i = r.ctx();
-        i.beginPath(), i.arc(t, e, a, 0, r.TWO_PI), i.clip();
+      function S(t, s, r) {
+        a("clipcirc()", "clip()");
+        let n = e.ctx();
+        n.beginPath(), n.arc(t, s, r, 0, e.TWO_PI), n.clip();
       }
-      function v(t) {
-        s("getcolor()", "stat(5)");
-        let e = stat(5);
-        return e[~~t % e.length];
-      }
-      function C(t) {
-        s("blendmode()", "ctx().globalCompositeOperation");
-        let e = r.ctx();
-        e.globalCompositeOperation = t;
+      function E(t) {
+        a("getcolor()", "stat(5)");
+        let s = stat(5);
+        return s[~~t % s.length];
       }
       function R(t) {
-        s("clear()", "cls()"), r.cls(t);
+        a("blendmode()", "ctx().globalCompositeOperation");
+        let s = e.ctx();
+        s.globalCompositeOperation = t;
       }
-      function L(t, e, a, i, l, h, G = true) {
-        return s("transform()", "ctx().setTransform() or ctx().transform()"), r.ctx()[G ? "setTransform" : "transform"](t, e, a, i, l, h);
+      function C(t) {
+        a("clear()", "cls()"), e.cls(t);
       }
-      function z() {
-        return s("mousepos()", "MX and MY"), [MX, MY];
+      function L(t, s, r, n, u, f, q = true) {
+        return a("transform()", "ctx().setTransform() or ctx().transform()"), e.ctx()[q ? "setTransform" : "transform"](t, s, r, n, u, f);
+      }
+      function Y() {
+        return a("mousepos()", "MX and MY"), [MX, MY];
       }
       function O(t) {
-        s("setfps()", "framerate()"), r.framerate(t);
+        a("setfps()", "framerate()"), e.framerate(t);
       }
-      let o = r.def;
-      function c(t, e) {
+      let i = e.def;
+      function p(t, s) {
         switch (t) {
           case "W":
           case "WIDTH":
-            o("W", e), o("WIDTH", e);
+            i("W", s), i("WIDTH", s);
             break;
           case "H":
           case "HEIGHT":
-            o("H", e), o("HEIGHT", e);
+            i("H", s), i("HEIGHT", s);
             break;
           case "T":
           case "ELAPSED":
-            o("T", e), o("ELAPSED", e);
+            i("T", s), i("ELAPSED", s);
             break;
           case "CX":
           case "CENTERX":
-            o("CX", e), o("CENTERX", e);
+            i("CX", s), i("CENTERX", s);
             break;
           case "CY":
           case "CENTERY":
-            o("CY", e), o("CENTERY", e);
+            i("CY", s), i("CENTERY", s);
             break;
           case "MX":
           case "MOUSEX":
-            o("MX", e), o("MOUSEX", e);
+            i("MX", s), i("MOUSEX", s);
             break;
           case "MY":
           case "MOUSEY":
-            o("MY", e), o("MOUSEY", e);
+            i("MY", s), i("MOUSEY", s);
             break;
           default:
-            o(t, e);
+            i(t, s);
             break;
         }
       }
-      function Y(t, e) {
-        s("setvar()", "def()"), c(t, e);
+      function X(t, s) {
+        a("setvar()", "def()"), p(t, s);
       }
-      r.listen("resized", E);
-      function E() {
-        c("CX", r.W / 2), c("CY", r.H / 2);
+      e.listen("resized", M);
+      function M() {
+        p("CX", e.W / 2), p("CY", e.H / 2);
       }
-      E(), c("CANVAS", r.canvas());
-      function H(t, e) {
-        if (n.autoscale) throw "resize() don't works with autoscale enabled";
-        s("resize()", null, "Avoid changing the canvas dimensions at runtime."), r.CANVAS.width = t, c("W", t), r.CANVAS.height = e, c("H", e), r.emit("resized", 1);
-      }
-      for (let t of ["W", "H", "T", "CX", "CY", "MX", "MY"]) r[t] != null && c(t, r[t]);
-      s("FPS", "", "but you can use our plugin to measure the fps: https://github.com/litecanvas/plugin-frame-rate-meter"), o("FPS", ""), n.fps && r.framerate(n.fps), n.background != null && (s('"background" option', "You must update your canvas CSS"), r.listen("after:init", () => {
-        r.canvas().style.background = v(~~n.background);
+      M(), p("CANVAS", e.canvas());
+      for (let t of ["W", "H", "T", "CX", "CY", "MX", "MY"]) e[t] != null && p(t, e[t]);
+      a("FPS", "", "but you can use our plugin to measure the fps: https://github.com/litecanvas/plugin-frame-rate-meter"), i("FPS", ""), o.fps && e.framerate(o.fps), o.background != null && (a('"background" option', "You must update your canvas CSS"), e.listen("after:init", () => {
+        e.canvas().style.background = E(~~o.background);
       }));
-      function X(t) {
-        return s("path()", "`new Path2D()`", "See https://developer.mozilla.org/en-US/docs/Web/API/Path2D"), new Path2D(t);
+      function H(t) {
+        return a("path()", "`new Path2D()`", "See https://developer.mozilla.org/en-US/docs/Web/API/Path2D"), new Path2D(t);
       }
-      let B = r.fill;
-      function W(t, e) {
-        if (e instanceof Path2D) {
-          s("fill(color, path)");
-          let a = r.stat(5), i = r.ctx();
-          i.fillStyle = a[~~t % a.length], r.ctx().fill(e);
+      let B = e.fill;
+      function D(t, s) {
+        if (s instanceof Path2D) {
+          a("fill(color, path)");
+          let r = e.stat(5), n = e.ctx();
+          n.fillStyle = r[~~t % r.length], e.ctx().fill(s);
         } else B(t);
       }
-      let D = r.stroke;
-      function U(t, e) {
-        if (e instanceof Path2D) {
-          s("stroke(color, path)");
-          let a = r.stat(5), i = r.ctx();
-          i.strokeStyle = a[~~t % a.length], r.ctx().stroke(e);
-        } else D(t);
+      let W = e.stroke;
+      function z(t, s) {
+        if (s instanceof Path2D) {
+          a("stroke(color, path)");
+          let r = e.stat(5), n = e.ctx();
+          n.strokeStyle = r[~~t % r.length], e.ctx().stroke(s);
+        } else W(t);
       }
-      let V = r.clip;
+      let U = e.clip;
       function Z(t) {
-        s("clip(path)", "clip(callback)", "E.g: `clip((ctx) => ctx.rect(0, 0, 200, 200))`"), t instanceof Path2D ? r.ctx().clip(t) : V(t);
+        a("clip(path)", "clip(callback)", "E.g: `clip((ctx) => ctx.rect(0, 0, 200, 200))`"), t instanceof Path2D ? e.ctx().clip(t) : U(t);
       }
-      n.antialias && s('"antialias" option', '"pixelart" option'), n.pixelart === false && s('"pixelart" option'), n.animate === false && s('"animate" option', "pause() in the of your draw()");
-      let $ = r.paint;
-      function j(t, e, a, i) {
-        let l = a;
-        return r.spr && Array.isArray(a) && (l = () => {
-          r.spr(0, 0, a.join(`
+      o.antialias && a('"antialias" option', '"pixelart" option'), o.pixelart === false && a('"pixelart" option'), o.animate === false && a('"animate" option', "pause() in the of your draw()");
+      let V = e.paint;
+      function $(t, s, r, n) {
+        let u = r;
+        return e.spr && Array.isArray(r) && (u = () => {
+          e.spr(0, 0, r.join(`
 `));
-        }), $(t, e, l, i);
+        }), V(t, s, u, n);
       }
-      let d = r.spr;
-      d && d.length === 3 && (m.spr = function(t, e, a, i, l) {
-        Number.isFinite(a) && a > 0 ? (s("spr() width and height", "spr(x, y, pixels)"), d(t, e, l)) : d(t, e, a);
+      let d = e.spr;
+      d && d.length === 3 && (m.spr = function(t, s, r, n, u) {
+        Number.isFinite(r) && r > 0 ? (a("spr() width and height", "spr(x, y, pixels)"), d(t, s, u)) : d(t, s, r);
       });
-      let q = r.listen, M = r.unlisten;
-      M && (m.listen = (t, e) => (q(t, e), () => {
-        I("listen() not returns a function anymore. Please use unlisten(event, callback) instead."), M(t, e);
+      let j = e.listen, I = e.unlisten;
+      I && (m.listen = (t, s) => (j(t, s), () => {
+        P("listen() not returns a function anymore. Please use unlisten(event, callback) instead."), I(t, s);
       }));
-      let A = r.ispaused;
-      A && (m.paused = () => (s("paused()", "ispaused()"), A()));
-      function I(t) {
-        u.warnings && console.warn(`[litecanvas/migrate] ${t}`);
+      let A = e.ispaused;
+      A && (m.paused = () => (a("paused()", "ispaused()"), A()));
+      function P(t) {
+        l.warnings && console.warn(`[litecanvas/migrate] ${t}`);
       }
-      function s(t, e, a = "") {
-        I(`${t} is removed. ` + (e ? `Please use ${e} instead. ` : "") + a);
+      function a(t, s, r = "") {
+        P(`${t} is removed. ` + (s ? `Please use ${s} instead. ` : "") + r);
       }
-      function g(t, e = "function") {
-        s(t, `This ${e} was moved to @litecanvas/utils package.`);
+      function x(t, s = "function") {
+        a(t, `This ${s} was moved to @litecanvas/utils package.`);
       }
       return m;
     }
