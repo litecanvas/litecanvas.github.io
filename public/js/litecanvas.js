@@ -15,7 +15,7 @@
     var assert = (condition, message = "Assertion failed") => {
       if (!condition) throw new Error("[Litecanvas] " + message);
     };
-    var version = "0.301.0";
+    var version = "0.301.1";
     function litecanvas(settings = {}) {
       const root = window, math = Math, perf = performance, TAU = math.PI * 2, raf = requestAnimationFrame, isNumber = Number.isFinite, _browserEventListeners = [], on = (elem, evt, callback) => {
         elem.addEventListener(evt, callback, false);
@@ -594,6 +594,7 @@
             null == autoscale || "boolean" === typeof autoscale || isNumber(autoscale) && autoscale > 1,
             "resize() 3rd argument must be a boolean or a number > 1"
           );
+          settings.width = width;
           settings.height = height;
           settings.autoscale = null == autoscale ? settings.autoscale : autoscale;
           resizeCanvas();
