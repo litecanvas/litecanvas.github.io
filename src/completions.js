@@ -511,6 +511,12 @@ export default function customCompletions(context) {
         type: "function",
         apply: "ispaused()",
       },
+      {
+        label: "resize",
+        type: "function",
+        apply: "resize(",
+        detail: "(w, h, autoscale?)",
+      },
 
       // asset loader plugin
       {
