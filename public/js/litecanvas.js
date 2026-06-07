@@ -1655,7 +1655,7 @@
       if (e.stat(1)) throw 'Plugin Migrate should be loaded before the "init" event';
       l = Object.assign({}, et, l);
       let m = { def: p, seed: h, print: T, clear: C, setfps: O, setvar: X, textstyle: g, textmetrics: k, cliprect: F, clipcirc: S, blendmode: R, transform: L, getcolor: E, mousepos: Y, path: H, fill: D, stroke: z, clip: Z, paint: $, colrect: (...t) => (x("colrect()"), _(...t)), colcirc: (...t) => (x("colrect()"), y(...t)), wave: (...t) => (x("wave()"), v(...t)) };
-      e.TWO_PI = e.PI * 2, e.HALF_PI = e.PI / 2;
+      e.def("TWO_PI", e.PI * 2), e.def("HALF_PI", e.PI / 2);
       let o = e.stat(0);
       function h(t) {
         return a("seed()", "rseed()"), t && e.rseed(t), e.stat(9);
