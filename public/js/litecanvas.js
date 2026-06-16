@@ -15,7 +15,7 @@
     var assert = (condition, message = "Assertion failed") => {
       if (!condition) throw new Error("[Litecanvas] " + message);
     };
-    var version = "0.301.1";
+    var version = "0.302.0";
     function litecanvas(settings = {}) {
       const root = window, math = Math, perf = performance, TAU = math.PI * 2, raf = requestAnimationFrame, isNumber = Number.isFinite, _browserEventListeners = [], on = (elem, evt, callback) => {
         elem.addEventListener(evt, callback, false);
@@ -37,7 +37,7 @@
         "litecanvas() 1st argument must be a object"
       );
       settings = Object.assign(defaults, settings);
-      let _loop = settings.loop, _initialized, _paused, _canvas, _canvasScale = 1, _ctx, _outline_fix = 0.5, _timeScale = 1, _lastFrameTime, _fpsInterval = 1e3 / 60, _accumulated, _rafid = 0, _defaultTextColor = 3, _fontFamily = "sans-serif", _fontSize = 20, _fontLineHeight = 1.2, _rngSeed = Date.now(), _colorPalette = defaultPalette, _colorPaletteState = [], _defaultSound = [0.5, 0, 1750, , , 0.3, 1, , , , 600, 0.1], _eventListeners = {};
+      let _loop = settings.loop, _initialized, _paused, _canvas, _canvasScale = 1, _ctx, _outline_fix = 0.5, _timeScale = 1, _lastFrameTime, _fpsInterval = 1e3 / 60, _accumulated, _rafid = 0, _defaultTextColor = 3, _fontFamily = "sans-serif", _fontSize = 20, _fontLineHeight = 1.2, _rngSeed = Date.now(), _currentPalette = defaultPalette, _lastPalette = defaultPalette, _colorPaletteState = [], _defaultSound = [0.5, 0, 1750, , , 0.3, 1, , , , 600, 0.1], _eventListeners = {};
       const instance = {
         W: 0,
         H: 0,
@@ -651,10 +651,15 @@
             isNumber(textColor) && textColor >= 0,
             "pal() 2nd argument must be a non-negative number"
           );
-          _colorPalette = colors || defaultPalette;
+          if (null == colors) {
+            _currentPalette = _lastPalette;
+          } else {
+            _lastPalette = _currentPalette;
+            _currentPalette = colors;
+          }
           _colorPaletteState = [];
           _defaultTextColor = textColor;
-          instance.emit("pal", _colorPalette, _defaultTextColor);
+          instance.emit("pal", _currentPalette, _defaultTextColor);
         },
         palc(a, b) {
           DEV: assert(
@@ -708,7 +713,7 @@
             _fpsInterval / 1e3,
             _canvasScale,
             _eventListeners,
-            _colorPalette,
+            _currentPalette,
             _defaultSound,
             _timeScale,
             root.zzfxV,
@@ -1011,7 +1016,7 @@
       }
       function getColor(index) {
         const i = _colorPaletteState[index] ?? index;
-        return _colorPalette[~~i % _colorPalette.length];
+        return _currentPalette[~~i % _currentPalette.length];
       }
       if (settings.global) {
         if (root.ENGINE) {
