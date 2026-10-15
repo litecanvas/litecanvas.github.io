@@ -88,19 +88,41 @@
     <script src="./js/litecanvas.js"></script>
 
     <script>
-      window.printPage = window.print;
+      {
+        window.printPage = window.print;
 
-      // init eruda console
-      eruda.init({
-        tool: ["console", "elements", "network", "info"],
-        defaults: {
-          displaySize: 40,
-          transparency: 0.9,
-          theme: "Dark",
-        },
-      });
-      eruda.get("console").config.set("maxLogNum", "250");
-      eruda.get("console").config.set("displayIfErr", true);
+        // init eruda console
+        const tools = ["console", "elements", "network", "info"];
+        eruda.init({
+          tool: tools,
+          defaults: {
+            displaySize: 40,
+            transparency: 0.9,
+            theme: "Dark",
+          },
+        });
+
+        eruda.get("console").config.set("maxLogNum", "250");
+        eruda.get("console").config.set("displayIfErr", true);
+
+        // save devtools state
+        const devtools = eruda.get();
+        devtools.on("show", () => {
+          localStorage.setItem("console_open", 1);
+        });
+        devtools.on("hide", () => {
+          localStorage.removeItem("console_open");
+        });
+        devtools.on("showTool", (name) => {
+          localStorage.setItem("console_tab", name);
+        });
+        // maybe restore devtools on reload
+        if (localStorage.getItem("console_open")) {
+          const tab = localStorage.getItem("console_tab") || tools[0];
+          eruda.show();
+          devtools.showTool(tab);
+        }
+      }
 
       // init litecanvas
       ((_litecanvas) => {
