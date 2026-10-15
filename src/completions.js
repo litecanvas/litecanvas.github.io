@@ -16,20 +16,22 @@ export default function customCompletions(context) {
       {
         label: "MX",
         type: "variable",
+        info: "mouse X-position",
       },
       {
         label: "MY",
         type: "variable",
+        info: "mouse Y-position",
       },
-      { label: "PI", type: "constant" },
-      { label: "TAU", type: "constant" },
+      { label: "PI", type: "constant", info: "~3.1416" },
+      { label: "TAU", type: "constant", info: "~6.2831" },
       // global functions
       {
         label: "litecanvas",
         type: "function",
         apply: `litecanvas({})\n\nfunction init() {\n\n}\n\nfunction tapped(tx, ty) {\n\n}\n\nfunction update(dt) {\n\n}\n\nfunction draw() {\n  cls(0)\n  text(0, 0, 'Hello world')\n}`,
         detail: "(settings?: object)",
-        info: "initialize a litecanvas instance",
+        info: "initialize a Litecanvas instance",
       },
       {
         label: "cls",
@@ -109,14 +111,14 @@ export default function customCompletions(context) {
         type: "function",
         apply: "textfont(",
         detail: "(fontName)",
-        info: "default: sans-serif",
+        info: "set font family (default: sans-serif)",
       },
       {
         label: "textsize",
         type: "function",
         apply: "textsize(",
         detail: "(size)",
-        info: "default font size: 32",
+        info: "set font size",
       },
       {
         label: "textalign",
@@ -191,28 +193,28 @@ export default function customCompletions(context) {
         type: "function",
         apply: "push()",
         detail: "(x?, y?, rot?, sx?, sy?)",
-        info: "save the rendering context",
+        info: "save the rendering context, optionally, translate, rotate and scale.",
       },
       {
         label: "pop",
         type: "function",
         apply: "pop()",
         detail: "",
-        info: "restore the rendering context",
+        info: "restore the previous rendering context state",
       },
       {
         label: "pal",
         type: "function",
         apply: "pal(",
         detail: "(colors?, textColor?)",
-        info: "set or reset the color palette",
+        info: "set a palette or restore the previous",
       },
       {
         label: "palc",
         type: "function",
         apply: "palc(",
         detail: "(a, b)",
-        info: 'replace the color "a" with color "b"',
+        info: 'replace the color index "a" with color index "b" or reset the palette',
       },
       {
         label: "ctx",
@@ -380,12 +382,6 @@ export default function customCompletions(context) {
         detail: "(value)",
       },
       {
-        label: "trunc",
-        type: "function",
-        apply: "trunc(",
-        detail: "(value)",
-      },
-      {
         label: "min",
         type: "function",
         apply: "min(",
@@ -426,12 +422,6 @@ export default function customCompletions(context) {
         type: "function",
         apply: "hypot(",
         detail: "(x, y, ...)",
-      },
-      {
-        label: "exp",
-        type: "function",
-        apply: "exp(",
-        detail: "(x)",
       },
       {
         label: "timescale",

@@ -15,7 +15,7 @@
     var assert = (condition, message = "Assertion failed") => {
       if (!condition) throw new Error("[Litecanvas] " + message);
     };
-    var version = "0.302.0";
+    var version = "0.303.0";
     function litecanvas(settings = {}) {
       const root = window, math = Math, perf = performance, TAU = math.PI * 2, raf = requestAnimationFrame, isNumber = Number.isFinite, _browserEventListeners = [], on = (elem, evt, callback) => {
         elem.addEventListener(evt, callback, false);
@@ -769,7 +769,7 @@
           );
         }
       };
-      const mathProps = "PI,sin,cos,atan2,hypot,tan,abs,ceil,floor,trunc,min,max,pow,sqrt,sign,exp";
+      const mathProps = "PI,sin,cos,atan2,hypot,tan,abs,ceil,floor,min,max,pow,sqrt,sign";
       for (const k of mathProps.split(",")) {
         instance[k] = math[k];
       }
