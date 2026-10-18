@@ -15,7 +15,7 @@
     var assert = (condition, message = "Assertion failed") => {
       if (!condition) throw new Error("[Litecanvas] " + message);
     };
-    var version = "0.400.0";
+    var version = "0.401.0";
     function litecanvas(settings = {}) {
       const root = window, math = Math, perf = performance, TAU = math.PI * 2, raf = requestAnimationFrame, isNumber = Number.isFinite, _browserEventListeners = [], on = (elem, evt, callback) => {
         elem.addEventListener(evt, callback, false);
@@ -798,77 +798,57 @@
             tap.y = y;
           }, _checkTapped = (tap) => tap && perf.now() - tap.t <= 300;
           let _pressingMouse = false;
-          on(_canvas, "mousedown", (ev) => {
-            if (!ev.button) {
-              preventDefault(ev);
-              const [x, y] = _getXY(ev);
-              instance.emit("tap", x, y, 0);
-              _registerTap(0, x, y);
+          on(_canvas, "pointerdown", (ev) => {
+            const [x, y] = _getXY(ev);
+            if ("mouse" === ev.pointerType) {
+              if (ev.button) return;
               _pressingMouse = true;
             }
+            const id = ev.pointerId;
+            _registerTap(id, x, y);
+            instance.emit("tap", x, y, id);
+            _canvas.setPointerCapture(id);
           });
-          on(_canvas, "mouseup", (ev) => {
-            if (!ev.button) {
-              preventDefault(ev);
-              const tap = _taps.get(0);
-              const [x, y] = _getXY(ev);
-              if (_checkTapped(tap)) {
-                instance.emit("tapped", tap.xi, tap.yi, 0);
-              }
-              instance.emit("untap", x, y, 0);
-              _taps.delete(0);
+          on(_canvas, "pointermove", (ev) => {
+            const [x, y] = _getXY(ev);
+            if ("mouse" === ev.pointerType) {
+              instance.def("MX", x);
+              instance.def("MY", y);
+              if (!_pressingMouse) return;
+            }
+            const id = ev.pointerId;
+            if (_taps.get(id)) {
+              instance.emit("tapping", x, y, id);
+              _updateTap(id, x, y);
+            }
+          });
+          const _pointerUpHandler = (ev) => {
+            const id = ev.pointerId;
+            const tap = _taps.get(id);
+            const [x, y] = _getXY(ev);
+            if (!tap) return;
+            if ("mouse" === ev.pointerType) {
+              if (ev.button) return;
               _pressingMouse = false;
             }
-          });
-          on(root, "mousemove", (ev) => {
-            preventDefault(ev);
-            const [x, y] = _getXY(ev);
-            instance.def("MX", x);
-            instance.def("MY", y);
-            if (!_pressingMouse) return;
-            instance.emit("tapping", x, y, 0);
-            _updateTap(0, x, y);
-          });
-          on(_canvas, "touchstart", (ev) => {
-            preventDefault(ev);
-            const touches = ev.changedTouches;
-            for (const touch of touches) {
-              const [x, y] = _getXY(touch);
-              instance.emit("tap", x, y, touch.identifier + 1);
-              _registerTap(touch.identifier + 1, x, y);
+            if (_checkTapped(tap)) {
+              instance.emit("tapped", tap.xi, tap.yi, id);
             }
-          });
-          on(_canvas, "touchmove", (ev) => {
-            preventDefault(ev);
-            const touches = ev.changedTouches;
-            for (const touch of touches) {
-              const [x, y] = _getXY(touch);
-              instance.emit("tapping", x, y, touch.identifier + 1);
-              _updateTap(touch.identifier + 1, x, y);
-            }
-          });
-          const _touchEndHandler = (ev) => {
-            preventDefault(ev);
-            const existing = [];
-            for (const touch of ev.targetTouches) {
-              existing.push(touch.identifier + 1);
-            }
-            for (const [id, tap] of _taps) {
-              if (existing.includes(id)) continue;
-              if (_checkTapped(tap)) {
-                instance.emit("tapped", tap.xi, tap.yi, id);
-              }
-              instance.emit("untap", tap.x, tap.y, id);
-              _taps.delete(id);
-            }
+            instance.emit("untap", x, y, id);
+            _taps.delete(id);
+            _canvas.releasePointerCapture(id);
           };
-          on(_canvas, "touchend", _touchEndHandler);
-          on(_canvas, "touchcancel", _touchEndHandler);
+          on(_canvas, "pointerup", _pointerUpHandler);
+          on(_canvas, "pointercancel", _pointerUpHandler);
           on(root, "blur", () => {
             _pressingMouse = false;
             for (const [id, tap] of _taps) {
               instance.emit("untap", tap.x, tap.y, id);
               _taps.delete(id);
+              try {
+                _canvas.releasePointerCapture(id);
+              } catch (_) {
+              }
             }
           });
         }
@@ -981,7 +961,7 @@
         instance.def("H", height);
         _canvas.width = width;
         _canvas.height = height;
-        _canvas.style = "image-rendering:pixelated";
+        _canvas.style = "image-rendering:pixelated;touch-action:none";
         if (settings.autoscale) {
           let maxScale = +settings.autoscale;
           if (!_canvas.style.display) {
