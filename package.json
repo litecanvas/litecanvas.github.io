@@ -31,8 +31,8 @@
     "@litecanvas/utils": "latest",
     "codemirror": "^6.0.2",
     "eruda": "^3.4.3",
-    "eslint-linter-browserify": "^10.12.0",
-    "litecanvas": "0.303.0",
+    "eslint-linter-browserify": "^10.13.0",
+    "litecanvas": "0.400",
     "pako": "^2.2.0"
   }
 }

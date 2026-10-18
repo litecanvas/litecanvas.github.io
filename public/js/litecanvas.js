@@ -15,7 +15,7 @@
     var assert = (condition, message = "Assertion failed") => {
       if (!condition) throw new Error("[Litecanvas] " + message);
     };
-    var version = "0.303.0";
+    var version = "0.400.0";
     function litecanvas(settings = {}) {
       const root = window, math = Math, perf = performance, TAU = math.PI * 2, raf = requestAnimationFrame, isNumber = Number.isFinite, _browserEventListeners = [], on = (elem, evt, callback) => {
         elem.addEventListener(evt, callback, false);
@@ -162,8 +162,8 @@
         },
         cls(color) {
           DEV: assert(
-            null == color || isNumber(color) && color >= 0,
-            "cls() 1st argument must be a non-negative number"
+            null == color || isNumber(color) && color >= 0 || "string" === typeof color,
+            "cls() 1st argument must be a non-negative number or string"
           );
           if (null == color) {
             _ctx.clearRect(0, 0, instance.W, instance.H);
@@ -183,8 +183,8 @@
             "rect() 4th argument must be a non-negative number"
           );
           DEV: assert(
-            null == color || isNumber(color) && color >= 0,
-            "rect() 5th argument must be a non-negative number"
+            null == color || isNumber(color) && color >= 0 || "string" === typeof color,
+            "rect() 5th argument must be a non-negative number or string"
           );
           DEV: assert(
             null == radii || isNumber(radii) || Array.isArray(radii) && radii.length >= 1,
@@ -212,8 +212,8 @@
             "rectfill() 4th argument must be a non-negative number"
           );
           DEV: assert(
-            null == color || isNumber(color) && color >= 0,
-            "rectfill() 5th argument must be a non-negative number"
+            null == color || isNumber(color) && color >= 0 || "string" === typeof color,
+            "rectfill() 5th argument must be a non-negative number or string"
           );
           DEV: assert(
             null == radii || isNumber(radii) || Array.isArray(radii) && radii.length >= 1,
@@ -235,8 +235,8 @@
             "oval() 4th argument must be a non-negative number"
           );
           DEV: assert(
-            null == color || isNumber(color) && color >= 0,
-            "oval() 5th argument must be a non-negative number"
+            null == color || isNumber(color) && color >= 0 || "string" === typeof color,
+            "oval() 5th argument must be a non-negative number or string"
           );
           beginPath(_ctx);
           _ctx.ellipse(~~x, ~~y, ~~radiusX, ~~radiusY, 0, 0, TAU);
@@ -254,8 +254,8 @@
             "ovalfill() 4th argument must be a non-negative number"
           );
           DEV: assert(
-            null == color || isNumber(color) && color >= 0,
-            "ovalfill() 5th argument must be a non-negative number"
+            null == color || isNumber(color) && color >= 0 || "string" === typeof color,
+            "ovalfill() 5th argument must be a non-negative number or string"
           );
           beginPath(_ctx);
           _ctx.ellipse(~~x, ~~y, ~~radiusX, ~~radiusY, 0, 0, TAU);
@@ -269,8 +269,8 @@
             "circ() 3rd argument must be a non-negative number"
           );
           DEV: assert(
-            null == color || isNumber(color) && color >= 0,
-            "circ() 4th argument must be a non-negative number"
+            null == color || isNumber(color) && color >= 0 || "string" === typeof color,
+            "circ() 4th argument must be a non-negative number or string"
           );
           instance.oval(x, y, radius, radius, color);
         },
@@ -282,8 +282,8 @@
             "circfill() 3rd argument must be a non-negative number"
           );
           DEV: assert(
-            null == color || isNumber(color) && color >= 0,
-            "circfill() 4th argument must be a non-negative number"
+            null == color || isNumber(color) && color >= 0 || "string" === typeof color,
+            "circfill() 4th argument must be a non-negative number or string"
           );
           instance.ovalfill(x, y, radius, radius, color);
         },
@@ -318,8 +318,8 @@
             "line() 4th argument must be a non-negative number"
           );
           DEV: assert(
-            null == color || isNumber(color) && color >= 0,
-            "line() 5th argument must be a non-negative number"
+            null == color || isNumber(color) && color >= 0 || "string" === typeof color,
+            "line() 5th argument must be a non-negative number or string"
           );
           beginPath(_ctx);
           let xfix = _outline_fix && ~~x1 === ~~x2 ? 0.5 : 0;
@@ -352,8 +352,8 @@
           DEV: assert(isNumber(x), "text() 1st argument must be a number");
           DEV: assert(isNumber(y), "text() 2nd argument must be a number");
           DEV: assert(
-            null == color || isNumber(color) && color >= 0,
-            "text() 4th argument must be a non-negative number"
+            null == color || isNumber(color) && color >= 0 || "string" === typeof color,
+            "text() 4th argument must be a non-negative number or string"
           );
           DEV: assert(
             "string" === typeof fontStyle,
@@ -514,16 +514,16 @@
         },
         fill(color) {
           DEV: assert(
-            null == color || isNumber(color) && color >= 0,
-            "fill() 1st argument must be a non-negative number"
+            null == color || isNumber(color) && color >= 0 || "string" === typeof color,
+            "fill() 1st argument must be a non-negative number or string"
           );
           _ctx.fillStyle = getColor(color);
           _ctx.fill();
         },
         stroke(color) {
           DEV: assert(
-            null == color || isNumber(color) && color >= 0,
-            "stroke() 1st argument must be a non-negative number"
+            null == color || isNumber(color) && color >= 0 || "string" === typeof color,
+            "stroke() 1st argument must be a non-negative number or string"
           );
           _ctx.strokeStyle = getColor(color);
           _ctx.stroke();
@@ -1014,9 +1014,8 @@
           instance.def(key, pluginData[key]);
         }
       }
-      function getColor(index) {
-        const i = _colorPaletteState[index] ?? index;
-        return _currentPalette[~~i % _currentPalette.length];
+      function getColor(color) {
+        return color >= 0 ? _currentPalette[~~(_colorPaletteState[color] ?? color) % _currentPalette.length] : color;
       }
       if (settings.global) {
         if (root.ENGINE) {

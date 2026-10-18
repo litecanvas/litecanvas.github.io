@@ -313,10 +313,10 @@ function tapping(x, y, touchId) {
 }
 </code></pre>
 
-      <h2><a id="colors">Default Colors</a></h2>
+      <h2><a id="colors">Default Palette Color</a></h2>
 
       <p>
-        Every time a function asks for a color, choose must choose one of these numbers.
+        Every time a function asks for a color, choose can choose one of these numbers.
       </p>
 
       <img src="images/colors.png" alt="Default Color Palette" style="border: 2px solid white;"/>
@@ -324,7 +324,7 @@ function tapping(x, y, touchId) {
       <p>Download: <a href="/misc/litecanvas-palette.gpl">palette.gpl</a> or <a href="/misc/litecanvas-palette.json" download>palette.json</a></p>
 
       <p>
-        <blockquote><strong>Note:</strong> You can change the color palette using the <code>pal()</code> function (see below).</blockquote>
+        <blockquote><strong>Note:</strong> You can change the color palette using the <code>pal()</code> function or use any other colors (see below).</blockquote>
       </p>
 
       <h2><a id="settings">Game Configuration</a></h2>
@@ -402,36 +402,38 @@ TAU: number // approximately 6.28 radians (360°)</code></pre>
  */
 
 // clear the canvas
-// if color is a number, fill the entire screen with which color
+// if color is a number, fill the entire screen with which palette color
+// if color is a string ("black", "#000", "rgb(0,0,0)", etc), fill with that color
 // if null just clear the screen
-cls(color: number | null): void
+cls(color: number | string | null): void
 
 // draw a color-filled rectangle
 // radii is for border radius
-rectfill(x, y, w, h, color = 0, radii?: number | number[]): void
+rectfill(x, y, w, h, color?: number | string, radii?: number | number[]): void
 
 // draw a outline rectangle
 // radii is for border radius
-rect(x, y, w, h, color = 0, radii?: number | number[]): void
+rect(x, y, w, h, color?: number | string, radii?: number | number[]): void
 
 // draw a color-filled circle
-circfill(x, y, r, color = 0): void
+circfill(x, y, r, color?: number | string): void
 
 // draw a outline circle
-circ(x, y, r, color = 0): void
+circ(x, y, r, color?: number | string): void
 
 // draw a color-filled ellipse
-ovalfill(x, y, rx, ry, color = 0): void
+ovalfill(x, y, rx, ry, color?: number | string): void
 
 // draw a outline ellipse
-oval(x, y, rx, ry, color = 0): void
+oval(x, y, rx, ry, color?: number | string): void
 
-// make a shape in the canvas context. To draw the shape you must call `fill()` or `stroke()` right after.
+// make a shape in the canvas context and
+// to draw that shape you must call `fill()` or `stroke()` right after.
 // example: shape([4,0,8,8,0,8]); fill(3); // draw a triangle
 shape(points: number[]): void
 
 // draw a line from one point (x1, y1) to another (x2, y2)
-line(x1, y1, x2, y2, color = 0): void
+line(x1, y1, x2, y2, color?: number | string): void
 
 // Sets the thickness of lines
 linewidth(value: number): void
@@ -511,11 +513,11 @@ alpha(value: number): void
 
 // Fills the current path
 // see: https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/fill
-fill(color: number): void
+fill(color: number | string): void
 
 // Outlines the current path
 // see: https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/stroke
-stroke(color: number): void
+stroke(color: number | string): void
 
 // Create a clipping region based in a path (in the callback)
 // see: https://github.com/litecanvas/game-engine/blob/main/samples/clip/clip.js
