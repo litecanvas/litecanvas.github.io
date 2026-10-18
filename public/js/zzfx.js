@@ -1,5 +1,7 @@
 // prettier-ignore
-let // ZzFXMicro - Zuper Zmall Zound Zynth - v1.3.1 by Frank Force ~ 1000 bytes
+// ZzFXMicro - Zuper Zmall Zound Zynth - v1.3.1 by Frank Force ~ 1000 bytes
+// https://github.com/KilledByAPixel/ZzFX
+let
 zzfxV=.3,               // volume
 zzfxX=new AudioContext, // audio context
 zzfx=                   // play sound

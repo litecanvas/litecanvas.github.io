@@ -288,27 +288,26 @@ function resized(newScale) {
   // use `W` and `H` to get the new width and height of the canvas
 }
 
-function tapped(x, y, touchId) {
-  // called when a tap (click or touch) happens
+function tapped(x, y, tapId) {
+  // called when a tap (mouse click or touch) happens
   // equivalent to "click" browser events
   // ---
   // Notes:
-  // - The "touchId" argument is used to handle multiple touches
-  // - Each touch has a unique touchId >= 1
-  // - The touchId of mouse clicks always will be 0 (zero)
+  // - The "tapId" argument is used to handle multiple taps (touches)
+  // - Each tap has a unique tapId >= 0
 }
 
-function tap(x, y, touchId) {
+function tap(x, y, tapId) {
   // called when a tap starts
   // equivalent to "mousedown" and "touchstart" browser events
 }
 
-function untap(x, y, touchId) {
+function untap(x, y, tapId) {
   // called when a tap ends
   // equivalent to "mouseup" and "touchend" browser events
 }
 
-function tapping(x, y, touchId) {
+function tapping(x, y, tapId) {
   // called when an active tap moves
 }
 </code></pre>
@@ -340,10 +339,10 @@ settings.loop = {
   update: Function?, // (dt) => void
   draw: Function?, // (ctx) => void
   resized: Function?, // (scale) => void
-  tap: Function?, // (x, y, touchId) => void
-  untap: Function? // (x, y, touchId) => void
-  tapping: Function?, // (x, y, touchId) => void
-  tapped: Function? // (x, y, touchId) => void
+  tap: Function?, // (x, y, tapId) => void
+  untap: Function? // (x, y, tapId) => void
+  tapping: Function?, // (x, y, tapId) => void
+  tapped: Function? // (x, y, tapId) => void
 }
 
 // the canvas (by default a new canvas is created).
