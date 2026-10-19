@@ -648,17 +648,17 @@ lerp(a: number, b: number, t: number): number
 
 /** Random Number Generator (RNG) */
 
-// Generates a pseudo-random float between min (inclusive)
-// and max (exclusive)
+// Generates a pseudo-random float between
+// min (inclusive) and max (exclusive)
 rand(min = 0, max = 1.0): number
 
-// Generates a pseudo-random integer between min (inclusive)
-// and max (inclusive)
+// Generates a pseudo-random integer between
+//  min (inclusive) and max (inclusive)
 randi(min = 0, max = 1): number
 
 // initializes the random number generator (RNG) with an explicit seed value
 // By default, the initial seed is the current timestamp (from `Date.now()`).
-// Note: The value should be a integer number greater than or equal to zero.
+// Note: The value should be a non-negative integer number.
 rseed(value: number): void</code></pre>
 
       <h2><a id="engine-api">Engine API</a></h2>

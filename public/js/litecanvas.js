@@ -15,7 +15,15 @@
     var assert = (condition, message = "Assertion failed") => {
       if (!condition) throw new Error("[Litecanvas] " + message);
     };
-    var version = "0.401.0";
+    var version = "0.402.0";
+    var mulberry32 = (seed) => {
+      return () => {
+        let t = seed += 1831565813;
+        t = Math.imul(t ^ t >>> 15, t | 1);
+        t ^= t + Math.imul(t ^ t >>> 7, t | 61);
+        return ((t ^ t >>> 14) >>> 0) / 4294967296;
+      };
+    };
     function litecanvas(settings = {}) {
       const root = window, math = Math, perf = performance, TAU = math.PI * 2, raf = requestAnimationFrame, isNumber = Number.isFinite, _browserEventListeners = [], on = (elem, evt, callback) => {
         elem.addEventListener(evt, callback, false);
@@ -37,13 +45,39 @@
         "litecanvas() 1st argument must be a object"
       );
       settings = Object.assign(defaults, settings);
-      let _loop = settings.loop, _initialized, _paused, _canvas, _canvasScale = 1, _ctx, _outline_fix = 0.5, _timeScale = 1, _lastFrameTime, _fpsInterval = 1e3 / 60, _accumulated, _rafid = 0, _defaultTextColor = 3, _fontFamily = "sans-serif", _fontSize = 20, _fontLineHeight = 1.2, _rngSeed = Date.now(), _currentPalette = defaultPalette, _lastPalette = defaultPalette, _colorPaletteState = [], _defaultSound = [0.5, 0, 1750, , , 0.3, 1, , , , 600, 0.1], _eventListeners = {};
+      let _loop = settings.loop, _initialized, _paused, _canvas, _canvasScale = 1, _ctx, _outline_fix = 0.5, _timeScale = 1, _lastFrameTime, _fpsInterval = 1e3 / 60, _accumulated, _rafid = 0, _defaultTextColor = 3, _fontFamily = "sans-serif", _fontSize = 20, _fontLineHeight = 1.2, _rngSeed = Date.now(), _rngNext = mulberry32(_rngSeed >>> 0), _currentPalette = defaultPalette, _lastPalette = defaultPalette, _colorPaletteState = [], _defaultSound = [0.5, 0, 1750, , , 0.3, 1, , , , 600, 0.1], _eventListeners = {};
       const instance = {
         W: 0,
         H: 0,
         T: 0,
         MX: -1,
         MY: -1,
+        rand: (min = 0, max = 1) => {
+          DEV: assert(isNumber(min), "rand() 1st argument must be a number");
+          DEV: assert(isNumber(max), "rand() 2nd argument must be a number");
+          DEV: assert(
+            max >= min,
+            "rand() the 1st argument must be less than the 2nd argument"
+          );
+          return min + _rngNext() * (max - min);
+        },
+        randi: (min = 0, max = 1) => {
+          DEV: assert(isNumber(min), "randi() 1st argument must be a number");
+          DEV: assert(isNumber(max), "randi() 2nd argument must be a number");
+          DEV: assert(
+            max >= min,
+            "randi() the 1st argument must be less than the 2nd argument"
+          );
+          return ~~instance.rand(min, max + 1);
+        },
+        rseed(value) {
+          DEV: assert(
+            isNumber(value) && value >= 0,
+            "rseed() 1st argument must be a non-negative integer"
+          );
+          _rngSeed = value;
+          _rngNext = mulberry32(_rngSeed >>> 0);
+        },
         TAU,
         lerp: (start, end, t) => {
           DEV: assert(isNumber(start), "lerp() 1st argument must be a number");
@@ -130,35 +164,6 @@
             "norm() the 2nd argument must be different than the 3rd argument"
           );
           return instance.map(value, start, stop, 0, 1);
-        },
-        rand: (min = 0, max = 1) => {
-          DEV: assert(isNumber(min), "rand() 1st argument must be a number");
-          DEV: assert(isNumber(max), "rand() 2nd argument must be a number");
-          DEV: assert(
-            max >= min,
-            "rand() the 1st argument must be less than the 2nd argument"
-          );
-          const a = 1664525;
-          const c = 1013904223;
-          const m = 4294967296;
-          _rngSeed = (a * _rngSeed + c) % m;
-          return _rngSeed / m * (max - min) + min;
-        },
-        randi: (min = 0, max = 1) => {
-          DEV: assert(isNumber(min), "randi() 1st argument must be a number");
-          DEV: assert(isNumber(max), "randi() 2nd argument must be a number");
-          DEV: assert(
-            max >= min,
-            "randi() the 1st argument must be less than the 2nd argument"
-          );
-          return ~~instance.rand(min, max + 1);
-        },
-        rseed(value) {
-          DEV: assert(
-            isNumber(value) && value >= 0,
-            "rseed() 1st argument must be a non-negative integer"
-          );
-          _rngSeed = ~~value;
         },
         cls(color) {
           DEV: assert(
@@ -2007,6 +2012,19 @@
     window.pluginJoystick = v;
   })();
 })();
+/**
+ * Mulberry32 is a 32-bit pseudo-random number generator (PRNG).
+ * You provide a 32-bit seed, and it produces a deterministic sequence of values.
+ * The same seed always gives the same sequence.
+ *
+ * @copyright https://gist.github.com/tommyettinger/46a874533244883189143505d203312c
+ * @license CC0-1.0 (Public Domain)
+ *
+ * @param {number} seed an unsigned 32-bit integer
+ * @param {number} t
+ * @param {typeof Math.imul} i
+ * @returns {() => number}
+ */
 /*! @litecanvas/utils by Luiz Bills | MIT Licensed */
 /*! Asset Loader plugin for litecanvas by Luiz Bills | MIT Licensed */
 /*! Migrate for litecanvas by Luiz Bills | MIT Licensed */
