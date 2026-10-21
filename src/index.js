@@ -343,14 +343,16 @@ if (!smallScreen) {
 }
 
 (async () => {
-  // if (isLocalhost()) return;
+  if (isLocalhost()) return;
 
   if (!navigator.storage || !navigator.storage.persist) {
+    console.error("navigator.storage not exists");
     return;
   }
 
   const isAlreadyPersisted = await navigator.storage.persisted();
   if (isAlreadyPersisted) {
+    console.info("navigator.storage.persisted() is true");
     return;
   }
 
@@ -360,6 +362,7 @@ if (!smallScreen) {
     const timePassed = Date.now() - lastDenied;
 
     if (timePassed < sevenDaysInMs) {
+      console.info("navigator.storage.persist() was denied. Skip for now.");
       return;
     }
   }
@@ -368,8 +371,10 @@ if (!smallScreen) {
 
   if (isGranted) {
     localStorage.removeItem("persistent_storage_denied_at");
+    console.info("navigator.storage.persist() returned true.");
   } else {
     localStorage.setItem("persistent_storage_denied_at", Date.now());
+    console.info("navigator.storage.persist() returned false.");
   }
 })();
 
