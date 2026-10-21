@@ -98,7 +98,7 @@ function stopGame(evt) {
 shareButton.addEventListener("click", (evt) => {
   if (!navigator.clipboard) {
     return alert(
-      "Your browser not support this feature. Consider installing Firefox or Chrome."
+      "Your browser not support this feature. Consider installing Firefox or Chrome.",
     );
   }
   const code = window.codeEditor.state.doc.toString();
@@ -117,7 +117,7 @@ shareButton.addEventListener("click", (evt) => {
     (err) => {
       alert("Error: Unable to generate your shareable url!");
       console.error("Error on copying text to clipboard:", err);
-    }
+    },
   );
 });
 
@@ -222,7 +222,7 @@ const state = EditorState.create({
           sourceType: "script",
         },
         rules: {},
-      })
+      }),
     ),
     javascriptLanguage.data.of({
       autocomplete: customCompletions,
@@ -276,16 +276,16 @@ function decompressString(str) {
         new Uint8Array(
           atob(str)
             .split("")
-            .map((c) => c.charCodeAt(0))
+            .map((c) => c.charCodeAt(0)),
         ),
-        { to: "string" }
+        { to: "string" },
       );
       console.log("Playground url decoded successfully!");
       break;
     } catch (e) {
       console.error(
         `Failed decode the playground url (${attempts + 1}/2). Error:`,
-        e
+        e,
       );
       console.log("Trying to decode again (fixing some characters)...");
       code = null;
@@ -311,7 +311,7 @@ if (config.autosave) {
 function saveCode() {
   localStorage.setItem(
     "litecanvas_code",
-    window.codeEditor.state.doc.toString()
+    window.codeEditor.state.doc.toString(),
   );
 }
 
@@ -321,6 +321,10 @@ function loadFromStorage() {
 
 function resetStorage() {
   localStorage.clear();
+}
+
+function isLocalhost() {
+  return ["localhost", "127.0.0.1", "[::1]"].includes(location.hostname);
 }
 
 if (isMobile) {
@@ -338,14 +342,41 @@ if (!smallScreen) {
   hide(screenshotButton);
 }
 
+(async () => {
+  if (isLocalhost() || !navigator.storage || !navigator.storage.persist) {
+    return;
+  }
+
+  const isAlreadyPersisted = await navigator.storage.persisted();
+  if (isAlreadyPersisted) {
+    return;
+  }
+
+  const lastDenied = localStorage.getItem("persistent_storage_denied_at");
+  if (lastDenied) {
+    const sevenDaysInMs = 604800000; // === 7 * 24 * 60 * 60 * 1000
+    const timePassed = Date.now() - (lastDenied | 0);
+
+    if (timePassed < sevenDaysInMs) {
+      return;
+    }
+  }
+
+  const isGranted = await navigator.storage.persist();
+
+  if (isGranted) {
+    localStorage.removeItem("persistent_storage_denied_at");
+  } else {
+    localStorage.setItem("persistent_storage_denied_at", Date.now());
+  }
+})();
+
 window.isUpdateAvailable = new Promise(function (resolve) {
   if (
     url.searchParams.get("test_service_worker") === "on" ||
     ("serviceWorker" in navigator &&
       location.protocol === "https:" &&
-      !location.hostname.startsWith("127.0.0") &&
-      !location.hostname.startsWith("192.168.") &&
-      !location.hostname.startsWith("172."))
+      !isLocalhost())
   ) {
     // register service worker file
     navigator.serviceWorker
@@ -384,7 +415,7 @@ window.isUpdateAvailable = new Promise(function (resolve) {
 window.isUpdateAvailable.then((isAvailable) => {
   if (!isAvailable) return;
   const result = confirm(
-    "New Update available! Reload the webapp to see the latest changes."
+    "New Update available! Reload the webapp to see the latest changes.",
   );
   if (result) {
     location.reload();
