@@ -343,7 +343,9 @@ if (!smallScreen) {
 }
 
 (async () => {
-  if (isLocalhost() || !navigator.storage || !navigator.storage.persist) {
+  // if (isLocalhost()) return;
+
+  if (!navigator.storage || !navigator.storage.persist) {
     return;
   }
 
@@ -355,7 +357,7 @@ if (!smallScreen) {
   const lastDenied = +localStorage.getItem("persistent_storage_denied_at") || 0;
   if (lastDenied) {
     const sevenDaysInMs = 604800000; // === 7 * 24 * 60 * 60 * 1000
-    const timePassed = Date.now() - (lastDenied | 0);
+    const timePassed = Date.now() - lastDenied;
 
     if (timePassed < sevenDaysInMs) {
       return;
