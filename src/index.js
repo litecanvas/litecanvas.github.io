@@ -352,7 +352,7 @@ if (!smallScreen) {
     return;
   }
 
-  const lastDenied = localStorage.getItem("persistent_storage_denied_at");
+  const lastDenied = +localStorage.getItem("persistent_storage_denied_at") || 0;
   if (lastDenied) {
     const sevenDaysInMs = 604800000; // === 7 * 24 * 60 * 60 * 1000
     const timePassed = Date.now() - (lastDenied | 0);
