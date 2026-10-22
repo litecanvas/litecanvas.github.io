@@ -93,6 +93,12 @@ svg {
   color: #606060;
 }
 
+.top-bar button#debug-mode.active {
+  --color-debug-mode: #c92a2a;
+  color: var(--color-debug-mode);
+  border-color: var(--color-debug-mode);
+}
+
 .editor {
   display: flex;
   flex-flow: row wrap;

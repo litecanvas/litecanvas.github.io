@@ -64,6 +64,7 @@ const code = $(".code");
 const game = $(".game");
 const playButton = $("#play");
 const screenshotButton = $("#screenshot");
+const debugModeButton = $("#debug-mode");
 const stopButton = $("#stop");
 const shareButton = $("#share");
 const hideEditor = $("#hide-editor");
@@ -77,6 +78,7 @@ playButton.addEventListener("click", () => {
   hide(playButton);
   show(stopButton);
   show(screenshotButton);
+  show(debugModeButton);
   runCode();
   if (smallScreen) {
     getIframe().focus();
@@ -92,6 +94,7 @@ function stopGame(evt) {
   show(playButton);
   hide(stopButton);
   hide(screenshotButton);
+  hide(debugModeButton);
   getIframe().remove();
 }
 
@@ -150,9 +153,36 @@ screenshotButton.addEventListener("click", () => {
   }
 });
 
-function runCode() {
+let debugModeActivated = "yes" === localStorage.getItem("debug_mode_on");
+
+updateDebugModeButton();
+
+function updateDebugModeButton() {
+  if (debugModeActivated) {
+    debugModeButton.classList.add("active");
+  } else {
+    debugModeButton.classList.remove("active");
+  }
+}
+
+debugModeButton.addEventListener("click", () => {
+  debugModeActivated = !debugModeActivated;
+  updateDebugModeButton();
+  localStorage.setItem("debug_mode_on", debugModeActivated ? "yes" : "no");
+  runCode(true);
+});
+
+function runCode(clearContent = false) {
   const iframe = getIframe();
-  iframe.src = "./preview.html"; // reload the iframe
+
+  if (clearContent) {
+    const iframeDocument = getIframe().contentDocument;
+    if (iframeDocument) {
+      iframeDocument.body.remove();
+    }
+  }
+
+  iframe.src = `./preview.html`; // reload the iframe
   if (!iframe.onload) {
     iframe.onload = loadCode;
   }
@@ -335,11 +365,13 @@ if (isMobile) {
 if (!smallScreen) {
   show(hideEditor);
   show(screenshotButton);
+  show(debugModeButton);
   if (autoplay) runCode();
 } else {
   show(playButton);
   hide(game);
   hide(screenshotButton);
+  hide(debugModeButton);
 }
 
 (async () => {

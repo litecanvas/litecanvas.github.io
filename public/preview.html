@@ -65,98 +65,121 @@
       </p>
     </div>
 
-    <script>
-      // blue screen of death
-      let errorMessage = null;
-      handleError = (e) => {
-        if (errorMessage) return;
-        errorMessage = e.message || e.reason;
-        if (errorMessage.includes("Potential infinite loop")) {
-          errorMessage = "Error: Potential infinite loop";
-          window["err-tip"].textContent =
-            "Tip: Check your code loops (for, while, etc)";
-        }
-        console.error(errorMessage);
-        err.prepend(errorMessage);
-        err.style.display = "block";
-      };
-      addEventListener("error", handleError);
-      addEventListener("unhandledrejection", handleError);
-    </script>
-
-    <script src="./js/eruda.js"></script>
-    <script src="./js/litecanvas.js"></script>
+    <!-- the editor user code -->
+    <script id="code" type="text/plain"></script>
 
     <script>
-      {
-        window.printPage = window.print;
+      (() => {
+        const codeTag = document.querySelector("script#code");
+        _checkUserCode();
 
-        // init eruda console
-        const tools = ["console", "elements", "network", "info"];
-        eruda.init({
-          tool: tools,
-          defaults: {
-            displaySize: 30,
-            transparency: 0.95,
-            theme: "Dark",
-          },
-        });
-
-        eruda.get("console").config.set("maxLogNum", "250");
-        eruda.get("console").config.set("displayIfErr", true);
-
-        // save devtools state
-        const devtools = eruda.get();
-        devtools.on("show", () => {
-          localStorage.setItem("console_open", 1);
-        });
-        devtools.on("hide", () => {
-          localStorage.removeItem("console_open");
-        });
-        devtools.on("showTool", (name) => {
-          localStorage.setItem("console_tab", name);
-        });
-        // maybe restore devtools on reload
-        if (localStorage.getItem("console_open")) {
-          const tab = localStorage.getItem("console_tab") || tools[0];
-          eruda.show();
-          devtools.showTool(tab);
+        function _checkUserCode() {
+          if (codeTag.innerHTML) {
+            _startPreview();
+          } else {
+            setTimeout(_checkUserCode, 100);
+          }
         }
-      }
 
-      // init litecanvas
-      ((_litecanvas) => {
-        // expose the utils to global context
-        utils.global(false);
+        function _startPreview() {
+          const debugMode = localStorage.getItem("debug_mode_on") === "yes";
 
-        window.litecanvas = (settings = {}) => {
-          const instance = _litecanvas(settings);
+          if (debugMode) {
+            // blue screen of death
+            let errorMessage = null;
+            handleError = (e) => {
+              if (errorMessage) return;
+              errorMessage = e.message || e.reason;
+              if (errorMessage.includes("Potential infinite loop")) {
+                errorMessage = "Error: Potential infinite loop";
+                window["err-tip"].textContent =
+                  "Tip: Check your code loops (for, while, etc)";
+              }
+              console.error(errorMessage);
+              err.prepend(errorMessage);
+              err.style.display = "block";
+            };
+            addEventListener("error", handleError);
+            addEventListener("unhandledrejection", handleError);
 
-          // load plugins
-          instance.use(pluginMigrate);
-          instance.use(pluginFrameRateMeter);
-          instance.use(pluginPixelFont);
-          instance.listen("before:init", () => {
-            instance.use(pluginAssetLoader);
-            instance.use(pluginJoystick);
-            joystick.disable();
-          });
+            const erudaScript = document.createElement("script");
+            erudaScript.src = "./js/eruda.js";
+            erudaScript.onload = () => {
+              // init eruda console
+              const tools = ["console", "elements", "network", "info"];
+              eruda.init({
+                tool: tools,
+                defaults: {
+                  displaySize: 30,
+                  transparency: 0.95,
+                  theme: "Dark",
+                },
+              });
 
-          window.__litecanvas__ = true;
+              eruda.get("console").config.set("maxLogNum", "250");
+              eruda.get("console").config.set("displayIfErr", true);
 
-          return instance;
-        };
-      })(window.litecanvas);
-    </script>
+              // save devtools state
+              const devtools = eruda.get();
+              devtools.on("show", () => {
+                localStorage.setItem("console_open", 1);
+              });
+              devtools.on("hide", () => {
+                localStorage.removeItem("console_open");
+              });
+              devtools.on("showTool", (name) => {
+                localStorage.setItem("console_tab", name);
+              });
+              // maybe restore devtools on reload
+              if (localStorage.getItem("console_open")) {
+                const tab = localStorage.getItem("console_tab") || tools[0];
+                eruda.show();
+                devtools.showTool(tab);
+              }
+            };
+            document.body.appendChild(erudaScript);
+          }
 
-    <script id="code"></script>
+          const litecanvasScript = document.createElement("script");
+          litecanvasScript.src = `./js/litecanvas${debugMode ? ".dev" : ""}.js`;
+          litecanvasScript.onload = () => {
+            const _litecanvas = window.litecanvas;
+            // expose the utils to global context
+            utils.global(false);
 
-    <script>
-      setTimeout(() => {
-        if (!window.__litecanvas__) {
-          throw new Error("You must call the litecanvas() function");
+            window.litecanvas = (settings = {}) => {
+              const instance = _litecanvas(settings);
+
+              // load plugins
+              instance.use(pluginMigrate);
+              instance.use(pluginFrameRateMeter, {
+                hidden: !debugMode,
+              });
+              instance.use(pluginPixelFont);
+              instance.listen("before:init", () => {
+                instance.use(pluginAssetLoader);
+                instance.use(pluginJoystick);
+                joystick.disable();
+              });
+
+              window.__litecanvas__ = true;
+
+              return instance;
+            };
+
+            const codeRunner = document.createElement("script");
+            codeRunner.innerHTML = codeTag.innerHTML;
+            codeRunner.onload = () => {
+              if (!window.__litecanvas__) {
+                throw new Error("You must call the litecanvas() function");
+              }
+            };
+            document.body.append(codeRunner);
+            codeTag.remove();
+          };
+          document.body.appendChild(litecanvasScript);
         }
-      }, 50);
+      })();
     </script>
   </body>
 </html>
