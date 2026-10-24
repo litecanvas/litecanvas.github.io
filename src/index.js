@@ -63,11 +63,13 @@ const desktopExtensions = [];
 const code = $(".code");
 const game = $(".game");
 const playButton = $("#play");
-const screenshotButton = $("#screenshot");
-const debugModeButton = $("#debug-mode");
 const stopButton = $("#stop");
 const shareButton = $("#share");
 const hideEditor = $("#hide-editor");
+const screenshotButton = $("#screenshot");
+const debugModeButton = $("#debug-mode");
+const reloadPreviewButton = $("#reload-preview");
+const mobileButtons = [screenshotButton, debugModeButton, reloadPreviewButton];
 
 const smallScreen = innerWidth < 1024;
 const isMobile = navigator.userAgent.match(/android|iphone|ipad/i) !== null;
@@ -77,8 +79,8 @@ playButton.addEventListener("click", () => {
   show(game);
   hide(playButton);
   show(stopButton);
-  show(screenshotButton);
-  show(debugModeButton);
+  mobileButtons.forEach(show);
+
   runCode();
   if (smallScreen) {
     getIframe().focus();
@@ -93,8 +95,7 @@ function stopGame(evt) {
   hide(game);
   show(playButton);
   hide(stopButton);
-  hide(screenshotButton);
-  hide(debugModeButton);
+  mobileButtons.forEach(hide);
   getIframe().remove();
 }
 
@@ -169,6 +170,10 @@ debugModeButton.addEventListener("click", () => {
   debugModeActivated = !debugModeActivated;
   updateDebugModeButton();
   localStorage.setItem("debug_mode_on", debugModeActivated ? "yes" : "no");
+  runCode(true);
+});
+
+reloadPreviewButton.addEventListener("click", () => {
   runCode(true);
 });
 
@@ -364,14 +369,12 @@ if (isMobile) {
 
 if (!smallScreen) {
   show(hideEditor);
-  show(screenshotButton);
-  show(debugModeButton);
+  mobileButtons.forEach(show);
   if (autoplay) runCode();
 } else {
   show(playButton);
   hide(game);
-  hide(screenshotButton);
-  hide(debugModeButton);
+  mobileButtons.forEach(hide);
 }
 
 (async () => {
