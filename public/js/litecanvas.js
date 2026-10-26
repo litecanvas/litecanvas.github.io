@@ -2437,106 +2437,115 @@
       window.pluginAssetLoader = plugin7;
     })();
     (() => {
-      var _ = (e, m, c, l, o, h, b, g) => e < o + b && e + c > o && m < h + g && m + l > h;
-      var y = (e, m, c, l, o, h) => (l - e) * (l - e) + (o - m) * (o - m) <= (c + h) * (c + h);
-      var Zt = 2 * Math.PI;
-      var v = (e, m, c, l = Math.sin) => e + (l(c) + 1) / 2 * (m - e);
+      var x = (e, l, c, i, m, h, r, b) => e < m + r && e + c > m && l < h + b && l + i > h;
+      var _ = (e, l, c, i, m, h) => (i - e) * (i - e) + (m - l) * (m - l) <= (c + h) * (c + h);
+      var Ut = 2 * Math.PI;
+      var N = (e, l, c, i = Math.sin) => e + (i(c) + 1) / 2 * (l - e);
       var Ws = Math.PI / 2;
-      var et = { warnings: true };
-      function w(e, m = {}) {
+      var tt = { warnings: true };
+      function v(e, l = {}) {
         if (e.stat(1)) throw 'Plugin Migrate should be loaded before the "init" event';
-        m = Object.assign({}, et, m);
-        let l = { def: p, seed: h, print: T, clear: R, setfps: O, setvar: X, textstyle: g, textmetrics: k, cliprect: F, clipcirc: C, blendmode: S, transform: L, getcolor: M, mousepos: Y, path: H, fill: D, stroke: z, clip: Z, paint: $, colrect: (...t) => (x("colrect()"), _(...t)), colcirc: (...t) => (x("colrect()"), y(...t)), wave: (...t) => (x("wave()"), v(...t)) };
-        e.def("TWO_PI", e.PI * 2), e.def("HALF_PI", e.PI / 2);
-        let o = e.stat(0);
+        l = Object.assign({}, tt, l);
+        let i = e.stat(0), m = /* @__PURE__ */ new Map();
         function h(t) {
-          return a("seed()", "rseed()"), t && e.rseed(t), e.stat(9);
+          l.warnings && (m.get(t) || (void 0, m.set(t, true)));
         }
-        let b = "";
-        function g(t) {
-          a("textstyle()", "the 5th param of text()"), b = t;
+        function r(t, s, a = "") {
+          h(`${t} is removed. ` + (s ? `Please use ${s} instead. ` : "") + a);
         }
-        function T(t, s, r, n) {
-          a("print()", "text()"), e.text(t, s, r, n);
+        function b(t, s = "function") {
+          r(t, `This ${s} was moved to @litecanvas/utils package.`);
+        }
+        let g = { def: p, seed: P, print: T, clear: R, setfps: O, setvar: X, textstyle: A, textmetrics: k, cliprect: F, clipcirc: C, blendmode: S, transform: L, getcolor: M, mousepos: Y, path: H, fill: W, stroke: z, clip: Z, paint: $, colrect: (...t) => (b("colrect()"), x(...t)), colcirc: (...t) => (b("colrect()"), _(...t)), wave: (...t) => (b("wave()"), N(...t)) };
+        e.def("TWO_PI", e.PI * 2), e.def("HALF_PI", e.PI / 2);
+        function P(t) {
+          return r("seed()", "rseed()"), t && e.rseed(t), e.stat(9);
+        }
+        let w = "";
+        function A(t) {
+          r("textstyle()", "the 5th param of text()"), w = t;
+        }
+        function T(t, s, a, n) {
+          r("print()", "text()"), e.text(t, s, a, n);
         }
         window.printPage = window.print;
         function k(t, s) {
-          a("textmetrics()", "ctx().measureText()");
-          let r = e.ctx(), n = e.stat(10), u = e.stat(11);
-          r.font = `${b || ""} ${~~(s || n)}px ${u}`;
-          let f = r.measureText(t);
+          r("textmetrics()", "ctx().measureText()");
+          let a = e.ctx(), n = e.stat(10), u = e.stat(11);
+          a.font = `${w || ""} ${~~(s || n)}px ${u}`;
+          let f = a.measureText(t);
           return f.height = f.actualBoundingBoxAscent + f.actualBoundingBoxDescent, f;
         }
-        function F(t, s, r, n) {
-          a("cliprect()", "clip()");
+        function F(t, s, a, n) {
+          r("cliprect()", "clip()");
           let u = e.ctx();
-          u.beginPath(), u.rect(t, s, r, n), u.clip();
+          u.beginPath(), u.rect(t, s, a, n), u.clip();
         }
-        function C(t, s, r) {
-          a("clipcirc()", "clip()");
+        function C(t, s, a) {
+          r("clipcirc()", "clip()");
           let n = e.ctx();
-          n.beginPath(), n.arc(t, s, r, 0, e.TWO_PI), n.clip();
+          n.beginPath(), n.arc(t, s, a, 0, e.TWO_PI), n.clip();
         }
         function M(t) {
-          a("getcolor()", "stat(5)");
+          r("getcolor()", "stat(5)");
           let s = stat(5);
           return s[~~t % s.length];
         }
         function S(t) {
-          a("blendmode()", "ctx().globalCompositeOperation");
+          r("blendmode()", "ctx().globalCompositeOperation");
           let s = e.ctx();
           s.globalCompositeOperation = t;
         }
         function R(t) {
-          a("clear()", "cls()"), e.cls(t);
+          r("clear()", "cls()"), e.cls(t);
         }
-        function L(t, s, r, n, u, f, q = true) {
-          return a("transform()", "ctx().setTransform() or ctx().transform()"), e.ctx()[q ? "setTransform" : "transform"](t, s, r, n, u, f);
+        function L(t, s, a, n, u, f, j = true) {
+          return r("transform()", "ctx().setTransform() or ctx().transform()"), e.ctx()[j ? "setTransform" : "transform"](t, s, a, n, u, f);
         }
         function Y() {
-          return a("mousepos()", "MX and MY"), [MX, MY];
+          return r("mousepos()", "MX and MY"), [MX, MY];
         }
         function O(t) {
-          a("setfps()", "framerate()"), e.framerate(t);
+          r("setfps()", "framerate()"), e.framerate(t);
         }
-        let i = e.def;
+        let o = e.def;
         function p(t, s) {
           switch (t) {
             case "W":
             case "WIDTH":
-              i("W", s), i("WIDTH", s);
+              o("W", s), o("WIDTH", s);
               break;
             case "H":
             case "HEIGHT":
-              i("H", s), i("HEIGHT", s);
+              o("H", s), o("HEIGHT", s);
               break;
             case "T":
             case "ELAPSED":
-              i("T", s), i("ELAPSED", s);
+              o("T", s), o("ELAPSED", s);
               break;
             case "CX":
             case "CENTERX":
-              i("CX", s), i("CENTERX", s);
+              o("CX", s), o("CENTERX", s);
               break;
             case "CY":
             case "CENTERY":
-              i("CY", s), i("CENTERY", s);
+              o("CY", s), o("CENTERY", s);
               break;
             case "MX":
             case "MOUSEX":
-              i("MX", s), i("MOUSEX", s);
+              o("MX", s), o("MOUSEX", s);
               break;
             case "MY":
             case "MOUSEY":
-              i("MY", s), i("MOUSEY", s);
+              o("MY", s), o("MOUSEY", s);
               break;
             default:
-              i(t, s);
+              o(t, s);
               break;
           }
         }
         function X(t, s) {
-          a("setvar()", "def()"), p(t, s);
+          r("setvar()", "def()"), p(t, s);
         }
         e.listen("resized", E);
         function E() {
@@ -2544,63 +2553,53 @@
         }
         E(), p("CANVAS", e.canvas());
         for (let t of ["W", "H", "T", "CX", "CY", "MX", "MY"]) e[t] != null && p(t, e[t]);
-        a("FPS", "", "but you can use our plugin to measure the fps: https://github.com/litecanvas/plugin-frame-rate-meter"), i("FPS", ""), o.fps && e.framerate(o.fps), o.background != null && (a('"background" option', "You must update your canvas CSS"), e.listen("after:init", () => {
-          e.canvas().style.background = M(~~o.background);
+        [e, i.global ? globalThis : null].forEach((t) => {
+          t && Object.defineProperty(t, "FPS", { get() {
+            return r("FPS", "", "but you can use our plugin to measure the fps: https://github.com/litecanvas/plugin-frame-rate-meter"), "";
+          }, enumerable: true, configurable: true });
+        }), i.fps && e.framerate(i.fps), i.background != null && (r('"background" option', "You must update your canvas CSS"), e.listen("after:init", () => {
+          e.canvas().style.background = M(~~i.background);
         }));
         function H(t) {
-          return a("path()", "`new Path2D()`", "See https://developer.mozilla.org/en-US/docs/Web/API/Path2D"), new Path2D(t);
+          return r("path()", "`new Path2D()`", "See https://developer.mozilla.org/en-US/docs/Web/API/Path2D"), new Path2D(t);
         }
         let B = e.fill;
-        function D(t, s) {
+        function W(t, s) {
           if (s instanceof Path2D) {
-            a("fill(color, path)");
-            let r = e.stat(5), n = e.ctx();
-            n.fillStyle = r[~~t % r.length], e.ctx().fill(s);
+            r("fill(color, path)");
+            let a = e.stat(5), n = e.ctx();
+            n.fillStyle = a[~~t % a.length], e.ctx().fill(s);
           } else B(t);
         }
-        let W = e.stroke;
+        let D = e.stroke;
         function z(t, s) {
           if (s instanceof Path2D) {
-            a("stroke(color, path)");
-            let r = e.stat(5), n = e.ctx();
-            n.strokeStyle = r[~~t % r.length], e.ctx().stroke(s);
-          } else W(t);
+            r("stroke(color, path)");
+            let a = e.stat(5), n = e.ctx();
+            n.strokeStyle = a[~~t % a.length], e.ctx().stroke(s);
+          } else D(t);
         }
         let U = e.clip;
         function Z(t) {
-          a("clip(path)", "clip(callback)", "E.g: `clip((ctx) => ctx.rect(0, 0, 200, 200))`"), t instanceof Path2D ? e.ctx().clip(t) : U(t);
+          r("clip(path)", "clip(callback)", "E.g: `clip((ctx) => ctx.rect(0, 0, 200, 200))`"), t instanceof Path2D ? e.ctx().clip(t) : U(t);
         }
-        o.antialias && a('"antialias" option', '"pixelart" option'), o.pixelart === false && a('"pixelart" option'), o.animate === false && a('"animate" option', "pause() in the of your draw()");
+        i.antialias && r('"antialias" option', '"pixelart" option'), i.pixelart === false && r('"pixelart" option'), i.animate === false && r('"animate" option', "pause() in the of your draw()");
         let V = e.paint;
-        function $(t, s, r, n) {
-          let u = r;
-          return e.spr && Array.isArray(r) && (u = () => {
-            e.spr(0, 0, r.join(`
+        function $(t, s, a, n) {
+          let u = a;
+          return e.spr && Array.isArray(a) && (u = () => {
+            e.spr(0, 0, a.join(`
 `));
           }), V(t, s, u, n);
         }
         let d = e.spr;
-        d && d.length === 3 && (l.spr = function(t, s, r, n, u) {
-          Number.isFinite(r) && r > 0 ? (a("spr() width and height", "spr(x, y, pixels)"), d(t, s, u)) : d(t, s, r);
+        d && d.length === 3 && (g.spr = function(t, s, a, n, u) {
+          Number.isFinite(a) && a > 0 ? (r("spr() width and height", "spr(x, y, pixels)"), d(t, s, u)) : d(t, s, a);
         });
-        let j = e.listen, I = e.unlisten;
-        I && (l.listen = (t, s) => (j(t, s), () => {
-          A("listen() not returns a function anymore. Please use unlisten(event, callback) instead."), I(t, s);
-        }));
-        let P = e.ispaused;
-        P && (l.paused = () => (a("paused()", "ispaused()"), P()));
-        function A(t) {
-          m.warnings && void 0;
-        }
-        function a(t, s, r = "") {
-          A(`${t} is removed. ` + (s ? `Please use ${s} instead. ` : "") + r);
-        }
-        function x(t, s = "function") {
-          a(t, `This ${s} was moved to @litecanvas/utils package.`);
-        }
-        return l;
+        let I = e.ispaused;
+        return I && (g.paused = () => (r("paused()", "ispaused()"), I())), g;
       }
-      window.pluginMigrate = w;
+      window.pluginMigrate = v;
     })();
     (() => {
       function T(s = {}) {

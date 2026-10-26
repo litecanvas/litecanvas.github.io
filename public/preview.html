@@ -136,48 +136,54 @@
                 eruda.show();
                 devtools.showTool(tab);
               }
+
+              loadUserCode();
             };
             document.body.appendChild(erudaScript);
+          } else {
+            loadUserCode();
           }
 
-          const litecanvasScript = document.createElement("script");
-          litecanvasScript.src = `./js/litecanvas${debugMode ? ".dev" : ""}.js`;
-          litecanvasScript.onload = () => {
-            const _litecanvas = window.litecanvas;
-            // expose the utils to global context
-            utils.global(false);
+          function loadUserCode() {
+            const litecanvasScript = document.createElement("script");
+            litecanvasScript.src = `./js/litecanvas${debugMode ? ".dev" : ""}.js`;
+            litecanvasScript.onload = () => {
+              const _litecanvas = window.litecanvas;
+              // expose the utils to global context
+              utils.global(false);
 
-            window.litecanvas = (settings = {}) => {
-              const instance = _litecanvas(settings);
+              window.litecanvas = (settings = {}) => {
+                const instance = _litecanvas(settings);
 
-              // load plugins
-              instance.use(pluginMigrate);
-              instance.use(pluginFrameRateMeter, {
-                hidden: !debugMode,
-              });
-              instance.use(pluginPixelFont);
-              instance.listen("before:init", () => {
-                instance.use(pluginAssetLoader);
-                instance.use(pluginJoystick);
-                joystick.disable();
-              });
+                // load plugins
+                instance.use(pluginMigrate);
+                instance.use(pluginFrameRateMeter, {
+                  hidden: !debugMode,
+                });
+                instance.use(pluginPixelFont);
+                instance.listen("before:init", () => {
+                  instance.use(pluginAssetLoader);
+                  instance.use(pluginJoystick);
+                  joystick.disable();
+                });
 
-              window.__litecanvas__ = true;
+                window.__litecanvasCalled = true;
 
-              return instance;
+                return instance;
+              };
+
+              const codeRunner = document.createElement("script");
+              codeRunner.innerHTML = codeTag.innerHTML;
+              codeRunner.onload = () => {
+                if (!window.__litecanvasCalled) {
+                  throw new Error("You must call the litecanvas() function");
+                }
+              };
+              document.body.append(codeRunner);
+              codeTag.remove();
             };
-
-            const codeRunner = document.createElement("script");
-            codeRunner.innerHTML = codeTag.innerHTML;
-            codeRunner.onload = () => {
-              if (!window.__litecanvas__) {
-                throw new Error("You must call the litecanvas() function");
-              }
-            };
-            document.body.append(codeRunner);
-            codeTag.remove();
-          };
-          document.body.appendChild(litecanvasScript);
+            document.body.appendChild(litecanvasScript);
+          }
         }
       })();
     </script>
