@@ -89,11 +89,7 @@ svg {
   color: #101820;
 }
 
-.top-bar button#hide-editor.active {
-  color: #606060;
-}
-
-.top-bar button#debug-mode.active {
+.top-bar button.active {
   --color-debug-mode: #c92a2a;
   color: var(--color-debug-mode);
   border-color: var(--color-debug-mode);

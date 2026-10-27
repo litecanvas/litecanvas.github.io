@@ -97,16 +97,15 @@
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
-          stroke="currentColor"
-          stroke-width="1.5"
-          role="img"
           width="24"
           height="24"
+          stroke-width="1.5"
+          stroke="currentColor"
         >
           <path
             stroke-linecap="round"
             stroke-linejoin="round"
-            d="M17.25 6.75 22.5 12l-5.25 5.25m-10.5 0L1.5 12l5.25-5.25m7.5-3-4.5 16.5"
+            d="M3.75 3.75v4.5m0-4.5h4.5m-4.5 0L9 9M3.75 20.25v-4.5m0 4.5h4.5m-4.5 0L9 15M20.25 3.75h-4.5m4.5 0v4.5m0-4.5L15 9m5.25 11.25h-4.5m4.5 0v-4.5m0 4.5L15 15"
           />
         </svg>
       </button>
@@ -137,7 +136,8 @@
         id="reload-preview"
         title="Reload"
         aria-label="Reload"
-        style="display: none; margin-left: auto"
+        style="margin-left: auto"
+        hidden
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -160,7 +160,7 @@
         id="debug-mode"
         title="Toogle the debug mode"
         aria-label="Toogle the debug mode"
-        style="display: none"
+        hidden
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -182,7 +182,7 @@
         id="screenshot"
         title="Take a screenshot"
         aria-label="Take a screenshot"
-        style="display: none"
+        hidden
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -207,11 +207,7 @@
     </div>
     <div class="editor">
       <div class="code">
-        <div
-          class="notice-warning"
-          id="changing-shared-code"
-          style="display: none"
-        >
+        <div class="notice-warning" id="changing-shared-code" hidden>
           You are accessing a code shared via a link. The changes you make will
           not be saved in your local storage. If you want to keep your changes,
           remember to copy the code before closing or refreshing this page.
