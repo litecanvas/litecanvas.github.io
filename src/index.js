@@ -62,6 +62,7 @@ window.addEventListener("beforeunload", (evt) => {
 const desktopExtensions = [];
 const code = $(".code");
 const game = $(".game");
+const helpButton = $("#help");
 const playButton = $("#play");
 const stopButton = $("#stop");
 const shareButton = $("#share");
@@ -70,7 +71,13 @@ const hideEditor = $("#hide-editor");
 const screenshotButton = $("#screenshot");
 const debugModeButton = $("#debug-mode");
 const reloadPreviewButton = $("#reload-preview");
-const mobileButtons = [screenshotButton, debugModeButton, reloadPreviewButton];
+const editorTools = [helpButton, playButton, shareButton, copyCodeButton];
+const previewTools = [
+  stopButton,
+  screenshotButton,
+  debugModeButton,
+  reloadPreviewButton,
+];
 
 const smallScreen = innerWidth < 1024;
 const isMobile = navigator.userAgent.match(/android|iphone|ipad/i) !== null;
@@ -78,9 +85,8 @@ const isMobile = navigator.userAgent.match(/android|iphone|ipad/i) !== null;
 playButton.addEventListener("click", () => {
   hide(code);
   show(game);
-  hide(playButton);
-  show(stopButton);
-  mobileButtons.forEach(show);
+  previewTools.forEach(show);
+  editorTools.forEach(hide);
 
   runCode();
   if (smallScreen) {
@@ -94,9 +100,8 @@ function stopGame(evt) {
   evt.preventDefault();
   show(code);
   hide(game);
-  show(playButton);
-  hide(stopButton);
-  mobileButtons.forEach(hide);
+  previewTools.forEach(hide);
+  editorTools.forEach(show);
   getIframe().remove();
 }
 
@@ -387,12 +392,12 @@ if (isMobile) {
 
 if (!smallScreen) {
   show(hideEditor);
-  mobileButtons.forEach(show);
+  previewTools.forEach(show);
   if (autoplay) runCode();
 } else {
   show(playButton);
   hide(game);
-  mobileButtons.forEach(hide);
+  previewTools.forEach(hide);
 }
 
 (async () => {
