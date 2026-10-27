@@ -127,6 +127,12 @@ shareButton.addEventListener("click", (evt) => {
 });
 
 copyCodeButton.addEventListener("click", () => {
+  if (!navigator.clipboard) {
+    return alert(
+      "Your browser not support this feature. Consider installing Firefox or Chrome.",
+    );
+  }
+
   const code = window.codeEditor.state.doc.toString();
   copyText(code).then(
     () => {},
