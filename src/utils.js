@@ -57,3 +57,10 @@ export function prepareCode(code) {
   }
   return result;
 }
+
+export function copyText(str) {
+  if (!navigator.clipboard) {
+    return alert("Could not copy text: Unsupported browser.");
+  }
+  return navigator.clipboard.writeText(str);
+}

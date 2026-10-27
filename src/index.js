@@ -12,7 +12,7 @@ import { indentWithTab } from "@codemirror/commands";
 import { oneDark } from "@codemirror/theme-one-dark";
 import * as eslint from "eslint-linter-browserify";
 
-import { show, hide, $, prepareCode } from "./utils";
+import { show, hide, $, prepareCode, copyText } from "./utils";
 import editorSetup from "./editorSetup";
 import demo from "./demo";
 import customCompletions from "./completions";
@@ -65,6 +65,7 @@ const game = $(".game");
 const playButton = $("#play");
 const stopButton = $("#stop");
 const shareButton = $("#share");
+const copyCodeButton = $("#copy-code");
 const hideEditor = $("#hide-editor");
 const screenshotButton = $("#screenshot");
 const debugModeButton = $("#debug-mode");
@@ -114,12 +115,23 @@ shareButton.addEventListener("click", (evt) => {
     return alert("Code too long to encode in URL");
   }
 
-  navigator.clipboard.writeText(url).then(
+  copyText(url).then(
     () => {
       alert("Your shareable url was copied to clipboard!");
     },
     (err) => {
       alert("Error: Unable to generate your shareable url!");
+      console.error("Error on copying text to clipboard:", err);
+    },
+  );
+});
+
+copyCodeButton.addEventListener("click", () => {
+  const code = window.codeEditor.state.doc.toString();
+  copyText(code).then(
+    () => {},
+    (err) => {
+      alert("Error: Unable to copy.");
       console.error("Error on copying text to clipboard:", err);
     },
   );
