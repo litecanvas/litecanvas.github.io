@@ -15,7 +15,7 @@
     var assert2 = (condition, message = "Assertion failed") => {
       if (!condition) throw new Error("[Litecanvas] " + message);
     };
-    var version = "0.404.0";
+    var version = "0.500.0";
     var mulberry32 = (seed) => {
       return () => {
         let t = seed += 1831565813;
@@ -30,7 +30,7 @@
         _browserEventListeners.push(
           () => elem.removeEventListener(evt, callback, false)
         );
-      }, lowerCase = (str) => str.toLowerCase(), preventDefault = (ev) => ev.preventDefault(), beginPath = (c) => c.beginPath(), zzfx = setupZzFX(root), defaults = {
+      }, lowerCase = (str) => str.toLowerCase(), beginPath = (c) => c.beginPath(), zzfx = setupZzFX(root), defaults = {
         width: null,
         height: null,
         autoscale: true,
@@ -47,9 +47,10 @@
       settings = Object.assign(defaults, settings);
       let _loop = settings.loop, _initialized, _paused, _canvas, _canvasScale = 1, _ctx, _outline_fix = 0.5, _timeScale = 1, _lastFrameTime, _fpsInterval = 1e3 / 60, _accumulated, _rafid = 0, _defaultTextColor = 3, _fontFamily = "sans-serif", _fontSize = 20, _fontLineHeight = 1.2, _rngSeed = Date.now(), _rngNext = mulberry32(_rngSeed >>> 0), _currentPalette = defaultPalette, _lastPalette = defaultPalette, _colorPaletteState = [], _defaultSound = [0.5, 0, 1750, , , 0.3, 1, , , , 600, 0.1], _eventListeners = {};
       const instance = {
+        T: 0,
+        F: 0,
         W: 0,
         H: 0,
-        T: 0,
         MX: -1,
         MY: -1,
         rand: (min = 0, max = 1) => {
@@ -916,6 +917,7 @@
         }
         if (updated) {
           instance.emit("draw", _ctx);
+          instance.def("F", instance.F + 1);
           if (updated > 1) _accumulated = 0;
         }
       }
@@ -964,7 +966,8 @@
         instance.def("H", height);
         _canvas.width = width;
         _canvas.height = height;
-        _canvas.style = "image-rendering:pixelated;touch-action:none";
+        _canvas.style = "image-rendering:pixelated";
+        _canvas.style.touchAction = "none";
         if (settings.autoscale) {
           let maxScale = +settings.autoscale;
           if (!_canvas.style.display) {
@@ -997,18 +1000,18 @@
           instance.def(key, pluginData[key]);
         }
       }
-      function getColor(color) {
-        return color >= 0 ? _currentPalette[~~(_colorPaletteState[color] ?? color) % _currentPalette.length] : color;
+      function getColor(color = 0) {
+        return color >= 0 ? _currentPalette[~~(_colorPaletteState[color] ?? color) % _currentPalette.length] : "" + color;
       }
       if (settings.global) {
-        if (root.ENGINE) {
+        DEV: if (root.ENGINE) {
           throw new Error("only one global litecanvas is allowed");
         }
         Object.assign(root, instance);
         root.ENGINE = instance;
       }
       DEV: console.info(`[litecanvas] version ${version} started`);
-      DEV: console.debug(`[litecanvas] litecanvas() options =`, settings);
+      DEV: console.info(`[litecanvas] litecanvas() options =`, settings);
       setupCanvas();
       resizeCanvas();
       if (_loop) {
