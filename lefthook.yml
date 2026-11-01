@@ -1,0 +1,4 @@
+pre-commit:
+  jobs:
+    - run: bun run build
+      stage_fixed: true

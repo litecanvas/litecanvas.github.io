@@ -3,7 +3,7 @@ export default () =>
 // Learn more tapping on the question mark (?) above.
 // Join our discord server: https://discord.com/invite/r2c3rGsvH3
 
-// Start the engine
+// start the engine
 litecanvas({
   loop: { init, update, draw, tapped },
 })

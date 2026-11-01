@@ -8,7 +8,7 @@
     "dev": "esbuild src/index.js --bundle --watch --outfile=public/js/app.js --servedir=public",
     "build": "esbuild src/index.js --bundle --minify --outfile=public/js/app.js",
     "prepare": "node ./script/copy-files.js && npm run build",
-    "postinstall": "npm run prepare",
+    "postinstall": "lefthook install && npm run prepare",
     "upgrade": "npm update && npm run prepare"
   },
   "keywords": [
@@ -17,7 +17,8 @@
   "author": "Luiz Bills",
   "license": "MIT",
   "devDependencies": {
-    "esbuild": "^0.28.2"
+    "esbuild": "^0.28.2",
+    "lefthook": "^2.2.2"
   },
   "dependencies": {
     "@babel/standalone": "^7.29.12",
@@ -31,7 +32,7 @@
     "@litecanvas/utils": "latest",
     "codemirror": "^6.0.2",
     "eruda": "^3.4.3",
-    "eslint-linter-browserify": "^10.13.0",
+    "eslint-linter-browserify": "^10.14.0",
     "litecanvas": "latest",
     "pako": "^2.2.0"
   }
