@@ -2456,7 +2456,7 @@
         function b(t, s = "function") {
           r(t, `This ${s} was moved to @litecanvas/utils package.`);
         }
-        let g = { def: p, seed: P, print: T, clear: R, setfps: O, setvar: X, textstyle: A, textmetrics: k, cliprect: F, clipcirc: C, blendmode: S, transform: L, getcolor: M, mousepos: Y, path: H, fill: W, stroke: z, clip: Z, paint: $, colrect: (...t) => (b("colrect()"), x(...t)), colcirc: (...t) => (b("colrect()"), _(...t)), wave: (...t) => (b("wave()"), N(...t)) };
+        let g = { def: p, seed: P, print: T, clear: R, setfps: O, setvar: X, textstyle: A, textmetrics: k, cliprect: F, clipcirc: C, blendmode: S, transform: L, getcolor: M, mousepos: Y, path: H, fill: W, stroke: D, clip: Z, paint: $, colrect: (...t) => (b("colrect()"), x(...t)), colcirc: (...t) => (b("colrect()"), _(...t)), wave: (...t) => (b("wave()"), N(...t)) };
         e.def("TWO_PI", e.PI * 2), e.def("HALF_PI", e.PI / 2);
         function P(t) {
           return r("seed()", "rseed()"), t && e.rseed(t), e.stat(9);
@@ -2568,16 +2568,16 @@
           if (s instanceof Path2D) {
             r("fill(color, path)");
             let a = e.stat(5), n = e.ctx();
-            n.fillStyle = a[~~t % a.length], e.ctx().fill(s);
+            n.fillStyle = a[~~t % a.length], n.fill(s);
           } else B(t);
         }
-        let D = e.stroke;
-        function z(t, s) {
+        let z = e.stroke;
+        function D(t, s) {
           if (s instanceof Path2D) {
             r("stroke(color, path)");
             let a = e.stat(5), n = e.ctx();
-            n.strokeStyle = a[~~t % a.length], e.ctx().stroke(s);
-          } else D(t);
+            n.strokeStyle = a[~~t % a.length], n.stroke(s);
+          } else z(t);
         }
         let U = e.clip;
         function Z(t) {
