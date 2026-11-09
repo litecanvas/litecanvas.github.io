@@ -5,6 +5,7 @@ import loopProtection from "./loop-protect";
  * @param {HTMLElement} el
  */
 export function show(el) {
+  if (!el) return;
   el.hidden = false;
   el.style.display = "";
 }
@@ -13,6 +14,7 @@ export function show(el) {
  * @param {HTMLElement} el
  */
 export function hide(el) {
+  if (!el) return;
   el.hidden = true;
   el.style.display = "none";
 }

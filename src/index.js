@@ -71,16 +71,25 @@ const hideEditor = $("#hide-editor");
 const screenshotButton = $("#screenshot");
 const debugModeButton = $("#debug-mode");
 const reloadPreviewButton = $("#reload-preview");
-const editorTools = [helpButton, playButton, shareButton, copyCodeButton];
+
+const smallScreen = innerWidth < 1024;
+const isMobile = navigator.userAgent.match(/android|iphone|ipad/i) !== null;
+
+const editorTools = [
+  smallScreen ? playButton : null,
+  !smallScreen ? hideEditor : null,
+  helpButton,
+  shareButton,
+  copyCodeButton,
+];
 const previewTools = [
-  stopButton,
+  smallScreen ? stopButton : null,
   screenshotButton,
   debugModeButton,
   reloadPreviewButton,
 ];
 
-const smallScreen = innerWidth < 1024;
-const isMobile = navigator.userAgent.match(/android|iphone|ipad/i) !== null;
+editorTools.forEach(show);
 
 playButton.addEventListener("click", () => {
   hide(code);
@@ -391,11 +400,9 @@ if (isMobile) {
 }
 
 if (!smallScreen) {
-  show(hideEditor);
   previewTools.forEach(show);
   if (autoplay) runCode();
 } else {
-  show(playButton);
   hide(game);
   previewTools.forEach(hide);
 }
