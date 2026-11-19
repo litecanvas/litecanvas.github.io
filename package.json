@@ -21,7 +21,7 @@
     "lefthook": "^2.2.2"
   },
   "dependencies": {
-    "@babel/standalone": "^7.29.13",
+    "@babel/standalone": "^7.29.14",
     "@codemirror/lang-javascript": "^6.2.5",
     "@codemirror/theme-one-dark": "^6.1.3",
     "@litecanvas/plugin-asset-loader": "latest",
@@ -32,7 +32,7 @@
     "@litecanvas/utils": "latest",
     "codemirror": "^6.0.2",
     "eruda": "^3.4.3",
-    "eslint-linter-browserify": "^10.14.0",
+    "eslint-linter-browserify": "^10.15.0",
     "litecanvas": "latest",
     "pako": "^2.2.0"
   }

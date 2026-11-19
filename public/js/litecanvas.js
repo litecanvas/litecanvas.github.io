@@ -1364,19 +1364,18 @@
       var ANCHOR_TOP_RIGHT = /* @__PURE__ */ vec(1, 0);
       var ANCHOR_BOT_LEFT = /* @__PURE__ */ vec(0, 1);
       var ANCHOR_BOT_RIGHT = /* @__PURE__ */ vec(1, 1);
+      var NOSPRITE = { width: 0, height: 0 };
       var Actor = class {
-        /** @type {CanvasImageSource} */
-        sprite;
+        /** @type {CanvasImageSource|CanvasImageSource[]} */
+        spr;
         /** @type {Vector} The actor position */
         pos;
         /** @type {Vector} The actor speed/velocity */
         spd;
         /** @type {Vector} The actor acceleration */
         acc;
-        /** @type {Vector} The actor anchor (origin) */
-        _o;
-        /** @type {Vector} The actor scale */
-        _s;
+        /** @type {object} The animation controls */
+        anim = null;
         /** @type {boolean} */
         flipX = false;
         /** @type {boolean} */
@@ -1387,18 +1386,58 @@
         opacity = 1;
         /** @type {boolean} If `true` the actor will not be drawn. */
         hidden = false;
+        /** @type {Vector} The actor anchor (origin) */
+        _o;
+        /** @type {Vector} The actor scale */
+        _s;
         /**
-         * @param {Image|HTMLCanvasElement|OffscreenCanvas|ImageBitmap} sprite
+         * @param {CanvasImageSource} sprite
          * @param {Vector} position
          * @param {Vector} anchor
          */
         constructor(sprite, position, anchor = ANCHOR_TOP_LEFT) {
-          this.sprite = sprite || { width: 0, height: 0 };
           this.pos = position || vec(0);
           this.spd = vec(0);
           this.acc = vec(0);
           this._o = vec(anchor);
           this._s = vec(1, 1);
+          this.anim = {
+            delay: 0.5,
+            // default delay between frames
+            frames: null,
+            // array of images
+            frame: 0,
+            // current frame
+            done: 0,
+            _t: 0,
+            // time counter
+            _e: false
+            // enabled?
+          };
+          this.sprite = sprite;
+        }
+        /**
+         * @param {CanvasImageSource|CanvasImageSource[]}
+         */
+        set sprite(frames) {
+          const animation = this.anim;
+          if (Array.isArray(frames)) {
+            animation._e = true;
+            animation.frames = frames;
+            animation.frame = 0;
+            animation.done = 0;
+            animation._t = 0;
+            this.spr = frames[0] || NOSPRITE;
+          } else {
+            animation._e = false;
+            this.spr = frames || NOSPRITE;
+          }
+        }
+        /**
+         * @returns {boolean}
+         */
+        get animated() {
+          return this.anim._e;
         }
         /**
          * @param {number}
@@ -1489,13 +1528,13 @@
          * @returns {number}
          */
         get width() {
-          return this.sprite.width * this._s.x;
+          return this.spr.width * this._s.x;
         }
         /**
          * @returns {number}
          */
         get height() {
-          return this.sprite.height * this._s.y;
+          return this.spr.height * this._s.y;
         }
         /**
          * @retuns {Vector}
@@ -1528,8 +1567,8 @@
          * @returns {number[]}
          */
         getBounds(scaled = true) {
-          const w = this.sprite.width * (scaled ? this._s.x : 1);
-          const h = this.sprite.height * (scaled ? this._s.y : 1);
+          const w = this.spr.width * (scaled ? this._s.x : 1);
+          const h = this.spr.height * (scaled ? this._s.y : 1);
           const x = this.pos.x - w * this.anchor.x;
           const y = this.pos.y - h * this.anchor.y;
           return [x, y, w, h];
@@ -1574,10 +1613,38 @@
         draw(engine = globalThis, saveContext = true) {
           if (saveContext) engine.push();
           this.transform(engine);
-          if (this.sprite.width && this.sprite.height && !this.hidden && this.opacity > 0) {
+          const animation = this.anim;
+          if (animation._e) {
+            const now = engine.T;
+            animation._t ||= now;
+            if (now - animation._t >= animation.delay) {
+              animation.frame = engine.wrap(
+                ++animation.frame,
+                0,
+                animation.frames.length
+              );
+              if (animation.frame === 0) {
+                animation.done++;
+              }
+              this.spr = animation.frames[animation.frame] || NOSPRITE;
+              animation._t = now;
+            }
+          }
+          if (this.spr.width && this.spr.height && !this.hidden && this.opacity > 0) {
             this.drawImage(engine);
           }
           if (saveContext) engine.pop();
+        }
+        /**
+         * @param {LitecanvasInstance} engine
+         * @param {boolean} alpha
+         */
+        drawImage(engine = globalThis, alpha = true) {
+          const anchor = this.anchor;
+          const x = -this.spr.width * (this.flipX ? 1 - anchor.x : anchor.x);
+          const y = -this.spr.height * (this.flipY ? 1 - anchor.y : anchor.y);
+          if (alpha) engine.alpha(this.opacity);
+          engine.image(x, y, this.spr);
         }
         /**
          * @param {LitecanvasInstance} engine
@@ -1589,17 +1656,6 @@
             (this.flipX ? -1 : 1) * this._s.x,
             (this.flipY ? -1 : 1) * this._s.y
           );
-        }
-        /**
-         * @param {LitecanvasInstance} engine
-         * @param {boolean} alpha
-         */
-        drawImage(engine = globalThis, alpha = true) {
-          const anchor = this.anchor;
-          const x = -this.sprite.width * (this.flipX ? 1 - anchor.x : anchor.x);
-          const y = -this.sprite.height * (this.flipY ? 1 - anchor.y : anchor.y);
-          if (alpha) engine.alpha(this.opacity);
-          engine.image(x, y, this.sprite);
         }
       };
       var diff_default = (a, b) => {
